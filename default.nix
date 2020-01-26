@@ -11,7 +11,7 @@ in {
 # Cabal project root
 , root ? gitignoreSource ./.
 # Cabal project name
-, name ? "rib-sample"
+, name ? "zulip-archive"
 , ...
 }:
 
