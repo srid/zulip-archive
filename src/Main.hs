@@ -16,6 +16,7 @@ import qualified Rib
 import qualified Rib.Parser.MMark as MMark
 import System.Environment
 import Zulip.Client
+import Slug
 
 data Page
   = Page_Index [Stream]
@@ -49,7 +50,9 @@ topicHtmlPath :: Stream -> Topic -> Text
 topicHtmlPath = topicUrl
 
 topicUrl :: Stream -> Topic -> Text
-topicUrl stream topic = streamUrl stream <> _topicName topic <> ".html"
+topicUrl stream topic = either (error . toText . displayException) id $ do 
+  topicSlug <- mkSlug $ _topicName topic
+  pure $ streamUrl stream <> unSlug topicSlug <> ".html"
 
 streamUrl :: (Semigroup s, IsString s) => Stream -> s
 streamUrl stream = show (_streamStreamId stream) <> "/"

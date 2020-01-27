@@ -34,4 +34,5 @@ executable zulip-archive
         text,
         req,
         casing,
-        shower
+        shower,
+        exceptions
