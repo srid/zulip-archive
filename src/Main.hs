@@ -9,13 +9,9 @@ module Main where
 
 import Clay ((?), Css, em, pc, px, sym)
 import qualified Clay as C
-import Data.Aeson (FromJSON, fromJSON)
-import qualified Data.Aeson as Aeson
-import Data.Text (Text)
 import Development.Shake
 import Lucid
 import Path
-import Rib (MMark, Source)
 import qualified Rib
 import qualified Rib.Parser.MMark as MMark
 import System.Environment
@@ -81,19 +77,3 @@ pageStyle = "div#thesite" ? do
     "b" ? C.fontSize (em 1.2)
     "p" ? sym C.margin (px 0)
 
--- | Metadata in our markdown sources
-data SrcMeta
-  = SrcMeta
-      { title :: Text,
-        -- | Description is optional, hence `Maybe`
-        description :: Maybe Text
-      }
-  deriving (Show, Eq, Generic, FromJSON)
-
--- | Get metadata from Markdown's YAML block
-getMeta :: Source MMark -> SrcMeta
-getMeta src = case MMark.projectYaml (Rib.sourceVal src) of
-  Nothing -> error "No YAML metadata"
-  Just val -> case fromJSON val of
-    Aeson.Error (toText -> e) -> error $ "JSON error: " <> e
-    Aeson.Success v -> v
