@@ -31,7 +31,7 @@ $(deriveJSON fieldLabelMod ''Stream)
 
 $(deriveJSON fieldLabelMod ''Streams)
 
-demo :: Text -> IO ()
+demo :: MonadIO m => Text -> m [Stream]
 demo apiKey = do
   let auth = basicAuth "srid@srid.ca" $ encodeUtf8 apiKey
   r <- runReq defaultHttpConfig $ do
@@ -43,4 +43,6 @@ demo apiKey = do
       auth
   case fromJSON (responseBody r :: Value) of
     Error s -> error $ toText s
-    Success (v :: Streams) -> Shower.printer v
+    Success (v :: Streams) -> do 
+      liftIO $ Shower.printer v
+      pure $ _streamsStreams v

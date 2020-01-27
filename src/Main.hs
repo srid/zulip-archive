@@ -21,46 +21,29 @@ import qualified Rib.Parser.MMark as MMark
 import System.Environment
 import Zulip.Client
 
--- | This will be our type representing generated pages.
---
--- Each `Source` specifies the parser type to use. Rib provides `MMark` and
--- `Pandoc`; but you may define your own as well.
 data Page
-  = Page_Index [Source MMark]
-  | Page_Single (Source MMark)
+  = Page_Index [Stream]
+  | Page_Stream Stream
 
--- | Main entry point to our generator.
---
--- `Rib.run` handles CLI arguments, and takes three parameters here.
---
--- 1. Directory `a`, from which static files will be read.
--- 2. Directory `b`, under which target files will be generated.
--- 3. Shake action to run.
---
--- In the shake build action you would expect to use the utility functions
--- provided by Rib to do the actual generation of your static site.
 main :: IO ()
-main = do
-  -- Rib.run [reldir|a|] [reldir|b|] generateSite
-  [apiKey] <- fmap toText <$> getArgs
-  demo apiKey
+main = Rib.runWith [reldir|a|] [reldir|b|] generateSite (Rib.Serve 8080 False)
 
 -- | Shake action for generating the static site
 generateSite :: Action ()
 generateSite = do
   -- Copy over the static files
   Rib.buildStaticFiles [[relfile|static/**|]]
-  -- Build individual sources, generating .html for each.
-  -- The function `buildHtmlMulti` takes the following arguments:
-  -- - Function that will parse the file (here we use mmark)
-  -- - File patterns to build
-  -- - Function that will generate the HTML (see below)
-  srcs <-
-    Rib.forEvery [[relfile|*.md|]] $ \srcPath ->
-      Rib.buildHtml srcPath MMark.parse $ renderPage . Page_Single
+  [apiKey] <- fmap toText <$> liftIO getArgs
+  streams <- demo apiKey
+  forM_ streams $ \stream -> do
+    f <- liftIO $ parseRelFile $ streamHtmlPath stream
+    Rib.writeHtml f $ renderPage $ Page_Stream stream
   -- Write an index.html linking to the aforementioned files.
   Rib.writeHtml [relfile|index.html|] $
-    renderPage (Page_Index srcs)
+    renderPage (Page_Index streams)
+
+streamHtmlPath :: (Semigroup s, IsString s) => Stream -> s
+streamHtmlPath stream = show (_streamStreamId stream) <> ".html"
 
 -- | Define your site HTML here
 renderPage :: Page -> Html ()
@@ -68,31 +51,28 @@ renderPage page = with html_ [lang_ "en"] $ do
   head_ $ do
     meta_ [httpEquiv_ "Content-Type", content_ "text/html; charset=utf-8"]
     title_ $ case page of
-      Page_Index _ -> "My website!"
-      Page_Single src -> toHtml $ title $ getMeta src
+      Page_Index _ -> "Fun Prog Zulip Archive"
+      Page_Stream s -> toHtml $ _streamName s
     style_ [type_ "text/css"] $ C.render pageStyle
   body_ $ do
     with div_ [id_ "thesite"] $ do
       with div_ [class_ "header"] $
         with a_ [href_ "/"] "Back to Home"
       case page of
-        Page_Index srcs -> div_ $ forM_ srcs $ \src ->
+        Page_Index streams -> div_ $ forM_ streams $ \stream ->
           with li_ [class_ "pages"] $ do
-            let meta = getMeta src
-            b_ $ with a_ [href_ (Rib.sourceUrl src)] $ toHtml $ title meta
-            maybe mempty renderMarkdown $ description meta
-        Page_Single src ->
-          with article_ [class_ "post"] $ do
-            h1_ $ toHtml $ title $ getMeta src
-            MMark.render $ Rib.sourceVal src
+            b_ $ with a_ [href_ (streamHtmlPath stream)] $ toHtml $ _streamName stream
+        Page_Stream stream -> do
+          h1_ $ toHtml $ _streamName stream
+          p_ $ toHtml $ _streamDescription stream
   where
-    renderMarkdown =
+    _renderMarkdown =
       MMark.render . either error id . MMark.parsePure "<none>"
 
 -- | Define your site CSS here
 pageStyle :: Css
 pageStyle = "div#thesite" ? do
-  C.margin (em 4) (pc 20) (em 1) (pc 20)
+  C.margin (em 4) (pc 5) (em 1) (pc 5)
   ".header" ? do
     C.marginBottom $ em 2
   "li.pages" ? do
