@@ -14,6 +14,7 @@ executable zulip-archive
         OverloadedStrings
         TypeApplications
         ScopedTypeVariables
+        LambdaCase
     ghc-options:
         -Wall
         -Wincomplete-record-updates
