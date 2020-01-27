@@ -7,7 +7,7 @@
 
 module Main where
 
-import Clay ((?), Css, em, pc, px, sym)
+import Clay ((?), Css, em)
 import qualified Clay as C
 import Development.Shake
 import Lucid
@@ -39,7 +39,10 @@ generateSite = do
     renderPage (Page_Index streams)
 
 streamHtmlPath :: (Semigroup s, IsString s) => Stream -> s
-streamHtmlPath stream = show (_streamStreamId stream) <> ".html"
+streamHtmlPath stream = streamUrl stream <> "index.html"
+
+streamUrl :: (Semigroup s, IsString s) => Stream -> s
+streamUrl stream = show (_streamStreamId stream) <> "/"
 
 -- | Define your site HTML here
 renderPage :: Page -> Html ()
@@ -50,30 +53,30 @@ renderPage page = with html_ [lang_ "en"] $ do
       Page_Index _ -> "Fun Prog Zulip Archive"
       Page_Stream s -> toHtml $ _streamName s
     style_ [type_ "text/css"] $ C.render pageStyle
+    stylesheet "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+    stylesheet "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+    stylesheet "https://fonts.googleapis.com/css?family=Open+Sans|Oswald&display=swap"
   body_ $ do
-    with div_ [id_ "thesite"] $ do
-      with div_ [class_ "header"] $
-        with a_ [href_ "/"] "Back to Home"
+    with div_ [class_ "ui text container", id_ "thesite"] $ do
       case page of
-        Page_Index streams -> div_ $ forM_ streams $ \stream ->
-          with li_ [class_ "pages"] $ do
-            b_ $ with a_ [href_ (streamHtmlPath stream)] $ toHtml $ _streamName stream
+        Page_Index streams -> 
+          with div_ [class_ "ui relaxed list"] $ 
+            forM_ streams $ \stream -> with div_ [class_ "item"] $ do
+              with div_ [class_ "content"] $ do
+                with a_ [class_ "header", href_ (streamUrl stream)] $
+                  toHtml $ _streamName stream
+                with div_ [class_ "description"] $ 
+                  toHtml $ _streamDescription stream
         Page_Stream stream -> do
-          h1_ $ toHtml $ _streamName stream
+          with h1_ [class_ "ui header"] $ toHtml $ _streamName stream
           p_ $ toHtml $ _streamDescription stream
   where
     _renderMarkdown =
       MMark.render . either error id . MMark.parsePure "<none>"
+    stylesheet x = link_ [rel_ "stylesheet", href_ x]
 
 -- | Define your site CSS here
 pageStyle :: Css
 pageStyle = "div#thesite" ? do
-  C.margin (em 4) (pc 5) (em 1) (pc 5)
-  ".header" ? do
-    C.marginBottom $ em 2
-  "li.pages" ? do
-    C.listStyleType C.none
-    C.marginTop $ em 1
-    "b" ? C.fontSize (em 1.2)
-    "p" ? sym C.margin (px 0)
-
+  C.marginTop $ em 1
+  C.marginBottom $ em 1
