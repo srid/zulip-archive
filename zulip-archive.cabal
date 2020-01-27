@@ -10,10 +10,15 @@ executable zulip-archive
     main-is: Main.hs
     hs-source-dirs: src
     default-language: Haskell2010
+    extensions:
+        OverloadedStrings
     ghc-options:
         -Wall
         -Wincomplete-record-updates
         -Wincomplete-uni-patterns
+    mixins:
+        base hiding (Prelude),
+        relude (Relude as Prelude)
     build-depends:
         base ^>=4.12.0.0,
         aeson,
@@ -21,5 +26,7 @@ executable zulip-archive
         lucid -any,
         path,
         rib ^>=0.7,
+        relude,
         shake -any,
         text,
+        req

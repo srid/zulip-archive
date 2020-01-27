@@ -1,26 +1,25 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE ViewPatterns #-}
 
 module Main where
 
 import Clay ((?), Css, em, pc, px, sym)
 import qualified Clay as C
-import Control.Monad
 import Data.Aeson (FromJSON, fromJSON)
 import qualified Data.Aeson as Aeson
-import qualified Data.Text as T
 import Data.Text (Text)
 import Development.Shake
-import GHC.Generics
 import Lucid
 import Path
 import Rib (MMark, Source)
 import qualified Rib
 import qualified Rib.Parser.MMark as MMark
+import System.Environment
+import Zulip.Client
 
 -- | This will be our type representing generated pages.
 --
@@ -41,7 +40,10 @@ data Page
 -- In the shake build action you would expect to use the utility functions
 -- provided by Rib to do the actual generation of your static site.
 main :: IO ()
-main = Rib.run [reldir|a|] [reldir|b|] generateSite
+main = do
+  -- Rib.run [reldir|a|] [reldir|b|] generateSite
+  [apiKey] <- fmap toText <$> getArgs
+  demo apiKey
 
 -- | Shake action for generating the static site
 generateSite :: Action ()
@@ -85,7 +87,7 @@ renderPage page = with html_ [lang_ "en"] $ do
             MMark.render $ Rib.sourceVal src
   where
     renderMarkdown =
-      MMark.render . either (error . T.unpack) id . MMark.parsePure "<none>"
+      MMark.render . either error id . MMark.parsePure "<none>"
 
 -- | Define your site CSS here
 pageStyle :: Css
@@ -113,5 +115,5 @@ getMeta :: Source MMark -> SrcMeta
 getMeta src = case MMark.projectYaml (Rib.sourceVal src) of
   Nothing -> error "No YAML metadata"
   Just val -> case fromJSON val of
-    Aeson.Error e -> error $ "JSON error: " <> e
+    Aeson.Error (toText -> e) -> error $ "JSON error: " <> e
     Aeson.Success v -> v
