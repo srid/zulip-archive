@@ -12,6 +12,8 @@ executable zulip-archive
     default-language: Haskell2010
     extensions:
         OverloadedStrings
+        TypeApplications
+        ScopedTypeVariables
     ghc-options:
         -Wall
         -Wincomplete-record-updates
@@ -29,4 +31,6 @@ executable zulip-archive
         relude,
         shake -any,
         text,
-        req
+        req,
+        casing,
+        shower
