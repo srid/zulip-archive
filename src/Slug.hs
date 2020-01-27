@@ -1,6 +1,9 @@
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
 -- | Taken from Web.Slug in hackage (no longer maintained)
 module Slug where
 
+import Relude
 import Control.Monad.Catch (MonadThrow (..))
 import Data.Char (isAlphaNum)
 import qualified Data.Text as T

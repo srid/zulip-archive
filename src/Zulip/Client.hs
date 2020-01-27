@@ -1,13 +1,18 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 
 module Zulip.Client where
 
 import Data.Aeson
 import Data.Aeson.TH
 import Network.HTTP.Req
+import Relude hiding (Option)
 import Zulip.Internal
-import Prelude hiding (Option)
 
 baseUrl :: Text
 baseUrl = "funprog.zulipchat.com"

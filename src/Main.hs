@@ -1,9 +1,11 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 
 module Main where
 
@@ -12,11 +14,12 @@ import qualified Clay as C
 import Development.Shake
 import Lucid
 import Path
+import Relude
 import qualified Rib
 import qualified Rib.Parser.MMark as MMark
+import Slug
 import System.Environment
 import Zulip.Client
-import Slug
 
 data Page
   = Page_Index [Stream]
@@ -36,9 +39,9 @@ generateSite = do
   forM_ d $ \(stream, topics) -> do
     f <- liftIO $ parseRelFile $ streamHtmlPath stream
     Rib.writeHtml f $ renderPage $ Page_Stream stream topics
-    forM_ topics $ \topic -> do 
+    forM_ topics $ \topic -> do
       g <- liftIO $ parseRelFile $ toString $ topicHtmlPath stream topic
-      Rib.writeHtml g $ renderPage $ Page_StreamTopic stream topic 
+      Rib.writeHtml g $ renderPage $ Page_StreamTopic stream topic
   -- Write an index.html linking to the aforementioned files.
   Rib.writeHtml [relfile|index.html|] $
     renderPage (Page_Index $ fst <$> d)
@@ -50,7 +53,7 @@ topicHtmlPath :: Stream -> Topic -> Text
 topicHtmlPath = topicUrl
 
 topicUrl :: Stream -> Topic -> Text
-topicUrl stream topic = either (error . toText . displayException) id $ do 
+topicUrl stream topic = either (error . toText . displayException) id $ do
   topicSlug <- mkSlug $ _topicName topic
   pure $ streamUrl stream <> unSlug topicSlug <> ".html"
 
@@ -73,26 +76,30 @@ renderPage page = with html_ [lang_ "en"] $ do
   body_ $ do
     with div_ [class_ "ui text container", id_ "thesite"] $ do
       case page of
-        Page_Index streams -> 
-          with div_ [class_ "ui relaxed list"] $ 
-            forM_ streams $ \stream -> with div_ [class_ "item"] $ do
+        Page_Index streams ->
+          with div_ [class_ "ui relaxed list"]
+            $ forM_ streams
+            $ \stream -> with div_ [class_ "item"] $ do
               with div_ [class_ "content"] $ do
-                with a_ [class_ "header", href_ (streamUrl stream)] $
-                  toHtml $ _streamName stream
-                with div_ [class_ "description"] $ 
-                  toHtml $ _streamDescription stream
+                with a_ [class_ "header", href_ (streamUrl stream)]
+                  $ toHtml
+                  $ _streamName stream
+                with div_ [class_ "description"]
+                  $ toHtml
+                  $ _streamDescription stream
         Page_Stream stream topics -> do
           with h1_ [class_ "ui header"] $ toHtml $ _streamName stream
           p_ $ toHtml $ _streamDescription stream
-          with div_ [class_ "ui relaxed list"] $ 
-            forM_ topics $ \topic -> with div_ [class_ "item"] $ do
+          with div_ [class_ "ui relaxed list"]
+            $ forM_ topics
+            $ \topic -> with div_ [class_ "item"] $ do
               with div_ [class_ "content"] $ do
-                with a_ [class_ "header", href_ ("/" <> topicUrl stream topic)] $
-                  toHtml $ _topicName topic
-
-        Page_StreamTopic stream topic -> do 
-          with h1_ [class_ "ui header"] $ do 
-            toHtml $ _streamName stream 
+                with a_ [class_ "header", href_ ("/" <> topicUrl stream topic)]
+                  $ toHtml
+                  $ _topicName topic
+        Page_StreamTopic stream topic -> do
+          with h1_ [class_ "ui header"] $ do
+            toHtml $ _streamName stream
             " > "
             toHtml $ _topicName topic
   where
