@@ -1,6 +1,6 @@
 # zulip-archive
 
-...
+Zulip archive viewer written in Haskell, using the [rib](https://github.com/srid/rib) static site generator.
 
 ## Prerequisites
 
@@ -19,14 +19,23 @@ nix-env -iA cachix -f https://cachix.org/api/v1/install
 cachix use srid
 ```
 
+### Zulip API Key
+
+Get your API key for zulip ([instructions here](https://zulipchat.com/api/api-keys)). Note: you are looking for *your* API key, and not a bot's API key.
+
+You may store it an environment variable for later access:
+
+```bash
+export ZULIPAPIKEY="<your api key here>"
+```
+
 ## Running
 
 To build and run the site:
 
 ```bash
-nix-shell --run 'ghcid -T ":main YOURAPIKEY"'
+rm b  # if b is a symlink
+nix-shell --run 'ghcid -T ":main $ZULIPAPIKEY"'
 ```
 
-This launches a web server at http://localhost:8080 serving the statically
-generated content. Changing either `Main.hs` or the content in `./a` reloads everything.
-
+Visit http://localhost:8080 
