@@ -143,13 +143,12 @@ demo apiKey = do
             (msg : _) -> pure $ _messageId msg
     liftIO $ Shower.printer ("lastMsgId" :: Text, lastMsgId)
     -- TODO: Pagination, for loading the full list of messages
-    msgs <- getMessages apiConfig lastMsgId 10 [] >>= \case
+    msgs <- getMessages apiConfig lastMsgId 1000 [] >>= \case
       Error s -> error $ toText s
       Success newMsgs -> do
-        forM_ (_messagesMessages newMsgs) $ \msg -> do
-          liftIO $ putStrLn $ show (_messageId msg, _messageSenderFullName msg, _messageTimestamp msg, _messageContent msg)
         let msgs = savedMsgs <> _messagesMessages newMsgs
         liftIO $ encodeFile messagesFile msgs
+        liftIO $ Shower.printer ("Writing " :: Text, length savedMsgs, " <> " :: Text, length (_messagesMessages newMsgs))
         pure msgs
     pure (streams, msgs)
 
