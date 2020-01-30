@@ -27,4 +27,5 @@ executable zulip-archive
         req,
         casing,
         shower,
-        exceptions
+        exceptions,
+        time
