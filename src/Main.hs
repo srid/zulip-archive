@@ -20,6 +20,8 @@ import qualified Rib.Parser.MMark as MMark
 import Slug
 import System.Environment
 import Zulip.Client
+import Data.Time
+import Data.Time.Clock.POSIX
 
 data Page
   = Page_Index [Stream]
@@ -102,10 +104,15 @@ renderPage page = with html_ [lang_ "en"] $ do
             toHtml $ _streamName stream
             " > "
             toHtml $ _topicName topic
-          forM_ msgs $ \msg -> do
-            li_ $ do
-              toHtml $ show @Text (_messageTimestamp msg, _messageSenderFullName msg)
-              toHtmlRaw $ _messageContent msg -- TODO: only if Html
+          with div_ [class_ "ui grid logs"] $ do
+            forM_ msgs $ \msg -> do
+              with div_ [class_ "row log-message top aligned"] $ do
+                with div_ [class_ $ "four wide column timestamp"] $ do
+                  let t = posixSecondsToUTCTime $ _messageTimestamp msg
+                  div_ $ toHtml $ _messageSenderFullName msg
+                  with a_ [] $ toHtml $ formatTime defaultTimeLocale "%F %X" t
+                with div_ [class_ "twelve wide column message-text"] $ 
+                  toHtmlRaw $ _messageContent msg -- TODO: only if Html
   where
     _renderMarkdown =
       MMark.render . either error id . MMark.parsePure "<none>"

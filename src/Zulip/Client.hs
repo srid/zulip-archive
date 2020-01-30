@@ -17,6 +17,7 @@ import Relude hiding (Option)
 import qualified Shower
 import System.Directory (doesFileExist)
 import Zulip.Internal
+import Data.Time.Clock.POSIX
 
 baseUrl :: Text
 baseUrl = "funprog.zulipchat.com"
@@ -73,9 +74,9 @@ data Message
         _messageSenderEmail :: Text,
         _messageSenderFullName :: Text,
         _messageSenderShortName :: Text,
-        _messageStreamId :: Int,
+        _messageStreamId :: Maybe Int,
         _messageSubject :: Text,
-        _messageTimestamp :: Int, -- UTCTime,
+        _messageTimestamp :: POSIXTime,
         _messageType :: Text
       }
   deriving (Eq, Show)
@@ -92,7 +93,7 @@ data Narrow
 filterTopicMessages :: Stream -> Topic -> [Message] -> [Message]
 filterTopicMessages stream topic = filter $ \msg ->
   and
-    [ _messageStreamId msg == _streamStreamId stream,
+    [ _messageStreamId msg == Just (_streamStreamId stream),
       _messageSubject msg == _topicName topic
     ]
 
