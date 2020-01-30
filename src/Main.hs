@@ -24,7 +24,7 @@ import Zulip.Client
 data Page
   = Page_Index [Stream]
   | Page_Stream Stream [Topic]
-  | Page_StreamTopic Stream Topic
+  | Page_StreamTopic Stream Topic [Message]
 
 main :: IO ()
 main = Rib.runWith [reldir|a|] [reldir|b|] generateSite (Rib.Serve 8080 False)
@@ -35,16 +35,16 @@ generateSite = do
   -- Copy over the static files
   Rib.buildStaticFiles [[relfile|static/**|]]
   [apiKey] <- fmap toText <$> liftIO getArgs
-  d <- demo apiKey
-  forM_ d $ \(stream, topics) -> do
+  (streams, msgs) <- demo apiKey
+  forM_ streams $ \(stream, topics) -> do
     f <- liftIO $ parseRelFile $ streamHtmlPath stream
     Rib.writeHtml f $ renderPage $ Page_Stream stream topics
     forM_ topics $ \topic -> do
       g <- liftIO $ parseRelFile $ toString $ topicHtmlPath stream topic
-      Rib.writeHtml g $ renderPage $ Page_StreamTopic stream topic
+      Rib.writeHtml g $ renderPage $ Page_StreamTopic stream topic (filterTopicMessages stream topic msgs)
   -- Write an index.html linking to the aforementioned files.
   Rib.writeHtml [relfile|index.html|] $
-    renderPage (Page_Index $ fst <$> d)
+    renderPage (Page_Index $ fst <$> streams)
 
 streamHtmlPath :: (Semigroup s, IsString s) => Stream -> s
 streamHtmlPath stream = streamUrl stream <> "index.html"
@@ -68,7 +68,7 @@ renderPage page = with html_ [lang_ "en"] $ do
     title_ $ case page of
       Page_Index _ -> "Fun Prog Zulip Archive"
       Page_Stream s _ -> toHtml $ _streamName s
-      Page_StreamTopic _s t -> toHtml $ _topicName t
+      Page_StreamTopic _s t _ -> toHtml $ _topicName t
     style_ [type_ "text/css"] $ C.render pageStyle
     stylesheet "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
     stylesheet "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
@@ -97,11 +97,15 @@ renderPage page = with html_ [lang_ "en"] $ do
                 with a_ [class_ "header", href_ ("/" <> topicUrl stream topic)]
                   $ toHtml
                   $ _topicName topic
-        Page_StreamTopic stream topic -> do
+        Page_StreamTopic stream topic msgs -> do
           with h1_ [class_ "ui header"] $ do
             toHtml $ _streamName stream
             " > "
             toHtml $ _topicName topic
+          forM_ msgs $ \msg -> do
+            li_ $ do
+              toHtml $ show @Text (_messageTimestamp msg, _messageSenderFullName msg)
+              toHtmlRaw $ _messageContent msg -- TODO: only if Html
   where
     _renderMarkdown =
       MMark.render . either error id . MMark.parsePure "<none>"

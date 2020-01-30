@@ -28,4 +28,5 @@ executable zulip-archive
         casing,
         shower,
         exceptions,
-        time
+        time,
+        directory

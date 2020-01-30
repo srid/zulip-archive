@@ -4,6 +4,7 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TupleSections #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 
@@ -14,6 +15,7 @@ import Data.Aeson.TH
 import Network.HTTP.Req
 import Relude hiding (Option)
 import qualified Shower
+import System.Directory (doesFileExist)
 import Zulip.Internal
 
 baseUrl :: Text
@@ -86,6 +88,14 @@ data Narrow
       }
   deriving (Eq, Show)
 
+-- | Get messages under the given stream's topic
+filterTopicMessages :: Stream -> Topic -> [Message] -> [Message]
+filterTopicMessages stream topic = filter $ \msg ->
+  and
+    [ _messageStreamId msg == _streamStreamId stream,
+      _messageSubject msg == _topicName topic
+    ]
+
 narrowStream :: Text -> [Narrow]
 narrowStream name = [Narrow "stream" name False]
 
@@ -106,7 +116,7 @@ $(deriveJSON fieldLabelMod ''Narrow)
 type APIConfig scheme = (Url scheme, Option scheme)
 
 -- | Just a playground for now.
-demo :: MonadIO m => Text -> m [(Stream, [Topic])]
+demo :: MonadIO m => Text -> m ([(Stream, [Topic])], [Message])
 demo apiKey = do
   let auth = basicAuth userEmail $ encodeUtf8 apiKey
       apiConfig = (https baseUrl /: "api" /: "v1", auth)
@@ -115,19 +125,33 @@ demo apiKey = do
     streams <- getStreams apiConfig >>= \case
       Error s -> error $ toText s
       Success (v :: Streams) -> do
-        let streams = take 2 $ _streamsStreams v -- WIP (take 2)
+        let streams = _streamsStreams v
         forM streams $ \stream -> do
           getTopics apiConfig (_streamStreamId stream) >>= \case
             Error s -> error $ toText s
             Success topics -> do
               pure (stream, topics)
     -- Play with messages API
-    getMessages apiConfig 0 10 [] >>= \case
+    let messagesFile = "messages.json"
+    (savedMsgs, lastMsgId) <- liftIO (doesFileExist messagesFile) >>= \case
+      False -> pure ([], 0)
+      True -> liftIO (eitherDecodeFileStrict messagesFile) >>= \case
+        Left e -> error $ toText e
+        Right (msgs :: [Message]) -> fmap (msgs,) $
+          case reverse msgs of
+            [] -> pure 0
+            (msg : _) -> pure $ _messageId msg
+    liftIO $ Shower.printer ("lastMsgId" :: Text, lastMsgId)
+    -- TODO: Pagination, for loading the full list of messages
+    msgs <- getMessages apiConfig lastMsgId 10 [] >>= \case
       Error s -> error $ toText s
-      Success msgs -> do
-        liftIO $ Shower.printer msgs
-        liftIO $ encodeFile "messages.json" $ _messagesMessages msgs
-    pure streams
+      Success newMsgs -> do
+        forM_ (_messagesMessages newMsgs) $ \msg -> do
+          liftIO $ putStrLn $ show (_messageId msg, _messageSenderFullName msg, _messageTimestamp msg, _messageContent msg)
+        let msgs = savedMsgs <> _messagesMessages newMsgs
+        liftIO $ encodeFile messagesFile msgs
+        pure msgs
+    pure (streams, msgs)
 
 getStreams :: MonadHttp m => APIConfig scheme -> m (Result Streams)
 getStreams (apiUrl, auth) = do
