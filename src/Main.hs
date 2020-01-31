@@ -15,6 +15,7 @@ import qualified Clay as C
 import Data.Time
 import Data.Time.Clock.POSIX
 import Development.Shake
+import qualified Data.Text as T
 import Lucid
 import Path
 import Relude
@@ -116,9 +117,10 @@ renderPage page = with html_ [lang_ "en"] $ do
     stylesheet "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
     stylesheet "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
     stylesheet "https://fonts.googleapis.com/css?family=Open+Sans|Oswald&display=swap"
+    googleFonts $ [headerFont, bodyFont]
   body_ $ do
     with div_ [class_ "ui text container", id_ "thesite"] $ do
-      with div_ [class_ "ui black inverted top attached center aligned segment"]
+      with div_ [class_ "ui violet inverted top attached center aligned segment"]
         $ with h1_ [class_ "ui huge header"]
         $ pageTitle page
       with div_ [class_ "ui attached segment"] $ do
@@ -135,7 +137,7 @@ renderPage page = with html_ [lang_ "en"] $ do
             with div_ [class_ "ui relaxed list"]
               $ forM_ (reverse $ sortOn streamMsgCount streams)
               $ \stream -> with div_ [class_ "item"] $ do
-                with div_ [class_ "right floated content"] $
+                with div_ [class_ "right floated content subtle"] $
                   case streamMsgCount stream of 
                     0 -> mempty
                     cnt -> do
@@ -152,7 +154,7 @@ renderPage page = with html_ [lang_ "en"] $ do
             with div_ [class_ "ui relaxed list"]
               $ forM_ (fromMaybe [] $ _streamTopics stream)
               $ \topic -> with div_ [class_ "item"] $ do
-                with div_ [class_ "right floated content"] $ do
+                with div_ [class_ "right floated content subtle"] $ do
                   toHtml $ maybe "" renderTimestamp $ _topicLastUpdated topic
                 with div_ [class_ "content"] $ do
                   with a_ [class_ "header", href_ ("/" <> topicUrl stream topic)]
@@ -187,10 +189,22 @@ renderPage page = with html_ [lang_ "en"] $ do
       Page_Stream s -> _streamName s <> " stream"
       Page_StreamTopic s t -> _topicName t <> " - " <> _streamName s
     stylesheet x = link_ [rel_ "stylesheet", href_ x]
+    googleFonts fs =
+      let s = T.intercalate "|" $ T.replace " " "+" <$> fs
+          url = "https://fonts.googleapis.com/css?family=" <> s <> "&display=swap"
+       in stylesheet url
+
+headerFont :: Text
+headerFont = "Roboto"
+
+bodyFont :: Text
+bodyFont = "Open Sans"
+
 
 -- | Define your site CSS here
 pageStyle :: Css
 pageStyle = "div#thesite" ? do
+  baseStyle
   C.marginTop $ em 1
   C.marginBottom $ em 1
   ".ui.breadcrumb.rib" ? do
@@ -201,6 +215,8 @@ pageStyle = "div#thesite" ? do
         C.color C.grey
       "a.avatar img" ? do 
         C.height C.auto  -- Fix vertical stretching of avatar
+  ".subtle" ? do 
+    C.color C.grey
   ".messages" ? do 
     "pre" ? do 
       C.fontSize $ pct 85
@@ -210,3 +226,15 @@ pageStyle = "div#thesite" ? do
     ".message_inline_image img" ? do 
       C.maxWidth $ pct 100
       C.marginBottom $ em 1
+  where
+    baseStyle :: Css 
+    baseStyle = do 
+      -- Fonts 
+      C.fontFamily [bodyFont] [C.sansSerif]
+      forM_ [C.h1, C.h2, C.h3, C.h4, C.h5, C.h6, ".ui.breadcrumb.rib .section", ".header", ".as-header"] $ \h -> h ? do
+        C.fontFamily [headerFont] [C.sansSerif]
+        C.lineHeight $ em 1.2
+      "code, pre, tt"
+        ? C.fontFamily ["SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New"] [C.monospace]
+      -- Get rid of the font lock in text container
+      C.important $ C.fontSize $ em 1

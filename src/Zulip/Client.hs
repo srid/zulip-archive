@@ -142,7 +142,6 @@ getArchive :: MonadIO m => Text -> m [Stream]
 getArchive apiKey = do
   let auth = basicAuth userEmail $ encodeUtf8 apiKey
       apiConfig = (https baseUrl /: "api" /: "v1", auth)
-  liftIO $ putStrLn "Running API request"
   runReq defaultHttpConfig $ do
     -- Fetch any remaining messages
     (hasNew, msgs) <- updateMessages apiConfig "messages.json"
@@ -155,6 +154,7 @@ getArchive apiKey = do
 
 updateMessages :: (MonadIO m, MonadHttp m) => APIConfig scheme -> FilePath -> m (Bool, [Message])
 updateMessages apiConfig messagesFile = do
+  liftIO $ putStrLn $ "Loading " <> messagesFile
   savedMsgs <- liftIO (doesFileExist messagesFile) >>= \case
     False -> pure []
     True -> liftIO (eitherDecodeFileStrict messagesFile) >>= \case
