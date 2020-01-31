@@ -16,6 +16,7 @@ import qualified Data.Map.Strict as Map
 import Data.Time.Clock.POSIX
 import Network.HTTP.Req
 import Relude hiding (Option)
+import Relude.Extra.Map (lookup)
 import qualified Shower
 import System.Directory (doesFileExist)
 import Zulip.Internal
@@ -55,7 +56,7 @@ data Topic
   = Topic
       { _topicName :: Text,
         _topicMessages :: [Message], -- Not in API; only used internally
-        _topicLastUpdated :: Maybe POSIXTime
+        _topicLastUpdated :: Maybe POSIXTime -- Not in API; only used internally
       }
   deriving (Eq, Show)
 
@@ -73,8 +74,9 @@ data Message
       { _messageId :: Int,
         _messageContent :: Text,
         _messageContentType :: Text,
-        _messageAvatarUrl :: Maybe Text,  -- FIXME: api doesn't return it
+        _messageAvatarUrl :: Maybe Text, -- API doesn't always set this.
         _messageSenderFullName :: Text,
+        _messageSenderId :: Int,
         _messageStreamId :: Maybe Int,
         _messageSubject :: Text,
         _messageTimestamp :: POSIXTime,
@@ -82,11 +84,28 @@ data Message
       }
   deriving (Eq, Show)
 
--- | Fill out hitherto missing _streamTopics and _topicMessages
-mkArchive :: [Stream] -> [Message] -> [Stream]
-mkArchive streams msgs = flip fmap streams $ \stream ->
+data Users
+  = Users
+      { _usersMembers :: [User]
+      }
+  deriving (Eq, Show)
+
+data User
+  = User
+      { _userAvatarUrl :: Text,
+        _userId :: Int,
+        _userFullName :: Text
+      }
+  deriving (Eq, Show)
+
+-- | Fill out hitherto missing _streamTopics, _topicMessages and _messageAvatarUrl
+mkArchive :: [Stream] -> [User] -> [Message] -> [Stream]
+mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
   -- TODO: Verify that stream and topic names are unique.
-  let streamMsgs = flip filter msgs $ \msg -> _messageStreamId msg == Just (_streamStreamId stream)
+  let avatarMap = Map.fromList $ flip fmap users $ _userId &&& _userAvatarUrl
+      msgs = flip fmap msgsWithoutAvatar $ \msg ->
+        msg {_messageAvatarUrl = _messageAvatarUrl msg <|> lookup (_messageSenderId msg) avatarMap}
+      streamMsgs = flip filter msgs $ \msg -> _messageStreamId msg == Just (_streamStreamId stream)
       topicMsgMap = Map.fromListWith (<>) $ flip fmap streamMsgs $ \msg ->
         (_messageSubject msg, [msg])
    in stream
@@ -113,6 +132,10 @@ $(deriveJSON fieldLabelMod ''Messages)
 
 $(deriveJSON fieldLabelMod ''Message)
 
+$(deriveJSON fieldLabelMod ''Users)
+
+$(deriveJSON fieldLabelMod ''User)
+
 type APIConfig scheme = (Url scheme, Option scheme)
 
 getArchive :: MonadIO m => Text -> m [Stream]
@@ -121,15 +144,14 @@ getArchive apiKey = do
       apiConfig = (https baseUrl /: "api" /: "v1", auth)
   liftIO $ putStrLn "Running API request"
   runReq defaultHttpConfig $ do
-    -- Fetch streams and topics
-    streams <- getStreams apiConfig >>= \case
-      -- TODO: use EitherT
-      Error s -> error $ toText s
-      Success v -> pure $ _streamsStreams v
-    -- Fetch remaining messages
+    -- Fetch any remaining messages
     (hasNew, msgs) <- updateMessages apiConfig "messages.json"
     liftIO $ Shower.printer ("hasNew" :: Text, hasNew)
-    pure $ mkArchive streams msgs
+    -- Fetch streams
+    streams <- getStreams apiConfig
+    -- Fetch user avatars
+    users <- getUsers apiConfig
+    pure $ mkArchive streams users msgs
 
 updateMessages :: (MonadIO m, MonadHttp m) => APIConfig scheme -> FilePath -> m (Bool, [Message])
 updateMessages apiConfig messagesFile = do
@@ -164,9 +186,15 @@ fetchMessages apiConfig lastMsgId num = do
         (False, (lastMsg : _)) -> (msgs <>) <$> fetchMessages apiConfig (_messageId lastMsg) num
         _ -> pure msgs
 
-getStreams :: MonadHttp m => APIConfig scheme -> m (Result Streams)
-getStreams (apiUrl, auth) = do
-  apiGet auth (apiUrl /: "streams") NoReqBody mempty
+getStreams :: MonadHttp m => APIConfig scheme -> m [Stream]
+getStreams (apiUrl, auth) =
+  _streamsStreams . fromResult
+    <$> apiGet auth (apiUrl /: "streams") NoReqBody mempty
+
+getUsers :: MonadHttp m => APIConfig scheme -> m [User]
+getUsers (apiUrl, auth) =
+  _usersMembers . fromResult
+    <$> apiGet auth (apiUrl /: "users") NoReqBody mempty
 
 getMessages :: MonadHttp m => APIConfig scheme -> Int -> Int -> m (Result Messages)
 getMessages (apiUrl, auth) anchor numAfter = do
@@ -195,3 +223,8 @@ apiGet auth url reqBody opts = do
       jsonResponse
       (auth <> opts)
   pure $ fromJSON (responseBody r :: Value)
+
+fromResult :: Result a -> a
+fromResult = \case
+  Error s -> error $ toText s
+  Success v -> v

@@ -82,7 +82,7 @@ renderCrumbs crumbs =
 pageName :: Page -> Text
 pageName = \case
   Page_Index _ -> "Home"
-  Page_Stream s -> _streamName s
+  Page_Stream s -> "#" <> _streamName s
   Page_StreamTopic _s t -> _topicName t
 
 pageUrl :: Page -> Text
@@ -198,6 +198,10 @@ pageStyle = "div#thesite" ? do
     C.paddingTop $ em 0.5
     C.paddingBottom $ em 0.5
     C.borderTop C.dotted (px 1) C.grey
+  ".ui.comments.messages" ? do 
+    ".comment" ? do 
+      "a.avatar img" ? do 
+        C.height C.auto  -- Fix vertical stretching of avatar
   ".messages" ? do 
     "pre" ? do 
       C.fontSize $ pct 85
