@@ -83,17 +83,21 @@ renderPage page = with html_ [lang_ "en"] $ do
   body_ $ do
     with div_ [class_ "ui text container", id_ "thesite"] $ do
       case page of
-        Page_Index streams ->
+        Page_Index streams -> do
+          let streamMsgCount stream = 
+                length $ mconcat $ _topicMessages <$> fromMaybe [] (_streamTopics stream)
           with div_ [class_ "ui relaxed list"]
-            $ forM_ streams
+            $ forM_ (reverse $ sortOn streamMsgCount streams)
             $ \stream -> with div_ [class_ "item"] $ do
               with div_ [class_ "content"] $ do
                 with a_ [class_ "header", href_ (streamUrl stream)]
                   $ toHtml
                   $ _streamName stream
-                with div_ [class_ "description"]
-                  $ toHtml
-                  $ _streamDescription stream
+                with div_ [class_ "description"] $ do
+                  toHtml (_streamDescription stream)
+                  div_ $ do 
+                    toHtml $ show @Text $ streamMsgCount stream
+                    " messages"
         Page_Stream stream -> do
           with h1_ [class_ "ui header"] $ toHtml $ _streamName stream
           p_ $ toHtml $ _streamDescription stream
@@ -104,6 +108,11 @@ renderPage page = with html_ [lang_ "en"] $ do
                 with a_ [class_ "header", href_ ("/" <> topicUrl stream topic)]
                   $ toHtml
                   $ _topicName topic
+                with div_ [class_ "description"] $ do
+                  toHtml $ show @Text (length $ _topicMessages topic)
+                  " messages."
+                  " Last updated: "
+                  toHtml $ maybe "" (formatTime defaultTimeLocale "%F %X" . posixSecondsToUTCTime) $ _topicLastUpdated topic
         Page_StreamTopic stream topic -> do
           with h1_ [class_ "ui header"] $ do
             toHtml $ _streamName stream
