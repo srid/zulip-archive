@@ -110,7 +110,7 @@ renderPage page = with html_ [lang_ "en"] $ do
             " > "
             toHtml $ _topicName topic
           with div_ [class_ "ui grid logs"] $ do
-            forM_ (fromMaybe [] $ _topicMessages topic) $ \msg -> do
+            forM_ (_topicMessages topic) $ \msg -> do
               with div_ [class_ "row log-message top aligned"] $ do
                 with div_ [class_ $ "four wide column timestamp"] $ do
                   let t = posixSecondsToUTCTime $ _messageTimestamp msg

@@ -29,4 +29,5 @@ executable zulip-archive
         shower,
         exceptions,
         time,
-        directory
+        directory,
+        containers

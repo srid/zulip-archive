@@ -12,6 +12,7 @@ module Zulip.Client where
 
 import Data.Aeson
 import Data.Aeson.TH
+import qualified Data.Map.Strict as Map
 import Data.Time.Clock.POSIX
 import Network.HTTP.Req
 import Relude hiding (Option)
@@ -38,7 +39,7 @@ data Stream
       { _streamName :: Text,
         _streamDescription :: Text,
         _streamStreamId :: Int,
-        _streamTopics :: Maybe [Topic]  -- Not in API; only used internally
+        _streamTopics :: Maybe [Topic] -- Not in API; only used internally
       }
   deriving (Eq, Show)
 
@@ -53,7 +54,8 @@ data Topics
 data Topic
   = Topic
       { _topicName :: Text,
-        _topicMessages :: Maybe [Message]  -- Not in API; only used internally
+        _topicMessages :: [Message], -- Not in API; only used internally
+        _topicLastUpdated :: Maybe POSIXTime
       }
   deriving (Eq, Show)
 
@@ -83,19 +85,23 @@ data Message
   deriving (Eq, Show)
 
 -- | Fill out hitherto missing _streamTopics and _topicMessages
-mkArchive :: [(Stream, [Topic])] -> [Message] -> [Stream] 
-mkArchive streams msgs = flip fmap streams $ \(stream, topics) -> 
+mkArchive :: [Stream] -> [Message] -> [Stream]
+mkArchive streams msgs = flip fmap streams $ \stream ->
   -- TODO: Verify that stream and topic names are unique.
-  stream { _streamTopics = Just (flip fmap topics $ \topic -> 
-    topic { _topicMessages = Just $ filterTopicMessages stream topic msgs })
-         }
+  let streamMsgs = flip filter msgs $ \msg -> _messageStreamId msg == Just (_streamStreamId stream)
+      topicMsgMap = Map.fromListWith (<>) $ flip fmap streamMsgs $ \msg ->
+        (_messageSubject msg, [msg])
+   in stream
+        { _streamTopics = Just (reverse $ sortOn _topicLastUpdated $ uncurry mkTopic <$> Map.toList topicMsgMap)
+        }
   where
-    -- | Get messages under the given stream's topic
-    filterTopicMessages stream topic = filter $ \msg ->
-      and
-        [ _messageStreamId msg == Just (_streamStreamId stream),
-          _messageSubject msg == _topicName topic
-        ]
+    mkTopic topicName ms =
+      let tmsgs = sortOn _messageTimestamp ms
+       in Topic topicName tmsgs (lastTimestamp tmsgs)
+    lastTimestamp xs =
+      case reverse xs of
+        msg : _ -> Just $ _messageTimestamp msg
+        _ -> Nothing
 
 $(deriveJSON fieldLabelMod ''Stream)
 
@@ -121,13 +127,7 @@ getArchive apiKey = do
     streams <- getStreams apiConfig >>= \case
       -- TODO: use EitherT
       Error s -> error $ toText s
-      Success (v :: Streams) -> do
-        let streams = _streamsStreams v
-        forM streams $ \stream -> do
-          getTopics apiConfig (_streamStreamId stream) >>= \case
-            Error s -> error $ toText s
-            Success topics -> do
-              pure (stream, topics)
+      Success v -> pure $ _streamsStreams v
     -- Fetch remaining messages
     (hasNew, msgs) <- updateMessages apiConfig "messages.json"
     liftIO $ Shower.printer ("hasNew" :: Text, hasNew)
@@ -143,16 +143,14 @@ updateMessages apiConfig messagesFile = do
         pure msgs
   let savedMsgsSplit = unconsRev savedMsgs
       lastMsgId = maybe 0 (_messageId . fst) savedMsgsSplit
-      savedMsgsRest = maybe [] snd savedMsgsSplit 
+      savedMsgsRest = maybe [] snd savedMsgsSplit
   liftIO $ Shower.printer ("lastMsgId" :: Text, lastMsgId)
   newMsgs <- fetchMessages apiConfig lastMsgId 1000
   let msgs = savedMsgsRest <> newMsgs
   liftIO $ encodeFile messagesFile msgs
   liftIO $ Shower.printer ("Writing " :: Text, length savedMsgsRest, " <> " :: Text, length newMsgs)
   pure (msgs /= savedMsgs, msgs)
-  where 
-    -- | Like uncons, but return the last element in place of head. "tail"
-    -- would the rest of elements (but last element) in the same order.
+  where
     unconsRev :: [a] -> Maybe (a, [a])
     unconsRev = fmap (fmap reverse) . uncons . reverse
 
@@ -171,10 +169,6 @@ fetchMessages apiConfig lastMsgId num = do
 getStreams :: MonadHttp m => APIConfig scheme -> m (Result Streams)
 getStreams (apiUrl, auth) = do
   apiGet auth (apiUrl /: "streams") NoReqBody mempty
-
-getTopics :: forall m scheme. MonadHttp m => APIConfig scheme -> Int -> m (Result [Topic])
-getTopics (apiUrl, auth) streamId = do
-  fmap _topicsTopics <$> apiGet auth (apiUrl /: "users" /: "me" /: show streamId /: "topics") NoReqBody mempty
 
 getMessages :: MonadHttp m => APIConfig scheme -> Int -> Int -> m (Result Messages)
 getMessages (apiUrl, auth) anchor numAfter = do
