@@ -135,20 +135,25 @@ renderPage page = with html_ [lang_ "en"] $ do
             with div_ [class_ "ui relaxed list"]
               $ forM_ (reverse $ sortOn streamMsgCount streams)
               $ \stream -> with div_ [class_ "item"] $ do
+                with div_ [class_ "right floated content"] $
+                  case streamMsgCount stream of 
+                    0 -> mempty
+                    cnt -> do
+                      toHtml $ show @Text cnt
+                      " messages"
                 with div_ [class_ "content"] $ do
                   with a_ [class_ "header", href_ (streamUrl stream)]
                     $ toHtml
                     $ _streamName stream
                   with div_ [class_ "description"] $ do
                     toHtml (_streamDescription stream)
-                    div_ $ do
-                      toHtml $ show @Text $ streamMsgCount stream
-                      " messages"
           Page_Stream stream -> do
             p_ $ i_ $ toHtml $ _streamDescription stream
             with div_ [class_ "ui relaxed list"]
               $ forM_ (fromMaybe [] $ _streamTopics stream)
               $ \topic -> with div_ [class_ "item"] $ do
+                with div_ [class_ "right floated content"] $ do
+                  toHtml $ maybe "" renderTimestamp $ _topicLastUpdated topic
                 with div_ [class_ "content"] $ do
                   with a_ [class_ "header", href_ ("/" <> topicUrl stream topic)]
                     $ toHtml
@@ -156,8 +161,6 @@ renderPage page = with html_ [lang_ "en"] $ do
                   with div_ [class_ "description"] $ do
                     toHtml $ show @Text (length $ _topicMessages topic)
                     " messages."
-                    " Last updated: "
-                    toHtml $ maybe "" renderTimestamp $ _topicLastUpdated topic
           Page_StreamTopic _stream topic -> do
             with div_ [class_ "ui comments messages"] $ do
               forM_ (_topicMessages topic) $ \msg -> do
@@ -192,16 +195,15 @@ pageStyle = "div#thesite" ? do
   C.marginBottom $ em 1
   ".ui.breadcrumb.rib" ? do
     C.marginBottom $ em 1
-  ".ui.grid.messages" ? do
-    C.marginTop $ em 1
-  ".row.message" ? do
-    C.paddingTop $ em 0.5
-    C.paddingBottom $ em 0.5
-    C.borderTop C.dotted (px 1) C.grey
   ".ui.comments.messages" ? do 
     ".comment" ? do 
+      ".metadata a" ? do 
+        C.color C.grey
       "a.avatar img" ? do 
         C.height C.auto  -- Fix vertical stretching of avatar
   ".messages" ? do 
     "pre" ? do 
       C.fontSize $ pct 85
+    ".message_embed" ? do 
+      C.borderLeft C.solid (px 3) C.grey
+      C.paddingLeft $ em 0.7
