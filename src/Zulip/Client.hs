@@ -175,7 +175,7 @@ getMessages (apiUrl, auth) anchor numAfter narrow = do
       payload =
         mconcat
           [ "anchor" =: anchor,
-            "num_before" =: (4 :: Int),
+            "num_before" =: (0 :: Int),
             "num_after" =: numAfter,
             "narrow" =: narrowText
           ]
