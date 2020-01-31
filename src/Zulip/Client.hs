@@ -53,7 +53,6 @@ data Topics
 data Topic
   = Topic
       { _topicName :: Text,
-        _topicMaxId :: Int,
         _topicMessages :: Maybe [Message]  -- Not in API; only used internally
       }
   deriving (Eq, Show)
@@ -86,6 +85,7 @@ data Message
 -- | Fill out hitherto missing _streamTopics and _topicMessages
 mkArchive :: [(Stream, [Topic])] -> [Message] -> [Stream] 
 mkArchive streams msgs = flip fmap streams $ \(stream, topics) -> 
+  -- TODO: Verify that stream and topic names are unique.
   stream { _streamTopics = Just (flip fmap topics $ \topic -> 
     topic { _topicMessages = Just $ filterTopicMessages stream topic msgs })
          }
@@ -119,6 +119,7 @@ getArchive apiKey = do
   runReq defaultHttpConfig $ do
     -- Fetch streams and topics
     streams <- getStreams apiConfig >>= \case
+      -- TODO: use EitherT
       Error s -> error $ toText s
       Success (v :: Streams) -> do
         let streams = _streamsStreams v
@@ -128,21 +129,32 @@ getArchive apiKey = do
             Success topics -> do
               pure (stream, topics)
     -- Fetch remaining messages
-    let messagesFile = "messages.json"
-    (savedMsgs, lastMsgId) <- liftIO (doesFileExist messagesFile) >>= \case
-      False -> pure ([], 0)
-      True -> liftIO (eitherDecodeFileStrict messagesFile) >>= \case
-        Left e -> error $ toText e
-        Right (msgs :: [Message]) ->
-          case reverse msgs of
-            [] -> pure ([], 0)
-            (msg : rest) -> pure (reverse rest, _messageId msg)
-    liftIO $ Shower.printer ("lastMsgId" :: Text, lastMsgId)
-    newMsgs <- fetchMessages apiConfig lastMsgId 1000
-    let msgs = savedMsgs <> newMsgs
-    liftIO $ encodeFile messagesFile msgs
-    liftIO $ Shower.printer ("Writing " :: Text, length savedMsgs, " <> " :: Text, length newMsgs)
+    (hasNew, msgs) <- updateMessages apiConfig "messages.json"
+    liftIO $ Shower.printer ("hasNew" :: Text, hasNew)
     pure $ mkArchive streams msgs
+
+updateMessages :: (MonadIO m, MonadHttp m) => APIConfig scheme -> FilePath -> m (Bool, [Message])
+updateMessages apiConfig messagesFile = do
+  savedMsgs <- liftIO (doesFileExist messagesFile) >>= \case
+    False -> pure []
+    True -> liftIO (eitherDecodeFileStrict messagesFile) >>= \case
+      Left e -> error $ toText e
+      Right (msgs :: [Message]) ->
+        pure msgs
+  let savedMsgsSplit = unconsRev savedMsgs
+      lastMsgId = maybe 0 (_messageId . fst) savedMsgsSplit
+      savedMsgsRest = maybe [] snd savedMsgsSplit 
+  liftIO $ Shower.printer ("lastMsgId" :: Text, lastMsgId)
+  newMsgs <- fetchMessages apiConfig lastMsgId 1000
+  let msgs = savedMsgsRest <> newMsgs
+  liftIO $ encodeFile messagesFile msgs
+  liftIO $ Shower.printer ("Writing " :: Text, length savedMsgsRest, " <> " :: Text, length newMsgs)
+  pure (msgs /= savedMsgs, msgs)
+  where 
+    -- | Like uncons, but return the last element in place of head. "tail"
+    -- would the rest of elements (but last element) in the same order.
+    unconsRev :: [a] -> Maybe (a, [a])
+    unconsRev = fmap (fmap reverse) . uncons . reverse
 
 fetchMessages :: MonadHttp m => APIConfig scheme -> Int -> Int -> m [Message]
 fetchMessages apiConfig lastMsgId num = do
