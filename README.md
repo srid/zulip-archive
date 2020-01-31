@@ -39,3 +39,7 @@ nix-shell --run 'ghcid -T ":main $ZULIPAPIKEY"'
 ```
 
 Visit http://localhost:8080 
+
+## Manual update
+
+User uploaded files are unavailable via the API. They must be manually exported (needs admin rights), and copied to `./a/user_uploads`.

@@ -35,7 +35,7 @@ main = Rib.runWith [reldir|a|] [reldir|b|] generateSite (Rib.Serve 8080 False)
 generateSite :: Action ()
 generateSite = do
   -- Copy over the static files
-  Rib.buildStaticFiles [[relfile|static/**|]]
+  Rib.buildStaticFiles [[relfile|user_uploads/**|]]
   [apiKey] <- fmap toText <$> liftIO getArgs
   streams <- getArchive apiKey
   forM_ streams $ \stream -> do
@@ -207,3 +207,6 @@ pageStyle = "div#thesite" ? do
     ".message_embed" ? do 
       C.borderLeft C.solid (px 3) C.grey
       C.paddingLeft $ em 0.7
+    ".message_inline_image img" ? do 
+      C.maxWidth $ pct 100
+      C.marginBottom $ em 1
