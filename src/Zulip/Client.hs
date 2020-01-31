@@ -12,12 +12,12 @@ module Zulip.Client where
 
 import Data.Aeson
 import Data.Aeson.TH
+import Data.Time.Clock.POSIX
 import Network.HTTP.Req
 import Relude hiding (Option)
 import qualified Shower
 import System.Directory (doesFileExist)
 import Zulip.Internal
-import Data.Time.Clock.POSIX
 
 baseUrl :: Text
 baseUrl = "funprog.zulipchat.com"
@@ -143,15 +143,23 @@ demo apiKey = do
             [] -> pure 0
             (msg : _) -> pure $ _messageId msg
     liftIO $ Shower.printer ("lastMsgId" :: Text, lastMsgId)
-    -- TODO: Pagination, for loading the full list of messages
-    msgs <- getMessages apiConfig lastMsgId 1000 [] >>= \case
-      Error s -> error $ toText s
-      Success newMsgs -> do
-        let msgs = savedMsgs <> _messagesMessages newMsgs
-        liftIO $ encodeFile messagesFile msgs
-        liftIO $ Shower.printer ("Writing " :: Text, length savedMsgs, " <> " :: Text, length (_messagesMessages newMsgs))
-        pure msgs
+    newMsgs <- fetchMessages apiConfig lastMsgId 1000
+    let msgs = savedMsgs <> newMsgs
+    liftIO $ encodeFile messagesFile msgs
+    liftIO $ Shower.printer ("Writing " :: Text, length savedMsgs, " <> " :: Text, length newMsgs)
     pure (streams, msgs)
+
+fetchMessages :: MonadHttp m => APIConfig scheme -> Int -> Int -> m [Message]
+fetchMessages apiConfig lastMsgId num = do
+  getMessages apiConfig lastMsgId num [] >>= \case
+    Error s -> error $ toText s
+    Success newMsgs -> do
+      let msgs = _messagesMessages newMsgs
+      liftIO $ Shower.printer ("Fetched " :: Text, length msgs, _messagesFoundAnchor newMsgs, _messagesFoundNewest newMsgs)
+      case (_messagesFoundNewest newMsgs, reverse msgs) of
+        -- Fetch more if available
+        (False, (lastMsg : _)) -> (msgs <>) <$> fetchMessages apiConfig (_messageId lastMsg) num
+        _ -> pure msgs
 
 getStreams :: MonadHttp m => APIConfig scheme -> m (Result Streams)
 getStreams (apiUrl, auth) = do
