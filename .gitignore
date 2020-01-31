@@ -5,4 +5,7 @@ result
 .shake
 
 b/*
+c
 !b/.gitkeep
+
+messages.json
