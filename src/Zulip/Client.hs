@@ -37,7 +37,8 @@ data Stream
   = Stream
       { _streamName :: Text,
         _streamDescription :: Text,
-        _streamStreamId :: Int
+        _streamStreamId :: Int,
+        _streamTopics :: Maybe [Topic]  -- Not in API; only used internally
       }
   deriving (Eq, Show)
 
@@ -52,7 +53,8 @@ data Topics
 data Topic
   = Topic
       { _topicName :: Text,
-        _topicMaxId :: Int
+        _topicMaxId :: Int,
+        _topicMessages :: Maybe [Message]  -- Not in API; only used internally
       }
   deriving (Eq, Show)
 
@@ -81,13 +83,19 @@ data Message
       }
   deriving (Eq, Show)
 
--- | Get messages under the given stream's topic
-filterTopicMessages :: Stream -> Topic -> [Message] -> [Message]
-filterTopicMessages stream topic = filter $ \msg ->
-  and
-    [ _messageStreamId msg == Just (_streamStreamId stream),
-      _messageSubject msg == _topicName topic
-    ]
+-- | Fill out hitherto missing _streamTopics and _topicMessages
+mkArchive :: [(Stream, [Topic])] -> [Message] -> [Stream] 
+mkArchive streams msgs = flip fmap streams $ \(stream, topics) -> 
+  stream { _streamTopics = Just (flip fmap topics $ \topic -> 
+    topic { _topicMessages = Just $ filterTopicMessages stream topic msgs })
+         }
+  where
+    -- | Get messages under the given stream's topic
+    filterTopicMessages stream topic = filter $ \msg ->
+      and
+        [ _messageStreamId msg == Just (_streamStreamId stream),
+          _messageSubject msg == _topicName topic
+        ]
 
 $(deriveJSON fieldLabelMod ''Stream)
 
@@ -103,13 +111,13 @@ $(deriveJSON fieldLabelMod ''Message)
 
 type APIConfig scheme = (Url scheme, Option scheme)
 
--- | Just a playground for now.
-demo :: MonadIO m => Text -> m ([(Stream, [Topic])], [Message])
-demo apiKey = do
+getArchive :: MonadIO m => Text -> m [Stream]
+getArchive apiKey = do
   let auth = basicAuth userEmail $ encodeUtf8 apiKey
       apiConfig = (https baseUrl /: "api" /: "v1", auth)
   liftIO $ putStrLn "Running API request"
   runReq defaultHttpConfig $ do
+    -- Fetch streams and topics
     streams <- getStreams apiConfig >>= \case
       Error s -> error $ toText s
       Success (v :: Streams) -> do
@@ -119,7 +127,7 @@ demo apiKey = do
             Error s -> error $ toText s
             Success topics -> do
               pure (stream, topics)
-    -- Play with messages API
+    -- Fetch remaining messages
     let messagesFile = "messages.json"
     (savedMsgs, lastMsgId) <- liftIO (doesFileExist messagesFile) >>= \case
       False -> pure ([], 0)
@@ -134,7 +142,7 @@ demo apiKey = do
     let msgs = savedMsgs <> newMsgs
     liftIO $ encodeFile messagesFile msgs
     liftIO $ Shower.printer ("Writing " :: Text, length savedMsgs, " <> " :: Text, length newMsgs)
-    pure (streams, msgs)
+    pure $ mkArchive streams msgs
 
 fetchMessages :: MonadHttp m => APIConfig scheme -> Int -> Int -> m [Message]
 fetchMessages apiConfig lastMsgId num = do

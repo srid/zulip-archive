@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
@@ -25,8 +26,8 @@ import Data.Time.Clock.POSIX
 
 data Page
   = Page_Index [Stream]
-  | Page_Stream Stream [Topic]
-  | Page_StreamTopic Stream Topic [Message]
+  | Page_Stream Stream
+  | Page_StreamTopic Stream Topic
 
 main :: IO ()
 main = Rib.runWith [reldir|a|] [reldir|b|] generateSite (Rib.Serve 8080 False)
@@ -37,16 +38,18 @@ generateSite = do
   -- Copy over the static files
   Rib.buildStaticFiles [[relfile|static/**|]]
   [apiKey] <- fmap toText <$> liftIO getArgs
-  (streams, msgs) <- demo apiKey
-  forM_ streams $ \(stream, topics) -> do
+  streams <- getArchive apiKey
+  forM_ streams $ \stream -> do
     f <- liftIO $ parseRelFile $ toString $ streamHtmlPath stream
-    Rib.writeHtml f $ renderPage $ Page_Stream stream topics
-    forM_ topics $ \topic -> do
-      g <- liftIO $ parseRelFile $ toString $ topicHtmlPath stream topic
-      Rib.writeHtml g $ renderPage $ Page_StreamTopic stream topic (filterTopicMessages stream topic msgs)
+    Rib.writeHtml f $ renderPage $ Page_Stream stream
+    case _streamTopics stream of
+      Nothing -> error "No topics stored in stream"
+      Just topics -> forM_ topics $ \topic -> do
+        g <- liftIO $ parseRelFile $ toString $ topicHtmlPath stream topic
+        Rib.writeHtml g $ renderPage $ Page_StreamTopic stream topic
   -- Write an index.html linking to the aforementioned files.
   Rib.writeHtml [relfile|index.html|] $
-    renderPage (Page_Index $ fst <$> streams)
+    renderPage (Page_Index streams)
 
 streamHtmlPath :: Stream -> Text
 streamHtmlPath stream = streamUrl stream <> "index.html"
@@ -71,8 +74,8 @@ renderPage page = with html_ [lang_ "en"] $ do
     meta_ [httpEquiv_ "Content-Type", content_ "text/html; charset=utf-8"]
     title_ $ case page of
       Page_Index _ -> "Fun Prog Zulip Archive"
-      Page_Stream s _ -> toHtml $ _streamName s
-      Page_StreamTopic _s t _ -> toHtml $ _topicName t
+      Page_Stream s -> toHtml $ _streamName s
+      Page_StreamTopic _s t -> toHtml $ _topicName t
     style_ [type_ "text/css"] $ C.render pageStyle
     stylesheet "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
     stylesheet "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
@@ -91,23 +94,23 @@ renderPage page = with html_ [lang_ "en"] $ do
                 with div_ [class_ "description"]
                   $ toHtml
                   $ _streamDescription stream
-        Page_Stream stream topics -> do
+        Page_Stream stream -> do
           with h1_ [class_ "ui header"] $ toHtml $ _streamName stream
           p_ $ toHtml $ _streamDescription stream
           with div_ [class_ "ui relaxed list"]
-            $ forM_ topics
+            $ forM_ (fromMaybe [] $ _streamTopics stream)
             $ \topic -> with div_ [class_ "item"] $ do
               with div_ [class_ "content"] $ do
                 with a_ [class_ "header", href_ ("/" <> topicUrl stream topic)]
                   $ toHtml
                   $ _topicName topic
-        Page_StreamTopic stream topic msgs -> do
+        Page_StreamTopic stream topic -> do
           with h1_ [class_ "ui header"] $ do
             toHtml $ _streamName stream
             " > "
             toHtml $ _topicName topic
           with div_ [class_ "ui grid logs"] $ do
-            forM_ msgs $ \msg -> do
+            forM_ (fromMaybe [] $ _topicMessages topic) $ \msg -> do
               with div_ [class_ "row log-message top aligned"] $ do
                 with div_ [class_ $ "four wide column timestamp"] $ do
                   let t = posixSecondsToUTCTime $ _messageTimestamp msg
