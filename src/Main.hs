@@ -39,7 +39,7 @@ generateSite = do
   [apiKey] <- fmap toText <$> liftIO getArgs
   (streams, msgs) <- demo apiKey
   forM_ streams $ \(stream, topics) -> do
-    f <- liftIO $ parseRelFile $ streamHtmlPath stream
+    f <- liftIO $ parseRelFile $ toString $ streamHtmlPath stream
     Rib.writeHtml f $ renderPage $ Page_Stream stream topics
     forM_ topics $ \topic -> do
       g <- liftIO $ parseRelFile $ toString $ topicHtmlPath stream topic
@@ -48,7 +48,7 @@ generateSite = do
   Rib.writeHtml [relfile|index.html|] $
     renderPage (Page_Index $ fst <$> streams)
 
-streamHtmlPath :: (Semigroup s, IsString s) => Stream -> s
+streamHtmlPath :: Stream -> Text
 streamHtmlPath stream = streamUrl stream <> "index.html"
 
 topicHtmlPath :: Stream -> Topic -> Text
@@ -59,8 +59,10 @@ topicUrl stream topic = either (error . toText . displayException) id $ do
   topicSlug <- mkSlug $ _topicName topic
   pure $ streamUrl stream <> unSlug topicSlug <> ".html"
 
-streamUrl :: (Semigroup s, IsString s) => Stream -> s
-streamUrl stream = show (_streamStreamId stream) <> "/"
+streamUrl :: Stream -> Text
+streamUrl stream = either (error . toText . displayException) id $ do 
+  streamSlug <- mkSlug $ _streamName stream
+  pure $ unSlug streamSlug <> "/"
 
 -- | Define your site HTML here
 renderPage :: Page -> Html ()
