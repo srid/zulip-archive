@@ -10,7 +10,7 @@
 
 module Main where
 
-import Clay ((?), Css, em, px)
+import Clay ((?), Css, em, px, pct)
 import qualified Clay as C
 import Data.Time
 import Data.Time.Clock.POSIX
@@ -116,7 +116,7 @@ renderPage page = with html_ [lang_ "en"] $ do
     stylesheet "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
     stylesheet "https://fonts.googleapis.com/css?family=Open+Sans|Oswald&display=swap"
   body_ $ do
-    with div_ [class_ "ui container", id_ "thesite"] $ do
+    with div_ [class_ "ui text container", id_ "thesite"] $ do
       with div_ [class_ "ui black inverted top attached center aligned segment"]
         $ with h1_ [class_ "ui huge header"]
         $ pageTitle page
@@ -158,18 +158,21 @@ renderPage page = with html_ [lang_ "en"] $ do
                     " Last updated: "
                     toHtml $ maybe "" renderTimestamp $ _topicLastUpdated topic
           Page_StreamTopic _stream topic -> do
-            with div_ [class_ "ui grid messages"] $ do
+            with div_ [class_ "ui comments messages"] $ do
               forM_ (_topicMessages topic) $ \msg -> do
-                with div_ [class_ "row message top aligned"] $ do
-                  with div_ [class_ $ "three wide right aligned column timestamp"] $ do
-                    let anchor = show $ _messageId msg
-                    with a_ [name_ anchor, href_ $ "#" <> anchor]
-                      $ toHtml
-                      $ _messageSenderFullName msg
-                    div_ $ renderTimestamp $ _messageTimestamp msg
-                  with div_ [class_ "thirteen wide column message-text"]
-                    $ toHtmlRaw
-                    $ _messageContent msg -- TODO: only if Html
+                with div_ [class_ "comment"] $ do
+                  with a_ [class_ "avatar"] $ do
+                    case _messageAvatarUrl msg of 
+                      Nothing -> mempty 
+                      Just avatarUrl -> img_ [src_ avatarUrl] 
+                  with div_ [class_ "content"] $ do 
+                    with a_ [class_ "author"] $ toHtml $ _messageSenderFullName msg 
+                    with div_ [class_ "metadata"] $ do
+                      let anchor = show $ _messageId msg
+                      with a_ [name_ anchor, href_ $ "#" <> anchor] $ 
+                        div_ $ renderTimestamp $ _messageTimestamp msg
+                    with div_ [class_ "text"] $ 
+                      toHtmlRaw (_messageContent msg)
       with div_ [class_ "ui vertical footer segment"] $ do
         with a_ [href_ "https://github.com/srid/zulip-archive"] "Powered by Haskell"
   where
@@ -194,3 +197,6 @@ pageStyle = "div#thesite" ? do
     C.paddingTop $ em 0.5
     C.paddingBottom $ em 0.5
     C.borderTop C.dotted (px 1) C.grey
+  ".messages" ? do 
+    "pre" ? do 
+      C.fontSize $ pct 85

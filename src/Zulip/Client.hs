@@ -73,10 +73,8 @@ data Message
       { _messageId :: Int,
         _messageContent :: Text,
         _messageContentType :: Text,
-        _messageSenderId :: Int,
-        _messageSenderEmail :: Text,
+        _messageAvatarUrl :: Maybe Text,  -- FIXME: api doesn't return it
         _messageSenderFullName :: Text,
-        _messageSenderShortName :: Text,
         _messageStreamId :: Maybe Int,
         _messageSubject :: Text,
         _messageTimestamp :: POSIXTime,
