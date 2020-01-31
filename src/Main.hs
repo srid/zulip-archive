@@ -17,7 +17,6 @@ import Lucid
 import Path
 import Relude
 import qualified Rib
-import qualified Rib.Parser.MMark as MMark
 import Slug
 import System.Environment
 import Zulip.Client
@@ -81,7 +80,7 @@ renderPage page = with html_ [lang_ "en"] $ do
     stylesheet "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
     stylesheet "https://fonts.googleapis.com/css?family=Open+Sans|Oswald&display=swap"
   body_ $ do
-    with div_ [class_ "ui text container", id_ "thesite"] $ do
+    with div_ [class_ "ui container", id_ "thesite"] $ do
       case page of
         Page_Index streams -> do
           let streamMsgCount stream = 
@@ -112,24 +111,25 @@ renderPage page = with html_ [lang_ "en"] $ do
                   toHtml $ show @Text (length $ _topicMessages topic)
                   " messages."
                   " Last updated: "
-                  toHtml $ maybe "" (formatTime defaultTimeLocale "%F %X" . posixSecondsToUTCTime) $ _topicLastUpdated topic
+                  toHtml $ maybe "" renderTimestamp $ _topicLastUpdated topic
         Page_StreamTopic stream topic -> do
           with h1_ [class_ "ui header"] $ do
             toHtml $ _streamName stream
             " > "
             toHtml $ _topicName topic
-          with div_ [class_ "ui grid logs"] $ do
+          with div_ [class_ "ui grid logs inverted segment"] $ do
             forM_ (_topicMessages topic) $ \msg -> do
-              with div_ [class_ "row log-message top aligned"] $ do
-                with div_ [class_ $ "four wide column timestamp"] $ do
-                  let t = posixSecondsToUTCTime $ _messageTimestamp msg
-                  div_ $ toHtml $ _messageSenderFullName msg
-                  with a_ [] $ toHtml $ formatTime defaultTimeLocale "%F %X" t
-                with div_ [class_ "twelve wide column message-text"] $ 
+              with div_ [class_ "row message top aligned"] $ do
+                with div_ [class_ $ "three wide right aligned column timestamp"] $ do
+                  let anchor = show $ _messageId msg
+                  with a_ [name_ anchor, href_ $ "#" <> anchor] $ 
+                    toHtml $ _messageSenderFullName msg
+                  div_ $ renderTimestamp $ _messageTimestamp msg
+                with div_ [class_ "thirteen wide column message-text"] $ 
                   toHtmlRaw $ _messageContent msg -- TODO: only if Html
   where
-    _renderMarkdown =
-      MMark.render . either error id . MMark.parsePure "<none>"
+    renderTimestamp t = 
+      toHtml $ formatTime defaultTimeLocale "%F %X" $ posixSecondsToUTCTime t
     stylesheet x = link_ [rel_ "stylesheet", href_ x]
 
 -- | Define your site CSS here
@@ -137,3 +137,6 @@ pageStyle :: Css
 pageStyle = "div#thesite" ? do
   C.marginTop $ em 1
   C.marginBottom $ em 1
+  ".row.message" ? do 
+    C.paddingTop $ em 0.5
+    C.paddingBottom $ em 0
