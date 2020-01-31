@@ -133,10 +133,10 @@ getArchive apiKey = do
       False -> pure ([], 0)
       True -> liftIO (eitherDecodeFileStrict messagesFile) >>= \case
         Left e -> error $ toText e
-        Right (msgs :: [Message]) -> fmap (msgs,) $
+        Right (msgs :: [Message]) ->
           case reverse msgs of
-            [] -> pure 0
-            (msg : _) -> pure $ _messageId msg
+            [] -> pure ([], 0)
+            (msg : rest) -> pure (reverse rest, _messageId msg)
     liftIO $ Shower.printer ("lastMsgId" :: Text, lastMsgId)
     newMsgs <- fetchMessages apiConfig lastMsgId 1000
     let msgs = savedMsgs <> newMsgs
