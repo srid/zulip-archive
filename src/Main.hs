@@ -102,6 +102,7 @@ renderPage :: Page -> Html ()
 renderPage page = with html_ [lang_ "en"] $ do
   head_ $ do
     meta_ [httpEquiv_ "Content-Type", content_ "text/html; charset=utf-8"]
+    meta_ [name_ "viewport", content_ "width=device-width, initial-scale=1"]
     title_ $ case page of
       Page_Index _ -> "Fun Prog Zulip Archive"
       Page_Stream s -> do
