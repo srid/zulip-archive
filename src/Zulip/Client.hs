@@ -81,14 +81,6 @@ data Message
       }
   deriving (Eq, Show)
 
-data Narrow
-  = Narrow
-      { _narrowOperator :: Text,
-        _narrowOperand :: Text,
-        _narrowNegated :: Bool
-      }
-  deriving (Eq, Show)
-
 -- | Get messages under the given stream's topic
 filterTopicMessages :: Stream -> Topic -> [Message] -> [Message]
 filterTopicMessages stream topic = filter $ \msg ->
@@ -96,9 +88,6 @@ filterTopicMessages stream topic = filter $ \msg ->
     [ _messageStreamId msg == Just (_streamStreamId stream),
       _messageSubject msg == _topicName topic
     ]
-
-narrowStream :: Text -> [Narrow]
-narrowStream name = [Narrow "stream" name False]
 
 $(deriveJSON fieldLabelMod ''Stream)
 
@@ -111,8 +100,6 @@ $(deriveJSON fieldLabelMod ''Topic)
 $(deriveJSON fieldLabelMod ''Messages)
 
 $(deriveJSON fieldLabelMod ''Message)
-
-$(deriveJSON fieldLabelMod ''Narrow)
 
 type APIConfig scheme = (Url scheme, Option scheme)
 
@@ -151,7 +138,7 @@ demo apiKey = do
 
 fetchMessages :: MonadHttp m => APIConfig scheme -> Int -> Int -> m [Message]
 fetchMessages apiConfig lastMsgId num = do
-  getMessages apiConfig lastMsgId num [] >>= \case
+  getMessages apiConfig lastMsgId num >>= \case
     Error s -> error $ toText s
     Success newMsgs -> do
       let msgs = _messagesMessages newMsgs
@@ -169,15 +156,13 @@ getTopics :: forall m scheme. MonadHttp m => APIConfig scheme -> Int -> m (Resul
 getTopics (apiUrl, auth) streamId = do
   fmap _topicsTopics <$> apiGet auth (apiUrl /: "users" /: "me" /: show streamId /: "topics") NoReqBody mempty
 
-getMessages :: MonadHttp m => APIConfig scheme -> Int -> Int -> [Narrow] -> m (Result Messages)
-getMessages (apiUrl, auth) anchor numAfter narrow = do
-  let narrowText :: Text = decodeUtf8 $ encode narrow
-      payload =
+getMessages :: MonadHttp m => APIConfig scheme -> Int -> Int -> m (Result Messages)
+getMessages (apiUrl, auth) anchor numAfter = do
+  let payload =
         mconcat
           [ "anchor" =: anchor,
             "num_before" =: (0 :: Int),
-            "num_after" =: numAfter,
-            "narrow" =: narrowText
+            "num_after" =: numAfter
           ]
   apiGet auth (apiUrl /: "messages") NoReqBody payload
 
