@@ -83,7 +83,16 @@ data Message
         _messageStreamId :: Maybe Int,
         _messageSubject :: Text,
         _messageTimestamp :: POSIXTime,
-        _messageType :: Text
+        _messageType :: Text,
+        _messageReactions :: [Reaction]
+      }
+  deriving (Eq, Show)
+
+data Reaction
+  = Reaction
+      { _reactionEmojiCode :: Text,
+        _reactionEmojiName :: Text,
+        _reactionReactionType :: Text
       }
   deriving (Eq, Show)
 
@@ -102,15 +111,14 @@ data User
   deriving (Eq, Show)
 
 -- | Make a non-injective function injective
-mkInjective :: (Ord a, Ord b) => [a] -> (a -> b) -> a -> (b, Maybe a)
-mkInjective domain f =
+mkInjective :: Ord b => [a] -> (a -> b) -> a -> (b, Maybe a)
+mkInjective domain f a =
   let image = map f domain
       nonInjectiveImage = Set.fromList $ dups image
-   in \a ->
-        let b = f a
-         in if Set.member b nonInjectiveImage
-              then (b, Just a)
-              else (b, Nothing)
+      b = f a
+   in if Set.member b nonInjectiveImage
+        then (b, Just a)
+        else (b, Nothing)
   where
     dups = Map.keys . Map.filter (> 1) . Map.fromListWith (+) . fmap (,1 :: Int)
 
@@ -156,6 +164,8 @@ $(deriveJSON fieldLabelMod ''Topic)
 $(deriveJSON fieldLabelMod ''Messages)
 
 $(deriveJSON fieldLabelMod ''Message)
+
+$(deriveJSON fieldLabelMod ''Reaction)
 
 $(deriveJSON fieldLabelMod ''Users)
 
