@@ -10,12 +10,12 @@
 
 module Main where
 
-import Clay ((?), Css, em, px, pct)
+import Clay ((?), Css, em, pct, px)
 import qualified Clay as C
+import qualified Data.Text as T
 import Data.Time
 import Data.Time.Clock.POSIX
 import Development.Shake
-import qualified Data.Text as T
 import Lucid
 import Path
 import Relude
@@ -138,7 +138,7 @@ renderPage page = with html_ [lang_ "en"] $ do
               $ forM_ (reverse $ sortOn streamMsgCount streams)
               $ \stream -> with div_ [class_ "item"] $ do
                 with div_ [class_ "right floated content subtle"] $
-                  case streamMsgCount stream of 
+                  case streamMsgCount stream of
                     0 -> mempty
                     cnt -> do
                       toHtml $ show @Text cnt
@@ -168,16 +168,18 @@ renderPage page = with html_ [lang_ "en"] $ do
               forM_ (_topicMessages topic) $ \msg -> do
                 with div_ [class_ "comment"] $ do
                   with a_ [class_ "avatar"] $ do
-                    case _messageAvatarUrl msg of 
-                      Nothing -> mempty 
-                      Just avatarUrl -> img_ [src_ avatarUrl] 
-                  with div_ [class_ "content"] $ do 
-                    with a_ [class_ "author"] $ toHtml $ _messageSenderFullName msg 
+                    case _messageAvatarUrl msg of
+                      Nothing -> mempty
+                      Just avatarUrl -> img_ [src_ avatarUrl]
+                  with div_ [class_ "content"] $ do
+                    with a_ [class_ "author"] $ toHtml $ _messageSenderFullName msg
                     with div_ [class_ "metadata"] $ do
                       let anchor = show $ _messageId msg
-                      with a_ [name_ anchor, href_ $ "#" <> anchor] $ 
-                        div_ $ renderTimestamp $ _messageTimestamp msg
-                    with div_ [class_ "text"] $ 
+                      with a_ [name_ anchor, href_ $ "#" <> anchor]
+                        $ div_
+                        $ renderTimestamp
+                        $ _messageTimestamp msg
+                    with div_ [class_ "text"] $
                       toHtmlRaw (_messageContent msg)
       with div_ [class_ "ui vertical footer segment"] $ do
         with a_ [href_ "https://github.com/srid/zulip-archive"] "Powered by Haskell"
@@ -200,7 +202,6 @@ headerFont = "Roboto"
 bodyFont :: Text
 bodyFont = "Open Sans"
 
-
 -- | Define your site CSS here
 pageStyle :: Css
 pageStyle = "div#thesite" ? do
@@ -209,27 +210,27 @@ pageStyle = "div#thesite" ? do
   C.marginBottom $ em 1
   ".ui.breadcrumb.rib" ? do
     C.marginBottom $ em 1
-  ".ui.comments.messages" ? do 
-    ".comment" ? do 
-      ".metadata a" ? do 
+  ".ui.comments.messages" ? do
+    ".comment" ? do
+      ".metadata a" ? do
         C.color C.grey
-      "a.avatar img" ? do 
-        C.height C.auto  -- Fix vertical stretching of avatar
-  ".subtle" ? do 
+      "a.avatar img" ? do
+        C.height C.auto -- Fix vertical stretching of avatar
+  ".subtle" ? do
     C.color C.grey
-  ".messages" ? do 
-    "pre" ? do 
+  ".messages" ? do
+    "pre" ? do
       C.fontSize $ pct 85
-    ".message_embed" ? do 
+    ".message_embed" ? do
       C.borderLeft C.solid (px 3) C.grey
       C.paddingLeft $ em 0.7
-    ".message_inline_image img" ? do 
+    ".message_inline_image img" ? do
       C.maxWidth $ pct 100
       C.marginBottom $ em 1
   where
-    baseStyle :: Css 
-    baseStyle = do 
-      -- Fonts 
+    baseStyle :: Css
+    baseStyle = do
+      -- Fonts
       C.fontFamily [bodyFont] [C.sansSerif]
       forM_ [C.h1, C.h2, C.h3, C.h4, C.h5, C.h6, ".ui.breadcrumb.rib .section", ".header", ".as-header"] $ \h -> h ? do
         C.fontFamily [headerFont] [C.sansSerif]
