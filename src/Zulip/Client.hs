@@ -13,11 +13,13 @@ module Zulip.Client where
 import Data.Aeson
 import Data.Aeson.TH
 import qualified Data.Map.Strict as Map
+import qualified Data.Set as Set
 import Data.Time.Clock.POSIX
 import Network.HTTP.Req
 import Relude hiding (Option)
 import Relude.Extra.Map (lookup)
 import qualified Shower
+import Slug
 import System.Directory (doesFileExist)
 import Zulip.Internal
 
@@ -56,7 +58,8 @@ data Topic
   = Topic
       { _topicName :: Text,
         _topicMessages :: [Message], -- Not in API; only used internally
-        _topicLastUpdated :: Maybe POSIXTime -- Not in API; only used internally
+        _topicLastUpdated :: Maybe POSIXTime, -- Not in API; only used internally
+        _topicSlug :: Text
       }
   deriving (Eq, Show)
 
@@ -98,6 +101,19 @@ data User
       }
   deriving (Eq, Show)
 
+-- | Make a non-injective function injective
+mkInjective :: (Ord a, Ord b) => [a] -> (a -> b) -> a -> (b, Maybe a)
+mkInjective domain f =
+  let image = map f domain
+      nonInjectiveImage = Set.fromList $ dups image
+   in \a ->
+        let b = f a
+         in if Set.member b nonInjectiveImage
+              then (b, Just a)
+              else (b, Nothing)
+  where
+    dups = Map.keys . Map.filter (> 1) . Map.fromListWith (+) . fmap (,1 :: Int)
+
 -- | Fill out hitherto missing _streamTopics, _topicMessages and _messageAvatarUrl
 mkArchive :: [Stream] -> [User] -> [Message] -> [Stream]
 mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
@@ -109,16 +125,25 @@ mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
       topicMsgMap = Map.fromListWith (<>) $ flip fmap streamMsgs $ \msg ->
         (_messageSubject msg, [msg])
    in stream
-        { _streamTopics = Just (reverse $ sortOn _topicLastUpdated $ uncurry mkTopic <$> Map.toList topicMsgMap)
+        { _streamTopics = Just (reverse $ sortOn _topicLastUpdated $ uncurry (mkTopic $ Map.keys topicMsgMap) <$> Map.toList topicMsgMap)
         }
   where
-    mkTopic topicName ms =
+    mkTopic allTopics topicName ms =
       let tmsgs = sortOn _messageTimestamp ms
-       in Topic topicName tmsgs (lastTimestamp tmsgs)
+          mkTopicSlug = mkInjective allTopics mkSlugPure >>> \case
+            (slug, Nothing) -> slug
+            (slug, Just _) -> slug <> "-" <> show (_messageId $ headStrict tmsgs)
+       in Topic topicName tmsgs (lastTimestamp tmsgs) (mkTopicSlug topicName)
     lastTimestamp xs =
       case reverse xs of
         msg : _ -> Just $ _messageTimestamp msg
         _ -> Nothing
+    mkSlugPure =
+      either (error . toText . displayException) unSlug . mkSlug
+    headStrict = \case
+      -- TODO: use NonEmpty lists instead
+      (x : _) -> x
+      [] -> error "empty list"
 
 $(deriveJSON fieldLabelMod ''Stream)
 

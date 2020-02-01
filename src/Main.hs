@@ -58,9 +58,8 @@ topicHtmlPath :: Stream -> Topic -> Text
 topicHtmlPath = topicUrl
 
 topicUrl :: Stream -> Topic -> Text
-topicUrl stream topic = either (error . toText . displayException) id $ do
-  topicSlug <- mkSlug $ _topicName topic
-  pure $ streamUrl stream <> unSlug topicSlug <> ".html"
+topicUrl stream topic =
+  streamUrl stream <> _topicSlug topic <> ".html"
 
 streamUrl :: Stream -> Text
 streamUrl stream = either (error . toText . displayException) id $ do
