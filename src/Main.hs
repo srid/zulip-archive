@@ -47,19 +47,21 @@ generateSite = do
   liftIO $ putStrLn "In build action"
   -- Copy over the static files
   Rib.buildStaticFiles [[relfile|user_uploads/**|]]
+  -- Fetch (and/or load from cache) all zulip data
   [apiKey] <- fmap toText <$> liftIO getArgs
   streams <- getArchive apiKey
   streamsT <- forM streams $ \stream -> do
-    f <- liftIO $ streamHtmlPath stream
-    let streamT = Rib.mkTarget f stream
+    -- Build the page for a stream
+    streamFile <- liftIO $ streamHtmlPath stream
+    let streamT = Rib.mkTarget streamFile stream
     Rib.writeTarget streamT $ renderPage . Page_Stream
     forM_ (fromMaybe (error "No topics in stream") $ _streamTopics stream) $ \topic -> do
-      -- TODO: topicSlug should be a Path Rel File
-      g <- (parent f </>) <$> liftIO (parseRelFile $ toString $ _topicSlug topic <> ".html")
-      let topicT = Rib.mkTarget g topic
+      -- Build the page for a topic belonging to this stream
+      topicFile <- liftIO $ addExtension ".html" $ parent streamFile </> _topicSlug topic
+      let topicT = Rib.mkTarget topicFile topic
       Rib.writeTarget topicT $ renderPage . Page_Topic . (streamT,)
     pure streamT
-  -- Write an index.html linking to the aforementioned files.
+  -- Write an index.html linking to all streams
   let indexT = Rib.mkTarget [relfile|index.html|] streamsT
   Rib.writeTarget indexT $ renderPage . Page_Index . Rib.targetVal
 
@@ -160,7 +162,7 @@ renderPage page = with html_ [lang_ "en"] $ do
                   toHtml $ maybe "" renderTimestamp $ _topicLastUpdated topic
                 with div_ [class_ "content"] $ do
                   -- TODO(HACK): We should really be passing `Target Topic` here
-                  let topicUrl = Rib.targetUrl streamT <> _topicSlug topic <> ".html"
+                  let topicUrl = Rib.targetUrl streamT <> (toText $ toFilePath $ _topicSlug topic) <> ".html"
                   with a_ [class_ "header", href_ topicUrl]
                     $ toHtml
                     $ _topicName topic
