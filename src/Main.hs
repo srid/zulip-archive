@@ -21,16 +21,16 @@ import Development.Shake
 import Lucid
 import Path
 import Relude
-import Rib (Target (Target))
+import Rib (Target)
 import qualified Rib
 import Slug
 import System.Environment
 import Zulip.Client
 
 data Page
-  = Page_Index [Target Stream]
-  | Page_Stream (Target Stream)
-  | Page_Topic (Target Stream, Target Topic)
+  = Page_Index [Target () Stream]
+  | Page_Stream (Target () Stream)
+  | Page_Topic (Target () Stream, Target () Topic)
 
 main :: IO ()
 main = forever $ do
@@ -51,16 +51,16 @@ generateSite = do
   streams <- getArchive apiKey
   streamsT <- forM streams $ \stream -> do
     f <- liftIO $ streamHtmlPath stream
-    let streamT = Target f stream
+    let streamT = Rib.mkTarget f stream
     Rib.writeTarget streamT $ renderPage . Page_Stream
     forM_ (fromMaybe (error "No topics in stream") $ _streamTopics stream) $ \topic -> do
       -- TODO: topicSlug should be a Path Rel File
       g <- (parent f </>) <$> liftIO (parseRelFile $ toString $ _topicSlug topic <> ".html")
-      let topicT = Target g topic
+      let topicT = Rib.mkTarget g topic
       Rib.writeTarget topicT $ renderPage . Page_Topic . (streamT,)
     pure streamT
   -- Write an index.html linking to the aforementioned files.
-  let indexT = Target [relfile|index.html|] streamsT
+  let indexT = Rib.mkTarget [relfile|index.html|] streamsT
   Rib.writeTarget indexT $ renderPage . Page_Index . Rib.targetVal
 
 -- TODO: calculate stream slug in Zulip.Client module, along with Topic
