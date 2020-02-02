@@ -53,17 +53,17 @@ generateSite = do
     f <- liftIO $ streamHtmlPath stream
     let streamT = Target f stream
     Rib.writeTarget streamT $ renderPage . Page_Stream
-    case _streamTopics stream of
-      Nothing -> error "No topics stored in stream"
-      Just topics -> forM_ topics $ \topic -> do
-        g <- (parent f </>) <$> liftIO (parseRelFile $ toString $ _topicSlug topic <> ".html")
-        let topicT = Target g topic
-        Rib.writeTarget topicT $ renderPage . Page_Topic . (streamT,)
+    forM_ (fromMaybe (error "No topics in stream") $ _streamTopics stream) $ \topic -> do
+      -- TODO: topicSlug should be a Path Rel File
+      g <- (parent f </>) <$> liftIO (parseRelFile $ toString $ _topicSlug topic <> ".html")
+      let topicT = Target g topic
+      Rib.writeTarget topicT $ renderPage . Page_Topic . (streamT,)
     pure streamT
   -- Write an index.html linking to the aforementioned files.
   let indexT = Target [relfile|index.html|] streamsT
   Rib.writeTarget indexT $ renderPage . Page_Index . Rib.targetVal
 
+-- TODO: calculate stream slug in Zulip.Client module, along with Topic
 streamHtmlPath :: Stream -> IO (Path Rel File)
 streamHtmlPath stream = do
   streamSlug <- parseRelDir . toString . unSlug =<< mkSlug (_streamName stream)
