@@ -4,6 +4,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TupleSections #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE NoImplicitPrelude #-}
@@ -27,7 +28,7 @@ import System.Environment
 import Zulip.Client
 
 data Page
-  = Page_Index [(Target Stream)]
+  = Page_Index [Target Stream]
   | Page_Stream (Target Stream)
   | Page_Topic (Target Stream, Target Topic)
 
@@ -51,17 +52,17 @@ generateSite = do
   streamsT <- forM streams $ \stream -> do
     f <- liftIO $ streamHtmlPath stream
     let streamT = Target f stream
-    Rib.writeHtml f $ renderPage $ Page_Stream streamT
+    Rib.writeTarget streamT $ renderPage . Page_Stream
     case _streamTopics stream of
       Nothing -> error "No topics stored in stream"
       Just topics -> forM_ topics $ \topic -> do
         g <- (parent f </>) <$> liftIO (parseRelFile $ toString $ _topicSlug topic <> ".html")
         let topicT = Target g topic
-        Rib.writeHtml g $ renderPage $ Page_Topic (streamT, topicT)
+        Rib.writeTarget topicT $ renderPage . Page_Topic . (streamT,)
     pure streamT
   -- Write an index.html linking to the aforementioned files.
-  Rib.writeHtml [relfile|index.html|] $
-    renderPage (Page_Index streamsT)
+  let indexT = Target [relfile|index.html|] streamsT
+  Rib.writeTarget indexT $ renderPage . Page_Index . Rib.targetVal
 
 streamHtmlPath :: Stream -> IO (Path Rel File)
 streamHtmlPath stream = do
@@ -158,7 +159,7 @@ renderPage page = with html_ [lang_ "en"] $ do
                 with div_ [class_ "right floated content subtle"] $ do
                   toHtml $ maybe "" renderTimestamp $ _topicLastUpdated topic
                 with div_ [class_ "content"] $ do
-                  -- TODO(HACK): We should really be passing `Target Topic` here 
+                  -- TODO(HACK): We should really be passing `Target Topic` here
                   let topicUrl = Rib.targetUrl streamT <> _topicSlug topic <> ".html"
                   with a_ [class_ "header", href_ topicUrl]
                     $ toHtml
