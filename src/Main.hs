@@ -34,8 +34,8 @@ data Page
 
 main :: IO ()
 main = forever $ do
-  -- Rib.runWith [reldir|a|] [reldir|b|] generateSite (Rib.Generate False)
-  Rib.runWith [reldir|a|] [reldir|c|] generateSite (Rib.Serve 8080 False)
+  Rib.runWith [reldir|a|] [reldir|b|] generateSite (Rib.Generate False)
+  -- Rib.runWith [reldir|a|] [reldir|c|] generateSite (Rib.Serve 8080 False)
   putStrLn $ "Waiting for " <> show delay
   threadDelay delay
   where

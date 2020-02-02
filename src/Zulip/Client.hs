@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes #-}
@@ -10,6 +11,7 @@
 
 module Zulip.Client where
 
+import Crypto.Hash (Digest, MD5 (..), hash)
 import Data.Aeson
 import Data.Aeson.TH
 import qualified Data.Map.Strict as Map
@@ -126,7 +128,7 @@ mkInjective domain f a =
 -- | Fill out hitherto missing _streamTopics, _topicMessages and _messageAvatarUrl
 mkArchive :: [Stream] -> [User] -> [Message] -> [Stream]
 mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
-  -- TODO: Verify that stream and topic names are unique.
+  -- TODO: Verify that stream names are unique.
   let avatarMap = Map.fromList $ flip fmap users $ _userId &&& _userAvatarUrl
       msgs = flip fmap msgsWithoutAvatar $ \msg ->
         msg {_messageAvatarUrl = _messageAvatarUrl msg <|> lookup (_messageSenderId msg) avatarMap}
@@ -141,8 +143,12 @@ mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
       let tmsgs = sortOn _messageTimestamp ms
           mkTopicSlug = mkInjective allTopics mkSlugPure >>> \case
             (slug, Nothing) -> slug
-            (slug, Just _) -> slug <> "-" <> show (_messageId $ headStrict tmsgs)
+            (slug, Just x) -> slug <> "-" <> textHash x
        in Topic topicName tmsgs (lastTimestamp tmsgs) (parseRelFilePure $ toString $ mkTopicSlug topicName)
+    textHash s =
+      let digest :: Digest MD5
+          digest = hash $ encodeUtf8 @Text @ByteString s
+       in show digest
     lastTimestamp xs =
       case reverse xs of
         msg : _ -> Just $ _messageTimestamp msg
@@ -151,10 +157,6 @@ mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
       either (error . toText . displayException) unSlug . mkSlug
     parseRelFilePure =
       either (error . show) id . parseRelFile
-    headStrict = \case
-      -- TODO: use NonEmpty lists instead
-      (x : _) -> x
-      [] -> error "empty list"
 
 $(deriveJSON fieldLabelMod ''Stream)
 

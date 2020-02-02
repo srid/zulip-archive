@@ -30,4 +30,5 @@ executable zulip-archive
         exceptions,
         time,
         directory,
-        containers
+        containers,
+        cryptonite
