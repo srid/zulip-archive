@@ -4,6 +4,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TupleSections #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE NoImplicitPrelude #-}
@@ -20,20 +21,21 @@ import Development.Shake
 import Lucid
 import Path
 import Relude
+import Rib (Target)
 import qualified Rib
 import Slug
 import System.Environment
 import Zulip.Client
 
 data Page
-  = Page_Index [Stream]
-  | Page_Stream Stream
-  | Page_StreamTopic Stream Topic
+  = Page_Index [Target () Stream]
+  | Page_Stream (Target () Stream)
+  | Page_Topic (Target () Stream, Target () Topic)
 
 main :: IO ()
 main = forever $ do
-  putStrLn "Running rib"
-  Rib.runWith [reldir|a|] [reldir|b|] generateSite (Rib.Generate False)
+  -- Rib.runWith [reldir|a|] [reldir|b|] generateSite (Rib.Generate False)
+  Rib.runWith [reldir|a|] [reldir|c|] generateSite (Rib.Serve 8080 False)
   putStrLn $ "Waiting for " <> show delay
   threadDelay delay
   where
@@ -42,37 +44,32 @@ main = forever $ do
 -- | Shake action for generating the static site
 generateSite :: Action ()
 generateSite = do
-  liftIO $ putStrLn "Generating site"
+  liftIO $ putStrLn "In build action"
   -- Copy over the static files
   Rib.buildStaticFiles [[relfile|user_uploads/**|]]
+  -- Fetch (and/or load from cache) all zulip data
   [apiKey] <- fmap toText <$> liftIO getArgs
   streams <- getArchive apiKey
-  forM_ streams $ \stream -> do
-    f <- liftIO $ parseRelFile $ toString $ streamHtmlPath stream
-    Rib.writeHtml f $ renderPage $ Page_Stream stream
-    case _streamTopics stream of
-      Nothing -> error "No topics stored in stream"
-      Just topics -> forM_ topics $ \topic -> do
-        g <- liftIO $ parseRelFile $ toString $ topicHtmlPath stream topic
-        Rib.writeHtml g $ renderPage $ Page_StreamTopic stream topic
-  -- Write an index.html linking to the aforementioned files.
-  Rib.writeHtml [relfile|index.html|] $
-    renderPage (Page_Index streams)
+  streamsT <- forM streams $ \stream -> do
+    -- Build the page for a stream
+    streamFile <- liftIO $ streamHtmlPath stream
+    let streamT = Rib.mkTarget streamFile stream
+    Rib.writeTarget streamT $ renderPage . Page_Stream
+    forM_ (fromMaybe (error "No topics in stream") $ _streamTopics stream) $ \topic -> do
+      -- Build the page for a topic belonging to this stream
+      topicFile <- liftIO $ addExtension ".html" $ parent streamFile </> _topicSlug topic
+      let topicT = Rib.mkTarget topicFile topic
+      Rib.writeTarget topicT $ renderPage . Page_Topic . (streamT,)
+    pure streamT
+  -- Write an index.html linking to all streams
+  let indexT = Rib.mkTarget [relfile|index.html|] streamsT
+  Rib.writeTarget indexT $ renderPage . Page_Index . Rib.targetVal
 
-streamHtmlPath :: Stream -> Text
-streamHtmlPath stream = streamUrl stream <> "index.html"
-
-topicHtmlPath :: Stream -> Topic -> Text
-topicHtmlPath = topicUrl
-
-topicUrl :: Stream -> Topic -> Text
-topicUrl stream topic =
-  streamUrl stream <> _topicSlug topic <> ".html"
-
-streamUrl :: Stream -> Text
-streamUrl stream = either (error . toText . displayException) id $ do
-  streamSlug <- mkSlug $ _streamName stream
-  pure $ unSlug streamSlug <> "/"
+-- TODO: calculate stream slug in Zulip.Client module, along with Topic
+streamHtmlPath :: Stream -> IO (Path Rel File)
+streamHtmlPath stream = do
+  streamSlug <- parseRelDir . toString . unSlug =<< mkSlug (_streamName stream)
+  pure $ streamSlug </> [relfile|index.html|]
 
 renderCrumbs :: NonEmpty Page -> Html ()
 renderCrumbs (_ :| []) = mempty
@@ -90,20 +87,20 @@ renderCrumbs crumbs =
 pageName :: Page -> Text
 pageName = \case
   Page_Index _ -> "Home"
-  Page_Stream s -> "#" <> _streamName s
-  Page_StreamTopic _s t -> _topicName t
+  Page_Stream (Rib.targetVal -> s) -> "#" <> _streamName s
+  Page_Topic ((_s, Rib.targetVal -> t)) -> _topicName t
 
 pageUrl :: Page -> Text
 pageUrl = \case
   Page_Index _ -> "/"
-  Page_Stream s -> "/" <> streamUrl s
-  Page_StreamTopic s t -> "/" <> topicUrl s t
+  Page_Stream s -> Rib.targetUrl s
+  Page_Topic (_, t) -> Rib.targetUrl t
 
 pageCrumbs :: Page -> NonEmpty Page
 pageCrumbs = (Page_Index [] :|) . \case
   Page_Index _ -> []
   x@(Page_Stream _) -> [x]
-  x@(Page_StreamTopic s _) -> [Page_Stream s, x]
+  x@(Page_Topic (s, _)) -> [Page_Stream s, x]
 
 -- | Define your site HTML here
 renderPage :: Page -> Html ()
@@ -113,10 +110,10 @@ renderPage page = with html_ [lang_ "en"] $ do
     meta_ [name_ "viewport", content_ "width=device-width, initial-scale=1"]
     title_ $ case page of
       Page_Index _ -> "Functional Programming Zulip Archive"
-      Page_Stream s -> do
+      Page_Stream (Rib.targetVal -> s) -> do
         toHtml $ _streamName s
         " - Functional Programming Zulip"
-      Page_StreamTopic s t -> do
+      Page_Topic (Rib.targetVal -> s, Rib.targetVal -> t) -> do
         toHtml $ _topicName t
         " - "
         toHtml $ _streamName s
@@ -134,7 +131,7 @@ renderPage page = with html_ [lang_ "en"] $ do
         renderCrumbs $ pageCrumbs page
         case page of
           Page_Index streams -> do
-            let streamMsgCount stream =
+            let streamMsgCount (Rib.targetVal -> stream) =
                   length $ mconcat $ _topicMessages <$> fromMaybe [] (_streamTopics stream)
             with div_ [class_ "ui message"] $ do
               p_ $ do
@@ -151,12 +148,12 @@ renderPage page = with html_ [lang_ "en"] $ do
                       toHtml $ show @Text cnt
                       " messages"
                 with div_ [class_ "content"] $ do
-                  with a_ [class_ "header", href_ (streamUrl stream)]
+                  with a_ [class_ "header", href_ (Rib.targetUrl stream)]
                     $ toHtml
-                    $ _streamName stream
+                    $ _streamName (Rib.targetVal stream)
                   with div_ [class_ "description"] $ do
-                    toHtml (_streamDescription stream)
-          Page_Stream stream -> do
+                    toHtml (_streamDescription $ Rib.targetVal stream)
+          Page_Stream streamT@(Rib.targetVal -> stream) -> do
             p_ $ i_ $ toHtml $ _streamDescription stream
             with div_ [class_ "ui relaxed list"]
               $ forM_ (fromMaybe [] $ _streamTopics stream)
@@ -164,13 +161,15 @@ renderPage page = with html_ [lang_ "en"] $ do
                 with div_ [class_ "right floated content subtle"] $ do
                   toHtml $ maybe "" renderTimestamp $ _topicLastUpdated topic
                 with div_ [class_ "content"] $ do
-                  with a_ [class_ "header", href_ ("/" <> topicUrl stream topic)]
+                  -- TODO(HACK): We should really be passing `Target Topic` here
+                  let topicUrl = Rib.targetUrl streamT <> (toText $ toFilePath $ _topicSlug topic) <> ".html"
+                  with a_ [class_ "header", href_ topicUrl]
                     $ toHtml
                     $ _topicName topic
                   with div_ [class_ "description"] $ do
                     toHtml $ show @Text (length $ _topicMessages topic)
                     " messages."
-          Page_StreamTopic _stream topic -> do
+          Page_Topic (_, Rib.targetVal -> topic) -> do
             with div_ [class_ "ui comments messages"] $ do
               forM_ (_topicMessages topic) $ \msg -> do
                 with div_ [class_ "comment"] $ do
@@ -195,8 +194,8 @@ renderPage page = with html_ [lang_ "en"] $ do
       toHtml $ formatTime defaultTimeLocale "%F %X" $ posixSecondsToUTCTime t
     pageTitle = toHtml . \case
       Page_Index _ -> "Functional Programming Zulip Chat Archive"
-      Page_Stream s -> _streamName s <> " stream"
-      Page_StreamTopic s t -> _topicName t <> " - " <> _streamName s
+      Page_Stream (Rib.targetVal -> s) -> _streamName s <> " stream"
+      Page_Topic (Rib.targetVal -> s, Rib.targetVal -> t) -> _topicName t <> " - " <> _streamName s
     stylesheet x = link_ [rel_ "stylesheet", href_ x]
     googleFonts fs =
       let s = T.intercalate "|" $ T.replace " " "+" <$> fs

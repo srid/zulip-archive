@@ -16,6 +16,7 @@ import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.Time.Clock.POSIX
 import Network.HTTP.Req
+import Path
 import Relude hiding (Option)
 import Relude.Extra.Map (lookup)
 import qualified Shower
@@ -59,7 +60,7 @@ data Topic
       { _topicName :: Text,
         _topicMessages :: [Message], -- Not in API; only used internally
         _topicLastUpdated :: Maybe POSIXTime, -- Not in API; only used internally
-        _topicSlug :: Text
+        _topicSlug :: Path Rel File
       }
   deriving (Eq, Show)
 
@@ -141,13 +142,15 @@ mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
           mkTopicSlug = mkInjective allTopics mkSlugPure >>> \case
             (slug, Nothing) -> slug
             (slug, Just _) -> slug <> "-" <> show (_messageId $ headStrict tmsgs)
-       in Topic topicName tmsgs (lastTimestamp tmsgs) (mkTopicSlug topicName)
+       in Topic topicName tmsgs (lastTimestamp tmsgs) (parseRelFilePure $ toString $ mkTopicSlug topicName)
     lastTimestamp xs =
       case reverse xs of
         msg : _ -> Just $ _messageTimestamp msg
         _ -> Nothing
     mkSlugPure =
       either (error . toText . displayException) unSlug . mkSlug
+    parseRelFilePure =
+      either (error . show) id . parseRelFile
     headStrict = \case
       -- TODO: use NonEmpty lists instead
       (x : _) -> x
