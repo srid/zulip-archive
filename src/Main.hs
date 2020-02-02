@@ -23,7 +23,7 @@ import Path
 import Relude
 import Rib (Target)
 import qualified Rib
-import Slug
+import Web.Slug (mkSlug, unSlug)
 import System.Environment
 import Zulip.Client
 

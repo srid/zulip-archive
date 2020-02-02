@@ -1,7 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 -- | Taken from Web.Slug in hackage (no longer maintained)
-module Slug where
+module Web.Slug where
 
 import Relude
 import Control.Monad.Catch (MonadThrow (..))
