@@ -12,6 +12,7 @@ module Main where
 
 import Clay ((?), Css, em, pct, px)
 import qualified Clay as C
+import Control.Concurrent (threadDelay)
 import qualified Data.Text as T
 import Data.Time
 import Data.Time.Clock.POSIX
@@ -30,11 +31,18 @@ data Page
   | Page_StreamTopic Stream Topic
 
 main :: IO ()
-main = Rib.runWith [reldir|a|] [reldir|b|] generateSite (Rib.Serve 8080 False)
+main = forever $ do
+  putStrLn "Running rib"
+  Rib.runWith [reldir|a|] [reldir|b|] generateSite (Rib.Generate False)
+  putStrLn $ "Waiting for " <> show delay
+  threadDelay delay
+  where
+    delay = 1000000 * 60 * 15
 
 -- | Shake action for generating the static site
 generateSite :: Action ()
 generateSite = do
+  liftIO $ putStrLn "Generating site"
   -- Copy over the static files
   Rib.buildStaticFiles [[relfile|user_uploads/**|]]
   [apiKey] <- fmap toText <$> liftIO getArgs
@@ -104,10 +112,10 @@ renderPage page = with html_ [lang_ "en"] $ do
     meta_ [httpEquiv_ "Content-Type", content_ "text/html; charset=utf-8"]
     meta_ [name_ "viewport", content_ "width=device-width, initial-scale=1"]
     title_ $ case page of
-      Page_Index _ -> "Fun Prog Zulip Archive"
+      Page_Index _ -> "Functional Programming Zulip Archive"
       Page_Stream s -> do
         toHtml $ _streamName s
-        " - Fun Prog Zulip Archive"
+        " - Functional Programming Zulip"
       Page_StreamTopic s t -> do
         toHtml $ _topicName t
         " - "
@@ -128,7 +136,7 @@ renderPage page = with html_ [lang_ "en"] $ do
           Page_Index streams -> do
             let streamMsgCount stream =
                   length $ mconcat $ _topicMessages <$> fromMaybe [] (_streamTopics stream)
-            with div_ [class_ "ui raised segment"] $ do
+            with div_ [class_ "ui message"] $ do
               p_ $ do
                 "Welcome to the Functional Programming Zulip Chat Archive. You can join the chat "
                 with a_ [href_ "https://funprog.zulipchat.com/"] "here"
