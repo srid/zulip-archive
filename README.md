@@ -34,11 +34,11 @@ export ZULIPAPIKEY="<your api key here>"
 To build and run the site:
 
 ```bash
-rm b  # if b is a symlink
+rm b  # b is a symlink, remove if you are not the author 
 nix-shell --run 'ghcid -T ":main $ZULIPAPIKEY"'
 ```
 
-Visit http://localhost:8080 
+HTML files will have been generated under `./b`.
 
 ## Manual update
 
