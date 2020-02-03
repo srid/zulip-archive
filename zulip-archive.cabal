@@ -31,4 +31,5 @@ executable zulip-archive
         time,
         directory,
         containers,
-        cryptonite
+        cryptonite,
+        dhall
