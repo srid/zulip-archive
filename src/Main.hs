@@ -19,6 +19,7 @@ import qualified Data.Text as T
 import Data.Time
 import Data.Time.Clock.POSIX
 import Development.Shake
+import GHC.Natural
 import Lucid
 import Path
 import Relude
@@ -38,10 +39,11 @@ main = forever $ do
   targetDir <- parseRelDir $ toString $ Config.targetDir cfg
   Rib.runWith [reldir|a|] targetDir (generateSite cfg) (Rib.Generate False)
   -- Rib.runWith [reldir|a|] [reldir|c|] generateSite (Rib.Serve 8080 False)
-  putStrLn $ "Waiting for " <> show delay
-  threadDelay delay
+  putStrLn $ "Waiting for " <> show (Config.fetchEveryMins cfg) <> " min"
+  threadDelayMins $ Config.fetchEveryMins cfg
   where
-    delay = 1000000 * 60 * 15
+    threadDelayMins :: Natural -> IO ()
+    threadDelayMins = threadDelay . (1000000 * 60 *) . naturalToInt
 
 -- | Shake action for generating the static site
 generateSite :: Config.Config -> Action ()
