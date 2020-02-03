@@ -13,6 +13,7 @@ module Main where
 
 import Clay ((?), Css, em, pct, px)
 import qualified Clay as C
+import qualified Config
 import Control.Concurrent (threadDelay)
 import qualified Data.Text as T
 import Data.Time
@@ -25,7 +26,6 @@ import Rib (Target)
 import qualified Rib
 import Web.Slug (mkSlug, unSlug)
 import Zulip.Client
-import qualified Config
 
 data Page
   = Page_Index [Target () Stream]
@@ -49,7 +49,7 @@ generateSite = do
   Rib.buildStaticFiles [[relfile|user_uploads/**|]]
   -- Fetch (and/or load from cache) all zulip data
   cfg <- Config.readConfig
-  streams <- getArchive $ Config.authApiKey cfg
+  streams <- getArchive (Config.zulipDomain cfg) (Config.authEmail cfg) (Config.authApiKey cfg)
   streamsT <- forM streams $ \stream -> do
     -- Build the page for a stream
     streamFile <- liftIO $ streamHtmlPath stream

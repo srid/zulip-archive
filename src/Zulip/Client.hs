@@ -19,15 +19,9 @@ import Path
 import Relude hiding (Option)
 import Relude.Extra.Map (lookup)
 import qualified Shower
-import Web.UniqSlug (mkUniqSlug)
 import System.Directory (doesFileExist)
+import Web.UniqSlug (mkUniqSlug)
 import Zulip.Internal
-
-baseUrl :: Text
-baseUrl = "funprog.zulipchat.com"
-
-userEmail :: ByteString
-userEmail = "srid@srid.ca"
 
 data Streams
   = Streams
@@ -137,9 +131,9 @@ mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
 
 type APIConfig scheme = (Url scheme, Option scheme)
 
-getArchive :: MonadIO m => Text -> m [Stream]
-getArchive apiKey = do
-  let auth = basicAuth userEmail $ encodeUtf8 apiKey
+getArchive :: MonadIO m => Text -> Text -> Text -> m [Stream]
+getArchive baseUrl userEmail apiKey = do
+  let auth = basicAuth (fromString $ toString userEmail) $ encodeUtf8 apiKey
       apiConfig = (https baseUrl /: "api" /: "v1", auth)
   runReq defaultHttpConfig $ do
     -- Fetch any remaining messages
@@ -245,5 +239,3 @@ $(deriveJSON fieldLabelMod ''Reaction)
 $(deriveJSON fieldLabelMod ''Users)
 
 $(deriveJSON fieldLabelMod ''User)
-
-

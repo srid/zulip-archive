@@ -31,14 +31,21 @@ export ZULIPAPIKEY="<your api key here>"
 
 ## Running
 
+First, create a configuration file, adding your Zulip site settings (including the API key):
+
+```
+cp config/config.example.dhall config/config.dhall
+vim config/config.dhall
+```
+
 To build and run the site:
 
 ```bash
 rm b  # b is a symlink, remove if you are not the author 
-nix-shell --run 'ghcid -T ":main $ZULIPAPIKEY"'
+nix-shell --run 'ghcid -T :main --restart=config'
 ```
 
-HTML files will have been generated under `./b`.
+HTML files will have been generated under `./b`, with the server serving them at http://localhost:8080
 
 ## Manual update
 
