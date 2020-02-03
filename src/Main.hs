@@ -52,21 +52,21 @@ generateSite cfg = do
   -- Copy over the static files
   Rib.buildStaticFiles [[relfile|user_uploads/**|]]
   -- Fetch (and/or load from cache) all zulip data
-  streams <- getArchive (Config.zulipDomain cfg) (Config.authEmail cfg) (Config.authApiKey cfg)
+  (server, streams) <- getArchive (Config.zulipDomain cfg) (Config.authEmail cfg) (Config.authApiKey cfg)
   streamsT <- forM streams $ \stream -> do
     -- Build the page for a stream
     streamFile <- liftIO $ streamHtmlPath stream
     let streamT = Rib.mkTarget streamFile stream
-    Rib.writeTarget streamT $ renderPage . Page_Stream
+    Rib.writeTarget streamT $ renderPage server . Page_Stream
     forM_ (fromMaybe (error "No topics in stream") $ _streamTopics stream) $ \topic -> do
       -- Build the page for a topic belonging to this stream
       topicFile <- liftIO $ addExtension ".html" $ parent streamFile </> _topicSlug topic
       let topicT = Rib.mkTarget topicFile topic
-      Rib.writeTarget topicT $ renderPage . Page_Topic . (streamT,)
+      Rib.writeTarget topicT $ renderPage server . Page_Topic . (streamT,)
     pure streamT
   -- Write an index.html linking to all streams
   let indexT = Rib.mkTarget [relfile|index.html|] streamsT
-  Rib.writeTarget indexT $ renderPage . Page_Index . Rib.targetVal
+  Rib.writeTarget indexT $ renderPage server . Page_Index . Rib.targetVal
 
 -- TODO: calculate stream slug in Zulip.Client module, along with Topic
 streamHtmlPath :: Stream -> IO (Path Rel File)
@@ -106,16 +106,18 @@ pageCrumbs = (Page_Index [] :|) . \case
   x@(Page_Topic (s, _)) -> [Page_Stream s, x]
 
 -- | Define your site HTML here
-renderPage :: Page -> Html ()
-renderPage page = with html_ [lang_ "en"] $ do
+renderPage :: ServerSettings -> Page -> Html ()
+renderPage server page = with html_ [lang_ "en"] $ do
+  let realmName = _serversettingsRealmName server <> " Zulip"
   head_ $ do
     meta_ [httpEquiv_ "Content-Type", content_ "text/html; charset=utf-8"]
     meta_ [name_ "viewport", content_ "width=device-width, initial-scale=1"]
     title_ $ case page of
-      Page_Index _ -> "Functional Programming Zulip Archive"
+      Page_Index _ -> toHtml $ realmName <> " Archive"
       Page_Stream (Rib.targetVal -> s) -> do
         toHtml $ _streamName s
-        " - Functional Programming Zulip"
+        " - "
+        toHtml realmName
       Page_Topic (Rib.targetVal -> s, Rib.targetVal -> t) -> do
         toHtml $ _topicName t
         " - "
@@ -127,9 +129,11 @@ renderPage page = with html_ [lang_ "en"] $ do
     googleFonts $ [headerFont, bodyFont]
   body_ $ do
     with div_ [class_ "ui text container", id_ "thesite"] $ do
-      with div_ [class_ "ui violet inverted top attached center aligned segment"]
-        $ with h1_ [class_ "ui huge header"]
-        $ pageTitle page
+      with div_ [class_ "ui violet inverted top attached center aligned segment"] $ do
+        with h1_ [class_ "ui huge header"] $ toHtml $ case page of
+          Page_Index _ -> realmName <> " Chat Archive"
+          Page_Stream (Rib.targetVal -> s) -> _streamName s <> " stream"
+          Page_Topic (Rib.targetVal -> s, Rib.targetVal -> t) -> _topicName t <> " - " <> _streamName s
       with div_ [class_ "ui attached segment"] $ do
         renderCrumbs $ pageCrumbs page
         case page of
@@ -138,8 +142,10 @@ renderPage page = with html_ [lang_ "en"] $ do
                   length $ mconcat $ _topicMessages <$> fromMaybe [] (_streamTopics stream)
             with div_ [class_ "ui message"] $ do
               p_ $ do
-                "Welcome to the Functional Programming Zulip Chat Archive. You can join the chat "
-                with a_ [href_ "https://funprog.zulipchat.com/"] "here"
+                "Welcome to the "
+                toHtml $ realmName
+                " Chat Archive. You can join the chat "
+                with a_ [href_ $ _serversettingsRealmUri server] "here"
                 "."
             with div_ [class_ "ui relaxed list"]
               $ forM_ (reverse $ sortOn streamMsgCount streams)
@@ -195,10 +201,6 @@ renderPage page = with html_ [lang_ "en"] $ do
   where
     renderTimestamp t =
       toHtml $ formatTime defaultTimeLocale "%F %X" $ posixSecondsToUTCTime t
-    pageTitle = toHtml . \case
-      Page_Index _ -> "Functional Programming Zulip Chat Archive"
-      Page_Stream (Rib.targetVal -> s) -> _streamName s <> " stream"
-      Page_Topic (Rib.targetVal -> s, Rib.targetVal -> t) -> _topicName t <> " - " <> _streamName s
     stylesheet x = link_ [rel_ "stylesheet", href_ x]
     googleFonts fs =
       let s = T.intercalate "|" $ T.replace " " "+" <$> fs

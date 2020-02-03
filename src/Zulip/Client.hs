@@ -104,6 +104,15 @@ data User
       }
   deriving (Eq, Show)
 
+data ServerSettings
+  = ServerSettings
+      { _serversettingsRealmIcon :: Text,
+        _serversettingsRealmName :: Text,
+        _serversettingsRealmDescription :: Text, -- HTML
+        _serversettingsRealmUri :: Text
+      }
+  deriving (Eq, Show)
+
 -- | Fill out hitherto missing _streamTopics, _topicMessages and _messageAvatarUrl
 mkArchive :: [Stream] -> [User] -> [Message] -> [Stream]
 mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
@@ -131,7 +140,7 @@ mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
 
 type APIConfig scheme = (Url scheme, Option scheme)
 
-getArchive :: MonadIO m => Text -> Text -> Text -> m [Stream]
+getArchive :: MonadIO m => Text -> Text -> Text -> m (ServerSettings, [Stream])
 getArchive baseUrl userEmail apiKey = do
   let auth = basicAuth (fromString $ toString userEmail) $ encodeUtf8 apiKey
       apiConfig = (https baseUrl /: "api" /: "v1", auth)
@@ -143,7 +152,9 @@ getArchive baseUrl userEmail apiKey = do
     streams <- getStreams apiConfig
     -- Fetch user avatars
     users <- getUsers apiConfig
-    pure $ mkArchive streams users msgs
+    -- Fetch metadata
+    serverSettings <- getServerSettings apiConfig
+    pure $ (serverSettings, mkArchive streams users msgs)
 
 updateMessages :: (MonadIO m, MonadHttp m) => APIConfig scheme -> FilePath -> m (Bool, [Message])
 updateMessages apiConfig messagesFile = do
@@ -178,6 +189,10 @@ fetchMessages apiConfig lastMsgId num = do
         -- Fetch more if available
         (False, (lastMsg : _)) -> (msgs <>) <$> fetchMessages apiConfig (_messageId lastMsg) num
         _ -> pure msgs
+
+getServerSettings :: MonadHttp m => APIConfig scheme -> m ServerSettings
+getServerSettings (apiUrl, auth) =
+  fromResult <$> apiGet auth (apiUrl /: "server_settings") NoReqBody mempty
 
 getStreams :: MonadHttp m => APIConfig scheme -> m [Stream]
 getStreams (apiUrl, auth) =
@@ -239,3 +254,5 @@ $(deriveJSON fieldLabelMod ''Reaction)
 $(deriveJSON fieldLabelMod ''Users)
 
 $(deriveJSON fieldLabelMod ''User)
+
+$(deriveJSON fieldLabelMod ''ServerSettings)
