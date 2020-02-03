@@ -34,7 +34,9 @@ data Page
 
 main :: IO ()
 main = forever $ do
-  Rib.runWith [reldir|a|] [reldir|b|] generateSite (Rib.Generate False)
+  cfg <- Config.readConfig
+  targetDir <- parseRelDir $ toString $ Config.targetDir cfg
+  Rib.runWith [reldir|a|] targetDir (generateSite cfg) (Rib.Generate False)
   -- Rib.runWith [reldir|a|] [reldir|c|] generateSite (Rib.Serve 8080 False)
   putStrLn $ "Waiting for " <> show delay
   threadDelay delay
@@ -42,13 +44,12 @@ main = forever $ do
     delay = 1000000 * 60 * 15
 
 -- | Shake action for generating the static site
-generateSite :: Action ()
-generateSite = do
+generateSite :: Config.Config -> Action ()
+generateSite cfg = do
   liftIO $ putStrLn "In build action"
   -- Copy over the static files
   Rib.buildStaticFiles [[relfile|user_uploads/**|]]
   -- Fetch (and/or load from cache) all zulip data
-  cfg <- Config.readConfig
   streams <- getArchive (Config.zulipDomain cfg) (Config.authEmail cfg) (Config.authApiKey cfg)
   streamsT <- forM streams $ \stream -> do
     -- Build the page for a stream

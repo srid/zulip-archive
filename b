@@ -1,1 +1,0 @@
-/home/srid/keybase/private/srid,kbpbot/funprogarchive-site

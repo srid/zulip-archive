@@ -23,12 +23,6 @@ cachix use srid
 
 Get your API key for zulip ([instructions here](https://zulipchat.com/api/api-keys)). Note: you are looking for *your* API key, and not a bot's API key.
 
-You may store it an environment variable for later access:
-
-```bash
-export ZULIPAPIKEY="<your api key here>"
-```
-
 ## Running
 
 First, create a configuration file, adding your Zulip site settings (including the API key):
@@ -41,11 +35,10 @@ vim config/config.dhall
 To build and run the site:
 
 ```bash
-rm b  # b is a symlink, remove if you are not the author 
 nix-shell --run 'ghcid -T :main --restart=config'
 ```
 
-HTML files will have been generated under `./b`, with the server serving them at http://localhost:8080
+Go to http://localhost:8080 to view your generated site.
 
 ## Manual update
 
