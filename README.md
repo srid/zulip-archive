@@ -42,4 +42,4 @@ Go to http://localhost:8080 to view your generated site.
 
 ## Manual update
 
-User uploaded files are unavailable via the API. They must be manually exported (needs admin rights), and copied to `./a/user_uploads`.
+User uploaded files are unavailable via the API. They must be manually exported (needs admin rights), and copied to `./static/user_uploads`.

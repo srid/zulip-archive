@@ -1,6 +1,6 @@
 { zulipDomain = "yourdomain.zulipchat.com"
 , authEmail = "your@email"
 , authApiKey = "YOURZULIPAPIKEY"
-, targetDir = "./b"
+, targetDir = "./site"
 , fetchEveryMins = 15
 }

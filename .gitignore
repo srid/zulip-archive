@@ -4,8 +4,8 @@ dist-*
 result
 .shake
 
-b
-c
+site
+tmp
 static/user_uploads
 
 messages.json

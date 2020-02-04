@@ -38,7 +38,6 @@ main = forever $ do
   cfg <- Config.readConfig
   targetDir <- parseRelDir $ toString $ Config.targetDir cfg
   Rib.runWith [reldir|static|] targetDir (generateSite cfg) (Rib.Generate False)
-  -- Rib.runWith [reldir|a|] [reldir|c|] generateSite (Rib.Serve 8080 False)
   putStrLn $ "Waiting for " <> show (Config.fetchEveryMins cfg) <> " min"
   threadDelayMins $ Config.fetchEveryMins cfg
   where
