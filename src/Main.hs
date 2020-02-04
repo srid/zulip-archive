@@ -50,7 +50,7 @@ generateSite :: Config.Config -> Action ()
 generateSite cfg = do
   liftIO $ putStrLn "In build action"
   -- Copy over the static files
-  Rib.buildStaticFiles [[relfile|user_uploads/**|]]
+  Rib.buildStaticFiles [[relfile|**|]]
   -- Fetch (and/or load from cache) all zulip data
   (server, streams) <- getArchive (Config.zulipDomain cfg) (Config.authEmail cfg) (Config.authApiKey cfg)
   streamsT <- forM streams $ \stream -> do
