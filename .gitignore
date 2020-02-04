@@ -7,6 +7,7 @@ result
 b
 c
 !b/.gitkeep
+a/user_uploads
 
 messages.json
 config/config.dhall
