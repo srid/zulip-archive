@@ -231,6 +231,8 @@ pageStyle = "div#thesite" ? do
   ".messages" ? do
     "pre" ? do
       C.fontSize $ pct 85
+      C.overflow C.auto
+      C.maxWidth $ pct 100
     ".message_embed" ? do
       C.borderLeft C.solid (px 3) C.grey
       C.paddingLeft $ em 0.7
