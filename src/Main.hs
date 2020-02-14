@@ -134,18 +134,18 @@ renderPage server page = with html_ [lang_ "en"] $ do
           Page_Stream (Rib.targetVal -> s) -> _streamName s <> " stream"
           Page_Topic (Rib.targetVal -> s, Rib.targetVal -> t) -> _topicName t <> " - " <> _streamName s
       with div_ [class_ "ui attached segment"] $ do
+        with div_ [class_ "ui message"] $ do
+          p_ $ do
+            "Welcome to the "
+            toHtml $ realmName
+            " Chat Archive. You can join the chat "
+            with a_ [href_ $ _serversettingsRealmUri server] "here"
+            "."
         renderCrumbs $ pageCrumbs page
         case page of
           Page_Index streams -> do
             let streamMsgCount (Rib.targetVal -> stream) =
                   length $ mconcat $ _topicMessages <$> fromMaybe [] (_streamTopics stream)
-            with div_ [class_ "ui message"] $ do
-              p_ $ do
-                "Welcome to the "
-                toHtml $ realmName
-                " Chat Archive. You can join the chat "
-                with a_ [href_ $ _serversettingsRealmUri server] "here"
-                "."
             with div_ [class_ "ui relaxed list"]
               $ forM_ (reverse $ sortOn streamMsgCount streams)
               $ \stream -> with div_ [class_ "item"] $ do
