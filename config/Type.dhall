@@ -3,4 +3,5 @@
 , authApiKey : Text 
 , targetDir : Text
 , fetchEveryMins : Natural
+, baseUrl : Text
 }

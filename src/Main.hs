@@ -48,6 +48,7 @@ main = forever $ do
 generateSite :: Config.Config -> Action ()
 generateSite cfg = do
   liftIO $ putStrLn "In build action"
+  let baseUrl = Config.baseUrl cfg
   -- Copy over the static files
   Rib.buildStaticFiles [[relfile|**|]]
   -- Fetch (and/or load from cache) all zulip data
@@ -56,16 +57,16 @@ generateSite cfg = do
     -- Build the page for a stream
     streamFile <- liftIO $ streamHtmlPath stream
     let streamT = Rib.mkTarget streamFile stream
-    Rib.writeTarget streamT $ renderPage server . Page_Stream
+    Rib.writeTarget streamT $ renderPage server baseUrl . Page_Stream
     forM_ (fromMaybe (error "No topics in stream") $ _streamTopics stream) $ \topic -> do
       -- Build the page for a topic belonging to this stream
       topicFile <- liftIO $ addExtension ".html" $ parent streamFile </> _topicSlug topic
       let topicT = Rib.mkTarget topicFile topic
-      Rib.writeTarget topicT $ renderPage server . Page_Topic . (streamT,)
+      Rib.writeTarget topicT $ renderPage server baseUrl . Page_Topic . (streamT,)
     pure streamT
   -- Write an index.html linking to all streams
   let indexT = Rib.mkTarget [relfile|index.html|] streamsT
-  Rib.writeTarget indexT $ renderPage server . Page_Index . Rib.targetVal
+  Rib.writeTarget indexT $ renderPage server baseUrl . Page_Index . Rib.targetVal
 
 -- TODO: calculate stream slug in Zulip.Client module, along with Topic
 streamHtmlPath :: Stream -> IO (Path Rel File)
@@ -105,12 +106,13 @@ pageCrumbs = (Page_Index [] :|) . \case
   x@(Page_Topic (s, _)) -> [Page_Stream s, x]
 
 -- | Define your site HTML here
-renderPage :: ServerSettings -> Page -> Html ()
-renderPage server page = with html_ [lang_ "en"] $ do
+renderPage :: ServerSettings -> Text -> Page -> Html ()
+renderPage server baseUrl page = with html_ [lang_ "en"] $ do
   let realmName = _serversettingsRealmName server <> " Zulip"
   head_ $ do
     meta_ [httpEquiv_ "Content-Type", content_ "text/html; charset=utf-8"]
     meta_ [name_ "viewport", content_ "width=device-width, initial-scale=1"]
+    ogpMetaTags realmName
     title_ $ case page of
       Page_Index _ -> toHtml $ realmName <> " Archive"
       Page_Stream (Rib.targetVal -> s) -> do
@@ -205,6 +207,33 @@ renderPage server page = with html_ [lang_ "en"] $ do
       let s = T.intercalate "|" $ T.replace " " "+" <$> fs
           url = "https://fonts.googleapis.com/css?family=" <> s <> "&display=swap"
        in stylesheet url
+    ogpMetaTags :: Text -> Html ()
+    ogpMetaTags realm = do
+      let ogpAttribute name value =
+            meta_ [term "property" $ "og:" <> name, content_ value]
+      ogpAttribute "site_name" $ realm <> " Archive"
+      ogpAttribute "url" $ baseUrl <> pageUrl page
+      case page of
+        Page_Index _ ->
+          ogpAttribute "title" "Home"
+        Page_Stream (Rib.targetVal -> s) -> do
+          ogpAttribute "title" $ _streamName s
+          ogpAttribute "description" $ _streamDescription s
+        Page_Topic ((Rib.targetVal -> s), Rib.targetVal -> t) -> do
+          ogpAttribute "title" $ _topicName t
+          ogpAttribute "type" "article"
+          ogpAttribute "article:section" $ _streamName s
+          mapM_ (ogpAttribute "article:modified_time" . ogpTimeFormat)
+            $ _topicLastUpdated t
+          whenJust (listToMaybe $ _topicMessages t) $ \msg -> do
+            ogpAttribute "article:published_time" $ ogpTimeFormat $ _messageTimestamp msg
+            ogpAttribute "description" $ T.take 300 $ _messageContent msg
+            ogpAttribute "image" `mapM_` _messageAvatarUrl msg
+    ogpTimeFormat :: POSIXTime -> T.Text
+    ogpTimeFormat =
+      toText
+        . formatTime defaultTimeLocale (iso8601DateFormat $ Just "%H:%M:%SZ")
+        . posixSecondsToUTCTime
 
 headerFont :: Text
 headerFont = "Roboto"
