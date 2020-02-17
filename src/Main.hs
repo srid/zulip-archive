@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -113,16 +114,7 @@ renderPage server baseUrl page = with html_ [lang_ "en"] $ do
     meta_ [httpEquiv_ "Content-Type", content_ "text/html; charset=utf-8"]
     meta_ [name_ "viewport", content_ "width=device-width, initial-scale=1"]
     ogpMetaTags realmName
-    title_ $ case page of
-      Page_Index _ -> toHtml $ realmName <> " Archive"
-      Page_Stream (Rib.targetVal -> s) -> do
-        toHtml $ _streamName s
-        " - "
-        toHtml realmName
-      Page_Topic (Rib.targetVal -> s, Rib.targetVal -> t) -> do
-        toHtml $ _topicName t
-        " - "
-        toHtml $ _streamName s
+    title_ $ toHtml $ pageTitle realmName page
     style_ [type_ "text/css"] $ C.render pageStyle
     stylesheet "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
     stylesheet "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
@@ -208,25 +200,25 @@ renderPage server baseUrl page = with html_ [lang_ "en"] $ do
           url = "https://fonts.googleapis.com/css?family=" <> s <> "&display=swap"
        in stylesheet url
     ogpMetaTags :: Text -> Html ()
-    ogpMetaTags realm = do
+    ogpMetaTags realmName = do
       let ogpAttribute name value =
             meta_ [term "property" $ "og:" <> name, content_ value]
-      ogpAttribute "site_name" $ realm <> " Archive"
+      ogpAttribute "site_name" $ realmName <> " Archive"
       ogpAttribute "url" $ baseUrl <> pageUrl page
+      ogpAttribute "title" $ pageTitle realmName page
       case page of
         Page_Index _ ->
-          ogpAttribute "title" "Home"
+          mempty
         Page_Stream (Rib.targetVal -> s) -> do
-          ogpAttribute "title" $ _streamName s
           ogpAttribute "description" $ _streamDescription s
         Page_Topic ((Rib.targetVal -> s), Rib.targetVal -> t) -> do
-          ogpAttribute "title" $ _topicName t
           ogpAttribute "type" "article"
           ogpAttribute "article:section" $ _streamName s
           mapM_ (ogpAttribute "article:modified_time" . ogpTimeFormat)
             $ _topicLastUpdated t
           whenJust (listToMaybe $ _topicMessages t) $ \msg -> do
             ogpAttribute "article:published_time" $ ogpTimeFormat $ _messageTimestamp msg
+            -- FIXME: _messageContent is HTML, but we need plain text.
             ogpAttribute "description" $ T.take 300 $ _messageContent msg
             ogpAttribute "image" `mapM_` _messageAvatarUrl msg
     ogpTimeFormat :: POSIXTime -> T.Text
@@ -234,6 +226,14 @@ renderPage server baseUrl page = with html_ [lang_ "en"] $ do
       toText
         . formatTime defaultTimeLocale (iso8601DateFormat $ Just "%H:%M:%SZ")
         . posixSecondsToUTCTime
+
+pageTitle :: Text -> Page -> Text
+pageTitle realmName = \case
+  Page_Index _ -> realmName <> " Archive"
+  Page_Stream (Rib.targetVal -> s) -> do
+    _streamName s <> " - " <> realmName
+  Page_Topic (Rib.targetVal -> s, Rib.targetVal -> t) -> do
+    _topicName t <> " - " <> _streamName s
 
 headerFont :: Text
 headerFont = "Roboto"
