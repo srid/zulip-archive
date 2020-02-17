@@ -1,9 +1,9 @@
 {-# LANGUAGE DeriveAnyClass #-}
-{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
 {-# LANGUAGE TypeApplications #-}
@@ -214,8 +214,8 @@ renderPage server baseUrl page = with html_ [lang_ "en"] $ do
         Page_Topic ((Rib.targetVal -> s), Rib.targetVal -> t) -> do
           ogpAttribute "type" "article"
           ogpAttribute "article:section" $ _streamName s
-          mapM_ (ogpAttribute "article:modified_time" . ogpTimeFormat)
-            $ _topicLastUpdated t
+          mapM_ (ogpAttribute "article:modified_time" . ogpTimeFormat) $
+            _topicLastUpdated t
           whenJust (listToMaybe $ _topicMessages t) $ \msg -> do
             ogpAttribute "article:published_time" $ ogpTimeFormat $ _messageTimestamp msg
             -- FIXME: _messageContent is HTML, but we need plain text.
