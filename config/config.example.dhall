@@ -3,4 +3,5 @@
 , authApiKey = "YOURZULIPAPIKEY"
 , targetDir = "./site"
 , fetchEveryMins = 15
+, baseUrl = "https://archivedomain.com"
 }
