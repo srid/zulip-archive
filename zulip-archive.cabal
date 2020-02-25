@@ -32,4 +32,5 @@ executable zulip-archive
         directory,
         containers,
         cryptonite,
-        dhall
+        dhall,
+        tagsoup

@@ -16,6 +16,7 @@ import Clay ((?), Css, em, pct, px)
 import qualified Clay as C
 import qualified Config
 import Control.Concurrent (threadDelay)
+import Data.Maybe (mapMaybe)
 import qualified Data.Text as T
 import Data.Time
 import Data.Time.Clock.POSIX
@@ -26,6 +27,7 @@ import Path
 import Relude
 import Rib (Target)
 import qualified Rib
+import Text.HTML.TagSoup (maybeTagText, parseTags)
 import Web.Slug (mkSlug, unSlug)
 import Zulip.Client
 
@@ -218,10 +220,11 @@ renderPage server baseUrl page = with html_ [lang_ "en"] $ do
             _topicLastUpdated t
           whenJust (listToMaybe $ _topicMessages t) $ \msg -> do
             ogpAttribute "article:published_time" $ ogpTimeFormat $ _messageTimestamp msg
-            -- FIXME: _messageContent is HTML, but we need plain text.
-            ogpAttribute "description" $ T.take 300 $ _messageContent msg
+            ogpAttribute "description" $ T.take 300 $ stripHtml $ _messageContent msg
             ogpAttribute "image" `mapM_` _messageAvatarUrl msg
-    ogpTimeFormat :: POSIXTime -> T.Text
+    stripHtml :: Text -> Text
+    stripHtml = T.concat . mapMaybe maybeTagText . parseTags
+    ogpTimeFormat :: POSIXTime -> Text
     ogpTimeFormat =
       toText
         . formatTime defaultTimeLocale (iso8601DateFormat $ Just "%H:%M:%SZ")
