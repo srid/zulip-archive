@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE GADTs #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
@@ -17,6 +18,7 @@ import qualified Clay as C
 import qualified Config
 import Control.Concurrent (threadDelay)
 import Data.Maybe (mapMaybe)
+import Data.Some
 import qualified Data.Text as T
 import Data.Time
 import Data.Time.Clock.POSIX
@@ -25,21 +27,53 @@ import GHC.Natural
 import Lucid
 import Path
 import Relude
-import Rib (Target)
+import Rib (IsRoute (..))
 import qualified Rib
 import Text.HTML.TagSoup (maybeTagText, parseTags)
 import Web.Slug (mkSlug, unSlug)
 import Zulip.Client
 
-data Page
-  = Page_Index [Target () Stream]
-  | Page_Stream (Target () Stream)
-  | Page_Topic (Target () Stream, Target () Topic)
+-- | Sentinel types for GADTs
+data StreamR = StreamR
+
+data TopicR = TopicR
+
+-- | Route represents the route for each generated static page.
+data Route a where
+  Route_Index :: Route [Route StreamR]
+  Route_Stream :: Stream -> StreamRoute a -> Route a
+
+data StreamRoute a where
+  StreamRoute_Index :: StreamRoute StreamR
+  StreamRoute_Topic :: Topic -> StreamRoute TopicR
+
+instance IsRoute Route where
+  routeFile = \case
+    Route_Index ->
+      pure [relfile|index.html|]
+    Route_Stream stream r -> do
+      streamSlug <- parseRelDir . toString . unSlug =<< mkSlug (_streamName stream)
+      fmap (streamSlug </>) $ case r of
+        StreamRoute_Index ->
+          pure [relfile|index.html|]
+        StreamRoute_Topic topic ->
+          addExtension ".html" $ _topicSlug topic
 
 main :: IO ()
-main = forever $ do
+main = prodMain
+
+devMain :: IO ()
+devMain = do
+  cfg <- Config.readConfig
+  -- Just dump development server's generated files under ./tmp for now.
+  -- TODO: We need a configurable way to support development environments in rib.
+  Rib.run [reldir|static|] [reldir|tmp|] $ generateSite cfg
+
+prodMain :: IO ()
+prodMain = forever $ do
   cfg <- Config.readConfig
   targetDir <- parseRelDir $ toString $ Config.targetDir cfg
+  -- Run rib without a http server. Just generate *once*.
   Rib.runWith [reldir|static|] targetDir (generateSite cfg) (Rib.Generate False)
   putStrLn $ "Waiting for " <> show (Config.fetchEveryMins cfg) <> " min"
   threadDelayMins $ Config.fetchEveryMins cfg
@@ -50,67 +84,58 @@ main = forever $ do
 -- | Shake action for generating the static site
 generateSite :: Config.Config -> Action ()
 generateSite cfg = do
-  liftIO $ putStrLn "In build action"
   let baseUrl = Config.baseUrl cfg
   -- Copy over the static files
   Rib.buildStaticFiles [[relfile|**|]]
   -- Fetch (and/or load from cache) all zulip data
   (server, streams) <- getArchive (Config.zulipDomain cfg) (Config.authEmail cfg) (Config.authApiKey cfg)
-  streamsT <- forM streams $ \stream -> do
-    -- Build the page for a stream
-    streamFile <- liftIO $ streamHtmlPath stream
-    let streamT = Rib.mkTarget streamFile stream
-    Rib.writeTarget streamT $ renderPage server baseUrl . Page_Stream
+  let writeHtmlRoute :: Route a -> a -> Action ()
+      writeHtmlRoute r = Rib.writeRoute r . Lucid.renderText . renderPage server baseUrl r
+  streamRoutes <- forM streams $ \stream -> do
     forM_ (fromMaybe (error "No topics in stream") $ _streamTopics stream) $ \topic -> do
-      -- Build the page for a topic belonging to this stream
-      topicFile <- liftIO $ addExtension ".html" $ parent streamFile </> _topicSlug topic
-      let topicT = Rib.mkTarget topicFile topic
-      Rib.writeTarget topicT $ renderPage server baseUrl . Page_Topic . (streamT,)
-    pure streamT
+      let tr = Route_Stream stream $ StreamRoute_Topic topic
+      writeHtmlRoute tr TopicR
+    let sr = Route_Stream stream StreamRoute_Index
+    writeHtmlRoute sr StreamR
+    pure sr
   -- Write an index.html linking to all streams
-  let indexT = Rib.mkTarget [relfile|index.html|] streamsT
-  Rib.writeTarget indexT $ renderPage server baseUrl . Page_Index . Rib.targetVal
+  writeHtmlRoute Route_Index streamRoutes
 
--- TODO: calculate stream slug in Zulip.Client module, along with Topic
-streamHtmlPath :: Stream -> IO (Path Rel File)
-streamHtmlPath stream = do
-  streamSlug <- parseRelDir . toString . unSlug =<< mkSlug (_streamName stream)
-  pure $ streamSlug </> [relfile|index.html|]
-
-renderCrumbs :: NonEmpty Page -> Html ()
+renderCrumbs :: NonEmpty (Some Route) -> Html ()
 renderCrumbs (_ :| []) = mempty
 renderCrumbs crumbs =
   with div_ [class_ "ui breadcrumb rib"] $ go crumbs
   where
-    go :: NonEmpty Page -> Html ()
+    go :: NonEmpty (Some Route) -> Html ()
     go (p0 :| []) = do
       with div_ [class_ "active section"] $ toHtml $ pageName p0
     go (p0 :| p1 : ps) = do
-      with a_ [class_ "section", href_ $ pageUrl p0] $ toHtml $ pageName p0
+      with a_ [class_ "section", href_ $ withSome p0 Rib.routeUrl] $ toHtml $ pageName p0
       with i_ [class_ "right angle icon divider"] mempty
       go $ p1 :| ps
 
-pageName :: Page -> Text
+pageName :: Some Route -> Text
 pageName = \case
-  Page_Index _ -> "Home"
-  Page_Stream (Rib.targetVal -> s) -> "#" <> _streamName s
-  Page_Topic ((_s, Rib.targetVal -> t)) -> _topicName t
+  Some Route_Index -> "Home"
+  Some (Route_Stream stream StreamRoute_Index) ->
+    "#" <> _streamName stream
+  Some (Route_Stream _ (StreamRoute_Topic topic)) ->
+    _topicName topic
 
-pageUrl :: Page -> Text
-pageUrl = \case
-  Page_Index _ -> "/"
-  Page_Stream s -> Rib.targetUrl s
-  Page_Topic (_, t) -> Rib.targetUrl t
-
-pageCrumbs :: Page -> NonEmpty Page
-pageCrumbs = (Page_Index [] :|) . \case
-  Page_Index _ -> []
-  x@(Page_Stream _) -> [x]
-  x@(Page_Topic (s, _)) -> [Page_Stream s, x]
+pageCrumbs :: Route a -> NonEmpty (Some Route)
+pageCrumbs = (Some Route_Index :|) . \case
+  Route_Index ->
+    []
+  r@(Route_Stream _ StreamRoute_Index) ->
+    [Some r]
+  r@(Route_Stream stream (StreamRoute_Topic _)) ->
+    [ Some $ Route_Stream stream StreamRoute_Index,
+      Some r
+    ]
 
 -- | Define your site HTML here
-renderPage :: ServerSettings -> Text -> Page -> Html ()
-renderPage server baseUrl page = with html_ [lang_ "en"] $ do
+renderPage :: ServerSettings -> Text -> Route a -> a -> Html ()
+renderPage server baseUrl page val = with html_ [lang_ "en"] $ do
   let realmName = _serversettingsRealmName server <> " Zulip"
   head_ $ do
     meta_ [httpEquiv_ "Content-Type", content_ "text/html; charset=utf-8"]
@@ -125,10 +150,13 @@ renderPage server baseUrl page = with html_ [lang_ "en"] $ do
   body_ $ do
     with div_ [class_ "ui text container", id_ "thesite"] $ do
       with div_ [class_ "ui violet inverted top attached center aligned segment"] $ do
-        with h1_ [class_ "ui huge header"] $ toHtml $ case page of
-          Page_Index _ -> realmName <> " Chat Archive"
-          Page_Stream (Rib.targetVal -> s) -> _streamName s <> " stream"
-          Page_Topic (Rib.targetVal -> s, Rib.targetVal -> t) -> _topicName t <> " - " <> _streamName s
+        with h1_ [class_ "ui huge header"] $ toHtml @Text $ case page of
+          Route_Index ->
+            realmName <> " Chat Archive"
+          Route_Stream stream StreamRoute_Index ->
+            _streamName stream <> " stream"
+          Route_Stream stream (StreamRoute_Topic topic) ->
+            _topicName topic <> " - " <> _streamName stream
       with div_ [class_ "ui attached segment"] $ do
         with div_ [class_ "ui message"] $ do
           p_ $ do
@@ -138,62 +166,66 @@ renderPage server baseUrl page = with html_ [lang_ "en"] $ do
             with a_ [href_ $ _serversettingsRealmUri server] "here"
             "."
         renderCrumbs $ pageCrumbs page
-        case page of
-          Page_Index streams -> do
-            let streamMsgCount (Rib.targetVal -> stream) =
-                  length $ mconcat $ _topicMessages <$> fromMaybe [] (_streamTopics stream)
-            with div_ [class_ "ui relaxed list"]
-              $ forM_ (reverse $ sortOn streamMsgCount streams)
-              $ \stream -> with div_ [class_ "item"] $ do
-                with div_ [class_ "right floated content subtle"] $
-                  case streamMsgCount stream of
-                    0 -> mempty
-                    cnt -> do
-                      toHtml $ show @Text cnt
-                      " messages"
-                with div_ [class_ "content"] $ do
-                  with a_ [class_ "header", href_ (Rib.targetUrl stream)]
-                    $ toHtml
-                    $ _streamName (Rib.targetVal stream)
-                  with div_ [class_ "description"] $ do
-                    toHtml (_streamDescription $ Rib.targetVal stream)
-          Page_Stream streamT@(Rib.targetVal -> stream) -> do
-            p_ $ i_ $ toHtml $ _streamDescription stream
-            with div_ [class_ "ui relaxed list"]
-              $ forM_ (fromMaybe [] $ _streamTopics stream)
-              $ \topic -> with div_ [class_ "item"] $ do
-                with div_ [class_ "right floated content subtle"] $ do
-                  toHtml $ maybe "" renderTimestamp $ _topicLastUpdated topic
-                with div_ [class_ "content"] $ do
-                  -- TODO(HACK): We should really be passing `Target Topic` here
-                  let topicUrl = Rib.targetUrl streamT <> (toText $ toFilePath $ _topicSlug topic) <> ".html"
-                  with a_ [class_ "header", href_ topicUrl]
-                    $ toHtml
-                    $ _topicName topic
-                  with div_ [class_ "description"] $ do
-                    toHtml $ show @Text (length $ _topicMessages topic)
-                    " messages."
-          Page_Topic (_, Rib.targetVal -> topic) -> do
-            with div_ [class_ "ui comments messages"] $ do
-              forM_ (_topicMessages topic) $ \msg -> do
-                with div_ [class_ "comment"] $ do
-                  with a_ [class_ "avatar"] $ do
-                    case _messageAvatarUrl msg of
-                      Nothing -> mempty
-                      Just avatarUrl -> img_ [src_ avatarUrl]
-                  with div_ [class_ "content"] $ do
-                    with a_ [class_ "author"] $ toHtml $ _messageSenderFullName msg
-                    with div_ [class_ "metadata"] $ do
-                      let anchor = show $ _messageId msg
-                      with a_ [name_ anchor, href_ $ "#" <> anchor]
-                        $ div_
-                        $ renderTimestamp
-                        $ _messageTimestamp msg
-                    with div_ [class_ "text"] $
-                      toHtmlRaw (_messageContent msg)
+        renderPageContent
       with div_ [class_ "ui vertical footer segment"] $ do
         with a_ [href_ "https://github.com/srid/zulip-archive"] "Powered by Haskell"
   where
+    renderPageContent :: Html ()
+    renderPageContent = case page of
+      Route_Index -> do
+        let streams = reverse $ flip sortOn val $ \(Route_Stream stream StreamRoute_Index) -> streamMsgCount stream
+            streamMsgCount :: Stream -> Int
+            streamMsgCount stream =
+              length $ mconcat $ _topicMessages <$> fromMaybe [] (_streamTopics stream)
+        with div_ [class_ "ui relaxed list"]
+          $ forM_ streams
+          $ \sr -> with div_ [class_ "item"] $ do
+            let Route_Stream stream StreamRoute_Index = sr
+            with div_ [class_ "right floated content subtle"] $
+              case streamMsgCount stream of
+                0 -> mempty
+                cnt -> do
+                  toHtml $ show @Text cnt
+                  " messages"
+            with div_ [class_ "content"] $ do
+              with a_ [class_ "header", href_ $ Rib.routeUrl sr]
+                $ toHtml
+                $ _streamName stream
+              with div_ [class_ "description"] $ do
+                toHtml (_streamDescription stream)
+      Route_Stream stream StreamRoute_Index -> do
+        let mkTopicRoute s t = Route_Stream s $ StreamRoute_Topic t
+        p_ $ i_ $ toHtml $ _streamDescription stream
+        with div_ [class_ "ui relaxed list"]
+          $ forM_ (fromMaybe [] $ _streamTopics stream)
+          $ \topic -> with div_ [class_ "item"] $ do
+            with div_ [class_ "right floated content subtle"] $ do
+              toHtml $ maybe "" renderTimestamp $ _topicLastUpdated topic
+            with div_ [class_ "content"] $ do
+              with a_ [class_ "header", href_ $ Rib.routeUrl $ mkTopicRoute stream topic]
+                $ toHtml
+                $ _topicName topic
+              with div_ [class_ "description"] $ do
+                toHtml $ show @Text (length $ _topicMessages topic)
+                " messages."
+      Route_Stream _ (StreamRoute_Topic topic) -> do
+        with div_ [class_ "ui comments messages"] $ do
+          forM_ (_topicMessages topic) $ \msg -> do
+            with div_ [class_ "comment"] $ do
+              with a_ [class_ "avatar"] $ do
+                case _messageAvatarUrl msg of
+                  Nothing -> mempty
+                  Just avatarUrl -> img_ [src_ avatarUrl]
+              with div_ [class_ "content"] $ do
+                with a_ [class_ "author"] $ toHtml $ _messageSenderFullName msg
+                with div_ [class_ "metadata"] $ do
+                  let anchor = show $ _messageId msg
+                  with a_ [name_ anchor, href_ $ "#" <> anchor]
+                    $ div_
+                    $ renderTimestamp
+                    $ _messageTimestamp msg
+                with div_ [class_ "text"] $
+                  toHtmlRaw (_messageContent msg)
     renderTimestamp t =
       toHtml $ formatTime defaultTimeLocale "%F %X" $ posixSecondsToUTCTime t
     stylesheet x = link_ [rel_ "stylesheet", href_ x]
@@ -206,19 +238,19 @@ renderPage server baseUrl page = with html_ [lang_ "en"] $ do
       let ogpAttribute name value =
             meta_ [term "property" $ "og:" <> name, content_ value]
       ogpAttribute "site_name" $ realmName <> " Archive"
-      ogpAttribute "url" $ baseUrl <> pageUrl page
+      ogpAttribute "url" $ baseUrl <> Rib.routeUrl page
       ogpAttribute "title" $ pageTitle realmName page
       case page of
-        Page_Index _ ->
+        Route_Index ->
           mempty
-        Page_Stream (Rib.targetVal -> s) -> do
-          ogpAttribute "description" $ _streamDescription s
-        Page_Topic ((Rib.targetVal -> s), Rib.targetVal -> t) -> do
+        Route_Stream stream StreamRoute_Index -> do
+          ogpAttribute "description" $ _streamDescription stream
+        Route_Stream stream (StreamRoute_Topic topic) -> do
           ogpAttribute "type" "article"
-          ogpAttribute "article:section" $ _streamName s
+          ogpAttribute "article:section" $ _streamName stream
           mapM_ (ogpAttribute "article:modified_time" . ogpTimeFormat) $
-            _topicLastUpdated t
-          whenJust (listToMaybe $ _topicMessages t) $ \msg -> do
+            _topicLastUpdated topic
+          whenJust (listToMaybe $ _topicMessages topic) $ \msg -> do
             ogpAttribute "article:published_time" $ ogpTimeFormat $ _messageTimestamp msg
             ogpAttribute "description" $ T.take 300 $ stripHtml $ _messageContent msg
             ogpAttribute "image" `mapM_` _messageAvatarUrl msg
@@ -230,13 +262,13 @@ renderPage server baseUrl page = with html_ [lang_ "en"] $ do
         . formatTime defaultTimeLocale (iso8601DateFormat $ Just "%H:%M:%SZ")
         . posixSecondsToUTCTime
 
-pageTitle :: Text -> Page -> Text
+pageTitle :: Text -> Route a -> Text
 pageTitle realmName = \case
-  Page_Index _ -> realmName <> " Archive"
-  Page_Stream (Rib.targetVal -> s) -> do
+  Route_Index -> realmName <> " Archive"
+  Route_Stream s StreamRoute_Index ->
     _streamName s <> " - " <> realmName
-  Page_Topic (Rib.targetVal -> s, Rib.targetVal -> t) -> do
-    _topicName t <> " - " <> _streamName s
+  Route_Stream stream (StreamRoute_Topic topic) ->
+    _topicName topic <> " - " <> _streamName stream
 
 headerFont :: Text
 headerFont = "Roboto"

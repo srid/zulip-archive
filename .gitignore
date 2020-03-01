@@ -10,3 +10,4 @@ static/user_uploads
 
 messages.json
 config/config.dhall
+tmp
