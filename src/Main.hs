@@ -240,12 +240,12 @@ routeTitle realmName = \case
   Route_Stream stream (StreamRoute_Topic topic) ->
     _topicName topic <> " - " <> _streamName stream
 
-routeName :: Some Route -> Text
+routeName :: Route a -> Text
 routeName = \case
-  Some Route_Index -> "Home"
-  Some (Route_Stream stream StreamRoute_Index) ->
+  Route_Index -> "Home"
+  Route_Stream stream StreamRoute_Index ->
     "#" <> _streamName stream
-  Some (Route_Stream _ (StreamRoute_Topic topic)) ->
+  Route_Stream _ (StreamRoute_Topic topic) ->
     _topicName topic
 
 routeCrumbs :: Route a -> NonEmpty (Some Route)
@@ -266,9 +266,9 @@ renderCrumbs crumbs =
   where
     go :: NonEmpty (Some Route) -> Html ()
     go (p0 :| []) = do
-      div_ [class_ "active section"] $ toHtml $ routeName p0
+      div_ [class_ "active section"] $ toHtml $ routeName `foldSome` p0
     go (p0 :| p1 : ps) = do
-      a_ [class_ "section", href_ $ withSome p0 Rib.routeUrl] $ toHtml $ routeName p0
+      a_ [class_ "section", href_ $ Rib.routeUrl `foldSome` p0] $ toHtml $ routeName `foldSome` p0
       i_ [class_ "right angle icon divider"] mempty
       go $ p1 :| ps
 
