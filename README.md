@@ -35,6 +35,7 @@ vim config/config.dhall
 To build and run the site:
 
 ```bash
+# First, set `main = devMain` in Main.hs so it starts a dev server
 nix-shell --run 'ghcid -T :main --restart=config'
 ```
 
