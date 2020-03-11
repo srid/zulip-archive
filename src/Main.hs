@@ -61,21 +61,10 @@ instance IsRoute Route where
           addExtension ".html" $ _topicSlug topic
 
 main :: IO ()
-main = prodMain
-
-devMain :: IO ()
-devMain = do
+main = forever $ do
   cfg <- Config.readConfig
-  -- Just dump development server's generated files under ./tmp for now.
-  -- TODO: We need a configurable way to support development environments in rib.
-  Rib.run [reldir|static|] [reldir|tmp|] $ generateSite cfg
-
-prodMain :: IO ()
-prodMain = forever $ do
-  cfg <- Config.readConfig
-  targetDir <- parseRelDir $ toString $ Config.targetDir cfg
   -- Run rib without a http server. Just generate *once*.
-  Rib.runWith [reldir|static|] targetDir (generateSite cfg) (Rib.Generate False)
+  Rib.runWith [reldir|static|] [reldir|site|] (generateSite cfg) (Rib.Generate False)
   putStrLn $ "Waiting for " <> show (Config.fetchEveryMins cfg) <> " min"
   threadDelayMins $ Config.fetchEveryMins cfg
   where

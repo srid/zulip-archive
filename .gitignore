@@ -5,9 +5,7 @@ result
 .shake
 
 site
-tmp
 static/user_uploads
 
 messages.json
 config/config.dhall
-tmp

@@ -1,7 +1,11 @@
-{ zulipDomain : Text
-, authEmail : Text
-, authApiKey : Text 
-, targetDir : Text
-, fetchEveryMins : Natural
-, baseUrl : Text
+{ zulipDomain :
+    Text
+, authEmail :
+    Text
+, authApiKey :
+    Text
+, fetchEveryMins :
+    Natural
+, baseUrl :
+    Text
 }
