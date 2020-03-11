@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE StandaloneDeriving #-}
@@ -14,10 +15,6 @@ import Relude
 import System.Directory (withCurrentDirectory)
 
 makeHaskellTypeFromUnion "Config" "< Config : ./config/Type.dhall >"
-
-deriving instance Generic Config
-
-deriving instance FromDhall Config
 
 readConfig :: MonadIO m => m Config
 readConfig =

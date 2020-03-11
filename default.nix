@@ -2,7 +2,7 @@ let
   # To upgrade rib, go to https://github.com/srid/rib/commits/master, select the
   # revision you would like to upgrade to and set it here. Consult rib's
   # ChangeLog.md to check any notes on API migration.
-  ribRevision = "4c80c4c";
+  ribRevision = "48c0e70b1d37d73680691c2eabc721bcdad04af3";
 
   inherit (import (builtins.fetchTarball "https://github.com/hercules-ci/gitignore/archive/7415c4f.tar.gz") { }) gitignoreSource;
 in {
@@ -17,17 +17,4 @@ in {
 
 import rib { 
   inherit root name; 
-  source-overrides = let 
-    githubRepo = fq: rev: 
-       builtins.fetchTarball ("https://github.com/" + fq + "/archive/" + rev + ".tar.gz");
-    dhallSrc = githubRepo "dhall-lang/dhall-haskell" "7aed7cf";
-    prettyprinterSrc = githubRepo "quchen/prettyprinter" "320538b";
-  in {
-    dhall = dhallSrc + "/dhall";
-    generic-random = githubRepo "Lysxia/generic-random" "1a091b6";
-    prettyprinter = (import <nixpkgs> {}).runCommand "prettyprinter" {}
-    ''
-      cp -r -L ${prettyprinterSrc}/prettyprinter $out
-    '';
-  };
 }

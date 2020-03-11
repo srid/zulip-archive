@@ -18,7 +18,6 @@ import qualified Clay as C
 import qualified Config
 import Config (Config)
 import Control.Concurrent (threadDelay)
-import Data.Maybe (mapMaybe)
 import Data.Some
 import qualified Data.Text as T
 import Data.Time
@@ -30,6 +29,7 @@ import Path
 import Relude
 import Rib (IsRoute (..))
 import qualified Rib
+import Rib.Extra.CSS (googleFonts, stylesheet)
 import Text.HTML.TagSoup (maybeTagText, parseTags)
 import Web.Slug (mkSlug, unSlug)
 import Zulip.Client
@@ -196,11 +196,6 @@ renderPage server cfg route val = html_ [lang_ "en"] $ do
                   toHtmlRaw (_messageContent msg)
     renderTimestamp t =
       toHtml $ formatTime defaultTimeLocale "%F %X" $ posixSecondsToUTCTime t
-    stylesheet x = link_ [rel_ "stylesheet", href_ x]
-    googleFonts fs =
-      let s = T.intercalate "|" $ T.replace " " "+" <$> fs
-          url = "https://fonts.googleapis.com/css?family=" <> s <> "&display=swap"
-       in stylesheet url
 
 ogpMetaTags :: Config -> Route a -> Text -> Html ()
 ogpMetaTags cfg r realmName = do

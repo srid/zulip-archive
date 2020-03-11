@@ -15,12 +15,12 @@ executable zulip-archive
         -Wincomplete-record-updates
         -Wincomplete-uni-patterns
     build-depends:
-        base ^>=4.12.0.0,
+        base,
         aeson,
         clay -any,
         lucid -any,
         path,
-        rib ^>=0.7,
+        rib ^>=0.8,
         relude,
         shake -any,
         text,
