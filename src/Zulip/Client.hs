@@ -20,6 +20,7 @@ import Relude hiding (Option)
 import Relude.Extra.Map (lookup)
 import qualified Shower
 import System.Directory (doesFileExist)
+import Text.URI (URI, mkURI)
 import Web.UniqSlug (mkUniqSlug)
 import Zulip.Internal
 
@@ -71,7 +72,7 @@ data Message
       { _messageId :: Int,
         _messageContent :: Text,
         _messageContentType :: Text,
-        _messageAvatarUrl :: Maybe Text, -- API doesn't always set this.
+        _messageAvatarUrl :: Maybe URI, -- API doesn't always set this.
         _messageSenderFullName :: Text,
         _messageSenderId :: Int,
         _messageStreamId :: Maybe Int,
@@ -119,7 +120,9 @@ mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
   -- TODO: Verify that stream names are unique.
   let avatarMap = Map.fromList $ flip fmap users $ _userId &&& _userAvatarUrl
       msgs = flip fmap msgsWithoutAvatar $ \msg ->
-        msg {_messageAvatarUrl = _messageAvatarUrl msg <|> lookup (_messageSenderId msg) avatarMap}
+        msg { _messageAvatarUrl =
+            _messageAvatarUrl msg <|> (lookup (_messageSenderId msg) avatarMap >>= mkURI)
+        }
       streamMsgs = flip filter msgs $ \msg -> _messageStreamId msg == Just (_streamStreamId stream)
       topicMsgMap = Map.fromListWith (<>) $ flip fmap streamMsgs $ \msg ->
         (_messageSubject msg, [msg])

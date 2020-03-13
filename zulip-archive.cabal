@@ -36,4 +36,5 @@ executable zulip-archive
         cryptonite,
         dhall,
         tagsoup,
-        dependent-sum
+        dependent-sum,
+        modern-uri
