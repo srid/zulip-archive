@@ -32,7 +32,7 @@ import Relude
 import Rib (IsRoute (..))
 import qualified Rib
 import Rib.Extra.CSS (googleFonts, stylesheet)
-import Rib.Extra.OpenGraph (OpenGraph(..), OGType(..), Article(..))
+import Rib.Extra.OpenGraph (Article (..), OGType (..), OpenGraph (..))
 import System.IO (BufferMode (LineBuffering), hSetBuffering)
 import System.Posix.Files (touchFile)
 import Text.HTML.TagSoup (maybeTagText, parseTags)
@@ -236,13 +236,13 @@ routeCrumbs = (Some Route_Index :|) . \case
 routeOgpMeta :: Config -> Text -> Route a -> OpenGraph
 routeOgpMeta cfg realmName route =
   OpenGraph
-    { _openGraph_title = routeTitle realmName route
-    , _openGraph_url = URI.mkURI $ Config.baseUrl cfg <> Rib.routeUrl route
-    , _openGraph_author = Nothing
-    , _openGraph_description = description
-    , _openGraph_siteName = realmName <> " Archive"
-    , _openGraph_type = ogType
-    , _openGraph_image = firstMessage >>= _messageAvatarUrl
+    { _openGraph_title = routeTitle realmName route,
+      _openGraph_url = URI.mkURI $ Config.baseUrl cfg <> Rib.routeUrl route,
+      _openGraph_author = Nothing,
+      _openGraph_description = description,
+      _openGraph_siteName = realmName <> " Archive",
+      _openGraph_type = ogType,
+      _openGraph_image = firstMessage >>= _messageAvatarUrl
     }
   where
     description :: Maybe Text
@@ -256,16 +256,17 @@ routeOgpMeta cfg realmName route =
     ogType :: Maybe OGType
     ogType = case route of
       Route_Stream stream (StreamRoute_Topic topic) ->
-        Just $ OGType_Article $ Article
-          { _article_section =
-              Just $ _streamName stream
-          , _article_modifiedTime =
-              posixSecondsToUTCTime <$> _topicLastUpdated topic
-          , _article_publishedTime =
-              posixSecondsToUTCTime . _messageTimestamp <$> firstMessage
-          , _article_expirationTime = Nothing
-          , _article_tag = []
-          }
+        Just $ OGType_Article $
+          Article
+            { _article_section =
+                Just $ _streamName stream,
+              _article_modifiedTime =
+                posixSecondsToUTCTime <$> _topicLastUpdated topic,
+              _article_publishedTime =
+                posixSecondsToUTCTime . _messageTimestamp <$> firstMessage,
+              _article_expirationTime = Nothing,
+              _article_tag = []
+            }
       _ ->
         Nothing
     firstMessage :: Maybe Message
