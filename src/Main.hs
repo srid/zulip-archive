@@ -32,9 +32,11 @@ import Relude
 import Rib (IsRoute (..))
 import qualified Rib
 import Rib.Extra.CSS (googleFonts, stylesheet)
+import Rib.Extra.OpenGraph (OpenGraph(..), OGType(..), Article(..))
 import System.IO (BufferMode (LineBuffering), hSetBuffering)
 import System.Posix.Files (touchFile)
 import Text.HTML.TagSoup (maybeTagText, parseTags)
+import qualified Text.URI as URI
 import Web.Slug (mkSlug, unSlug)
 import Zulip.Client
 
@@ -115,7 +117,7 @@ renderPage server cfg route val = html_ [lang_ "en"] $ do
   head_ $ do
     meta_ [httpEquiv_ "Content-Type", content_ "text/html; charset=utf-8"]
     meta_ [name_ "viewport", content_ "width=device-width, initial-scale=1"]
-    ogpMetaTags cfg route realmName
+    toHtml $ routeOgpMeta cfg realmName route
     title_ $ toHtml $ routeTitle realmName route
     style_ [type_ "text/css"] $ C.render routeStyle
     stylesheet "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
@@ -190,7 +192,7 @@ renderPage server cfg route val = html_ [lang_ "en"] $ do
               a_ [class_ "avatar"] $ do
                 case _messageAvatarUrl msg of
                   Nothing -> mempty
-                  Just avatarUrl -> img_ [src_ avatarUrl]
+                  Just avatarUrl -> img_ [src_ $ URI.render avatarUrl]
               div_ [class_ "content"] $ do
                 a_ [class_ "author"] $ toHtml $ _messageSenderFullName msg
                 div_ [class_ "metadata"] $ do
@@ -203,36 +205,6 @@ renderPage server cfg route val = html_ [lang_ "en"] $ do
                   toHtmlRaw (_messageContent msg)
     renderTimestamp t =
       toHtml $ formatTime defaultTimeLocale "%F %X" $ posixSecondsToUTCTime t
-
-ogpMetaTags :: Config -> Route a -> Text -> Html ()
-ogpMetaTags cfg r realmName = do
-  let ogpAttribute name value =
-        meta_ [term "property" $ "og:" <> name, content_ value]
-  ogpAttribute "site_name" $ realmName <> " Archive"
-  ogpAttribute "url" $ Config.baseUrl cfg <> Rib.routeUrl r
-  ogpAttribute "title" $ routeTitle realmName r
-  case r of
-    Route_Index ->
-      mempty
-    Route_Stream stream StreamRoute_Index -> do
-      ogpAttribute "description" $ _streamDescription stream
-    Route_Stream stream (StreamRoute_Topic topic) -> do
-      ogpAttribute "type" "article"
-      ogpAttribute "article:section" $ _streamName stream
-      mapM_ (ogpAttribute "article:modified_time" . ogpTimeFormat) $
-        _topicLastUpdated topic
-      whenJust (listToMaybe $ _topicMessages topic) $ \msg -> do
-        ogpAttribute "article:published_time" $ ogpTimeFormat $ _messageTimestamp msg
-        ogpAttribute "description" $ T.take 300 $ stripHtml $ _messageContent msg
-        ogpAttribute "image" `mapM_` _messageAvatarUrl msg
-  where
-    stripHtml :: Text -> Text
-    stripHtml = T.concat . mapMaybe maybeTagText . parseTags
-    ogpTimeFormat :: POSIXTime -> Text
-    ogpTimeFormat =
-      toText
-        . formatTime defaultTimeLocale (iso8601DateFormat $ Just "%H:%M:%SZ")
-        . posixSecondsToUTCTime
 
 routeTitle :: Text -> Route a -> Text
 routeTitle realmName = \case
@@ -260,6 +232,50 @@ routeCrumbs = (Some Route_Index :|) . \case
     [ Some $ Route_Stream stream StreamRoute_Index,
       Some r
     ]
+
+routeOgpMeta :: Config -> Text -> Route a -> OpenGraph
+routeOgpMeta cfg realmName route =
+  OpenGraph
+    { _openGraph_title = routeTitle realmName route
+    , _openGraph_url = URI.mkURI $ Config.baseUrl cfg <> Rib.routeUrl route
+    , _openGraph_author = Nothing
+    , _openGraph_description = description
+    , _openGraph_siteName = realmName <> " Archive"
+    , _openGraph_type = ogType
+    , _openGraph_image = firstMessage >>= _messageAvatarUrl
+    }
+  where
+    description :: Maybe Text
+    description = case route of
+      Route_Index ->
+        Nothing
+      Route_Stream stream StreamRoute_Index ->
+        Just $ _streamDescription stream
+      Route_Stream _ (StreamRoute_Topic _) ->
+        T.take 300 . stripHtml . _messageContent <$> firstMessage
+    ogType :: Maybe OGType
+    ogType = case route of
+      Route_Stream stream (StreamRoute_Topic topic) ->
+        Just $ OGType_Article $ Article
+          { _article_section =
+              Just $ _streamName stream
+          , _article_modifiedTime =
+              posixSecondsToUTCTime <$> _topicLastUpdated topic
+          , _article_publishedTime =
+              posixSecondsToUTCTime . _messageTimestamp <$> firstMessage
+          , _article_expirationTime = Nothing
+          , _article_tag = []
+          }
+      _ ->
+        Nothing
+    firstMessage :: Maybe Message
+    firstMessage = case route of
+      Route_Stream _ (StreamRoute_Topic topic) ->
+        listToMaybe $ _topicMessages topic
+      _ ->
+        Nothing
+    stripHtml :: Text -> Text
+    stripHtml = T.concat . mapMaybe maybeTagText . parseTags
 
 renderCrumbs :: NonEmpty (Some Route) -> Html ()
 renderCrumbs (_ :| []) = mempty
