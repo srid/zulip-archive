@@ -242,7 +242,11 @@ routeOgpMeta cfg realmName route =
       _openGraph_description = description,
       _openGraph_siteName = realmName <> " Archive",
       _openGraph_type = ogType,
-      _openGraph_image = firstMessage >>= _messageAvatarUrl
+      _openGraph_image = case route of
+        Route_Stream _ (StreamRoute_Topic topic) ->
+          _messageAvatarUrl =<< firstMessage topic
+        _ ->
+          Nothing
     }
   where
     description :: Maybe Text
@@ -251,8 +255,8 @@ routeOgpMeta cfg realmName route =
         Nothing
       Route_Stream stream StreamRoute_Index ->
         Just $ _streamDescription stream
-      Route_Stream _ (StreamRoute_Topic _) ->
-        T.take 300 . stripHtml . _messageContent <$> firstMessage
+      Route_Stream _ (StreamRoute_Topic topic) ->
+        T.take 300 . stripHtml . _messageContent <$> firstMessage topic
     ogType :: Maybe OGType
     ogType = case route of
       Route_Stream stream (StreamRoute_Topic topic) ->
@@ -263,18 +267,13 @@ routeOgpMeta cfg realmName route =
               _article_modifiedTime =
                 posixSecondsToUTCTime <$> _topicLastUpdated topic,
               _article_publishedTime =
-                posixSecondsToUTCTime . _messageTimestamp <$> firstMessage,
+                posixSecondsToUTCTime . _messageTimestamp <$> firstMessage topic,
               _article_expirationTime = Nothing,
               _article_tag = []
             }
       _ ->
         Nothing
-    firstMessage :: Maybe Message
-    firstMessage = case route of
-      Route_Stream _ (StreamRoute_Topic topic) ->
-        listToMaybe $ _topicMessages topic
-      _ ->
-        Nothing
+    firstMessage = listToMaybe . _topicMessages
     stripHtml :: Text -> Text
     stripHtml = T.concat . mapMaybe maybeTagText . parseTags
 
