@@ -17,6 +17,7 @@ executable zulip-archive
     build-depends:
         base,
         aeson,
+        async,
         clay -any,
         lucid -any,
         path,
@@ -25,6 +26,7 @@ executable zulip-archive
         shake -any,
         text,
         req,
+        unix,
         casing,
         shower,
         exceptions,

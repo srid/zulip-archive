@@ -1,3 +1,4 @@
+{-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE GADTs #-}
@@ -18,6 +19,7 @@ import qualified Clay as C
 import qualified Config
 import Config (Config)
 import Control.Concurrent (threadDelay)
+import Control.Concurrent.Async (race_)
 import Data.Some
 import qualified Data.Text as T
 import Data.Time
@@ -30,6 +32,8 @@ import Relude
 import Rib (IsRoute (..))
 import qualified Rib
 import Rib.Extra.CSS (googleFonts, stylesheet)
+import System.IO (BufferMode (LineBuffering), hSetBuffering)
+import System.Posix.Files (touchFile)
 import Text.HTML.TagSoup (maybeTagText, parseTags)
 import Web.Slug (mkSlug, unSlug)
 import Zulip.Client
@@ -61,12 +65,26 @@ instance IsRoute Route where
           addExtension ".html" $ _topicSlug topic
 
 main :: IO ()
-main = forever $ do
+main = do
+  let inputDir = [reldir|static|]
+      outputDir = [reldir|site|]
   cfg <- Config.readConfig
-  -- Run rib without a http server. Just generate *once*.
-  Rib.runWith [reldir|static|] [reldir|site|] (generateSite cfg) (Rib.Generate False)
-  putStrLn $ "Waiting for " <> show (Config.fetchEveryMins cfg) <> " min"
-  threadDelayMins $ Config.fetchEveryMins cfg
+  race_
+    do Rib.run inputDir outputDir $ generateSite cfg
+    do scheduleGeneration inputDir cfg
+
+-- | Periodically trigger site generation
+--
+-- For every `Config.fetchEveryMins`, this effectively induces rib to invoke
+-- `generateSite`
+scheduleGeneration :: Path Rel Dir -> Config -> IO ()
+scheduleGeneration inputDir cfg = do
+  hSetBuffering stdout LineBuffering
+  forever $ do
+    putStrLn $ "Waiting for " <> show (Config.fetchEveryMins cfg) <> " min"
+    threadDelayMins $ Config.fetchEveryMins cfg
+    -- Modify a file under the input directory so that Rib runs site generation.
+    touchFile $ toFilePath $ inputDir </> [relfile|.rib-trigger|]
   where
     threadDelayMins :: Natural -> IO ()
     threadDelayMins = threadDelay . (1000000 * 60 *) . naturalToInt
