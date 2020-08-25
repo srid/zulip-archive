@@ -39,7 +39,7 @@ To build and run the site:
 nix-shell --run 'ghcid -T ":main serve" --restart=config'
 ```
 
-Go to http://localhost:8080 to view your generated site.
+Go to http://localhost:7004 to view your generated site.
 
 ## Manual update
 
