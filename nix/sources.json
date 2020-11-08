@@ -1,0 +1,38 @@
+{
+    "niv": {
+        "branch": "master",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "nmattia",
+        "repo": "niv",
+        "rev": "ba57d5a29b4e0f2085917010380ef3ddc3cf380f",
+        "sha256": "1kpsvc53x821cmjg1khvp1nz7906gczq8mp83664cr15h94sh8i4",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/niv/archive/ba57d5a29b4e0f2085917010380ef3ddc3cf380f.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "release-20.03",
+        "description": "Nix Packages collection",
+        "homepage": "",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0da76dab4c2a",
+        "sha256": "1lj3h4hg3cnxl3avbg9089wd8c82i6sxhdyxfy99l950i78j0gfg",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/0da76dab4c2a.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "rib": {
+        "branch": "master",
+        "description": "Haskell static site generator based on Shake, with a delightful development experience.",
+        "homepage": "https://rib.srid.ca",
+        "owner": "srid",
+        "repo": "rib",
+        "rev": "81da868a4ecc9a0baf06b26d712e1c65a251e8fb",
+        "sha256": "1im732kjw1vmnp0k2gx9qnd9hjy0yk5l2acpqk1ykdg447n0f047",
+        "type": "tarball",
+        "url": "https://github.com/srid/rib/archive/81da868a4ecc9a0baf06b26d712e1c65a251e8fb.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

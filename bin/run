@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 set -xe
-nix-shell --run 'ghcid -T ":main serve -p 7004"'
+nix-shell --run 'ghcid -T ":main -s :8080"'

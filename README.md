@@ -35,8 +35,7 @@ vim config/config.dhall
 To build and run the site:
 
 ```bash
-# Or, use `bin/run` (useful for production)
-nix-shell --run 'ghcid -T ":main serve" --restart=config'
+bin/run
 ```
 
 Go to http://localhost:7004 to view your generated site.

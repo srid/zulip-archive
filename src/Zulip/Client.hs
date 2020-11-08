@@ -15,7 +15,6 @@ import Data.Aeson.TH
 import qualified Data.Map.Strict as Map
 import Data.Time.Clock.POSIX
 import Network.HTTP.Req
-import Path
 import Relude hiding (Option)
 import Relude.Extra.Map (lookup)
 import qualified Shower
@@ -24,94 +23,84 @@ import Text.URI (URI, mkURI)
 import Web.UniqSlug (mkUniqSlug)
 import Zulip.Internal
 
-data Streams
-  = Streams
-      { _streamsResult :: Text,
-        _streamsMsg :: Text,
-        _streamsStreams :: [Stream]
-      }
+data Streams = Streams
+  { _streamsResult :: Text,
+    _streamsMsg :: Text,
+    _streamsStreams :: [Stream]
+  }
   deriving (Eq, Show)
 
-data Stream
-  = Stream
-      { _streamName :: Text,
-        _streamDescription :: Text,
-        _streamStreamId :: Int,
-        _streamTopics :: Maybe [Topic] -- Not in API; only used internally
-      }
+data Stream = Stream
+  { _streamName :: Text,
+    _streamDescription :: Text,
+    _streamStreamId :: Int,
+    _streamTopics :: Maybe [Topic] -- Not in API; only used internally
+  }
   deriving (Eq, Show)
 
-data Topics
-  = Topics
-      { _topicsResult :: Text,
-        _topicsMsg :: Text,
-        _topicsTopics :: [Topic]
-      }
+data Topics = Topics
+  { _topicsResult :: Text,
+    _topicsMsg :: Text,
+    _topicsTopics :: [Topic]
+  }
   deriving (Eq, Show)
 
-data Topic
-  = Topic
-      { _topicName :: Text,
-        _topicMessages :: [Message], -- Not in API; only used internally
-        _topicLastUpdated :: Maybe POSIXTime, -- Not in API; only used internally
-        _topicSlug :: Path Rel File
-      }
+data Topic = Topic
+  { _topicName :: Text,
+    _topicMessages :: [Message], -- Not in API; only used internally
+    _topicLastUpdated :: Maybe POSIXTime, -- Not in API; only used internally
+    _topicSlug :: FilePath
+  }
   deriving (Eq, Show)
 
-data Messages
-  = Messages
-      { _messagesAnchor :: Int,
-        _messagesFoundAnchor :: Bool,
-        _messagesFoundNewest :: Bool,
-        _messagesMessages :: [Message]
-      }
+data Messages = Messages
+  { _messagesAnchor :: Int,
+    _messagesFoundAnchor :: Bool,
+    _messagesFoundNewest :: Bool,
+    _messagesMessages :: [Message]
+  }
   deriving (Eq, Show)
 
-data Message
-  = Message
-      { _messageId :: Int,
-        _messageContent :: Text,
-        _messageContentType :: Text,
-        _messageAvatarUrl :: Maybe URI, -- API doesn't always set this.
-        _messageSenderFullName :: Text,
-        _messageSenderId :: Int,
-        _messageStreamId :: Maybe Int,
-        _messageSubject :: Text,
-        _messageTimestamp :: POSIXTime,
-        _messageType :: Text,
-        _messageReactions :: [Reaction]
-      }
+data Message = Message
+  { _messageId :: Int,
+    _messageContent :: Text,
+    _messageContentType :: Text,
+    _messageAvatarUrl :: Maybe URI, -- API doesn't always set this.
+    _messageSenderFullName :: Text,
+    _messageSenderId :: Int,
+    _messageStreamId :: Maybe Int,
+    _messageSubject :: Text,
+    _messageTimestamp :: POSIXTime,
+    _messageType :: Text,
+    _messageReactions :: [Reaction]
+  }
   deriving (Eq, Show)
 
-data Reaction
-  = Reaction
-      { _reactionEmojiCode :: Text,
-        _reactionEmojiName :: Text,
-        _reactionReactionType :: Text
-      }
+data Reaction = Reaction
+  { _reactionEmojiCode :: Text,
+    _reactionEmojiName :: Text,
+    _reactionReactionType :: Text
+  }
   deriving (Eq, Show)
 
-data Users
-  = Users
-      { _usersMembers :: [User]
-      }
+data Users = Users
+  { _usersMembers :: [User]
+  }
   deriving (Eq, Show)
 
-data User
-  = User
-      { _userAvatarUrl :: Text,
-        _userId :: Int,
-        _userFullName :: Text
-      }
+data User = User
+  { _userAvatarUrl :: Text,
+    _userId :: Int,
+    _userFullName :: Text
+  }
   deriving (Eq, Show)
 
-data ServerSettings
-  = ServerSettings
-      { _serversettingsRealmIcon :: Text,
-        _serversettingsRealmName :: Text,
-        _serversettingsRealmDescription :: Text, -- HTML
-        _serversettingsRealmUri :: Text
-      }
+data ServerSettings = ServerSettings
+  { _serversettingsRealmIcon :: Text,
+    _serversettingsRealmName :: Text,
+    _serversettingsRealmDescription :: Text, -- HTML
+    _serversettingsRealmUri :: Text
+  }
   deriving (Eq, Show)
 
 -- | Fill out hitherto missing _streamTopics, _topicMessages and _messageAvatarUrl
@@ -120,12 +109,14 @@ mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
   -- TODO: Verify that stream names are unique.
   let avatarMap = Map.fromList $ flip fmap users $ _userId &&& _userAvatarUrl
       msgs = flip fmap msgsWithoutAvatar $ \msg ->
-        msg { _messageAvatarUrl =
-            _messageAvatarUrl msg <|> (lookup (_messageSenderId msg) avatarMap >>= mkURI)
-        }
+        msg
+          { _messageAvatarUrl =
+              _messageAvatarUrl msg <|> (lookup (_messageSenderId msg) avatarMap >>= mkURI)
+          }
       streamMsgs = flip filter msgs $ \msg -> _messageStreamId msg == Just (_streamStreamId stream)
-      topicMsgMap = Map.fromListWith (<>) $ flip fmap streamMsgs $ \msg ->
-        (_messageSubject msg, [msg])
+      topicMsgMap = Map.fromListWith (<>) $
+        flip fmap streamMsgs $ \msg ->
+          (_messageSubject msg, [msg])
    in stream
         { _streamTopics = Just (reverse $ sortOn _topicLastUpdated $ uncurry (mkTopic $ Map.keys topicMsgMap) <$> Map.toList topicMsgMap)
         }
@@ -133,13 +124,11 @@ mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
     mkTopic allTopics topicName ms =
       let tmsgs = sortOn _messageTimestamp ms
           mkTopicSlug = mkUniqSlug allTopics
-       in Topic topicName tmsgs (lastTimestamp tmsgs) (parseRelFilePure $ toString $ mkTopicSlug topicName)
+       in Topic topicName tmsgs (lastTimestamp tmsgs) (toString $ mkTopicSlug topicName)
     lastTimestamp xs =
       case reverse xs of
         msg : _ -> Just $ _messageTimestamp msg
         _ -> Nothing
-    parseRelFilePure =
-      either (error . show) id . parseRelFile
 
 type APIConfig scheme = (Url scheme, Option scheme)
 
@@ -162,12 +151,14 @@ getArchive baseUrl userEmail apiKey = do
 updateMessages :: (MonadIO m, MonadHttp m) => APIConfig scheme -> FilePath -> m (Bool, [Message])
 updateMessages apiConfig messagesFile = do
   liftIO $ putStrLn $ "Loading " <> messagesFile
-  savedMsgs <- liftIO (doesFileExist messagesFile) >>= \case
-    False -> pure []
-    True -> liftIO (eitherDecodeFileStrict messagesFile) >>= \case
-      Left e -> error $ toText e
-      Right (msgs :: [Message]) ->
-        pure msgs
+  savedMsgs <-
+    liftIO (doesFileExist messagesFile) >>= \case
+      False -> pure []
+      True ->
+        liftIO (eitherDecodeFileStrict messagesFile) >>= \case
+          Left e -> error $ toText e
+          Right (msgs :: [Message]) ->
+            pure msgs
   let savedMsgsSplit = unconsRev savedMsgs
       lastMsgId = maybe 0 (_messageId . fst) savedMsgsSplit
       savedMsgsRest = maybe [] snd savedMsgsSplit

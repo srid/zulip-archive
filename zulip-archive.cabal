@@ -1,6 +1,6 @@
 cabal-version: 2.4
 name: zulip-archive
-version: 0.1.0.0
+version: 0.1.1.0
 license: BSD-3-Clause
 maintainer: srid@srid.ca
 author: Sridhar Ratnakumar
@@ -26,8 +26,7 @@ executable zulip-archive
         async,
         clay -any,
         lucid -any,
-        path,
-        rib ^>=0.8,
+        rib >= 1.0,
         relude,
         shake -any,
         text,
@@ -35,6 +34,7 @@ executable zulip-archive
         unix,
         casing,
         shower,
+        filepath,
         exceptions,
         time,
         directory,
