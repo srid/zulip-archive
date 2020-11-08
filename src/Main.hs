@@ -64,7 +64,7 @@ instance IsRoute Route where
         StreamRoute_Index ->
           pure "index.html"
         StreamRoute_Topic topic ->
-          pure $ addExtension ".html" $ _topicSlug topic
+          pure $ flip addExtension ".html" $ _topicSlug topic
 
 main :: IO ()
 main = do
