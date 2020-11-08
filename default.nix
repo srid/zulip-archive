@@ -1,3 +1,4 @@
+# TODO: Use developPackage, ignoring rib/default.nix
 let
   # To upgrade rib, go to https://github.com/srid/rib/commits/master, select the
   # revision you would like to upgrade to and set it here. Consult rib's
