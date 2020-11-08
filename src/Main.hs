@@ -94,8 +94,6 @@ scheduleGeneration inputDir cfg = do
 -- | Shake action for generating the static site
 generateSite :: Config -> Action ()
 generateSite cfg = do
-  -- Copy over the static files
-  Rib.buildStaticFiles ["**"]
   -- Fetch (and/or load from cache) all zulip data
   (server, streams) <- getArchive (Config.zulipDomain cfg) (Config.authEmail cfg) (Config.authApiKey cfg)
   let writeHtmlRoute :: Route a -> a -> Action ()
