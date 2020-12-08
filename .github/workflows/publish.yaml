@@ -12,20 +12,16 @@ jobs:
     - uses: cachix/install-nix-action@v12
     - name: Build
       run: nix-build -j 4
-    - uses: actions/download-artifact@v2
+    - uses: actions/cache@v2
       with:
-        name: message-cache
+        path: |
+          messages.json
     - name: Generate site 🔧
       run: |
         ./result/bin/zulip-archive generate
-    - uses: actions/upload-artifact@v2
-      with:
-        name: message-cache 
-        path: messages.json
     - name: Deploy to GitHub Pages 🚀
       uses: JamesIves/github-pages-deploy-action@3.5.6
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BRANCH: gh-pages
         FOLDER: site
-
