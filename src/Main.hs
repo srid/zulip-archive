@@ -152,6 +152,8 @@ renderPage server cfg route val = html_ [lang_ "en"] $ do
         renderPageContent
       div_ [class_ "ui vertical footer segment"] $ do
         a_ [href_ "https://github.com/srid/zulip-archive"] "Powered by Haskell"
+        " | Questions? Contact "
+        a_ [href_ "https://www.srid.ca"] "srid"
   where
     renderPageContent :: Html ()
     renderPageContent = case route of
