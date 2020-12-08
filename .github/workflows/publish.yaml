@@ -22,7 +22,7 @@ jobs:
       env:
         ZULIP_ARCHIVE_CONFIG: ${{ secrets.ZULIP_ARCHIVE_CONFIG }}
       run: |
-        ./result/bin/zulip-archive generate
+        ./result/bin/zulip-archive
     - name: Deploy to GitHub Pages 🚀
       uses: JamesIves/github-pages-deploy-action@3.5.6
       with:
