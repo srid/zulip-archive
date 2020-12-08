@@ -1,9 +1,9 @@
 name: "Publish"
 on:
-  # Run only when pushing to master branch
-  push:
-    branches:
-      - master
+  # Run only on schedule, not branch push.
+  #push:
+  #  branches:
+  #    - master
   schedule:
     - cron:  '*/15 * * * *'
 jobs:
