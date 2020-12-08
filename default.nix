@@ -10,7 +10,7 @@ let
       then with pkgs.haskellPackages; [ 
           cabal-install
           ghcid 
-          # haskell-language-server  -- Let VSCode download latest
+          haskell-language-server
         ]
       else [];
 in 
