@@ -1,0 +1,215 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I extracted some stuff from a project into a library for using http-client with semy:
+https://github.com/tek/polysemy-http
+I invite you all to shower me with criticism and provide suggestions for features and improvements!
+tek/polysemy-httppolysemy effect for http-client. Contribute to tek/polysemy-" name="description"><link href="https://funprog.srid.ca/polysemy/polysemy-http.html" rel="canonical"><meta property="og:title" content="polysemy-http - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-09-18T15:50:24Z"><meta property="og:article:published_time" content="2020-08-26T19:58:38Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"><title>polysemy-http - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">polysemy-http - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">polysemy-http</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208140555" name="208140555"><div>2020-08-26 19:58:38</div></a></div><div class="text"><p>I extracted some stuff from a project into a library for using <code>http-client</code> with semy:</p>
+<p><a href="https://github.com/tek/polysemy-http">https://github.com/tek/polysemy-http</a></p>
+<p>I invite you all to shower me with criticism and provide suggestions for features and improvements!</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/tek/polysemy-http" style="background-image: url(https://avatars0.githubusercontent.com/u/2632?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/tek/polysemy-http" title="tek/polysemy-http">tek/polysemy-http</a></div><div class="message_embed_description">polysemy effect for http-client. Contribute to tek/polysemy-http development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208140622" name="208140622"><div>2020-08-26 19:59:19</div></a></div><div class="text"><p>hackage to follow soon.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#208181228" name="208181228"><div>2020-08-27 06:12:28</div></a></div><div class="text"><p>NIce work Torsten, it looks like you've been pretty thorough!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#208181245" name="208181245"><div>2020-08-27 06:13:25</div></a></div><div class="text"><p>I notice you've got your own polysemised co-log in there. Maybe it would be worth breaking that out into its own package?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#208181251" name="208181251"><div>2020-08-27 06:13:49</div></a></div><div class="text"><p>I've done a similar thing in a project of my own, that I was going to break out into its own package as well.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#208181292" name="208181292"><div>2020-08-27 06:14:04</div></a></div><div class="text"><p>I've taken a different approach, so it may be fun to compare.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#208181298" name="208181298"><div>2020-08-27 06:14:31</div></a></div><div class="text"><p>I know there already is one such package - what do y'all think about it?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#208181315" name="208181315"><div>2020-08-27 06:14:54</div></a></div><div class="text"><p>(a co-log polysemy package)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#208181327" name="208181327"><div>2020-08-27 06:15:07</div></a></div><div class="text"><p>Mine uses co-log-polysemy, but puts some convenience and bells and whistles on top.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#208181332" name="208181332"><div>2020-08-27 06:15:29</div></a></div><div class="text"><p>And integrates with <code>formatting</code> as well.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#208182232" name="208182232"><div>2020-08-27 06:35:47</div></a></div><div class="text"><p>Here's the core of mine:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">type</span> <span class="kt">WithLog&#39;</span> <span class="n">msg</span> <span class="n">r</span> <span class="ow">=</span> <span class="p">(</span><span class="kt">HasCallStack</span><span class="p">,</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Log</span> <span class="n">msg</span><span class="p">)</span> <span class="n">r</span><span class="p">)</span>
+
+<span class="kr">type</span> <span class="kt">WithLog</span> <span class="n">r</span> <span class="ow">=</span> <span class="kt">WithLog&#39;</span> <span class="p">(</span><span class="kt">Msg</span> <span class="kt">Severity</span><span class="p">)</span> <span class="n">r</span>
+
+<span class="nf">log</span> <span class="ow">::</span> <span class="kt">WithLog</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Severity</span> <span class="ow">-&gt;</span> <span class="kt">Format</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span>
+<span class="nf">log</span> <span class="n">sev</span> <span class="n">m</span> <span class="ow">=</span> <span class="n">withFrozenCallStack</span> <span class="o">$</span>
+  <span class="n">runFormat</span> <span class="n">m</span>
+    <span class="o">$</span> <span class="kt">Colog</span><span class="o">.</span><span class="n">log</span>
+    <span class="o">.</span> <span class="kt">Msg</span> <span class="n">sev</span> <span class="n">callStack</span>
+    <span class="o">.</span> <span class="kt">TL</span><span class="o">.</span><span class="n">toStrict</span>
+    <span class="o">.</span> <span class="kt">TLB</span><span class="o">.</span><span class="n">toLazyText</span>
+
+<span class="nf">logDebug</span> <span class="ow">::</span> <span class="kt">WithLog</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Format</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span>
+<span class="nf">logDebug</span> <span class="ow">=</span> <span class="n">withFrozenCallStack</span> <span class="o">$</span> <span class="n">log</span> <span class="kt">Debug</span>
+
+<span class="nf">logInfo</span> <span class="ow">::</span> <span class="kt">WithLog</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Format</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span>
+<span class="nf">logInfo</span> <span class="ow">=</span> <span class="n">withFrozenCallStack</span> <span class="o">$</span> <span class="n">log</span> <span class="kt">Info</span>
+
+<span class="nf">logWarning</span> <span class="ow">::</span> <span class="kt">WithLog</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Format</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span>
+<span class="nf">logWarning</span> <span class="ow">=</span> <span class="n">withFrozenCallStack</span> <span class="o">$</span> <span class="n">log</span> <span class="kt">Warning</span>
+
+<span class="nf">logError</span> <span class="ow">::</span> <span class="kt">WithLog</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Format</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span>
+<span class="nf">logError</span> <span class="ow">=</span> <span class="n">withFrozenCallStack</span> <span class="o">$</span> <span class="n">log</span> <span class="kt">Error</span>
+
+<span class="nf">logException</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">WithLog</span> <span class="n">r</span><span class="p">,</span> <span class="kt">Exception</span> <span class="n">e</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">e</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span>
+<span class="nf">logException</span> <span class="ow">=</span> <span class="n">withFrozenCallStack</span> <span class="o">.</span> <span class="n">logError</span> <span class="n">string</span> <span class="o">.</span> <span class="n">displayException</span>
+
+<span class="nf">ignoreLog</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Applicative</span> <span class="n">m</span><span class="p">,</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Embed</span> <span class="n">m</span><span class="p">)</span> <span class="n">r</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Log</span> <span class="n">msg</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">ignoreLog</span> <span class="ow">=</span> <span class="n">runLogAction</span> <span class="n">mempty</span>
+</code></pre></div>
+
+
+<p>So I've stuck with <code>co-log-polysemy</code>'s <code>Log</code> effect, and built the different severity functions on top of this. These are couple with <code>Format</code> from <code>formatting</code>, but you could do the same and still take <code>Text</code>. Torsten has defined his own <code>Log</code> effect (from <a href="https://github.com/tek/polysemy-http/blob/master/packages/polysemy-http/lib/Polysemy/Http/Data/Log.hs">https://github.com/tek/polysemy-http/blob/master/packages/polysemy-http/lib/Polysemy/Http/Data/Log.hs</a>):</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- |An effect that wraps &#39;Colog.Polysemy.Log&#39; for less boilerplate.</span>
+<span class="c1">-- Constructors are manual because &#39;HasCallStack&#39; is always in scope.</span>
+<span class="kr">data</span> <span class="kt">Log</span> <span class="ow">::</span> <span class="kt">Effect</span> <span class="kr">where</span>
+  <span class="kt">Debug</span> <span class="ow">::</span> <span class="kt">HasCallStack</span> <span class="ow">=&gt;</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">Log</span> <span class="n">m</span> <span class="nb">()</span>
+  <span class="kt">Info</span> <span class="ow">::</span> <span class="kt">HasCallStack</span> <span class="ow">=&gt;</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">Log</span> <span class="n">m</span> <span class="nb">()</span>
+  <span class="kt">Warn</span> <span class="ow">::</span> <span class="kt">HasCallStack</span> <span class="ow">=&gt;</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">Log</span> <span class="n">m</span> <span class="nb">()</span>
+  <span class="kt">Error</span> <span class="ow">::</span> <span class="kt">HasCallStack</span> <span class="ow">=&gt;</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">Log</span> <span class="n">m</span> <span class="nb">()</span>
+  <span class="kt">ErrorPlus</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">HasCallStack</span><span class="p">,</span> <span class="kt">Traversable</span> <span class="n">t</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="n">t</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">Log</span> <span class="n">m</span> <span class="nb">()</span>
+</code></pre></div>
+
+
+<p>I'm not sure which of these approaches is better, if either is.</p>
+<p>I've also got some stuff to add colour (if the terminal supports it), the time of the log message, and the thread id. Again though, mine is using <code>formatting</code>.  I found it awkward to get it working with multi-threading via the <code>Async</code> effect, because if I ran the effects in the wrong order then I got my log messages jumbled, and if I got the log message time in the place where I interpreted the <code>Log</code> effect then the log message always had the thread id of the main thread, not the thread where the message was logged. In the end I needed to interpret things like this:</p>
+<div class="codehilite"><pre><span></span><code>  <span class="n">logEnvStderr</span> <span class="ow">&lt;-</span> <span class="n">newLogEnv</span> <span class="n">stderr</span>
+  <span class="n">runWithConfiguration</span> <span class="n">cliInfo</span> <span class="o">$</span> <span class="nf">\</span><span class="n">config</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kr">do</span>
+    <span class="n">logInfo</span> <span class="p">(</span><span class="s">&quot;Version &quot;</span> <span class="o">%</span> <span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="n">showVersion</span>
+    <span class="n">version</span><span class="p">)</span>
+    <span class="n">logDebug</span> <span class="p">(</span><span class="s">&quot;Running with config:</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">text</span><span class="p">)</span> <span class="p">(</span><span class="n">pShow</span> <span class="n">config</span><span class="p">)</span>
+    <span class="n">runCommand</span> <span class="n">config</span>
+    <span class="p">)</span> <span class="o">&amp;</span> <span class="n">runFileIO</span>
+      <span class="o">&amp;</span> <span class="n">filterLogs</span> <span class="p">(</span><span class="kr">if</span> <span class="n">config</span> <span class="o">^.</span> <span class="n">scShowDebug</span>
+          <span class="kr">then</span> <span class="n">const</span> <span class="kt">True</span>
+          <span class="kr">else</span> <span class="n">msgSeverity</span> <span class="o">&gt;&gt;&gt;</span> <span class="p">(</span><span class="o">&lt;</span><span class="p">)</span> <span class="kt">Debug</span><span class="p">)</span>
+      <span class="o">&amp;</span> <span class="n">addThreadAndTimeToLog</span>
+      <span class="o">&amp;</span> <span class="n">asyncToIO</span>
+      <span class="o">&amp;</span> <span class="n">runLogAction</span> <span class="p">(</span><span class="n">logTextStderr</span> <span class="o">&amp;</span> <span class="n">cmap</span> <span class="p">(</span><span class="n">fmtMessage</span>
+      <span class="n">logEnvStderr</span><span class="p">))</span>
+      <span class="o">&amp;</span> <span class="n">runContM</span>
+      <span class="o">&amp;</span> <span class="n">runM</span>
+</code></pre></div>
+
+
+<p>You can see there that:</p>
+<ol>
+<li>I filter the logs early, to (possibly) avoid overhead of debugging logs when debugging is disabled,</li>
+<li>I call <code>addThreadAndTimeToLog</code> <em>before</em> calling <code>asyncToIO</code>,</li>
+<li>I call <code>runLogAction</code> <em>after</em> calling <code>asyncToIO</code>.</li>
+</ol>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/tek/polysemy-http/blob/master/packages/polysemy-http/lib/Polysemy/Http/Data/Log.hs" style="background-image: url(https://avatars0.githubusercontent.com/u/2632?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/tek/polysemy-http/blob/master/packages/polysemy-http/lib/Polysemy/Http/Data/Log.hs" title="tek/polysemy-http">tek/polysemy-http</a></div><div class="message_embed_description">polysemy effect for http-client. Contribute to tek/polysemy-http development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#208182409" name="208182409"><div>2020-08-27 06:39:18</div></a></div><div class="text"><p>Output looks like:<br>
+<a href="/user_uploads/13896/pR3qYGcJo02fnAwFPcr944Zb/image.png">image.png</a> <br>
+<a href="/user_uploads/13896/Zp48s4JzeN9zZ1wtCdwWZdcK/image.png">image.png</a></p>
+<div class="message_inline_image"><a href="/user_uploads/13896/pR3qYGcJo02fnAwFPcr944Zb/image.png" title="image.png"><img src="/user_uploads/13896/pR3qYGcJo02fnAwFPcr944Zb/image.png"></a></div><div class="message_inline_image"><a href="/user_uploads/13896/Zp48s4JzeN9zZ1wtCdwWZdcK/image.png" title="image.png"><img src="/user_uploads/13896/Zp48s4JzeN9zZ1wtCdwWZdcK/image.png"></a></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#208182431" name="208182431"><div>2020-08-27 06:39:58</div></a></div><div class="text"><p>(sorry for the kind of derail <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span> )</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#208182970" name="208182970"><div>2020-08-27 06:49:07</div></a></div><div class="text"><p>Right, so getting back on topic... :)<br>
+Torsten, I see you have your effects in one place and your interpreters in another, e.g. <code>Polysemy.Http.Data.Log</code> and <code>Polysemy.Http.Log</code>.  I tend to just define both the effect, interpreter, and other related stuff in the one module. I'm not saying I'm right, just wondering what the rationale, and tradeoffs are?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208201724" name="208201724"><div>2020-08-27 10:57:19</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="282523">Alex Chapman</span> <a href="#narrow/stream/216942-Polysemy/topic/polysemy-http/near/208181245">said</a>:</p>
+<blockquote>
+<p>I notice you've got your own polysemised co-log in there. Maybe it would be worth breaking that out into its own package?</p>
+</blockquote>
+<p>It's been a few months (I copied this <code>Log</code> from the project I first defined <code>Http</code> in) and I'm not quite sure what motivations I had, but I think it's mostly been that I wanted a terser api. I just copied the relevant parts from <code>co-log-polysemy</code> because they weren't exported. Not sure this warrants for a new package, though it would surely be convenient for myself, since I so far have three copies of this stuff in dependent projects, and it's only gonna grow <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span> I think the most sensible action would be to PR <code>co-log-polysemy</code>to make my _bells and whistles_ easier to add without making a bespoke effect.<br>
+Also I think it's very likely that there was just one tiny thing that annoyed me, like a weird looking compiler message, that ultimately pushed me to wrap the <code>logDebug</code> etc. combinators in an effect <span aria-label="see no evil" class="emoji emoji-1f648" role="img" title="see no evil">:see_no_evil:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208202398" name="208202398"><div>2020-08-27 11:04:41</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="282523">Alex Chapman</span> <a href="#narrow/stream/216942-Polysemy/topic/polysemy-http/near/208182970">said</a>:</p>
+<blockquote>
+<p>Right, so getting back on topic... <span aria-label="smile" class="emoji emoji-1f642" role="img" title="smile">:smile:</span><br>
+Torsten, I see you have your effects in one place and your interpreters in another, e.g. <code>Polysemy.Http.Data.Log</code> and <code>Polysemy.Http.Log</code>.  I tend to just define both the effect, interpreter, and other related stuff in the one module. I'm not saying I'm right, just wondering what the rationale, and tradeoffs are?</p>
+</blockquote>
+<p>This is kind of an application of a more general rule I have, which is to put any data types into individual modules. I do that because it tends to confuse me a bit when files are large and mixed <span aria-label="halo" class="emoji emoji-1f607" role="img" title="halo">:halo:</span> and also because of potential field name clashes (think TH lenses) with smart constructors etc. I admit that it seems pretty sensible for effects and interpreters, but I like to stick to those rules, they have grown organically. It's probably more significant in projects with a few hundred files than in this case.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208202667" name="208202667"><div>2020-08-27 11:08:25</div></a></div><div class="text"><p>for example I have a file <code>Native.hs</code> for the <code>http-client</code> interpreter and one <code>Strict.hs</code> for the in-memory interpreter. It's a personal taste question, I feel more organized that way. and since the effect data type is related to both those files, it would feel incorrect to me to put it in one of them.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208204151" name="208204151"><div>2020-08-27 11:27:18</div></a></div><div class="text"><p>btw, I'm struggling with <code>cabal upload</code>. So far I've only used stack, but now that I'm managing dependencies with nix exclusively, I'm trying it with bare-metal cabal, but it seems to be a bit tricky. </p>
+<div class="codehilite"><pre><span></span><code>Packages using &#39;cabal-version: 2.0&#39; and the autogenerated module Paths_* must
+include it also on the &#39;autogen-modules&#39; field besides &#39;exposed-modules&#39; and
+&#39;other-modules&#39;. This specifies that the module does not come with the package
+and is generated on setup. Modules built with a custom Setup.hs script also go
+here to ensure that commands like sdist don&#39;t fail.
+</code></pre></div>
+
+
+<p>is this an hpack problem? any ideas?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#208208320" name="208208320"><div>2020-08-27 12:18:05</div></a></div><div class="text"><p><span class="user-mention" data-user-id="260881">@Torsten Schmits</span> how does generated <code>.cabal</code> look like?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208208388" name="208208388"><div>2020-08-27 12:18:58</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> <a href="https://github.com/tek/polysemy-http/blob/master/packages/polysemy-http/polysemy-http.cabal">https://github.com/tek/polysemy-http/blob/master/packages/polysemy-http/polysemy-http.cabal</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/tek/polysemy-http/blob/master/packages/polysemy-http/polysemy-http.cabal" style="background-image: url(https://avatars0.githubusercontent.com/u/2632?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/tek/polysemy-http/blob/master/packages/polysemy-http/polysemy-http.cabal" title="tek/polysemy-http">tek/polysemy-http</a></div><div class="message_embed_description">polysemy effect for http-client. Contribute to tek/polysemy-http development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#208208939" name="208208939"><div>2020-08-27 12:24:19</div></a></div><div class="text"><p>I guess I would try to follow that suggestion and add <a href="https://github.com/sol/hpack#test-fields"><code>generated-other-modules</code></a> to <code>polysemy-http-unit</code> test suite</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/sol/hpack#test-fields" style="background-image: url(https://avatars3.githubusercontent.com/u/461132?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/sol/hpack#test-fields" title="sol/hpack">sol/hpack</a></div><div class="message_embed_description">hpack: A modern format for Haskell packages. Contribute to sol/hpack development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208209037" name="208209037"><div>2020-08-27 12:25:15</div></a></div><div class="text"><p>thanks, will try that! <span aria-label="heart" class="emoji emoji-2764" role="img" title="heart">:heart:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208209949" name="208209949"><div>2020-08-27 12:33:16</div></a></div><div class="text"><p>yessss! thanks <span class="user-mention" data-user-id="225127">@TheMatten</span> !!! <span aria-label="sunglasses" class="emoji emoji-1f60e" role="img" title="sunglasses">:sunglasses:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208210131" name="208210131"><div>2020-08-27 12:35:04</div></a></div><div class="text"><p>oh btw. I added it to the library, not the test suite</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#208210464" name="208210464"><div>2020-08-27 12:38:30</div></a></div><div class="text"><p>So it didn't work in test suite? Or Cabal just doesn't care? <span aria-label="grinning" class="emoji emoji-1f600" role="img" title="grinning">:grinning:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208211145" name="208211145"><div>2020-08-27 12:44:35</div></a></div><div class="text"><p>I think the problem is that <code>Paths_polysemy_http</code> was not at all listed for the library. no idea why it was present in the test suite, I guess it's only added for executable components by default</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208211176" name="208211176"><div>2020-08-27 12:44:59</div></a></div><div class="text"><p>(no idea what that module is about)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#208211335" name="208211335"><div>2020-08-27 12:46:19</div></a></div><div class="text"><p>It let's you access some build-time info gathered from Cabal AFAIK - not sure why it's needed either, but it sounds like a pretty reasonable dependency given purpose</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208212094" name="208212094"><div>2020-08-27 12:53:45</div></a></div><div class="text"><p>sounds plausible</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208246776" name="208246776"><div>2020-08-27 17:07:30</div></a></div><div class="text"><p>any idea on how to hide the <code>Paths_polysemy_http</code> module from the documentation? I tried <code>cabal v2-haddock --haddock-options='--hide Paths_polysemy_http'</code> but it doesn't make a difference</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208247527" name="208247527"><div>2020-08-27 17:13:17</div></a></div><div class="text"><p>ah, now it works. it's still listed, but there's no doc link. not sure that's better...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208247596" name="208247596"><div>2020-08-27 17:13:52</div></a></div><div class="text"><p><a href="https://hackage.haskell.org/package/polysemy-http-0.1.0.0/candidate">https://hackage.haskell.org/package/polysemy-http-0.1.0.0/candidate</a> btw</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208256918" name="208256918"><div>2020-08-27 18:26:53</div></a></div><div class="text"><p>published <span aria-label="tada" class="emoji emoji-1f389" role="img" title="tada">:tada:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#210538800" name="210538800"><div>2020-09-18 15:50:24</div></a></div><div class="text"><p>yay, first issue!</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

@@ -1,0 +1,123 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Is anyone familiar with how the values stored in ExitCode get to the RTS (i.e. actually make the program exit with the given number). As far as I can tell ExitCode is used as an everyday normal-looking exception (which are defined entirely in &quot;library code&quot;, by using the raise#/catch# primitives), w" name="description"><link href="https://funprog.srid.ca/haskell/how-does-exitcode-work.html" rel="canonical"><meta property="og:title" content="How does ExitCode work? - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-07-16T12:38:42Z"><meta property="og:article:published_time" content="2020-07-15T08:19:52Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"><title>How does ExitCode work? - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">How does ExitCode work? - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">How does ExitCode work?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#203927520" name="203927520"><div>2020-07-15 08:19:52</div></a></div><div class="text"><p>Is anyone familiar with how the values stored in <code>ExitCode</code> get to the RTS (i.e. actually make the program exit with the given number). As far as I can tell <code>ExitCode</code> is used as an everyday normal-looking exception (which are defined entirely in "library code", by using the <code>raise#</code>/<code>catch#</code> primitives), without any direct link to the RTS. What am I missing?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#203989441" name="203989441"><div>2020-07-15 17:52:34</div></a></div><div class="text"><p>This module seems to be relevant: <a href="https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/libraries/base/GHC/TopHandler.hs">https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/libraries/base/GHC/TopHandler.hs</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/libraries/base/GHC/TopHandler.hs" style="background-image: url(https://gitlab.haskell.org/uploads/-/system/project/avatar/1/ghc.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/libraries/base/GHC/TopHandler.hs" title="libraries/base/GHC/TopHandler.hs · a1f34d37b47826e86343e368a5c00f1a4b1f2bce · Glasgow Haskell Compiler / GHC">libraries/base/GHC/TopHandler.hs · a1f34d37b47826e86343e368a5c00f1a4b1f2bce · Glasgow Haskell Compiler / GHC</a></div><div class="message_embed_description">The Glorious Glasgow Haskell Compiler.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#203990468" name="203990468"><div>2020-07-15 18:01:26</div></a></div><div class="text"><p>It seems to delegate <code>ExitCode</code> s to foreign <code>shutdownHaskellAndExit</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#203990783" name="203990783"><div>2020-07-15 18:03:52</div></a></div><div class="text"><p>Which passes int through RTS to</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span>
+<span class="nf">stg_exit</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">exitFn</span><span class="p">)</span>
+    <span class="p">(</span><span class="o">*</span><span class="n">exitFn</span><span class="p">)(</span><span class="n">n</span><span class="p">);</span>
+  <span class="n">exit</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#203990918" name="203990918"><div>2020-07-15 18:04:41</div></a></div><div class="text"><p>So nothing fancy really - it passes code to RTS through FFI</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204011629" name="204011629"><div>2020-07-15 20:54:23</div></a></div><div class="text"><p>but how does a users program hook into this, i.e. how does a user's <code>main</code> get to <code>runIO</code> (or something similar)?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204011660" name="204011660"><div>2020-07-15 20:54:38</div></a></div><div class="text"><p>is there some magic place where all this is documented :(</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#204054038" name="204054038"><div>2020-07-16 07:39:40</div></a></div><div class="text"><p>Found this: <a href="https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/rts/RtsAPI.c#L478">https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/rts/RtsAPI.c#L478</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/rts/RtsAPI.c#L478" style="background-image: url(https://gitlab.haskell.org/uploads/-/system/project/avatar/1/ghc.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/rts/RtsAPI.c#L478" title="rts/RtsAPI.c · a1f34d37b47826e86343e368a5c00f1a4b1f2bce · Glasgow Haskell Compiler / GHC">rts/RtsAPI.c · a1f34d37b47826e86343e368a5c00f1a4b1f2bce · Glasgow Haskell Compiler / GHC</a></div><div class="message_embed_description">The Glorious Glasgow Haskell Compiler.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#204054184" name="204054184"><div>2020-07-16 07:41:46</div></a></div><div class="text"><p><a href="https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/rts/Schedule.c#L2175">https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/rts/Schedule.c#L2175</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/rts/Schedule.c#L2175" style="background-image: url(https://gitlab.haskell.org/uploads/-/system/project/avatar/1/ghc.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://gitlab.haskell.org/ghc/ghc/-/blob/a1f34d37b47826e86343e368a5c00f1a4b1f2bce/rts/Schedule.c#L2175" title="rts/Schedule.c · a1f34d37b47826e86343e368a5c00f1a4b1f2bce · Glasgow Haskell Compiler / GHC">rts/Schedule.c · a1f34d37b47826e86343e368a5c00f1a4b1f2bce · Glasgow Haskell Compiler / GHC</a></div><div class="message_embed_description">The Glorious Glasgow Haskell Compiler.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204063284" name="204063284"><div>2020-07-16 09:40:16</div></a></div><div class="text"><p>so I guess the rts is semi-attached to <code>base</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204063303" name="204063303"><div>2020-07-16 09:40:31</div></a></div><div class="text"><p>relies on having a function named in a particular way during compilation</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204063987" name="204063987"><div>2020-07-16 09:49:56</div></a></div><div class="text"><p>thanks!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#204067167" name="204067167"><div>2020-07-16 10:30:42</div></a></div><div class="text"><p>Are you working on something related to this? <span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204075921" name="204075921"><div>2020-07-16 12:30:03</div></a></div><div class="text"><p>nope (un??)fortunately, a colleague of mine made a claim that the rts depends on the <code>base</code> library (by detecting <code>ExitCode</code> manually in the rts or something)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204075927" name="204075927"><div>2020-07-16 12:30:06</div></a></div><div class="text"><p>and I was highly doubtful</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204076315" name="204076315"><div>2020-07-16 12:34:16</div></a></div><div class="text"><p>and it was also standalone interesting, because in the continuations proposal there was also the claim <code>There's really nothing special about the SomeException type as far as I know, and in principle an alternate base would be perfectly free to use a different one</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#204076741" name="204076741"><div>2020-07-16 12:38:42</div></a></div><div class="text"><p>Well, GHC already depends on <code>base</code> anyway, at least because of bunch of functions/datatypes used e.g. in desugaring</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

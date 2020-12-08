@@ -1,0 +1,148 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="A common pattern I stumbled upon while implementing small logic checkers is using a list monad to do computations with backtracking then returning true or false depending on whether the list is empty (nonempty list means there is at least one solution). However, this practice doesn&#39;t make intention " name="description"><link href="https://funprog.srid.ca/haskell/nondeterministic-booleans.html" rel="canonical"><meta property="og:title" content="Nondeterministic booleans - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-10-13T06:21:34Z"><meta property="og:article:published_time" content="2020-10-13T02:44:20Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?x=x&amp;version=2"><title>Nondeterministic booleans - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Nondeterministic booleans - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Nondeterministic booleans</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?x=x&amp;version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#213106704" name="213106704"><div>2020-10-13 02:44:20</div></a></div><div class="text"><p>A common pattern I stumbled upon while implementing small logic checkers is using a list monad to do computations with backtracking then returning true or false depending on whether the list is empty (nonempty list means there is at least one solution). However, this practice doesn't make intention clear in the function type. Today, I converted <a href="https://gist.github.com/pedrominicz/aee6521f229eca0faf7ea7f07c8562c9/8f1ff7bac4b2b6d65140f463a459ad813ceb4f39">this</a> small minimal logic checker I wrote a while ago to the following:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">module</span> <span class="nn">Lean</span> <span class="kr">where</span>
+
+<span class="c1">-- http://ceur-ws.org/Vol-2271/paper1.pdf</span>
+
+<span class="kr">import</span> <span class="nn">Control.Monad</span>
+<span class="kr">import</span> <span class="nn">Data.Bifunctor</span>
+
+<span class="kr">data</span> <span class="kt">Term</span>
+    <span class="ow">=</span> <span class="kt">Var</span> <span class="kt">Char</span>
+    <span class="o">|</span> <span class="kt">Impl</span> <span class="kt">Term</span> <span class="kt">Term</span>
+    <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Eq</span><span class="p">,</span> <span class="kt">Show</span><span class="p">)</span>
+
+<span class="nf">prove</span> <span class="ow">::</span> <span class="kt">Term</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span>
+<span class="nf">prove</span> <span class="ow">=</span> <span class="n">ljt</span> <span class="kt">[]</span>
+
+<span class="nf">ljt</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Term</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="kt">Term</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span>
+<span class="nf">ljt</span> <span class="n">env</span> <span class="n">t</span>
+    <span class="o">|</span> <span class="n">elem</span> <span class="n">t</span> <span class="n">env</span> <span class="ow">=</span> <span class="kt">True</span>
+<span class="nf">ljt</span> <span class="n">env</span> <span class="p">(</span><span class="kt">Impl</span> <span class="n">a</span> <span class="n">b</span><span class="p">)</span> <span class="ow">=</span> <span class="n">ljt</span> <span class="p">(</span><span class="n">a</span> <span class="kt">:</span> <span class="n">env</span><span class="p">)</span> <span class="n">b</span>
+<span class="nf">ljt</span> <span class="n">env</span> <span class="n">t</span> <span class="ow">=</span> <span class="n">not</span> <span class="o">.</span> <span class="n">null</span> <span class="o">$</span> <span class="kr">do</span>
+    <span class="p">(</span><span class="kt">Impl</span> <span class="n">a</span> <span class="n">b</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="ow">&lt;-</span> <span class="n">select</span> <span class="n">env</span>
+    <span class="kr">case</span> <span class="n">a</span> <span class="kr">of</span>
+        <span class="kt">Var</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+            <span class="n">guard</span> <span class="o">$</span> <span class="n">elem</span> <span class="p">(</span><span class="kt">Var</span> <span class="n">a</span><span class="p">)</span> <span class="n">env</span>
+            <span class="n">guard</span> <span class="o">$</span> <span class="n">ljt</span> <span class="p">(</span><span class="n">b</span> <span class="kt">:</span> <span class="n">env</span><span class="p">)</span> <span class="n">t</span>
+        <span class="kt">Impl</span> <span class="n">c</span> <span class="n">d</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+            <span class="n">guard</span> <span class="o">$</span> <span class="n">ljt</span> <span class="p">(</span><span class="kt">Impl</span> <span class="n">d</span> <span class="n">b</span> <span class="kt">:</span> <span class="n">env</span><span class="p">)</span> <span class="p">(</span><span class="kt">Impl</span> <span class="n">c</span> <span class="n">d</span><span class="p">)</span>
+            <span class="n">guard</span> <span class="o">$</span> <span class="n">ljt</span> <span class="p">(</span><span class="n">b</span> <span class="kt">:</span> <span class="n">env</span><span class="p">)</span> <span class="n">t</span>
+
+<span class="nf">select</span> <span class="ow">::</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="p">])]</span>
+<span class="nf">select</span> <span class="p">(</span><span class="n">x</span><span class="kt">:</span><span class="n">xs</span><span class="p">)</span> <span class="ow">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xs</span><span class="p">)</span> <span class="kt">:</span> <span class="n">map</span> <span class="p">(</span><span class="n">second</span> <span class="p">(</span><span class="n">x</span><span class="kt">:</span><span class="p">))</span> <span class="p">(</span><span class="n">select</span> <span class="n">xs</span><span class="p">)</span>
+<span class="nf">select</span> <span class="kt">[]</span>     <span class="ow">=</span> <span class="kt">[]</span>
+</code></pre></div>
+
+<p>Any feedback on this style? Mainly the consecutive <code>guard $ ...</code>.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://gist.github.com/pedrominicz/aee6521f229eca0faf7ea7f07c8562c9/8f1ff7bac4b2b6d65140f463a459ad813ceb4f39" style="background-image: url(https://github.githubassets.com/images/modules/gists/gist-og-image.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://gist.github.com/pedrominicz/aee6521f229eca0faf7ea7f07c8562c9/8f1ff7bac4b2b6d65140f463a459ad813ceb4f39" title="A lean prover for minimal logic.">A lean prover for minimal logic.</a></div><div class="message_embed_description">A lean prover for minimal logic. GitHub Gist: instantly share code, notes, and snippets.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213115713" name="213115713"><div>2020-10-13 06:21:34</div></a></div><div class="text"><p>if you want to make intent more clear in the types, wouldn't it be best to return the actual solution itself instead of a <code>Bool</code>? as proof that you found it</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

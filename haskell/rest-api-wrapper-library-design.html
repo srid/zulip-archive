@@ -1,0 +1,115 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I found a great article this morning on designing Haskell libraries to wrap REST APIs: https://alexeyzabelin.com/haskell-api-wrapper/
+I&#39;m presently working on one to wrap the Microsoft Power BI REST APIs and some of Azure Active Directory and this seems like a great approach. I&#39;ve seen other librari" name="description"><link href="https://funprog.srid.ca/haskell/rest-api-wrapper-library-design.html" rel="canonical"><meta property="og:title" content="REST API wrapper library design - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-04-03T06:17:13Z"><meta property="og:article:published_time" content="2020-04-02T14:59:00Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"><title>REST API wrapper library design - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">REST API wrapper library design - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">REST API wrapper library design</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#192677345" name="192677345"><div>2020-04-02 14:59:00</div></a></div><div class="text"><p>I found a great article this morning on designing Haskell libraries to wrap REST APIs: <a href="https://alexeyzabelin.com/haskell-api-wrapper/" title="https://alexeyzabelin.com/haskell-api-wrapper/">https://alexeyzabelin.com/haskell-api-wrapper/</a></p>
+<p>I'm presently working on one to wrap the Microsoft Power BI REST APIs and some of Azure Active Directory and this seems like a great approach. I've seen other libraries like <code>github</code> take rather different approach. Is there one you find more ergonomic and pleasing to use?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#192677660" name="192677660"><div>2020-04-02 15:00:58</div></a></div><div class="text"><p>The <code>amazonka</code> libraries are much different as well, relying heavily on <code>mtl</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#192761878" name="192761878"><div>2020-04-03 06:17:13</div></a></div><div class="text"><p>As soon as it mentioned type families I got a bit apprehensive about the rest.</p>
+<p>IMO simpler is better when it comes to libraries that are to be consumed by others.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

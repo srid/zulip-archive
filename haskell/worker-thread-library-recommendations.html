@@ -1,0 +1,131 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I&#39;ve got a servant web server that I want to add async worker threads for, so that routes can return early instead of waiting for an email to send or an image to be optimized.
+I&#39;ve got a persistent database, so I was thinking of using that as a queue, something likeTaskQueue { action :: Task, queued" name="description"><link href="https://funprog.srid.ca/haskell/worker-thread-library-recommendations.html" rel="canonical"><meta property="og:title" content="worker thread library recommendations - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-02-29T19:23:11Z"><meta property="og:article:published_time" content="2019-12-13T03:41:20Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/51413c298d0dbf10639e259f8af5b837?d=identicon&amp;version=1"><title>worker thread library recommendations - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">worker thread library recommendations - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">worker thread library recommendations</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/51413c298d0dbf10639e259f8af5b837?d=identicon&amp;version=1"></a><div class="content"><a class="author">Pavan Rikhi</a><div class="metadata"><a href="#183326146" name="183326146"><div>2019-12-13 03:41:20</div></a></div><div class="text"><p>I've got a servant web server that I want to add async worker threads for, so that routes can return early instead of waiting for an email to send or an image to be optimized.</p>
+<p>I've got a persistent database, so I was thinking of using that as a queue, something like<code>TaskQueue { action :: Task, queuedAt :: UTCTime, runAt :: Maybe UTCTime, retries :: Int }</code></p>
+<p>For the workers I'm thinking of using this article for inspiration: <a href="https://hackernoon.com/assume-it-worked-and-fix-later-8436d18b7ed3" target="_blank" title="https://hackernoon.com/assume-it-worked-and-fix-later-8436d18b7ed3">https://hackernoon.com/assume-it-worked-and-fix-later-8436d18b7ed3</a><br>
+But there's seems to be a handful of libraries that I could use for the thread management:<br>
+<a href="https://hackage.haskell.org/package/supervisors-0.2.0.0" target="_blank" title="https://hackage.haskell.org/package/supervisors-0.2.0.0">https://hackage.haskell.org/package/supervisors-0.2.0.0</a><br>
+<a href="https://hackage.haskell.org/package/threads-supervisor-1.2.0.1" target="_blank" title="https://hackage.haskell.org/package/threads-supervisor-1.2.0.1">https://hackage.haskell.org/package/threads-supervisor-1.2.0.1</a><br>
+<a href="https://hackage.haskell.org/package/slave-thread" target="_blank" title="https://hackage.haskell.org/package/slave-thread">https://hackage.haskell.org/package/slave-thread</a><br>
+<a href="https://hackage.haskell.org/package/immortal" target="_blank" title="https://hackage.haskell.org/package/immortal">https://hackage.haskell.org/package/immortal</a></p>
+<p>Wondering if there's a common library that gets used for this or would be better suited to my usecase</p>
+<div class="message_embed"><a class="message_embed_image" href="https://hackernoon.com/assume-it-worked-and-fix-later-8436d18b7ed3" style="background-image: url(https://hackernoon.com/Devimg/story-image-default.png)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://hackernoon.com/assume-it-worked-and-fix-later-8436d18b7ed3" target="_blank" title="Assume It Worked and Fix Later">Assume It Worked and Fix Later</a></div><div class="message_embed_description">During account signup, a web server will make an HTTP request to send an email. Not only are synchronous requests slow, but if the remote host is unresponsive, the application can become unresponsive.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#183421471" name="183421471"><div>2019-12-14 03:25:14</div></a></div><div class="text"><p>I don't know of any sadly, but if you find one lmk. I'd really love to see a library to wrap up some CQRS style patterns. There seemed to be a few attempts at starting Event Sourcing libs a few years ago, but I think that they all died sadly.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/51413c298d0dbf10639e259f8af5b837?d=identicon&amp;version=1"></a><div class="content"><a class="author">Pavan Rikhi</a><div class="metadata"><a href="#183495264" name="183495264"><div>2019-12-15 16:49:36</div></a></div><div class="text"><p>I never found one but I hacked something together with MVars, Async, and Immortal. <br>
+I haven't done much concurrency work but it doesn't deadlock &amp; it lets my routes return faster so... good enough for me :P</p>
+<p>Generic module:<br>
+<a href="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/ImmortalQueue.hs" target="_blank" title="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/ImmortalQueue.hs">https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/ImmortalQueue.hs</a><br>
+Implementation pulling tasks from my DB:<br>
+<a href="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/Workers.hs" target="_blank" title="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/Workers.hs">https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/Workers.hs</a></p>
+<p>I wonder if that's a decent enough API for something like this. Tempted to figure out how to test it and stick it in a package.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/ImmortalQueue.hs" style="background-image: url(https://avatars2.githubusercontent.com/u/16367280?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/ImmortalQueue.hs" target="_blank" title="Southern-Exposure-Seed-Exchange/southernexposure.com">Southern-Exposure-Seed-Exchange/southernexposure.com</a></div><div class="message_embed_description">Southern Exposure's E-Commerce Website, Built with Haskell &amp; Elm. - Southern-Exposure-Seed-Exchange/southernexposure.com</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/Workers.hs" style="background-image: url(https://avatars2.githubusercontent.com/u/16367280?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/Workers.hs" target="_blank" title="Southern-Exposure-Seed-Exchange/southernexposure.com">Southern-Exposure-Seed-Exchange/southernexposure.com</a></div><div class="message_embed_description">Southern Exposure's E-Commerce Website, Built with Haskell &amp; Elm. - Southern-Exposure-Seed-Exchange/southernexposure.com</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/caa34946216201b3a3a04ae1aca21ef1?d=identicon&amp;version=1"></a><div class="content"><a class="author">IC Rainbow</a><div class="metadata"><a href="#183745343" name="183745343"><div>2019-12-18 12:26:45</div></a></div><div class="text"><p>Nice. But you have a race in <code>assignWork</code> - between <code>tryReadMVar</code> and <code>putMVar</code> a few calls later.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/51413c298d0dbf10639e259f8af5b837?d=identicon&amp;version=1"></a><div class="content"><a class="author">Pavan Rikhi</a><div class="metadata"><a href="#183745628" name="183745628"><div>2019-12-18 12:31:22</div></a></div><div class="text"><p>Hmm, do you mean something might put something in the MVar between my <code>tryReadMVar</code> call &amp; the <code>putMVar</code> call?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/51413c298d0dbf10639e259f8af5b837?d=identicon&amp;version=1"></a><div class="content"><a class="author">Pavan Rikhi</a><div class="metadata"><a href="#183745653" name="183745653"><div>2019-12-18 12:31:51</div></a></div><div class="text"><p>Also, I appreciate you reviewing the code <span aria-label="heart eyes" class="emoji emoji-1f60d" role="img" title="heart eyes">:heart_eyes:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/51413c298d0dbf10639e259f8af5b837?d=identicon&amp;version=1"></a><div class="content"><a class="author">Pavan Rikhi</a><div class="metadata"><a href="#183746285" name="183746285"><div>2019-12-18 12:41:59</div></a></div><div class="text"><p>(that <code>Just workerData</code> branch in <code>assignWork</code> is the only thing that ever puts actions into the <code>wdInputMVar</code>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/51413c298d0dbf10639e259f8af5b837?d=identicon&amp;version=1"></a><div class="content"><a class="author">Pavan Rikhi</a><div class="metadata"><a href="#189402033" name="189402033"><div>2020-02-29 19:23:11</div></a></div><div class="text"><p>Finally coming back to this, if anyone's got a couple minutes I'd love a review before I fork this out into a separate package:<br>
+<a href="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/ImmortalQueue.hs" target="_blank" title="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/ImmortalQueue.hs">https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/ImmortalQueue.hs</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/ImmortalQueue.hs" style="background-image: url(https://avatars2.githubusercontent.com/u/16367280?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com/blob/develop/server/src/ImmortalQueue.hs" target="_blank" title="Southern-Exposure-Seed-Exchange/southernexposure.com">Southern-Exposure-Seed-Exchange/southernexposure.com</a></div><div class="message_embed_description">Southern Exposure's E-Commerce Website, Built with Haskell &amp; Elm. - Southern-Exposure-Seed-Exchange/southernexposure.com</div></div></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

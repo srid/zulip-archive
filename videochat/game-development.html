@@ -1,0 +1,139 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="@Avi Dessauer last time I said briefly that in my experience writing a few games that I liked FRP and didn&#39;t like ECS (they fill different roles, but that&#39;s beside the point).  I didn&#39;t have a clear thought of why I felt the way I felt, but now I do. The reason I like FRP, but don&#39;t like ECS or OOP " name="description"><link href="https://funprog.srid.ca/videochat/game-development.html" rel="canonical"><meta property="og:title" content="Game development - VideoChat"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="VideoChat"><meta property="og:article:modified_time" content="2020-05-02T16:59:16Z"><meta property="og:article:published_time" content="2020-04-30T16:38:16Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"><title>Game development - VideoChat</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Game development - VideoChat</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/videochat/" class="section">#VideoChat</a><i class="right angle icon divider"></i><div class="active section">Game development</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"></a><div class="content"><a class="author">Julian KG</a><div class="metadata"><a href="#195866370" name="195866370"><div>2020-04-30 16:38:16</div></a></div><div class="text"><p><span class="user-mention" data-user-id="271930">@Avi Dessauer</span> last time I said briefly that in my experience writing a few games that I liked FRP and didn't like ECS (they fill different roles, but that's beside the point).  I didn't have a clear thought of why I felt the way I felt, but now I do. The reason I like FRP, but don't like ECS or OOP for games and UIs, is because<br>
+most of the difficult things in programming games and UIs are not<br>
+declarative. Things happen temporally, and a large number of bugs are due to<br>
+incorrect ordering. I want to write a function that acts on ALL of state in an<br>
+ordered manner, and it can be made up of helper functions that can be zoomed in<br>
+when possible (by limiting scope). In OOP and ECS you are limited to certain<br>
+scope (in OOP this is the class) and but often you have to contain a reference to<br>
+a larger scope thereby defeating the purpose of scoping, to begin with (yes there<br>
+are mitigation techniques for these problems, but without ECS, and OOP these<br>
+problems never existed). This is related to my issue with Objects referencing<br>
+their parents. In OOP/ECS you have functions accessing global state with<br>
+nonsense type annotations ordered confusingly. In an imperative style, you<br>
+have "global function" that processes all of state made up of smaller functions<br>
+that are made up of smaller functions. FRP is the same, but FRP has a greater<br>
+vocabulary for composition (in the imperative style we mostly just have function<br>
+composition and sequencing). So I don't like the model of Objects with<br>
+callbacks, but that doesn't mean I hate declarative style. I think declarative<br>
+things should be declarative. I think having sum types + pattern matching &gt;<br>
+control flow every day of the week. My level layout shouldn't worry about time or<br>
+ordering since it isn't relevant to the problem. Data/info should be<br>
+declarative, but game logic can be temporal.<br>
+please let me know if I can clarify further</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195915406" name="195915406"><div>2020-04-30 23:32:15</div></a></div><div class="text"><p>I dunno how much I agree with this. At the end of the day a game is just a pair of functions <code>Input -&gt; State -&gt; State</code> and <code>State -&gt; Image</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195915471" name="195915471"><div>2020-04-30 23:33:14</div></a></div><div class="text"><p>i view ECS as a way of driving complicated transformations inside the state that are too finicky to describe operationally</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195915623" name="195915623"><div>2020-04-30 23:35:13</div></a></div><div class="text"><p>imo it's a pretty natural decomposition of the problem; implement each small piece of functionality as an ECS transformation and you get the composition "for free"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195915656" name="195915656"><div>2020-04-30 23:36:01</div></a></div><div class="text"><p>although i'll grant you that the ordering in which they run can be important, and when it is, weird bugs do occur</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195915700" name="195915700"><div>2020-04-30 23:36:14</div></a></div><div class="text"><p>though the exact same problem happens in more procedural approaches</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195915880" name="195915880"><div>2020-04-30 23:39:07</div></a></div><div class="text"><p>personally i haven't had much work getting FRP to work for me in games. i've been trying for about six years and never once had the "aha!" moment</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195915906" name="195915906"><div>2020-04-30 23:39:39</div></a></div><div class="text"><p>though i am not convinced this is a failure in frp; maybe i'm just dumb</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/074c66f0b64377e140623a34ed479409?d=identicon&amp;version=1"></a><div class="content"><a class="author">Avi Dessauer</a><div class="metadata"><a href="#195916303" name="195916303"><div>2020-04-30 23:44:42</div></a></div><div class="text"><p>I have to agree with Sandy.  <br>
+The order of each systems execution is determined by data dependence, and each system is run once per global step. So long as systems are pure ordering is simple.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195916688" name="195916688"><div>2020-04-30 23:50:13</div></a></div><div class="text"><p>(also i have no idea what the context is here)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"></a><div class="content"><a class="author">Julian KG</a><div class="metadata"><a href="#195929971" name="195929971"><div>2020-05-01 04:03:01</div></a></div><div class="text"><p>I have gotten FRP to work for toy examples, but I feel like there needs to be a library tailored towards games for it to really work, and be worthwhile for a larger project. I hope I can talk to someone who has written an FRP library, so I could get some insight as to how one might go about writing this library. To be fair to ECS I haven't used it for a large project before. My Game Dev timeline goes OOP -&gt; OOP + Unity -&gt; OOP -&gt; mostly imperative with many functional ideas/ experimentation with many different patterns (briefly touching ECS). I have only a few games I've spent more than a month on, and most large recent endeavors have involved net code so that's an extra layer of complexity. Generally I feel like most ECS functionality could be just a function, and by doing that you get to be really clear about what it has access to, and when it's being called. I also have an aesthetic distaste for the kind of world modeling that goes into pattern goes into these patterns so I might be biased. Anyway I think people should use what they like at the end of the day, so I won't push my opinion too much more. The original thought was as someone who does imperative game dev stuff sometimes FRP appeals to me while other patterns don't, and I could see how on paper someone could think FRP is a closer cousin to something like ECS, especially since they are at a higher level of abstraction.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195974637" name="195974637"><div>2020-05-01 15:49:51</div></a></div><div class="text"><p>absolutely fair.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195974708" name="195974708"><div>2020-05-01 15:50:12</div></a></div><div class="text"><p>yeah frp works in the small for me, but as soon as i want to add a menu screen or something it goes off the rail --- unless you have monadic frp, which is its own can of worms</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195974763" name="195974763"><div>2020-05-01 15:50:50</div></a></div><div class="text"><p>though my experience there was mostly as a babby haskell programmer, so i was probably not modeling very well</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195974828" name="195974828"><div>2020-05-01 15:51:33</div></a></div><div class="text"><p>i'm actively designing an ECS library, which is maybe why i bristled earlier!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/0c2b1161102f87a1d710bb391f0d6fd0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Simon Michael</a><div class="metadata"><a href="#195977347" name="195977347"><div>2020-05-01 16:15:11</div></a></div><div class="text"><p>I have the impression dunai is the modern FRP lib currently suited for games - because it has Yampa in its lineage, and Yampa has been used to make <a href="https://packdeps.haskellers.com/reverse/Yampa" title="https://packdeps.haskellers.com/reverse/Yampa">actual games</a>.</p>
+<p>Or perhaps Yampa itself is still best, since it has a <a href="https://github.com/keera-studios/haskell-titan" title="https://github.com/keera-studios/haskell-titan">debugging tool</a> ?</p>
+<p>Perhaps reflex also works for games.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/keera-studios/haskell-titan" style="background-image: url(https://avatars0.githubusercontent.com/u/1853753?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/keera-studios/haskell-titan" title="keera-studios/haskell-titan">keera-studios/haskell-titan</a></div><div class="message_embed_description">Testing Infrastructure for Temporal AbstractioNs. Contribute to keera-studios/haskell-titan development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d3d2de116df80bc024b799e84dcdbc97?d=identicon&amp;version=1"></a><div class="content"><a class="author">gilmi</a><div class="metadata"><a href="#195999001" name="195999001"><div>2020-05-01 19:22:57</div></a></div><div class="text"><p>Is continuous semantics of frp useful for games? Maybe discrete semantics is enough?</p>
+<p>In the past I've used the signals api in elm and purescript to make games and it was decent. I also used a simple iterative loop (in Haskell) and it was decent as well.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#196001733" name="196001733"><div>2020-05-01 19:46:48</div></a></div><div class="text"><p>I'd be curious to see. I've never seen an FRP game engine before. :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d3d2de116df80bc024b799e84dcdbc97?d=identicon&amp;version=1"></a><div class="content"><a class="author">gilmi</a><div class="metadata"><a href="#196034497" name="196034497"><div>2020-05-02 05:18:12</div></a></div><div class="text"><p>Was this directed at me?<br>
+My games are very simple and aren't really using "engines" but I can link them if you want.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"></a><div class="content"><a class="author">Julian KG</a><div class="metadata"><a href="#196060498" name="196060498"><div>2020-05-02 16:59:16</div></a></div><div class="text"><p>I have used Yampa, and liked it. I don't understand how to works under the hood at all which I imagine would become an issue if I wanted performance on a larger project. I'd be curious to see how I like an ECS in Haskell with our purity and whatnot so I might end up trying out <span class="user-mention" data-user-id="251120">@Sandy Maguire</span>'s ECS.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

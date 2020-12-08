@@ -1,0 +1,112 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="What can I use to compute a diff between two values of some generic structure? Such that applying the diff produces the 2nd value given the 1st value?" name="description"><link href="https://funprog.srid.ca/haskell/diffing-data-structures.html" rel="canonical"><meta property="og:title" content="Diff&#39;ing data structures - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-27T20:16:15Z"><meta property="og:article:published_time" content="2020-05-27T17:19:55Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>Diff&#39;ing data structures - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Diff&#39;ing data structures - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Diff&#39;ing data structures</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#198923613" name="198923613"><div>2020-05-27 17:19:55</div></a></div><div class="text"><p>What can I use to compute a diff between two values of some generic structure? Such that applying the diff produces the 2nd value given the 1st value?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#198923685" name="198923685"><div>2020-05-27 17:20:11</div></a></div><div class="text"><p>Assuming we are dealing with container structures mainly (map, list, records, sum types, etc.)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#198946881" name="198946881"><div>2020-05-27 20:16:15</div></a></div><div class="text"><p>This is the closest thing that reminds me of, idk whether it has all you're looking for: <a href="https://hackage.haskell.org/package/tree-diff">https://hackage.haskell.org/package/tree-diff</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

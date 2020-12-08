@@ -1,0 +1,137 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="one question:
+imagine I&#39;ve written a note A. some time later I write another note B that is tangentially related. I want one to link to the other, what do I do?
+
+write a normal link from B to A
+write a folgezettel link from B to A
+go back to A and write a normal link from A to B
+go back to A and wri" name="description"><link href="https://funprog.srid.ca/neuron/best-practice-for-links.html" rel="canonical"><meta property="og:title" content="best practice for links - Neuron"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Neuron"><meta property="og:article:modified_time" content="2020-09-13T00:31:24Z"><meta property="og:article:published_time" content="2020-09-08T00:24:25Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"><title>best practice for links - Neuron</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">best practice for links - Neuron</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/neuron/" class="section">#Neuron</a><i class="right angle icon divider"></i><div class="active section">best practice for links</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209336263" name="209336263"><div>2020-09-08 00:24:25</div></a></div><div class="text"><p>one question:<br>
+imagine I've written a note A. some time later I write another note B that is tangentially related. I want one to link to the other, what do I do?</p>
+<ol>
+<li>write a normal link from B to A</li>
+<li>write a folgezettel link from B to A</li>
+<li>go back to A and write a normal link from A to B</li>
+<li>go back to A and write a folgezettel link from A to B</li>
+</ol></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209336286" name="209336286"><div>2020-09-08 00:25:48</div></a></div><div class="text"><p>folgezettel choice is up to you, depending on how you want them to appear in the hierarchy (zindex and the 'uplink tree' on top of zettels).</p>
+<p>if non-folgezettel, it doesn't matter if it is A-&gt;B or B-&gt;A. They will appear in the backlinks of another note anyway</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209336337" name="209336337"><div>2020-09-08 00:26:30</div></a></div><div class="text"><p>Sometimes, you might want to create C, and then folgezettel connect them to [[[A]]] and [[[B]]]. So you have a triangle, with C on top, with A and B below.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209336343" name="209336343"><div>2020-09-08 00:26:48</div></a></div><div class="text"><p>That's all dependent on what the note is about.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209770906" name="209770906"><div>2020-09-11 11:56:08</div></a></div><div class="text"><p>I get confused about which link to use and when all the time<br>
+I have no idea of what kind of link will lead to a fruithful zettelkasten in the future<br>
+maybe <code>[[]]</code> was a mistake, like you said in another topic</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209813994" name="209813994"><div>2020-09-11 17:57:23</div></a></div><div class="text"><p>I don't think <code>[[..]]</code> is a mistake. If you happen to use just that (and no folgezettel links), then that means you have to use the "More backlinks" section for navigating your zettelkasten, with both the uplink tree (the thing above zettel) and the z-index being not at all useful, as they operate on folgezettel links. Also note that the future of neuron is such that it may well move towards using exclusively <code>[[..]]</code> links, with folgezettel (<code>[[[..]]]</code>) being used to "curate" the published site's navigation, all the while the backlinks sections becomes more feature-rich, with the z-index supporting a more general graph view (discarding folgezettel). For details, refer to today's planning chat: <a href="https://twitter.com/sridca/status/1304445587908112384">https://twitter.com/sridca/status/1304445587908112384</a></p>
+<div class="inline-preview-twitter"><div class="twitter-tweet"><a href="https://twitter.com/sridca/status/1304445587908112384"><img class="twitter-avatar" src="https://pbs.twimg.com/profile_images/1278707979462881280/piRvgOXO_normal.jpg"></a><p>Design and planning for what's coming next for neuron:
+
+- Less monolithic: neuron "core" separated out from publishing
+- "core" is just wiki-links (`[[..]]`)
+- Plugin mechanism to extend (eg: publishing, code evaluation, pandoc plugin run)
+
+#Zettelkasten
+
+<a href="https://t.co/WbWGnLihur">https://matrix.to/#/!ygGUISjbmnwJPtaUmH:matrix.org/$waCsaP2cDzWmKRrStFkPzc1agUi9icnH6BNVlv0c5TM?via=matrix.org&amp;via=lost-frequencies.eu&amp;via=maralorn.de</a></p><span>- a liver a day keeps the doctor away (@sridca)</span></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209906692" name="209906692"><div>2020-09-13 00:31:24</div></a></div><div class="text"><p>that makes sense to me, I was already slowly moving towards using <code>[[[...]]]</code> for indexes and sub-indexes and <code>[[...]]</code> for references, but maybe I'll make these a rule now</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

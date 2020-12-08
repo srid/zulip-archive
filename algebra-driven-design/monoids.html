@@ -1,0 +1,235 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Here&#39;s another interesting monoid from chris penner:
+https://chrispenner.ca/posts/monoid-sort" name="description"><link href="https://funprog.srid.ca/algebra-driven-design/monoids.html" rel="canonical"><meta property="og:title" content="Monoids - Algebra Driven Design"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Algebra Driven Design"><meta property="og:article:modified_time" content="2020-09-27T18:09:37Z"><meta property="og:article:published_time" content="2020-09-27T16:50:38Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2?d=identicon&amp;version=1"><title>Monoids - Algebra Driven Design</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Monoids - Algebra Driven Design</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/algebra-driven-design/" class="section">#Algebra Driven Design</a><i class="right angle icon divider"></i><div class="active section">Monoids</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211424393" name="211424393"><div>2020-09-27 16:50:38</div></a></div><div class="text"><p>Here's another interesting monoid from chris penner:<br>
+<a href="https://chrispenner.ca/posts/monoid-sort">https://chrispenner.ca/posts/monoid-sort</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211424416" name="211424416"><div>2020-09-27 16:51:18</div></a></div><div class="text"><div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="o">&gt;</span> <span class="n">toSort</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">&lt;&gt;</span> <span class="n">toSort</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="kt">Sort</span> <span class="p">{</span><span class="n">getSorted</span> <span class="ow">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">]}</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211424542" name="211424542"><div>2020-09-27 16:54:49</div></a></div><div class="text"><p>the funny thing is that</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">toSort</span> <span class="ow">::</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="kt">Sort</span> <span class="n">a</span>
+<span class="nf">toSort</span> <span class="ow">=</span> <span class="n">foldMap</span> <span class="p">(</span><span class="kt">Sort</span> <span class="o">.</span> <span class="n">pure</span><span class="p">)</span>
+</code></pre></div>
+
+<p>seems to essentially be an insertion sort</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/060188f013042ed3fa39f3b5aa602be2?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211424557" name="211424557"><div>2020-09-27 16:55:28</div></a></div><div class="text"><p>He mentions them in his post, but anybody who wants to see a really compelling use-case for monoids should look at <a href="https://en.wikipedia.org/wiki/Finger_tree">finger trees</a>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211424572" name="211424572"><div>2020-09-27 16:55:55</div></a></div><div class="text"><p>That's the thing behind Data.Seq, right?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211424617" name="211424617"><div>2020-09-27 16:56:11</div></a></div><div class="text"><p>Data.Sequence rather</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/060188f013042ed3fa39f3b5aa602be2?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211424622" name="211424622"><div>2020-09-27 16:56:49</div></a></div><div class="text"><p>Yes, <code>Data.Sequence</code> is basically a finger tree where our monoid is <code>Sum</code> and we map each element to <code>1</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211424633" name="211424633"><div>2020-09-27 16:57:24</div></a></div><div class="text"><p>looks like he has a post on those too<br>
+<a href="https://chrispenner.ca/posts/intro-to-finger-trees">https://chrispenner.ca/posts/intro-to-finger-trees</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#211424807" name="211424807"><div>2020-09-27 17:01:29</div></a></div><div class="text"><p>I'm not sure that tosort function justifies itself vs concat/join-collection with sort.</p>
+<p>E.g why not just define what sort means over collection at that point? Is tosort in addition to sort in some way?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211424961" name="211424961"><div>2020-09-27 17:05:02</div></a></div><div class="text"><p>I guess this is more of an exploratory thing than a practical one <span aria-label="smile" class="emoji emoji-1f642" role="img" title="smile">:smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211424994" name="211424994"><div>2020-09-27 17:05:52</div></a></div><div class="text"><p><del>This is parallelizable! :)</del><br>
+nvm got confused</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#211425034" name="211425034"><div>2020-09-27 17:06:05</div></a></div><div class="text"><p>You could do <code>Sort . sort</code> right?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#211425043" name="211425043"><div>2020-09-27 17:06:34</div></a></div><div class="text"><p>Oh wait no the concat isn't going to work <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211425069" name="211425069"><div>2020-09-27 17:07:15</div></a></div><div class="text"><p>Oh no that's fine</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211425093" name="211425093"><div>2020-09-27 17:08:02</div></a></div><div class="text"><p>I think the idea was just to use the <code>mergeSort</code> function he already defined earlier. In an actual library, yeah, you'd define the smart constructor as <code>toSort = Sort . sort</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/060188f013042ed3fa39f3b5aa602be2?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211425557" name="211425557"><div>2020-09-27 17:19:00</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251123">James Sully</span> <a href="#narrow/stream/258464-Algebra-Driven.20Design/topic/Monoids/near/211424542">said</a>:</p>
+<blockquote>
+<p>the funny thing is that</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">toSort</span> <span class="ow">::</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="kt">Sort</span> <span class="n">a</span>
+<span class="nf">toSort</span> <span class="ow">=</span> <span class="n">foldMap</span> <span class="p">(</span><span class="kt">Sort</span> <span class="o">.</span> <span class="n">pure</span><span class="p">)</span>
+</code></pre></div>
+
+<p>seems to essentially be an insertion sort</p>
+</blockquote>
+<p>The specific implementation of <code>sort</code> you get out is related to the implementation of <code>foldMap</code>.</p>
+<p>You could define a variant of <code>foldMap</code> that recursively splits a list in half and merges them together with <code>mconcat</code> or <code>&lt;&gt;</code>.<br>
+This is normally a bad idea because we have to</p>
+<ol>
+<li>
+<p>Traverse the list to find its length</p>
+<p>Automatically fails here on infinite lists, even if <code>&lt;&gt;</code> can short circuit</p>
+</li>
+<li>
+<p>Juggle around multiple intermediate values instead of 1 single accumulator (bad for efficiency/stack overflows)</p>
+</li>
+</ol>
+<p>but for certain monoids, we can get an improvement.</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="c1">-- WARNING: UNTESTED CODE, DON'T USE THIS IN PRACTICE</span>
+<span class="kr">import</span> <span class="nn">Data.List</span> <span class="p">(</span><span class="nf">splitAt</span><span class="p">)</span>
+
+<span class="nf">foldMap'</span> <span class="ow">::</span> <span class="kt">Monoid</span> <span class="n">b</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<span class="nf">foldMap'</span> <span class="n">f</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">reduce</span> <span class="o">.</span> <span class="n">fmap</span> <span class="n">f</span> <span class="o">$</span> <span class="n">xs</span>
+
+<span class="nf">reduce</span> <span class="ow">::</span> <span class="kt">Monoid</span> <span class="n">b</span> <span class="ow">=&gt;</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<span class="nf">reduce</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">reduceFirstN</span> <span class="p">(</span><span class="n">length</span> <span class="n">xs</span><span class="p">)</span> <span class="n">xs</span>
+
+<span class="nf">reduceFirstN</span> <span class="ow">::</span> <span class="kt">Monoid</span> <span class="n">b</span> <span class="ow">=&gt;</span> <span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<span class="nf">reduceFirstN</span> <span class="mi">0</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">mempty</span>
+<span class="nf">reduceFirstN</span> <span class="kr">_</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="ow">=</span> <span class="n">x</span>
+<span class="nf">reduceFirstN</span> <span class="n">n</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">|</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">=</span> <span class="n">x</span> <span class="o">&lt;&gt;</span> <span class="n">y</span>
+<span class="nf">reduceFirstN</span> <span class="n">len</span> <span class="n">xs</span> <span class="ow">=</span> <span class="n">left'</span> <span class="o">&lt;&gt;</span> <span class="n">right'</span>
+    <span class="kr">where</span>
+      <span class="n">halfLen</span> <span class="ow">=</span> <span class="n">len</span> <span class="p">`</span><span class="n">quot</span><span class="p">`</span> <span class="mi">2</span>
+      <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span> <span class="ow">=</span> <span class="n">splitAt</span> <span class="n">halfLen</span> <span class="n">xs</span>
+      <span class="n">left'</span> <span class="ow">=</span> <span class="n">reduceFirstN</span> <span class="n">halfLen</span> <span class="n">left</span>
+      <span class="n">right'</span> <span class="ow">=</span> <span class="n">reduceFirstN</span> <span class="p">(</span><span class="n">len</span> <span class="o">-</span> <span class="n">halfLen</span><span class="p">)</span> <span class="n">right</span>
+</code></pre></div>
+
+<p>If you use this <code>toSort = foldMap' (Sort . pure)</code> you <del>basically get classical merge sort</del> something much more like classical merge sort.<br>
+(I'm still worried that my looping over the left half of the list messes up the <code>nlog n</code> time because splitting linked lists is slow)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211425714" name="211425714"><div>2020-09-27 17:22:07</div></a></div><div class="text"><p>Huh, true, I guess I was assuming that foldMap works left to right, but associativity of monoids means we clearly don't need to necessarily.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/060188f013042ed3fa39f3b5aa602be2?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211425835" name="211425835"><div>2020-09-27 17:25:10</div></a></div><div class="text"><p>Your choice of what <code>foldMap</code> to use is like your choice of what <code>sort</code> to use.<br>
+It shouldn't affect the answer you get but it can impact the performance of your code.<br>
+(Modulo non-termination because you made your code too strict)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/060188f013042ed3fa39f3b5aa602be2?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211425943" name="211425943"><div>2020-09-27 17:27:43</div></a></div><div class="text"><p>As a corollary, because <code>foldMap'</code> should produce the same results as <code>foldMap</code> does, you can </p>
+<ol>
+<li>Benchmark your code</li>
+<li>Replace 1 or more <code>foldMap</code>s with <code>foldMap'</code>s</li>
+<li>Make sure your code doesn't crash/infinite loop now because <code>foldMap'</code> isn't as lazy as <code>foldMap</code> is</li>
+<li>Pick the faster option</li>
+</ol>
+<p>and you don't need to worry about your answers changing.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#211426208" name="211426208"><div>2020-09-27 17:33:51</div></a></div><div class="text"><p>I'm confused daniel, you said the problem was you need to traverse the list. But your implementation knows the length. </p>
+<p>Efficiency in sort depends on pre existing knowledge of the type and collection.</p>
+<p>I don't yet read Haskell so I'm inferring a lot.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/060188f013042ed3fa39f3b5aa602be2?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211426481" name="211426481"><div>2020-09-27 17:41:56</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="345177">drew verlee</span> <a href="#narrow/stream/258464-Algebra-Driven.20Design/topic/Monoids/near/211426208">said</a>:</p>
+<blockquote>
+<p>I'm confused daniel, you said the problem was you need to traverse the list. But your implementation knows the length. </p>
+<p>Efficiency in sort depends on pre existing knowledge of the type and collection.</p>
+<p>I don't yet read Haskell so I'm inferring a lot.</p>
+</blockquote>
+<p>There are 2 problems with my <code>foldMap'</code>.<br>
+They are caused by the following function calls</p>
+<ol>
+<li><code>length xs</code> and</li>
+<li><code>splitAt halfLen xs</code></li>
+</ol>
+<p>The problem with <code>length xs</code> is that this only works for non-infinite lists.<br>
+For example</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">countingNums</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Integer</span><span class="p">]</span>
+<span class="nf">countingNums</span> <span class="ow">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="p">]</span>
+</code></pre></div>
+
+<p>Is a list of all Positive Integers.</p>
+<p>If you try to compute its length, you'll take infinite time because you'll never reach the end of the list where you would stop and return how long it is.</p>
+<p>We can still do useful things with this list, for example</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">all</span> <span class="n">even</span> <span class="n">countingNums</span>
+</code></pre></div>
+
+<p>immediately returns <code>False</code> because <code>even 1</code> is <code>False</code> so it can stop without inspecting the rest of the list.</p>
+<p>(Fun-fact: <code>all ??? infiniteList</code> will never return <code>True</code>, it will either return <code>False</code> when it finds the first <code>False</code> element or it will take forever as it tries to find a <code>False</code> element or the (non-existent) end of the list)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/060188f013042ed3fa39f3b5aa602be2?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211426804" name="211426804"><div>2020-09-27 17:50:23</div></a></div><div class="text"><p>The second issue is about what it means to be "classical merge-sort".</p>
+<p>My <code>foldMap'</code> implementation splits the list in half.<br>
+This is close to what you would do in a traditional language, but in those languages, you would normally have either</p>
+<ul>
+<li>A pointer to the beginning of the array + a length or</li>
+<li>A start and stop index to that section of the array</li>
+</ul>
+<p>The problem here is that <code>[a]</code> is a linked list in Haskell.<br>
+If I make a <code>left</code> and <code>right</code> pair of linked lists (which is what I do), I have to loop over each element in the left half of the list, to copy it to a new shorter list.<br>
+But, this means that my <code>foldMap'</code> merge-sort as defined here will probably take O(n^2) time because it is making copies of our linked list.</p>
+<p>If I try using offsets into the list to avoid the copying, I'll suffer from the <code>O(n)</code> indexing time for random elements in a linked list, which is probably even worse.</p>
+<p>Can I solve both of these and traverse the linked list in a way that avoids the indexing time and <code>splitAt</code> time cost, almost certainly yes <em>but</em> it would dramatically increase the complexity of my answer.</p>
+<p>Likewise, there are ways to avoid asking for the length of the list but my answer would get much more alien in exchange for better handling long/infinite linked lists.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/060188f013042ed3fa39f3b5aa602be2?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211426885" name="211426885"><div>2020-09-27 17:53:01</div></a></div><div class="text"><p>p.s. The simplest way to fix the second problem (but still fail the infinite list one) is to do a one-time conversion to a <a href="https://hackage.haskell.org/package/vector-0.12.1.2/docs/Data-Vector.html"><code>Data.Vector</code></a> and use that for O(1) time <code>splitAt</code>s and then convert back to a linked list at the end.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/060188f013042ed3fa39f3b5aa602be2?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211427400" name="211427400"><div>2020-09-27 18:06:23</div></a></div><div class="text"><p>In addition to</p>
+<ol>
+<li>Parallelism and</li>
+<li>finger-trees and</li>
+<li>alternative <code>foldMap</code>s for different performance profiles</li>
+</ol>
+<p>Another way to benefit from monoids is the famous <a href="https://en.wikipedia.org/wiki/Exponentiation_by_squaring">Exponentiation by Squaring</a> algorithm.</p>
+<p>You can use this algorithm to solve many problems in lg n time, pretty quickly.<br>
+If you define</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">pow</span> <span class="ow">::</span> <span class="kt">Monoid</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="n">a</span>
+<span class="nf">pow</span> <span class="kr">_</span> <span class="mi">0</span> <span class="ow">=</span> <span class="n">mempty</span>
+<span class="nf">pow</span> <span class="n">x</span> <span class="n">n</span> <span class="ow">=</span> <span class="n">x</span> <span class="o">&lt;&gt;</span> <span class="n">pow</span> <span class="n">x</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+
+<p>So <code>pow x n</code> is <code>x &lt;&gt; ... &lt;&gt; x</code> n times, then we can compute <code>pow x n</code> in lg n <code>&lt;&gt;</code>s by rewriting <code>pow</code> with the Exponentiation by squaring algorithm instead of the naive one I wrote above.</p>
+<p>The most famous use-cases for this are fast exponentiation of modular arithmetic and matrix powers.</p>
+<p>You can also use it to write a lg n time Fibonacci function <a href="https://old.reddit.com/r/rust/comments/imb1a1/if_you_want_performance_cheat/g42p086/?context=3">like I wrote in this reddit comment</a> or solve the <a href="https://alexgolec.dev/knights-dialer-logarithmic-time-edition/">Knight's dialer</a> in lg n time.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://old.reddit.com/r/rust/comments/imb1a1/if_you_want_performance_cheat/g42p086/?context=3" style="background-image: url(https://www.redditstatic.com/new-icon.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://old.reddit.com/r/rust/comments/imb1a1/if_you_want_performance_cheat/g42p086/?context=3" title="If you want performance, cheat!">If you want performance, cheat!</a></div><div class="message_embed_description">Posted in r/rust by u/Michal_Vaner • 97 points and 35 comments</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/060188f013042ed3fa39f3b5aa602be2?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211427508" name="211427508"><div>2020-09-27 18:09:37</div></a></div><div class="text"><p>Side-note:<br>
+If you don't require the ability to compute the <code>0</code>th power of a value, we can relax the <code>Monoid a</code> restriction to a <code>Semigroup a</code> restriction.<br>
+That's because the only difference between <code>Monoid</code> and <code>Semigroup</code> is whether or not <code>mempty</code> needs to be defined and we only need to have <code>mempty</code> for the <code>0</code> case.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

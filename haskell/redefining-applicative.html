@@ -1,0 +1,154 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I&#39;m trying to do the following:
+import qualified Prelude as P
+
+class Functor f =&gt; Apply f
+  where
+  zip :: f a -&gt; f b -&gt; f (a, b)
+
+class Apply f =&gt; Applicative f
+  where
+  pure:: a -&gt; f a
+
+instance Applicative f =&gt; P.Applicative f
+  where
+  pure = pure
+  f &lt;*&gt; x = uncurry ($) &lt;$&gt; zip f x
+" name="description"><link href="https://funprog.srid.ca/haskell/redefining-applicative.html" rel="canonical"><meta property="og:title" content="Redefining applicative - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-02-25T12:35:02Z"><meta property="og:article:published_time" content="2020-02-25T01:25:35Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"><title>Redefining applicative - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Redefining applicative - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Redefining applicative</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#188983563" name="188983563"><div>2020-02-25 01:25:35</div></a></div><div class="text"><p>I'm trying to do the following:</p>
+<div class="codehilite"><pre><span></span>import qualified Prelude as P
+
+class Functor f =&gt; Apply f
+  where
+  zip :: f a -&gt; f b -&gt; f (a, b)
+
+class Apply f =&gt; Applicative f
+  where
+  pure:: a -&gt; f a
+
+instance Applicative f =&gt; P.Applicative f
+  where
+  pure = pure
+  f &lt;*&gt; x = uncurry ($) &lt;$&gt; zip f x
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#188983582" name="188983582"><div>2020-02-25 01:25:59</div></a></div><div class="text"><p>But I get the following error:</p>
+<div class="codehilite"><pre><span></span>src/Monoidal/Applicative.hs:19:10: error:
+    • Could not deduce (Functor f)
+        arising from the superclasses of an instance declaration
+      from the context: Applicative f
+        bound by the instance declaration
+        at src/Monoidal/Applicative.hs:19:10-41
+      Possible fix:
+        add (Functor f) to the context of the instance declaration
+    • In the instance declaration for ‘P.Applicative f’
+   |
+19 | instance Applicative f =&gt; P.Applicative f
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#188983633" name="188983633"><div>2020-02-25 01:26:14</div></a></div><div class="text"><p>shouldn't the <code>Functor</code> constraint on <code>Apply</code> make this work?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#188984104" name="188984104"><div>2020-02-25 01:34:57</div></a></div><div class="text"><p>Interesting. Looks like a GHC bug.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#188984235" name="188984235"><div>2020-02-25 01:37:08</div></a></div><div class="text"><p>it works if I add <code>Functor f</code> to the constraints explicitly apparently</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#188984244" name="188984244"><div>2020-02-25 01:37:31</div></a></div><div class="text"><p>like <code>instance (Functor f, Applicative f) =&gt; P.Applicative f</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?x=x&amp;version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#189015393" name="189015393"><div>2020-02-25 12:35:02</div></a></div><div class="text"><p>That is weird</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

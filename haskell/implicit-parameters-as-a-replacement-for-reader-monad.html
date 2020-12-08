@@ -1,0 +1,149 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I started using implicit parameters the way you would use reader monad. There are a lot of benefits to this approach: not having to deal with multiple monads. Implicit parameters has all of the benefits of Has pattern without any of the cruft. Honestly I&#39;m not seeing any downside." name="description"><link href="https://funprog.srid.ca/haskell/implicit-parameters-as-a-replacement-for-reader-monad.html" rel="canonical"><meta property="og:title" content="Implicit parameters as a replacement for reader monad - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-09-22T17:39:54Z"><meta property="og:article:published_time" content="2020-07-19T09:54:18Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"><title>Implicit parameters as a replacement for reader monad - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Implicit parameters as a replacement for reader monad - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Implicit parameters as a replacement for reader monad</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"></a><div class="content"><a class="author">Julian KG</a><div class="metadata"><a href="#204341857" name="204341857"><div>2020-07-19 09:54:18</div></a></div><div class="text"><p>I started using implicit parameters the way you would use reader monad. There are a lot of benefits to this approach: not having to deal with multiple monads. Implicit parameters has all of the benefits of Has pattern without any of the cruft. Honestly I'm not seeing any downside.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204341929" name="204341929"><div>2020-07-19 09:57:04</div></a></div><div class="text"><p><a href="http://okmij.org/ftp/Haskell/tr-15-04.pdf">http://okmij.org/ftp/Haskell/tr-15-04.pdf</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204341928" name="204341928"><div>2020-07-19 09:57:04</div></a></div><div class="text"><p>I can't open the links to the supposed problems with them</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204341932" name="204341932"><div>2020-07-19 09:57:13</div></a></div><div class="text"><p>referenced in "the reflection paper"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204341982" name="204341982"><div>2020-07-19 09:58:59</div></a></div><div class="text"><p><a href="/user_uploads/13896/TmUkveNeENMX9GkN_bEmQTqr/2020-07-19-125852_483x193_scrot.png">2020-07-19-125852_483x193_scrot.png</a></p>
+<div class="message_inline_image"><a href="/user_uploads/13896/TmUkveNeENMX9GkN_bEmQTqr/2020-07-19-125852_483x193_scrot.png" title="2020-07-19-125852_483x193_scrot.png"><img src="/user_uploads/13896/TmUkveNeENMX9GkN_bEmQTqr/2020-07-19-125852_483x193_scrot.png"></a></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204342000" name="204342000"><div>2020-07-19 10:00:02</div></a></div><div class="text"><p>from section 6.2</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#204342057" name="204342057"><div>2020-07-19 10:01:09</div></a></div><div class="text"><p>It think problems boil down to examples like this:</p>
+<div class="codehilite"><pre><span></span><code>λ&gt; let ?a = 1 in let b :: Int = ?a + 1 in let ?a = 42 in b
+43
+λ&gt; let ?a = 1 in let b :: Int; b = ?a + 1 in let ?a = 42 in b
+2
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#204342062" name="204342062"><div>2020-07-19 10:01:40</div></a></div><div class="text"><p>It may not be apparent at first sight which "instance" should be chosen</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#204342104" name="204342104"><div>2020-07-19 10:02:20</div></a></div><div class="text"><p>(It makes a lot of sense from typechecker perspective, but may be hard to spot for <em>human</em>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204342106" name="204342106"><div>2020-07-19 10:02:29</div></a></div><div class="text"><p>oh man that's horrifying tbh</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204342111" name="204342111"><div>2020-07-19 10:02:43</div></a></div><div class="text"><p>when you realise what's wrong..</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#204342165" name="204342165"><div>2020-07-19 10:04:07</div></a></div><div class="text"><blockquote>
+<p>A term's behavior can change if it's signature is added, removed, or changed</p>
+</blockquote>
+<p>I can't remember the last time I wrote a Haskell library/program where this wasn't the case, and I never use implicit parameters</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204342186" name="204342186"><div>2020-07-19 10:05:16</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225136">@Asad Saeeduddin</span> <br>
+I don't think "common" haskell programming does this very often - anything without fancy type classes/type families should be fine, no?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#204342239" name="204342239"><div>2020-07-19 10:06:25</div></a></div><div class="text"><p>It's not that much of a problem with "normal classes", because they are globally coherent (usually)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#204342245" name="204342245"><div>2020-07-19 10:06:58</div></a></div><div class="text"><p>well what's a fancy typeclass? e.g. is this fancy?</p>
+<div class="codehilite"><pre><span></span><code>class Foo a b
+  where
+  foo :: a -&gt; b
+
+test :: Foo Int Int =&gt; Int
+test = foo $ (1 :: Int)
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204342313" name="204342313"><div>2020-07-19 10:08:58</div></a></div><div class="text"><p>In my opinion, it is. I have no idea how to reason about anything like <code>foo :: Foo a b =&gt; a -&gt; b</code></p>
+<p>This does indeed remind me of an annoying "everyday" example though - aeson's FromJSON typeclasses, which has a polymorphic return type</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#204342374" name="204342374"><div>2020-07-19 10:10:33</div></a></div><div class="text"><p>you can't reason about <code>Foo</code>, it's just a made up typeclass with no rules. my point is in contravariant position the type of arguments is not always determined: you often have to fix it using type annotations or visible type applications</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#204342436" name="204342436"><div>2020-07-19 10:12:45</div></a></div><div class="text"><p>if we only ever did things like <code>test :: Foo Int Int =&gt; Int -&gt; Int; test = foo</code>, then everything would be fine, but we often apply functions to polymorphic arguments where the input type doesn't wholly determine the result type, and so we need to fix the argument type manually in order to resolve the right instance</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204342439" name="204342439"><div>2020-07-19 10:12:50</div></a></div><div class="text"><p>my point is that <code>Foo</code> is indeed complicated from my pov, exactly because it has an entirely polymorphic argument/return-type</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#204342446" name="204342446"><div>2020-07-19 10:13:32</div></a></div><div class="text"><p>typeclasses like that lead to subtle errors, or at least I've made such mistakes with e.g. <code>FromJSON</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"></a><div class="content"><a class="author">Julian KG</a><div class="metadata"><a href="#204342542" name="204342542"><div>2020-07-19 10:16:39</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> this example seems very contrived, and if I have to choose between this complexity, and the complexities that arise from the reader monad I choose this.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#204342646" name="204342646"><div>2020-07-19 10:20:22</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span> I think the bar for fancy/complicated is a bit too low then. If you try to model something like a class for vector spaces, like so:</p>
+<div class="codehilite"><pre><span></span><code>class ... =&gt; VectorSpace s v
+  where
+  scale :: s -&gt; v -&gt; v
+</code></pre></div>
+
+
+<p>you will have to annotate/visibly type apply the scalar type if you use a numeric literal so as to choose the right instance. this is not a very exotic use case IMO</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#204342655" name="204342655"><div>2020-07-19 10:20:30</div></a></div><div class="text"><p>From this perspective, something like Agda's <code>open</code> on records seems to be superior to instance resolution in terms of clarity, even if it's more verbose</p>
+<p><span class="user-mention" data-user-id="294380">@Julian KG</span> I would say adding type signature is actually something you may do pretty often when working with highly-polymorphic sub-bindings (e.g. in <code>where</code>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"></a><div class="content"><a class="author">Julian KG</a><div class="metadata"><a href="#204342778" name="204342778"><div>2020-07-19 10:24:23</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> I have an idea for a language with better support for implicit parameters in my head because there have been some things that I think could be more ergonomic. I'll have to read this paper and try out Agda so I see what else is out there.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"></a><div class="content"><a class="author">Julian KG</a><div class="metadata"><a href="#204343563" name="204343563"><div>2020-07-19 10:48:41</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> <br>
+the code example that went like this:</p>
+<div class="codehilite"><pre><span></span><code>sort1 :: Compares a ⇒ s→[a]→[a] --ok
+sort2 :: Compares a ⇒[M sa]→[M sa] --ok
+</code></pre></div>
+
+
+<p>in the paper is exactly what I'd like to avoid. I think there is a way to achieve monomorphism without adding these <code>M</code>'s or <code>s -&gt;</code>'s.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"></a><div class="content"><a class="author">Julian KG</a><div class="metadata"><a href="#204343647" name="204343647"><div>2020-07-19 10:50:52</div></a></div><div class="text"><p>it might not work as a Haskell extension, and it definitely wouldn't be as powerful as implicit parameters</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/e0842574f3a3c70d15e978f2b543e74119562ed2?x=x&amp;version=2"></a><div class="content"><a class="author">Will</a><div class="metadata"><a href="#204586722" name="204586722"><div>2020-07-21 18:46:57</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/Implicit.20parameters.20as.20a.20replacement.20for.20reader.20monad/near/204341982">said</a>:</p>
+<blockquote>
+<p><a href="/user_uploads/13896/TmUkveNeENMX9GkN_bEmQTqr/2020-07-19-125852_483x193_scrot.png">2020-07-19-125852_483x193_scrot.png</a></p>
+</blockquote>
+<p>these are problems with implicit parameters as a language extension, no? my read was that oleg's typeclass-based implicit parameter passing implementation doesn't suffer these drawbacks</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"></a><div class="content"><a class="author">Julian KG</a><div class="metadata"><a href="#210905673" name="210905673"><div>2020-09-22 17:39:54</div></a></div><div class="text"><p><span class="user-mention" data-user-id="250747">@Will</span> yeah the typeclass based approach does not have those problems, but it does create lots and lots of boilerplate and thus encourages sparing use.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

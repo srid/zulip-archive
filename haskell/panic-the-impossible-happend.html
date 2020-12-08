@@ -1,0 +1,141 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="{-# LANGUAGE DerivingVia #-}
+
+module CodeGen where
+
+import Control.Monad.Writer
+
+newtype Name = Name String
+  deriving (Eq, Show)
+
+newtype CodeGen a = CodeGen (Writer [a] ())
+  deriving Applicative via Writer [a]
+
+
+
+This is just some code I&#39;m toying around with but I haven&#39;t encountered the &quot;impossi" name="description"><link href="https://funprog.srid.ca/haskell/panic-the-impossible-happend.html" rel="canonical"><meta property="og:title" content="panic! the &#39;impossible&#39; happend! - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-04-29T05:42:37Z"><meta property="og:article:published_time" content="2020-04-29T01:03:24Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"><title>panic! the &#39;impossible&#39; happend! - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">panic! the &#39;impossible&#39; happend! - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">panic! the &#39;impossible&#39; happend!</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195648418" name="195648418"><div>2020-04-29 01:03:24</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code><span class="cm">{-# LANGUAGE DerivingVia #-}</span>
+
+<span class="kr">module</span> <span class="nn">CodeGen</span> <span class="kr">where</span>
+
+<span class="kr">import</span> <span class="nn">Control.Monad.Writer</span>
+
+<span class="kr">newtype</span> <span class="kt">Name</span> <span class="ow">=</span> <span class="kt">Name</span> <span class="kt">String</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Eq</span><span class="p">,</span> <span class="kt">Show</span><span class="p">)</span>
+
+<span class="kr">newtype</span> <span class="kt">CodeGen</span> <span class="n">a</span> <span class="ow">=</span> <span class="kt">CodeGen</span> <span class="p">(</span><span class="kt">Writer</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="nb">()</span><span class="p">)</span>
+  <span class="kr">deriving</span> <span class="kt">Applicative</span> <span class="n">via</span> <span class="kt">Writer</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+</code></pre></div>
+
+
+<p>This is just some code I'm toying around with but I haven't encountered the "impossible" before. Neat! Anyone know what's happening here? Is it simple improper use of <code>DerivingVia</code> or should there be a type error here?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#195649334" name="195649334"><div>2020-04-29 01:14:45</div></a></div><div class="text"><p>This is certainly a weird instance.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#195649376" name="195649376"><div>2020-04-29 01:16:00</div></a></div><div class="text"><p><code>Applicative</code> on <code>Writer [a]</code> would give you <code>pure :: x -&gt; Writer [a] x</code><br>
+but for <code>CodeGen</code> you need <code>pure :: x -&gt; Writer [x] ()</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#195649451" name="195649451"><div>2020-04-29 01:17:08</div></a></div><div class="text"><p><code>CodeGen a</code> is coercible to <code>Writer [a] ()</code>, but that doesn't mean <code>CodeGen</code> is coercible to <code>Writer [a]</code>, it doesn't really make sense since there is not <code>a</code> in <code>CodeGen</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195649714" name="195649714"><div>2020-04-29 01:20:52</div></a></div><div class="text"><p>Thanks!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#195662830" name="195662830"><div>2020-04-29 05:42:37</div></a></div><div class="text"><p>BTW, this should probably be filled as a bug on GHC repo - I don't think "impossible" can ever be considered to be a proper error</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

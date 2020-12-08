@@ -1,0 +1,118 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="New release! https://github.com/srid/rib/releases/tag/0.7.0.0
+srid/ribHaskell library for writing your own static site generator - srid/rib" name="description"><link href="https://funprog.srid.ca/rib/0-7-with-type-safe-routes.html" rel="canonical"><meta property="og:title" content="0.7 with type-safe routes - Rib"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Rib"><meta property="og:article:modified_time" content="2020-03-11T04:22:18Z"><meta property="og:article:published_time" content="2020-03-03T18:44:51Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>0.7 with type-safe routes - Rib</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">0.7 with type-safe routes - Rib</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/rib/" class="section">#Rib</a><i class="right angle icon divider"></i><div class="active section">0.7 with type-safe routes</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#189621704" name="189621704"><div>2020-03-03 18:44:51</div></a></div><div class="text"><p>New release! <a href="https://github.com/srid/rib/releases/tag/0.7.0.0" target="_blank" title="https://github.com/srid/rib/releases/tag/0.7.0.0">https://github.com/srid/rib/releases/tag/0.7.0.0</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/rib/releases/tag/0.7.0.0" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/rib/releases/tag/0.7.0.0" target="_blank" title="srid/rib">srid/rib</a></div><div class="message_embed_description">Haskell library for writing your own static site generator - srid/rib</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#189624269" name="189624269"><div>2020-03-03 19:14:51</div></a></div><div class="text"><p>I started picking my site back up the last few nights; i may upgrade this evening.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#189627324" name="189627324"><div>2020-03-03 19:49:18</div></a></div><div class="text"><p>Is it still do able to opt out of various things? I want to keep myself up to date, but personally am not (currently) interested in type safe routes</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#189630246" name="189630246"><div>2020-03-03 20:19:15</div></a></div><div class="text"><p>Yea, <code>Rib.Route</code> is entirely optional (that was one of the goals behind the change). And you can use the low-level <code>Rib.Shake.writeFileCached</code> to write arbitrary filepath with arbitrary string.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#189630544" name="189630544"><div>2020-03-03 20:22:19</div></a></div><div class="text"><p>Re: optional/one of the goals. This is why:</p>
+<blockquote>
+<p>Removed buildHtmlMulti, buildHtml, readSource functions and Source type.</p>
+</blockquote>
+<p>Now you can just do <code>thing &lt;- myFunctionInActionMonad</code> without having to call any rib function. And then do <code>writeFileCached theFilePath $ renderTheThing thing</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#189630707" name="189630707"><div>2020-03-03 20:24:48</div></a></div><div class="text"><p>Cool cool.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#190249710" name="190249710"><div>2020-03-11 04:22:18</div></a></div><div class="text"><p>I upgraded. No real issues. I am not using the routes system (currently), it mostly just doesn't fit with what I am doing.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

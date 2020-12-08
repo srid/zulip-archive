@@ -1,0 +1,139 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="https://github.com/ghc-proposals/ghc-proposals/wiki/GHC2020
+ghc-proposals/ghc-proposalsProposed compiler and language changes for GHC and GHC/Haskell - ghc-proposals/ghc-proposals" name="description"><link href="https://funprog.srid.ca/haskell/ghc-2020-standard.html" rel="canonical"><meta property="og:title" content="GHC 2020 standard - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-12-03T13:56:55Z"><meta property="og:article:published_time" content="2020-09-08T08:21:33Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"><title>GHC 2020 standard - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">GHC 2020 standard - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">GHC 2020 standard</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#209357631" name="209357631"><div>2020-09-08 08:21:33</div></a></div><div class="text"><p><a href="https://github.com/ghc-proposals/ghc-proposals/wiki/GHC2020">https://github.com/ghc-proposals/ghc-proposals/wiki/GHC2020</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/ghc-proposals/ghc-proposals/wiki/GHC2020" style="background-image: url(https://avatars0.githubusercontent.com/u/20374637?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/ghc-proposals/ghc-proposals/wiki/GHC2020" title="ghc-proposals/ghc-proposals">ghc-proposals/ghc-proposals</a></div><div class="message_embed_description">Proposed compiler and language changes for GHC and GHC/Haskell - ghc-proposals/ghc-proposals</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#209357851" name="209357851"><div>2020-09-08 08:24:02</div></a></div><div class="text"><p>Not having to write out these in <code>.cabal</code> by hand would be sooo nice</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#209360619" name="209360619"><div>2020-09-08 08:55:17</div></a></div><div class="text"><p>lists seems kind of arbitrary and contains some stuff that the community at large seems to not like too much/be unsure about</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#209360676" name="209360676"><div>2020-09-08 08:56:01</div></a></div><div class="text"><p>e.g. <code>RecordWildCards</code> <code>ImplicitParams</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#209360741" name="209360741"><div>2020-09-08 08:56:35</div></a></div><div class="text"><p>and for me enabling <code>Overloaded{Strings,Lists}</code> by default is definitely not a great idea, very often I get type ambiguity errors after doing so (more so with <code>Lists</code>, because of <code>Foldable</code>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#209360804" name="209360804"><div>2020-09-08 08:57:28</div></a></div><div class="text"><p>you can still opt not to use e.g. <code>ImplicitParams</code>, but enabling it by default is like the compiler is saying to you "we encourage this"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#209360925" name="209360925"><div>2020-09-08 08:58:40</div></a></div><div class="text"><p>don't know why this isn't a pull request like the other proposals so we can comment on it.. <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#209366653" name="209366653"><div>2020-09-08 10:01:54</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/GHC.202020.20standard/near/209360741">said</a>:</p>
+<blockquote>
+<p>and for me enabling <code>Overloaded{Strings,Lists}</code> by default is definitely not a great idea, very often I get type ambiguity errors after doing so (more so with <code>Lists</code>, because of <code>Foldable</code>)</p>
+</blockquote>
+<p>the list says they aren't going to be in it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#209367197" name="209367197"><div>2020-09-08 10:07:51</div></a></div><div class="text"><p>well it says that Eisenberg is against including them, not that they will definitely not be in</p>
+<p>my issue is that I (and whoever else wants to) can't write a comment under the linked list with what I just wrote here (and there is also no provided way to express an opinion in the linked list - the best I can do is read through the list and see a mailing list mentioned, and start guessing which mailing list that is)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#209367257" name="209367257"><div>2020-09-08 10:08:11</div></a></div><div class="text"><p>well then again, if there was some such way I guess this GHC2020 thing would never actually be agreed upon <span aria-label="grinning face with smiling eyes" class="emoji emoji-1f601" role="img" title="grinning face with smiling eyes">:grinning_face_with_smiling_eyes:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#209367358" name="209367358"><div>2020-09-08 10:09:20</div></a></div><div class="text"><p>maybe it's going to be opened for discussion later</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#209398438" name="209398438"><div>2020-09-08 14:58:54</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span> see <a href="https://mail.haskell.org/pipermail/ghc-steering-committee/2020-August/001712.html">thread on mailing list</a> and <a href="https://mail.haskell.org/pipermail/ghc-steering-committee/2020-September/001719.html">it's continuation in September</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218677854" name="218677854"><div>2020-12-03 10:54:44</div></a></div><div class="text"><p>From discussion on committee's mailing list:</p>
+<blockquote>
+<p>Applying the actual quota of ⅔ out of 11, i.e. 8 votes, these would go<br>
+in no matter how Cale and Eric vote:</p>
+<p>BangPatterns, BinaryLiterals, ConstraintKinds, DeriveDataTypeable,<br>
+DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveLift,<br>
+DeriveTraversable, EmptyCase, EmptyDataDecls, EmptyDataDeriving,<br>
+ExplicitForAll, FlexibleContexts, FlexibleInstances, GADTSyntax,<br>
+HexFloatLiterals, ImportQualifiedPost, KindSignatures,<br>
+MultiParamTypeClasses, NamedFieldPuns, NumericUnderscores,<br>
+StandaloneDeriving, ViewPatterns</p>
+<p>The following have 6 or 7 votes, i.e. they’d go in if we extrapolate<br>
+from the current votes:</p>
+<p>ConstrainedClassMethods, DerivingStrategies,<br>
+ExistentialQuantification, GeneralisedNewtypeDeriving, InstanceSigs,<br>
+NegativeLiterals, PostfixOperators, RankNTypes, RecordWildCards,<br>
+ScopedTypeVariables, TupleSections, TypeApplications, TypeFamilies,<br>
+TypeOperators, TypeSynonymInstances</p>
+<p>These extensions are short one vote:</p>
+<p>DataKinds, DerivingVia, GADTs, LambdaCase, PolyKinds</p>
+</blockquote></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#218694625" name="218694625"><div>2020-12-03 13:52:04</div></a></div><div class="text"><p>what</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#218694667" name="218694667"><div>2020-12-03 13:52:20</div></a></div><div class="text"><p>how did LambdaCase not unanimously make it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#218694705" name="218694705"><div>2020-12-03 13:52:37</div></a></div><div class="text"><p>ditto</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#218694723" name="218694723"><div>2020-12-03 13:52:47</div></a></div><div class="text"><p>yet RecordWildCards has a chance to do so</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218694794" name="218694794"><div>2020-12-03 13:53:34</div></a></div><div class="text"><p>There's this new proposal for <code>\of</code> that makes committee feel uneasy about including it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#218694815" name="218694815"><div>2020-12-03 13:53:49</div></a></div><div class="text"><p>ugh</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#218694913" name="218694913"><div>2020-12-03 13:54:22</div></a></div><div class="text"><p>then if it doesn't make it i'd hope <code>\of</code> gets in faster :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d5f51e76392d18898a66faf360be0416?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Díaz Carrete</a><div class="metadata"><a href="#218694939" name="218694939"><div>2020-12-03 13:54:39</div></a></div><div class="text"><p>ImportQualifiedPost is in? <span aria-label="joy" class="emoji emoji-1f602" role="img" title="joy">:joy:</span> awesome. Strange that NumDecimals doesn't appear anywhere though.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218695296" name="218695296"><div>2020-12-03 13:56:55</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span>  Personally I don't mind that much - I'm happy that my wall of extensions in <code>.cabal</code> is going to reduce maybe in less than third, and I mean, we're probably going to get newer versions of <code>GHCXXXX</code> extension in upcoming years that will figure the remaining stuff out</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

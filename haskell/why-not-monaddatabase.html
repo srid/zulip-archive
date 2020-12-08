@@ -1,0 +1,123 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="The 3layer blog posts says:
+
+DO NOT try to implement MonadRedis or MonadDatabase or MonadFilesystem here.
+
+Yet when you look at the holmusk app, it does use something like MonadDatabase (i.e., WithDb): https://github.com/Holmusk/three-layer/blob/1b58ec102f206681b66a584ca4a7d18f2eb4ef81/src/Lib/Db/Us" name="description"><link href="https://funprog.srid.ca/haskell/why-not-monaddatabase.html" rel="canonical"><meta property="og:title" content="Why not `MonadDatabase`? - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-06T21:03:49Z"><meta property="og:article:published_time" content="2020-05-06T15:09:03Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>Why not `MonadDatabase`? - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Why not `MonadDatabase`? - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Why not `MonadDatabase`?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196648219" name="196648219"><div>2020-05-06 15:09:03</div></a></div><div class="text"><p>The 3layer blog posts says:</p>
+<blockquote>
+<p>DO NOT try to implement MonadRedis or MonadDatabase or MonadFilesystem here.</p>
+</blockquote>
+<p>Yet when you look at the holmusk app, it does use something like MonadDatabase (i.e., WithDb): <a href="https://github.com/Holmusk/three-layer/blob/1b58ec102f206681b66a584ca4a7d18f2eb4ef81/src/Lib/Db/User.hs#L15-L20" title="https://github.com/Holmusk/three-layer/blob/1b58ec102f206681b66a584ca4a7d18f2eb4ef81/src/Lib/Db/User.hs#L15-L20">https://github.com/Holmusk/three-layer/blob/1b58ec102f206681b66a584ca4a7d18f2eb4ef81/src/Lib/Db/User.hs#L15-L20</a></p>
+<p>It's WithDb itself is based on the <code>Has</code> pattern: <a href="https://haskell.zettel.page/a997bfa5.html" title="https://haskell.zettel.page/a997bfa5.html">https://haskell.zettel.page/a997bfa5.html</a></p>
+<p>How would you one do this so as to make it testable?</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/Holmusk/three-layer/blob/1b58ec102f206681b66a584ca4a7d18f2eb4ef81/src/Lib/Db/User.hs#L15-L20" style="background-image: url(https://avatars2.githubusercontent.com/u/11267576?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/Holmusk/three-layer/blob/1b58ec102f206681b66a584ca4a7d18f2eb4ef81/src/Lib/Db/User.hs#L15-L20" title="Holmusk/three-layer">Holmusk/three-layer</a></div><div class="message_embed_description">:three: :cake: Architecture of the Haskell web applications - Holmusk/three-layer</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#196659095" name="196659095"><div>2020-05-06 16:18:45</div></a></div><div class="text"><p>I think the idea there would be that your Monad is specific for getting a user</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#196659109" name="196659109"><div>2020-05-06 16:18:53</div></a></div><div class="text"><p>The implementation is using the DB</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#196659185" name="196659185"><div>2020-05-06 16:19:26</div></a></div><div class="text"><p>Keep your scope concentrated on your business logic. The DB just helps you execute that logic</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196680303" name="196680303"><div>2020-05-06 18:54:51</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251612">@Fintan Halpenny</span> Would you say, then, that Holmusk/three-layer is a bad example? Because its <code>getUserByEmail</code> requires <code>WithDb</code> (which is specific to database), and you cannot test any of its business logic that uses this function (eg: what <code>loginHandler</code> does)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#196686862" name="196686862"><div>2020-05-06 19:44:36</div></a></div><div class="text"><p>Ya <code>withDb</code> is constrained to <code>MonadIO</code> so it makes it harder to test</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#196687003" name="196687003"><div>2020-05-06 19:45:34</div></a></div><div class="text"><p>I forget the 3-layer method but I certainly would say that it's not a great example of separation :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196688113" name="196688113"><div>2020-05-06 19:53:55</div></a></div><div class="text"><p>Jesus, this mtl thing is so fscking confusin. Wish I could use something neater like polysemy.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196688547" name="196688547"><div>2020-05-06 19:57:51</div></a></div><div class="text"><p>And what is this <code>MonadBaseControl</code>. Fsck</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#196690607" name="196690607"><div>2020-05-06 20:13:16</div></a></div><div class="text"><p>I just glanced back at Matt's post. He has a pretty clear example of scoping the typeclass to just User functions</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#196690745" name="196690745"><div>2020-05-06 20:14:10</div></a></div><div class="text"><p><code>MonadBaseControl</code> comes into play when you're working with resources and <code>IO</code> and I've mostly cargo culted it in the past <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196690912" name="196690912"><div>2020-05-06 20:15:35</div></a></div><div class="text"><p>I was trying to use that <code>di</code> library (because I thought hierarhical logging is cool), and it used MonadMask, MonadBaseControl and all that jazz, whereas this app uses MonadSnap and I just gave up making them all behave well together</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196691036" name="196691036"><div>2020-05-06 20:16:30</div></a></div><div class="text"><p>Anyway, I'm giving up, and trying polysemy. Giving it an actual chance finally.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196696916" name="196696916"><div>2020-05-06 21:03:49</div></a></div><div class="text"><p>I think polysemy embraces <a href="https://haskell.zettel.page/2012406.html" title="https://haskell.zettel.page/2012406.html">Boring Haskell</a> more than mtl (in a philosophical sense).</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

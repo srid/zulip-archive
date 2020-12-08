@@ -1,0 +1,130 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="What would a strict impure Haskell be like? I started a hobby project to explore this question https://github.com/chrismwendt/talloy inb4 pitchforks
+chrismwendt/talloyStrict impure Haskell. Contribute to chrismwendt/talloy development by creating an account on GitHub." name="description"><link href="https://funprog.srid.ca/haskell/strict-impure-haskell.html" rel="canonical"><meta property="og:title" content="Strict impure Haskell - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-06-06T17:05:47Z"><meta property="og:article:published_time" content="2020-06-06T08:48:20Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"><title>Strict impure Haskell - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Strict impure Haskell - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Strict impure Haskell</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#199963921" name="199963921"><div>2020-06-06 08:48:20</div></a></div><div class="text"><p>What would a strict impure Haskell be like? I started a hobby project to explore this question <a href="https://github.com/chrismwendt/talloy">https://github.com/chrismwendt/talloy</a> inb4 pitchforks</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/chrismwendt/talloy" style="background-image: url(https://avatars3.githubusercontent.com/u/1387653?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/chrismwendt/talloy" title="chrismwendt/talloy">chrismwendt/talloy</a></div><div class="message_embed_description">Strict impure Haskell. Contribute to chrismwendt/talloy development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/b10e5343a097452b2b3f411febc67e282658af76?x=x&amp;version=2"></a><div class="content"><a class="author">Matt Peddie</a><div class="metadata"><a href="#199964021" name="199964021"><div>2020-06-06 08:50:44</div></a></div><div class="text"><p>maybe you should try to add higher-kinded types to OCaml instead ;)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/b10e5343a097452b2b3f411febc67e282658af76?x=x&amp;version=2"></a><div class="content"><a class="author">Matt Peddie</a><div class="metadata"><a href="#199964036" name="199964036"><div>2020-06-06 08:51:10</div></a></div><div class="text"><p>seriously, though, please report back with what you learn!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#199964134" name="199964134"><div>2020-06-06 08:53:26</div></a></div><div class="text"><p>I once wrote a few hundred lines of OCaml at a previous job and was pleasantly surprised with the language, so I'm not opposed to getting more familiar with it <span aria-label="grinning" class="emoji emoji-1f600" role="img" title="grinning">:grinning:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b?d=identicon&amp;version=1"></a><div class="content"><a class="author">Julian KG</a><div class="metadata"><a href="#199979978" name="199979978"><div>2020-06-06 15:24:22</div></a></div><div class="text"><p>In the readme it says "No type classes, only interfaces" what exactly do you mean by "interfaces" in this context?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#199983096" name="199983096"><div>2020-06-06 16:36:47</div></a></div><div class="text"><p>I had a half-baked thought a couple weeks ago that multi parameter type classes don't seem all that useful and it might be possible to get away with interfaces that look more like what you'd find in other languages. Something like <code>print :: Showable -&gt; ()</code> instead of <code>print :: Show a =&gt; a -&gt; ()</code>. Now that I write this down it doesn't make a whole lot of sense <span aria-label="unamused" class="emoji emoji-1f612" role="img" title="unamused">:unamused:</span>Very half-baked indeed</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#199983242" name="199983242"><div>2020-06-06 16:41:04</div></a></div><div class="text"><p><span class="user-mention" data-user-id="294416">@Chris Wendt</span> See <a href="http://okmij.org/ftp/Haskell/TypeClass.html#Haskell1">"Haskell with only one typeclass"</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#199983549" name="199983549"><div>2020-06-06 16:49:27</div></a></div><div class="text"><p>also</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">Show</span> <span class="n">a</span> <span class="ow">=</span> <span class="kt">Show</span> <span class="p">{</span> <span class="n">show</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">String</span> <span class="p">}</span>
+
+<span class="nf">print</span> <span class="ow">::</span> <span class="kt">Show</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">IO</span> <span class="nb">()</span>
+</code></pre></div>
+
+
+<p>instead of</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">class</span> <span class="kt">Show</span> <span class="n">a</span>
+  <span class="kr">where</span>
+  <span class="n">show</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">String</span>
+
+<span class="nf">print</span> <span class="ow">::</span> <span class="kt">Show</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">IO</span> <span class="nb">()</span>
+</code></pre></div>
+
+
+<p>is a perfectly good idea (although not the same as the one discussed in the link I sent). It even has its own acronym: <a href="http://www.haskellforall.com/2012/05/scrap-your-type-classes.html">"Scrap Your Type Classes"</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#199983572" name="199983572"><div>2020-06-06 16:49:58</div></a></div><div class="text"><p>It doesn't work that great in Haskell for various reasons, but if you're making a new language it's worth trying</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#199984004" name="199984004"><div>2020-06-06 16:58:58</div></a></div><div class="text"><p>This is bending my mind <a href="http://okmij.org/ftp/Haskell/Haskell1/Class1.hs">http://okmij.org/ftp/Haskell/Haskell1/Class1.hs</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#199984073" name="199984073"><div>2020-06-06 17:00:05</div></a></div><div class="text"><p>Ah, I read SYTC a while back. It seems that automatic dictionary-passing by the compiler is convenient to have. I wonder if implicit parameters helps. Needs more thought.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#199984285" name="199984285"><div>2020-06-06 17:04:23</div></a></div><div class="text"><p>It's convenient in some ways, but inconvenient in other ways</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#199984300" name="199984300"><div>2020-06-06 17:04:58</div></a></div><div class="text"><p>E.g. it's convenient that you're guaranteed to never need type annotations in SYTC, but of course you pay a big price in losing polymorphism</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#199984320" name="199984320"><div>2020-06-06 17:05:47</div></a></div><div class="text"><p>similarly it's convenient that the compiler will build instance dictionaries for you, but the cost is that classes and instances are not the same as types and values, and so you can't do first class functional programming with them</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

@@ -1,0 +1,112 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Newbie question. I can&#39;t believe I&#39;m still struggling to grapple MTL stuff. The lucid library has HtmlT m a which has a MonadState instance. But how exactly do you use it? I tried flip runState mempty someFunc where someFunc is MonadState String m =&gt; HtmlT m () but that doesn&#39;t compile." name="description"><link href="https://funprog.srid.ca/haskell/monad-transformer-stack-confusion.html" rel="canonical"><meta property="og:title" content="Monad transformer stack confusion - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-02-21T15:36:02Z"><meta property="og:article:published_time" content="2020-02-17T00:26:23Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>Monad transformer stack confusion - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Monad transformer stack confusion - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Monad transformer stack confusion</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#188345393" name="188345393"><div>2020-02-17 00:26:23</div></a></div><div class="text"><p>Newbie question. I can't believe I'm still struggling to grapple MTL stuff. The lucid library has <code>HtmlT m a</code> which has a MonadState instance. But how exactly do you use it? I tried <code>flip runState mempty someFunc</code> where someFunc is <code>MonadState String m =&gt; HtmlT m ()</code> but that doesn't compile.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#188345449" name="188345449"><div>2020-02-17 00:29:13</div></a></div><div class="text"><p><code>StateT String (HtmlT Identity) ()</code> seems one step forward, but then you have to <code>lift</code> all UI elements, thus losing access to state.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#188345610" name="188345610"><div>2020-02-17 00:35:36</div></a></div><div class="text"><p>Aha, <code>flip runStateT mempty $ evalHtmlT someFunc</code> works.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#188345846" name="188345846"><div>2020-02-17 00:43:00</div></a></div><div class="text"><p>Grr, but that doesn't render the Html at runtime</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#188346065" name="188346065"><div>2020-02-17 00:51:05</div></a></div><div class="text"><p>Okay, after reading the source ... unpack and pack it back: <code>HtmlT $ fmap fst $ flip runStateT mempty $ runHtmlT someFunc</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#188702086" name="188702086"><div>2020-02-21 04:00:26</div></a></div><div class="text"><p>you're doing something cray here!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#188702097" name="188702097"><div>2020-02-21 04:01:44</div></a></div><div class="text"><p>monad transformers should only need to be unpeeled in <code>main</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#188702137" name="188702137"><div>2020-02-21 04:02:06</div></a></div><div class="text"><p><code>flip runState myState $ runHtmlT myHTMLFUNCTION</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#188702139" name="188702139"><div>2020-02-21 04:02:25</div></a></div><div class="text"><p>the <code>State</code> here is global</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#188702141" name="188702141"><div>2020-02-21 04:02:50</div></a></div><div class="text"><p>if you want local state semantic, you want to build a <code>StateT s Html</code> instead</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#188735385" name="188735385"><div>2020-02-21 14:25:28</div></a></div><div class="text"><p>With <code>StateT s Html</code> you would have <code>lift</code> when rendering UI, but at that point - access to state is lost.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#188735410" name="188735410"><div>2020-02-21 14:25:48</div></a></div><div class="text"><p>And it seems that the lucid library recommends putting State inside the HtmlT transformer: <a href="https://hackage.haskell.org/package/lucid-2.9.12/docs/Lucid.html#t:HtmlT" target="_blank" title="https://hackage.haskell.org/package/lucid-2.9.12/docs/Lucid.html#t:HtmlT">https://hackage.haskell.org/package/lucid-2.9.12/docs/Lucid.html#t:HtmlT</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#188735578" name="188735578"><div>2020-02-21 14:27:27</div></a></div><div class="text"><p>So to "inject" an inner monad, I had to peel the skin, apply the topical cream (runState), then put it back.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#188735615" name="188735615"><div>2020-02-21 14:27:55</div></a></div><div class="text"><p>(well, that reads pretty gory)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#188742747" name="188742747"><div>2020-02-21 15:36:02</div></a></div><div class="text"><p>Real-world code that lead to all this: <a href="#narrow/stream/201385-Haskell/topic/HTML.20in.20Haskell/near/188742480" title="#narrow/stream/201385-Haskell/topic/HTML.20in.20Haskell/near/188742480">https://funprog.zulipchat.com/#narrow/stream/201385-Haskell/topic/HTML.20in.20Haskell/near/188742480</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

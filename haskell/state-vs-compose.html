@@ -1,0 +1,135 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I build a list of &quot;edit&quot; functions to modify a graph datastructure. The functions list is evaluated using compose, which is defined as:
+compose :: [a -&gt; a] -&gt; a -&gt; a
+compose = foldr (.) id
+
+
+See full code here: https://github.com/srid/ka/blob/b24fc03dee53a91fd11122422405b3be3939eeb0/src/Ka/Graph.hs#" name="description"><link href="https://funprog.srid.ca/haskell/state-vs-compose.html" rel="canonical"><meta property="og:title" content="State vs compose - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-10-01T16:32:00Z"><meta property="og:article:published_time" content="2020-09-30T23:07:12Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>State vs compose - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">State vs compose - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">State vs compose</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#211851125" name="211851125"><div>2020-09-30 23:07:12</div></a></div><div class="text"><p>I build a list of "edit" functions to modify a graph datastructure. The functions list is evaluated using <code>compose</code>, which is defined as:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">compose</span> <span class="ow">::</span> <span class="p">[</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span>
+<span class="nf">compose</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="p">(</span><span class="o">.</span><span class="p">)</span> <span class="n">id</span>
+</code></pre></div>
+
+<p>See full code here: <a href="https://github.com/srid/ka/blob/b24fc03dee53a91fd11122422405b3be3939eeb0/src/Ka/Graph.hs#L24-L48">https://github.com/srid/ka/blob/b24fc03dee53a91fd11122422405b3be3939eeb0/src/Ka/Graph.hs#L24-L48</a></p>
+<p>As I was <a href="https://github.com/srid/ka/commit/b24fc03dee53a91fd11122422405b3be3939eeb0">refactoring line 38-44</a>, by injecting that anonymous function (<code>\g -&gt; ...</code>), it occured to me that this whole thing looked similar to some well-known monad. Lo and hold - <a href="https://hackage.haskell.org/package/mtl-2.2.2/docs/Control-Monad-State-Class.html#v:modify"><code>modify</code></a> of Reader:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">modify</span> <span class="ow">::</span> <span class="kt">MonadState</span> <span class="n">s</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">s</span> <span class="ow">-&gt;</span> <span class="n">s</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="nb">()</span>
+</code></pre></div>
+
+<p>So, my code can be rewritten to use State. </p>
+<p>The question is: which version is more performant?</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/ka/blob/b24fc03dee53a91fd11122422405b3be3939eeb0/src/Ka/Graph.hs#L24-L48" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/ka/blob/b24fc03dee53a91fd11122422405b3be3939eeb0/src/Ka/Graph.hs#L24-L48" title="srid/ka">srid/ka</a></div><div class="message_embed_description">neuron is undergoing a heart surgery. Contribute to srid/ka development by creating an account on GitHub.</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/ka/commit/b24fc03dee53a91fd11122422405b3be3939eeb0" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/ka/commit/b24fc03dee53a91fd11122422405b3be3939eeb0" title="ref again · srid/ka@b24fc03">ref again · srid/ka@b24fc03</a></div><div class="message_embed_description">neuron is undergoing a heart surgery. Contribute to srid/ka development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#211851824" name="211851824"><div>2020-09-30 23:17:00</div></a></div><div class="text"><p>fok it. State version is easier to read: <a href="https://github.com/srid/ka/commit/edd9ff9d6c485d88431064c38d52bbd5aae13109">https://github.com/srid/ka/commit/edd9ff9d6c485d88431064c38d52bbd5aae13109</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/ka/commit/edd9ff9d6c485d88431064c38d52bbd5aae13109" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/ka/commit/edd9ff9d6c485d88431064c38d52bbd5aae13109" title="Use State · srid/ka@edd9ff9">Use State · srid/ka@edd9ff9</a></div><div class="message_embed_description">neuron is undergoing a heart surgery. Contribute to srid/ka development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211872564" name="211872564"><div>2020-10-01 06:13:47</div></a></div><div class="text"><p>well it's exactly a state monad, except everywhere you have <code>()</code> for your "result" parameter (so it'll be <code>m ()</code> everywhere)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211872565" name="211872565"><div>2020-10-01 06:14:00</div></a></div><div class="text"><p>so it should be somewhat same performance? (very questionable claims :D )</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211874995" name="211874995"><div>2020-10-01 07:01:21</div></a></div><div class="text"><p>actually state still internally does tupling+de-tupling, so maybe your original thing is faster in the end<br>
+it also doesn't have the cross-module specialisation issues that using mtl type classes has</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211877047" name="211877047"><div>2020-10-01 07:31:27</div></a></div><div class="text"><p>I guess we would need to consult Core to know for sure</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211877066" name="211877066"><div>2020-10-01 07:31:45</div></a></div><div class="text"><p>Because GHC could remove case of known constructor</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211877123" name="211877123"><div>2020-10-01 07:32:20</div></a></div><div class="text"><p>(I mean, we're talking about compiler that can optimize out (un)boxing, which is very similar)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211877418" name="211877418"><div>2020-10-01 07:37:12</div></a></div><div class="text"><p>btw, for your <code>a -&gt; a</code> usage, I think you can get away with only a <a href="https://hackage.haskell.org/package/transformers-0.5.6.2/docs/Control-Monad-Trans-Reader.html#v:local"><code>Reader</code> and <code>local</code></a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#211883631" name="211883631"><div>2020-10-01 08:53:06</div></a></div><div class="text"><p>Also fyi, I believe <code>compose</code> is <code>foldMap Endo</code> <span aria-label="eyes" class="emoji emoji-1f440" role="img" title="eyes">:eyes:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211884314" name="211884314"><div>2020-10-01 09:02:02</div></a></div><div class="text"><p>yeah but you need to unwrap it afterwards, and the noise becomes more than just <code>foldr (.) id</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211884363" name="211884363"><div>2020-10-01 09:02:18</div></a></div><div class="text"><p>I wish there was something like <code>sum</code> is to <code>(+)</code> for <code>(.)</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211884382" name="211884382"><div>2020-10-01 09:02:33</div></a></div><div class="text"><p>or we had something like <code>ApplyingVia</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#211937294" name="211937294"><div>2020-10-01 16:32:00</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/State.20vs.20compose/near/211877418">said</a>:</p>
+<blockquote>
+<p>btw, for your <code>a -&gt; a</code> usage, I think you can get away with only a <a href="https://hackage.haskell.org/package/transformers-0.5.6.2/docs/Control-Monad-Trans-Reader.html#v:local"><code>Reader</code> and <code>local</code></a></p>
+</blockquote>
+<p>not sure how that would work</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

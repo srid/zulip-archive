@@ -1,0 +1,114 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I am trying to host neuron through rib. Hosting it on the base url works fine however I would like to have it at https://&lt;domain&gt;/neuron. This does not currently work yielding  &quot;File not Found&quot; in Firefox. I assume it has something to do with setting the proper context path to either rib or shake ho" name="description"><link href="https://funprog.srid.ca/rib/set-context-path.html" rel="canonical"><meta property="og:title" content="Set context path? - Rib"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Rib"><meta property="og:article:modified_time" content="2020-06-24T14:35:18Z"><meta property="og:article:published_time" content="2020-06-24T13:51:28Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/6a0b3f2d65a920a2909f5b7b7b938cde?d=identicon&amp;version=1"><title>Set context path? - Rib</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Set context path? - Rib</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/rib/" class="section">#Rib</a><i class="right angle icon divider"></i><div class="active section">Set context path?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6a0b3f2d65a920a2909f5b7b7b938cde?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sergiu</a><div class="metadata"><a href="#201849152" name="201849152"><div>2020-06-24 13:51:28</div></a></div><div class="text"><p>I am trying to host neuron through rib. Hosting it on the base url works fine however I would like to have it at https://&lt;domain&gt;/neuron. This does not currently work yielding  "File not Found" in Firefox. I assume it has something to do with setting the proper context path to either rib or shake however by knowledge of Haskell is very limited. Can you help?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201849638" name="201849638"><div>2020-06-24 13:55:15</div></a></div><div class="text"><p>Do you have an URL to share ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6a0b3f2d65a920a2909f5b7b7b938cde?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sergiu</a><div class="metadata"><a href="#201853858" name="201853858"><div>2020-06-24 14:25:53</div></a></div><div class="text"><p><a href="https://hiddenaway.xyz/neuron">https://hiddenaway.xyz/neuron</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6a0b3f2d65a920a2909f5b7b7b938cde?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sergiu</a><div class="metadata"><a href="#201854127" name="201854127"><div>2020-06-24 14:27:42</div></a></div><div class="text"><p>neuron is on my home pc which connects to a proxy. The proxy forwards all requests to the local port</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6a0b3f2d65a920a2909f5b7b7b938cde?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sergiu</a><div class="metadata"><a href="#201854295" name="201854295"><div>2020-06-24 14:28:46</div></a></div><div class="text"><p>If requests are directly sent to / and not /neuron, it works fine. From my experience with airsonic, this is usually solved by giving a context path to the application. I'm wondering if there is such a thing for rib.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201854482" name="201854482"><div>2020-06-24 14:30:06</div></a></div><div class="text"><p><span class="user-mention" data-user-id="312954">@Sergiu</span> Are you trying to access the rib server? (neuron's <code>rib -s</code> command)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201854584" name="201854584"><div>2020-06-24 14:30:41</div></a></div><div class="text"><p>rib server always services neuron notes at /</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201854630" name="201854630"><div>2020-06-24 14:30:58</div></a></div><div class="text"><p>But you don't need to be using the rib server</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6a0b3f2d65a920a2909f5b7b7b938cde?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sergiu</a><div class="metadata"><a href="#201854658" name="201854658"><div>2020-06-24 14:31:09</div></a></div><div class="text"><p>Yes. Server is generated with "neuron rib -wS"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6a0b3f2d65a920a2909f5b7b7b938cde?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sergiu</a><div class="metadata"><a href="#201854684" name="201854684"><div>2020-06-24 14:31:20</div></a></div><div class="text"><p>How can I tell it to serve from /neuron?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201854704" name="201854704"><div>2020-06-24 14:31:31</div></a></div><div class="text"><p>Just run <code>neuron rib -w</code> on your home pc. And then have nginx or something serve the generated files at <code>.neuron/output</code>. At whatever relative path you want like /neuron.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6a0b3f2d65a920a2909f5b7b7b938cde?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sergiu</a><div class="metadata"><a href="#201854749" name="201854749"><div>2020-06-24 14:31:51</div></a></div><div class="text"><p>I know, but using  rib seemed like the easiest way to host my zettelkasten. Host it on my own machine and use a reverse proxy to access it from anywhere in the world.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201854748" name="201854748"><div>2020-06-24 14:31:51</div></a></div><div class="text"><p>Tip: you can open .neuron/output/index.html directly in your browser. All the URLs in it are relative.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201854824" name="201854824"><div>2020-06-24 14:32:06</div></a></div><div class="text"><p>Are you on Windows?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6a0b3f2d65a920a2909f5b7b7b938cde?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sergiu</a><div class="metadata"><a href="#201854839" name="201854839"><div>2020-06-24 14:32:12</div></a></div><div class="text"><p>Linux</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201854985" name="201854985"><div>2020-06-24 14:33:16</div></a></div><div class="text"><p>Okay. the rib server is mainly for local/development use.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201855043" name="201855043"><div>2020-06-24 14:33:46</div></a></div><div class="text"><p>If you really want to expose it at /neuron, you should try the nginx middleman.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201855108" name="201855108"><div>2020-06-24 14:34:04</div></a></div><div class="text"><p><a href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/">https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/" style="background-image: url(https://docs.nginx.com/_static/images/nginx-documentation-500x300.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/" title="NGINX Docs | NGINX Reverse Proxy">NGINX Docs | NGINX Reverse Proxy</a></div><div class="message_embed_description">Configure NGINX as a reverse proxy for HTTP and other protocols, with support for modifying request headers and fine-tuned buffering of responses.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6a0b3f2d65a920a2909f5b7b7b938cde?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sergiu</a><div class="metadata"><a href="#201855127" name="201855127"><div>2020-06-24 14:34:11</div></a></div><div class="text"><p>I see. I will just use nginx then to serve the static files in .neuron/output</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6a0b3f2d65a920a2909f5b7b7b938cde?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sergiu</a><div class="metadata"><a href="#201855154" name="201855154"><div>2020-06-24 14:34:25</div></a></div><div class="text"><p>Thanks!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201855228" name="201855228"><div>2020-06-24 14:34:58</div></a></div><div class="text"><p>FWIW, I use nginx to serve some zettelkastens. But nginx refers directly to the generated directory (instead of talking to rib server). Something like: <a href="/user_uploads/13896/gyb1kr47BmlhqGODug1zsns2/image.png">image.png</a></p>
+<div class="message_inline_image"><a href="/user_uploads/13896/gyb1kr47BmlhqGODug1zsns2/image.png" title="image.png"><img src="/user_uploads/13896/gyb1kr47BmlhqGODug1zsns2/image.png"></a></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201855268" name="201855268"><div>2020-06-24 14:35:18</div></a></div><div class="text"><p>So you can bypass rib, and just use .neuron/output/ in your nginx config</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

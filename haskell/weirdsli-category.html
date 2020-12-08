@@ -1,0 +1,188 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="What laws do I need for Distributive to make the Category instance below lawful?
+data Weirdsli w m a b = Weirdsli { runWeirdsli :: w a -&gt; m b }
+
+class Distributive f g
+  where
+  distribute :: f (g a) -&gt; g (f a)
+
+instance (Comonad w, Monad m, Distributive w m) =&gt; Category (Weirdsli w m)
+  where
+  id " name="description"><link href="https://funprog.srid.ca/haskell/weirdsli-category.html" rel="canonical"><meta property="og:title" content="Weirdsli category - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-13T15:42:40Z"><meta property="og:article:published_time" content="2020-05-12T20:23:40Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"><title>Weirdsli category - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Weirdsli category - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Weirdsli category</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197333461" name="197333461"><div>2020-05-12 20:23:40</div></a></div><div class="text"><p>What laws do I need for <code>Distributive</code> to make the <code>Category</code> instance below lawful?</p>
+<div class="codehilite"><pre><span></span><code>data Weirdsli w m a b = Weirdsli { runWeirdsli :: w a -&gt; m b }
+
+class Distributive f g
+  where
+  distribute :: f (g a) -&gt; g (f a)
+
+instance (Comonad w, Monad m, Distributive w m) =&gt; Category (Weirdsli w m)
+  where
+  id = Weirdsli $ pure . extract
+  Weirdsli f . Weirdsli g = Weirdsli $ (&gt;&gt;= f) . distribute . (g &lt;&lt;=)
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#197341211" name="197341211"><div>2020-05-12 21:20:13</div></a></div><div class="text"><p>The last one can probably be simplified, but here's what I have <a href="https://gist.github.com/Lysxia/0f6ef064af8dbf2f39f518d12b77531b">https://gist.github.com/Lysxia/0f6ef064af8dbf2f39f518d12b77531b</a></p>
+<div class="codehilite"><pre><span></span><code>    distribute (fmap_w pure x) = pure x.
+
+    fmap_m extract (distribute u) = extract u.
+
+    ((distribute . (g &lt;&lt;=)) =&lt;&lt; distribute (f &lt;&lt;= x))
+    =
+    distribute (((g =&lt;&lt;) . distribute) &lt;&lt;= (f &lt;&lt;= x))
+</code></pre></div>
+
+
+<div class="message_embed"><a class="message_embed_image" href="https://gist.github.com/Lysxia/0f6ef064af8dbf2f39f518d12b77531b" style="background-image: url(https://github.githubassets.com/images/modules/gists/gist-og-image.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://gist.github.com/Lysxia/0f6ef064af8dbf2f39f518d12b77531b" title="weirdsli.v">weirdsli.v</a></div><div class="message_embed_description">GitHub Gist: instantly share code, notes, and snippets.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#197343763" name="197343763"><div>2020-05-12 21:42:56</div></a></div><div class="text"><p>Code-golfing the last one:</p>
+<div class="codehilite"><pre><span></span><code>(=&lt;&lt;) (distribute . (&lt;&lt;=) g) . distribute
+=
+distribute ((&lt;&lt;=) ((=&lt;&lt;) g . distribute))
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197347462" name="197347462"><div>2020-05-12 22:19:20</div></a></div><div class="text"><p>hmm, very interesting. so the first two are <code>distribute . fmap pure = pure</code> and <code>fmap extract . distribute = extract</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197350722" name="197350722"><div>2020-05-12 22:55:36</div></a></div><div class="text"><p>diagrammatically that's like:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mover><mo stretchy="true">→</mo><mpadded width="+0.6em" lspace="0.3em"><mi>ρ</mi></mpadded></mover><mi>W</mi><mo>⊙</mo><mn>1</mn><mover><mo stretchy="true">→</mo><mpadded width="+0.6em" lspace="0.3em"><mrow><mn>1</mn><mo>⊙</mo><mi>η</mi></mrow></mpadded></mover><mi>W</mi><mo>⊙</mo><mi>M</mi><mover><mo stretchy="true">→</mo><mpadded width="+0.6em" lspace="0.3em"><mi mathvariant="normal">Δ</mi></mpadded></mover><mi>M</mi><mo>⊙</mo><mi>W</mi></mrow><annotation encoding="application/x-tex">W \xrightarrow{\rho} W \odot 1 \xrightarrow{1 \odot \eta} W \odot M \xrightarrow{\Delta} M \odot W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.934392em;vertical-align:-0.01100000000000001em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.923392em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord mathdefault mtight">ρ</span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg width='400em' height='0.522em' viewBox='0 0 400000 522' preserveAspectRatio='xMaxYMin slice'><path d='M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.01100000000000001em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⊙</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.084108em;vertical-align:-0.01100000000000012em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.073108em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord mtight">1</span><span class="mbin mtight">⊙</span><span class="mord mathdefault mtight" style="margin-right:0.03588em;">η</span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg width='400em' height='0.522em' viewBox='0 0 400000 522' preserveAspectRatio='xMaxYMin slice'><path d='M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.01100000000000012em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⊙</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1113309999999998em;vertical-align:-0.010999999999999899em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.100331em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord mtight">Δ</span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg width='400em' height='0.522em' viewBox='0 0 400000 522' preserveAspectRatio='xMaxYMin slice'><path d='M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.010999999999999899em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⊙</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mover><mo stretchy="true">→</mo><mpadded width="+0.6em" lspace="0.3em"><mi>λ</mi></mpadded></mover><mn>1</mn><mo>⊙</mo><mi>W</mi><mover><mo stretchy="true">→</mo><mpadded width="+0.6em" lspace="0.3em"><mrow><mi>η</mi><mo>⊙</mo><mn>1</mn></mrow></mpadded></mover><mi>M</mi><mo>⊙</mo><mi>W</mi></mrow><annotation encoding="application/x-tex">W \xrightarrow{\lambda} 1 \odot W \xrightarrow{\eta \odot 1} M \odot W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.119108em;vertical-align:-0.01100000000000012em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1081079999999999em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord mathdefault mtight">λ</span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg width='400em' height='0.522em' viewBox='0 0 400000 522' preserveAspectRatio='xMaxYMin slice'><path d='M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.01100000000000012em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⊙</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.084108em;vertical-align:-0.01100000000000012em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.073108em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">η</span><span class="mbin mtight">⊙</span><span class="mord mtight">1</span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg width='400em' height='0.522em' viewBox='0 0 400000 522' preserveAspectRatio='xMaxYMin slice'><path d='M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.01100000000000012em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⊙</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span></span></span></span></span></p>
+<p>it's frustratingly close to something like a bimonoid, but it's not quite that</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#197362864" name="197362864"><div>2020-05-13 02:24:07</div></a></div><div class="text"><p>how did you make this diagram</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197362941" name="197362941"><div>2020-05-13 02:26:08</div></a></div><div class="text"><p>you can just write:</p>
+<div class="codehilite"><pre><span></span><code>```math
+1 + 1 = 2
+```
+</code></pre></div>
+
+
+<p>and get:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">1 + 1 = 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span></span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197362951" name="197362951"><div>2020-05-13 02:26:33</div></a></div><div class="text"><p>btw you can look at the source for anyone's comments, there's a little menu on the right</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#197362957" name="197362957"><div>2020-05-13 02:26:44</div></a></div><div class="text"><p>wow</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#197362962" name="197362962"><div>2020-05-13 02:26:57</div></a></div><div class="text"><p>til. thanks!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/31b0847ae161d8af30e1a2fcb059be4d?d=identicon&amp;version=1"></a><div class="content"><a class="author">Hazem</a><div class="metadata"><a href="#197363071" name="197363071"><div>2020-05-13 02:29:29</div></a></div><div class="text"><p>This is really cool! (Especially the source view feature!) Thanks!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#197363511" name="197363511"><div>2020-05-13 02:38:42</div></a></div><div class="text"><p>You're a wizard.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197431521" name="197431521"><div>2020-05-13 15:42:40</div></a></div><div class="text"><p>Someone post this in fpslack :-P</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

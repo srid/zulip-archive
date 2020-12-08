@@ -1,0 +1,115 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="If you were going to design a new system that was moldable/configurable today (like Emacs or the smalltalk environments), how would you design it?
+For a while I have been noodling with the idea of making an environment to play with ideas about this in, specifically I am thinking of PureScript and el" name="description"><link href="https://funprog.srid.ca/general/design-for-moldable-interactive-systems.html" rel="canonical"><meta property="og:title" content="Design for &quot;moldable&quot;/interactive systems - General"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="General"><meta property="og:article:modified_time" content="2020-09-29T04:30:45Z"><meta property="og:article:published_time" content="2020-09-28T23:04:19Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"><title>Design for &quot;moldable&quot;/interactive systems - General</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Design for &quot;moldable&quot;/interactive systems - General</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/general/" class="section">#General</a><i class="right angle icon divider"></i><div class="active section">Design for &quot;moldable&quot;/interactive systems</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211561729" name="211561729"><div>2020-09-28 23:04:19</div></a></div><div class="text"><p>If you were going to design a new system that was moldable/configurable today (like Emacs or the smalltalk environments), how would you design it?</p>
+<p>For a while I have been noodling with the idea of making an environment to play with ideas about this in, specifically I am thinking of PureScript and electron. So far what I think is basically build indepenedent "processes"/actors which can message one another and when you update the code in a specific process it restarts. But I don't know really if that would make sense. </p>
+<p>Any thoughts? How would you deal with needing to compile a snippet and patch the running environment etc? I'm not wedded to Purescript FWIW if there is a better tool available, but i do want to experiemnt with the idea with typed, pure FP.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb?d=identicon&amp;version=1"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211574282" name="211574282"><div>2020-09-29 02:25:52</div></a></div><div class="text"><p>Xmonad and Yi's use of dyre come to mind. I don't know if those fit, but exploring how they do or don't may be illuminating</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#211574441" name="211574441"><div>2020-09-29 02:29:41</div></a></div><div class="text"><p>my secret project = neuron w/ plugins.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211578392" name="211578392"><div>2020-09-29 03:51:36</div></a></div><div class="text"><p>secret project? wdym</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211579937" name="211579937"><div>2020-09-29 04:30:45</div></a></div><div class="text"><p>oh do you mean like what you've been noodling on mentally</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

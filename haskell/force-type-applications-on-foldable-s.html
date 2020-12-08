@@ -1,0 +1,200 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="does anyone know of a way to force users of a function f :: Foldable t =&gt; ... to always use TypeApplications? to specify t" name="description"><link href="https://funprog.srid.ca/haskell/force-type-applications-on-foldable-s.html" rel="canonical"><meta property="og:title" content="Force type applications on `Foldable`s - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-10-15T08:51:45Z"><meta property="og:article:published_time" content="2020-10-13T09:48:15Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"><title>Force type applications on `Foldable`s - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Force type applications on `Foldable`s - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Force type applications on `Foldable`s</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213132172" name="213132172"><div>2020-10-13 09:48:15</div></a></div><div class="text"><p>does anyone know of a way to force users of a function <code>f :: Foldable t =&gt; ...</code> to always use <code>TypeApplications</code>? to specify <code>t</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#213132405" name="213132405"><div>2020-10-13 09:50:34</div></a></div><div class="text"><p><a href="https://github.com/int-index/ghc-proposals/blob/visible-forall/proposals/0000-visible-forall.rst">https://github.com/int-index/ghc-proposals/blob/visible-forall/proposals/0000-visible-forall.rst</a></p>
+<p><span aria-label="question" class="emoji emoji-2753" role="img" title="question">:question:</span></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/int-index/ghc-proposals/blob/visible-forall/proposals/0000-visible-forall.rst" style="background-image: url(https://avatars0.githubusercontent.com/u/4061728?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/int-index/ghc-proposals/blob/visible-forall/proposals/0000-visible-forall.rst" title="int-index/ghc-proposals">int-index/ghc-proposals</a></div><div class="message_embed_description">Proposed compiler and language changes for GHC and GHC/Haskell - int-index/ghc-proposals</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213132587" name="213132587"><div>2020-10-13 09:52:44</div></a></div><div class="text"><p>omg vdq</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213132627" name="213132627"><div>2020-10-13 09:53:23</div></a></div><div class="text"><p>nooo ghc 8.10 <span aria-label="sob" class="emoji emoji-1f62d" role="img" title="sob">:sob:</span> i'm on 8.8</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213132634" name="213132634"><div>2020-10-13 09:53:31</div></a></div><div class="text"><p>thanks</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213132860" name="213132860"><div>2020-10-13 09:56:26</div></a></div><div class="text"><p>wait it doesn't work</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#213132870" name="213132870"><div>2020-10-13 09:56:35</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span> <a href="https://kcsongor.github.io/ambiguous-tags/#an-ambiguous-smart-constructor">https://kcsongor.github.io/ambiguous-tags/#an-ambiguous-smart-constructor</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://kcsongor.github.io/ambiguous-tags/#an-ambiguous-smart-constructor" style="background-image: url(https://kcsongor.github.io/images/default-thumb.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://kcsongor.github.io/ambiguous-tags/#an-ambiguous-smart-constructor" title="Tripping up type inference">Tripping up type inference</a></div><div class="message_embed_description">Improving code readability by enforcing type annotations.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213132900" name="213132900"><div>2020-10-13 09:57:22</div></a></div><div class="text"><p>ah thanks, I knew I had seen that in his blog, but I didn't remember where/didn't find it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213132945" name="213132945"><div>2020-10-13 09:57:58</div></a></div><div class="text"><div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">ln</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="nb">()</span>
+<span class="nf">ln</span> <span class="ow">=</span> <span class="n">undefined</span>
+<span class="c1">--</span>
+<span class="nf">vdq</span><span class="o">.</span><span class="n">hs</span><span class="kt">:</span><span class="mi">1</span><span class="kt">:</span><span class="mi">7</span><span class="kt">:</span> <span class="ne">error</span><span class="kt">:</span>
+    <span class="kt">Illegal</span> <span class="n">symbol</span> <span class="err">‘</span><span class="n">forall</span><span class="err">’</span> <span class="kr">in</span> <span class="kr">type</span>
+    <span class="kt">Perhaps</span> <span class="n">you</span> <span class="n">intended</span> <span class="n">to</span> <span class="n">use</span> <span class="kt">RankNTypes</span> <span class="n">or</span> <span class="n">a</span> <span class="n">similar</span> <span class="n">language</span>
+    <span class="n">extension</span> <span class="n">to</span> <span class="n">enable</span> <span class="n">explicit</span><span class="o">-</span><span class="n">forall</span> <span class="n">syntax</span><span class="kt">:</span> <span class="n">forall</span> <span class="o">&lt;</span><span class="n">tvs</span><span class="o">&gt;.</span> <span class="o">&lt;</span><span class="kr">type</span><span class="o">&gt;</span>
+  <span class="o">|</span>
+<span class="mi">1</span> <span class="o">|</span> <span class="n">ln</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="nb">()</span>
+  <span class="o">|</span>       <span class="o">^^^^^^</span>
+<span class="kt">Failed</span><span class="p">,</span> <span class="n">no</span> <span class="n">modules</span> <span class="n">loaded</span><span class="o">.</span>
+<span class="o">&gt;</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213132949" name="213132949"><div>2020-10-13 09:58:01</div></a></div><div class="text"><p>with ghc9</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#213133036" name="213133036"><div>2020-10-13 09:58:51</div></a></div><div class="text"><p>It only works with kinds for now</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#213133071" name="213133071"><div>2020-10-13 09:59:36</div></a></div><div class="text"><p>Namespacing problems coming from types written as expressions are not solved yet</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#213133078" name="213133078"><div>2020-10-13 09:59:43</div></a></div><div class="text"><p>or at least not decided upon</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213134339" name="213134339"><div>2020-10-13 10:13:25</div></a></div><div class="text"><p>cool, the hack works in my case, thanks!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213134804" name="213134804"><div>2020-10-13 10:18:51</div></a></div><div class="text"><blockquote>
+<p>does anyone know of a way to force users of a function <code>f :: Foldable t =&gt; ...</code> to always use <code>TypeApplications</code>? to specify <code>t</code></p>
+</blockquote>
+<p>Why would you want to do that? It’s up to the client of your function to decide whether to leave instance resolution to the compiler.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213134946" name="213134946"><div>2020-10-13 10:20:21</div></a></div><div class="text"><p>for readability and maintainability</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213134973" name="213134973"><div>2020-10-13 10:20:45</div></a></div><div class="text"><p><code>foldl1 expensiveOperation</code> is very different depending on if you have a <code>[]</code> or <code>Maybe</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213135030" name="213135030"><div>2020-10-13 10:21:41</div></a></div><div class="text"><p>there's also the camp of "I refactored a <code>[a]</code> into a <code>(b, [a])</code> and it compiled, and I now get <code>length xs == 1</code> always"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213135042" name="213135042"><div>2020-10-13 10:22:00</div></a></div><div class="text"><p>(instead of <code>length . snd</code> which is what they want)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213135322" name="213135322"><div>2020-10-13 10:25:58</div></a></div><div class="text"><p>it's a slightly more "thrifty" solution (not sure if right word) compared to manual specialisations for all the <code>t</code>s you want to use it for</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213379754" name="213379754"><div>2020-10-15 04:38:55</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/Force.20type.20applications.20on.20.60Foldable.60s/near/213134973">said</a>:</p>
+<blockquote>
+<p><code>foldl1 expensiveOperation</code> is very different depending on if you have a <code>[]</code> or <code>Maybe</code></p>
+</blockquote>
+<p>So highlight that point in the documentation of your library.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213379943" name="213379943"><div>2020-10-15 04:44:01</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/Force.20type.20applications.20on.20.60Foldable.60s/near/213135030">said</a>:</p>
+<blockquote>
+<p>there's also the camp of "I refactored a <code>[a]</code> into a <code>(b, [a])</code> and it compiled, and I now get <code>length xs == 1</code> always"</p>
+</blockquote>
+<p>Isn't this an issue orthogonal to the above? Whereas earlier it was about unexpected time complexity of <code>Foldable</code>, now this is a case of unexpected instances of <code>Foldable</code>that the compiler should have but didn't report as type errors?</p>
+<p>The latter isn't your fault.</p>
+<p>But if you think the client of your library needs reminding of perilous <code>Foldable</code> instances, they will appreciate the effort you took to add that reminder in your docs.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213384309" name="213384309"><div>2020-10-15 06:28:57</div></a></div><div class="text"><p>even if I highlight it my coworker(or me one week later!) can easily ignore/forget the docs - anything that isn't enforced but merely a suggestion will eventually be "gotten wrong"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213384437" name="213384437"><div>2020-10-15 06:31:12</div></a></div><div class="text"><p>it's not my fault that the instances are there, but by providing explicit applications I <em>can</em> do something to avoid unexpectedly using them - much like how it's usually better when possible to do explicit matches on all constructors vs a <code>_</code> match, so that when you add a new constructor to your datatype you get reminded by the compiler to write proper logic for it wherever you're using the datatype</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213384522" name="213384522"><div>2020-10-15 06:32:24</div></a></div><div class="text"><p>it takes "cognitive load" off me, and puts it on the compiler instead</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213384702" name="213384702"><div>2020-10-15 06:35:55</div></a></div><div class="text"><p>tbh if this was a public library I probably wouldn't do this! (or I would do it in some other way, e.g. not use Foldable) </p>
+<p>but it's something that we've agreed upon for some specific functions at my workplace <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span> sorry if this was "missing critical information"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213388966" name="213388966"><div>2020-10-15 07:35:43</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/Force.20type.20applications.20on.20.60Foldable.60s/near/213384309">said</a>:</p>
+<blockquote>
+<p>even if I highlight it my coworker(or me one week later!) can easily ignore/forget the docs - anything that isn't enforced but merely a suggestion will eventually be "gotten wrong"</p>
+</blockquote>
+<p>It sounds like you're dead set on this novel idea of "forcing type application," in which case I'll refrain from giving more suggestions on what else you could do. </p>
+<p>I will say, though, your work environment sounds quite dysfunctional if communicating critical information, whether via docs or otherwise, cuts so against the grain.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213390894" name="213390894"><div>2020-10-15 08:00:40</div></a></div><div class="text"><p>I don't see how communicating information helps the problem of "oops this happened by accident"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213390911" name="213390911"><div>2020-10-15 08:00:57</div></a></div><div class="text"><p>to me this is like saying we don't need a typechecker because you can simply write next to a function what kinds of arguments it takes and returns</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213391246" name="213391246"><div>2020-10-15 08:04:33</div></a></div><div class="text"><p>this is not about people <strong>not knowing</strong> stuff - it's about people <strong>forgetting</strong> stuff, and even more than that about <strong>minimising</strong> how much one has to actively think about while writing a program</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213391476" name="213391476"><div>2020-10-15 08:06:51</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/Force.20type.20applications.20on.20.60Foldable.60s/near/213384437">said</a>:</p>
+<blockquote>
+<p>it's not my fault that the instances are there, but by providing explicit applications I <em>can</em> do something to avoid unexpectedly using them - much like how it's usually better when possible to do explicit matches on all constructors vs a <code>_</code> match, so that when you add a new constructor to your datatype you get reminded by the compiler to write proper logic for it wherever you're using the datatype</p>
+</blockquote>
+<p>This is a false analogy. Yes, the compiler warns of missing pattern matches when new constructors get added.</p>
+<p>Ever notice what happens when a haskell beginner enters <code>not</code> at the repl? They get the Show instance not found error for the type of a function. </p>
+<p>An instance that should be there isn't, resulting in compiler dyspepsia just like when pattern matching that should be there isn't. That is the true analogy.</p>
+<p>Also you aren't "providing explicit applications." Here you are <strong>mandating</strong> explicit applications by <strong>revoking</strong> type class instance inference which essentially means getting rid of all of type classes entirely. Far from giving something, you actually want to take things away from the status quo.</p>
+<p>Are you alluding to a problem with OverlappingInstances? Or are you trying to mitigate the <code>Foldable</code> instance problem for tuples? The greater clarity you bring to your problem the easier it is to find a proper solution instead of one that brings a raft of new problems.</p>
+<p>It sounds like the latter: there is a Foldable instance for tuples that you'd somehow want to suppress. And so the solution you're reaching for is to force type applications.</p>
+<p>There are other solutions.</p>
+<p>This proposal about "forcing type applications" will absolutely require hacking on the ghc compiler to implement.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213392948" name="213392948"><div>2020-10-15 08:20:15</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code>This is a false analogy. Yes, the compiler warns of missing pattern matches when new constructors get added.
+</code></pre></div>
+
+
+<p>I don't see how it's any different from the pov of "this is something the compiler can handle instead of me".</p>
+<div class="codehilite"><pre><span></span><code>Also you aren&#39;t &quot;providing explicit applications.&quot; Here you are **mandating** explicit applications by **revoking** type class instance inference which essentially means getting rid of all of type classes entirely. Far from giving something, you actually want to take things away from the status quo.
+</code></pre></div>
+
+
+<p>Just because I'm doing so for one function, doesn't mean I am going to do so for every function in existence (I'm not writing <code>(+) @Int 5 3</code>!!). I would be writing Elm or Go instead, if I wanted to do that.</p>
+<div class="codehilite"><pre><span></span><code>Are you alluding to a problem with OverlappingInstances? Or are you trying to mitigate the `Foldable` instance problem for tuples? The greater clarity you bring to your problem the easier it is to find a proper solution instead of one that brings a raft of new problems.
+
+It sounds like the latter: there is a Foldable instance for tuples that you&#39;d somehow want to suppress. And so the solution you&#39;re reaching for is to force type applications.
+
+There are other solutions.
+</code></pre></div>
+
+
+<p>Would you argue <code>Maybe</code> also shouldn't have <code>Foldable</code>? Because in my original case the two concrete uses are of <code>Foldable []</code> and <code>Foldable Maybe</code> - and I was not originally trying to prevent anything - it was just clearer to write <code>@Maybe</code> or <code>@[]</code> rather than spend time trying to figure out what type is being used in a code review (this is coming from someone else btw, not me)</p>
+<div class="codehilite"><pre><span></span><code>This proposal about &quot;forcing type applications&quot; will absolutely require hacking on the ghc compiler to implement.
+</code></pre></div>
+
+
+<p>I am not proposing to change the compiler or anything like that - I was only asking if I can do this thing (and I even got a solution that is good enough for my use case).</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213393715" name="213393715"><div>2020-10-15 08:28:18</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/Force.20type.20applications.20on.20.60Foldable.60s/near/213392948">said</a>:</p>
+<blockquote>
+<p>Just because I'm doing so for one function, doesn't mean I am going to do so for every function in existence (I'm not writing <code>(+) @Int 5 3</code>!!). I would be writing Elm or Go instead, if I wanted to do that.</p>
+</blockquote>
+<p>Agreed. But you still need to be clear with your use of plain language. You are mandating type application for a small set of functions you’ve written. You aren't providing anything. You are demanding that the client of those functions write those type applications. It is the client who is doing the providing because you have insisted on it.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213395488" name="213395488"><div>2020-10-15 08:46:35</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/Force.20type.20applications.20on.20.60Foldable.60s/near/213392948">said</a>:</p>
+<blockquote>
+<p>Would you argue <code>Maybe</code> also shouldn't have <code>Foldable</code>? Because in my original case the two concrete uses are of <code>Foldable []</code> and <code>Foldable Maybe</code> - and I was not originally trying to prevent anything - it was just clearer to write <code>@Maybe</code> or <code>@[]</code> rather than spend time trying to figure out what type is being used in a code review (this is coming from someone else btw, not me)</p>
+</blockquote>
+<p>This is what I mean about problem clarity. </p>
+<p>Is this an issue of unclear instance resolution leading to poor code readability and maintainability? Because that's a problem of ad-hoc polymorphic code in general.</p>
+<p>Poor code maintainability isn't the same problem as erroneous instance resolution that risks a runtime error. The latter cuts deeper because it jeopardizes the assurance that well-typed programs don't go wrong.</p>
+<blockquote>
+<p>Would you argue <code>Maybe</code> also shouldn't have <code>Foldable</code>?</p>
+</blockquote>
+<p>Why "also"? I haven't argued anything that can be construed as a lead-in to this question. If you're referring to the Foldable instance for tuples, that was seeking clarification from you because that was the example you gave earlier. You seem to allude that it is a problem so I wrote what I did hypothesizing on that assumption.</p>
+<p>If you really want to know my opinion about Foldable instances, we can discuss in a different thread. I'm quite cognizant of the arguments pro and contra the FTP proposal.</p>
+<p>I participated in this conversation in the spirit of nudging it back to X--the problem--rather than letting it fester on a fixation on Y--the attempted solution because as the record demonstrates, we have a classic XY problem on our hands: <a href="http://xyproblem.info/">http://xyproblem.info/</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213395837" name="213395837"><div>2020-10-15 08:50:17</div></a></div><div class="text"><p>I started talking about this as different reasons I could think of why you would want to be explicit about what instances you're using (this is what I understood from <code>Why would you want to do that?</code>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213395985" name="213395985"><div>2020-10-15 08:51:45</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/Force.20type.20applications.20on.20.60Foldable.60s/near/213395837">said</a>:</p>
+<blockquote>
+<p>I started talking about this as different reasons I could think of why you would want to do this (this is what I understood from <code>Why would you want to do that?</code>)</p>
+</blockquote>
+<p>The "you" in the question was specific. It is a "you with whatever problem you are facing hic et nunc" rather than a hypothetical "you" in all possible worlds.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

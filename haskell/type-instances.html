@@ -1,0 +1,274 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Can type instances be overlappable?" name="description"><link href="https://funprog.srid.ca/haskell/type-instances.html" rel="canonical"><meta property="og:title" content="Type instances - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-03-04T03:38:29Z"><meta property="og:article:published_time" content="2020-03-04T00:38:27Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"><title>Type instances - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Type instances - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Type instances</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189650101" name="189650101"><div>2020-03-04 00:38:27</div></a></div><div class="text"><p>Can type instances be overlappable?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189650597" name="189650597"><div>2020-03-04 00:46:49</div></a></div><div class="text"><p>You can have overlap in a closed type family, or in an open type family as long as the compiler can see they're confluent. For example: <br>
+<a href="https://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Bool.html#t:-38--38-" target="_blank" title="https://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Bool.html#t:-38--38-">https://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Bool.html#t:-38--38-</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189650625" name="189650625"><div>2020-03-04 00:47:48</div></a></div><div class="text"><p>Is confluence something I can mark explicitly, or if the compiler isn't happy with my definition does that just mean I can't do it.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189650626" name="189650626"><div>2020-03-04 00:47:54</div></a></div><div class="text"><p>with open type families I mean</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189650677" name="189650677"><div>2020-03-04 00:48:39</div></a></div><div class="text"><p>There's no way to argue with the compiler about this</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189650701" name="189650701"><div>2020-03-04 00:49:22</div></a></div><div class="text"><p>I'm trying to do something like this:</p>
+<div class="codehilite"><pre><span></span>class Normalize (e :: *)
+  where
+  type Normalized (e :: *) :: *
+
+instance Normalize (Either x Void)
+  where
+  type Normalized (Either x Void) = Normalized x
+
+instance Normalize (Either Void x)
+  where
+  type Normalized (Either Void x) = Normalized x
+
+instance Normalize (x, ())
+  where
+  type Normalized (x, ()) = Normalized x
+
+instance Normalize ((), x)
+  where
+  type Normalized ((), x) = Normalized x
+
+instance Normalize x
+  where
+  type Normalized x = x
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189650715" name="189650715"><div>2020-03-04 00:49:41</div></a></div><div class="text"><p>i tried the Fcf approach as well, but I run into the same issue with that catch all case at the end</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189650778" name="189650778"><div>2020-03-04 00:50:10</div></a></div><div class="text"><p>maybe I need a closed type family here</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189650801" name="189650801"><div>2020-03-04 00:50:36</div></a></div><div class="text"><p>Yeah that doesn't work with open families.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189650828" name="189650828"><div>2020-03-04 00:51:07</div></a></div><div class="text"><p>the problem is if I do it as a closed type family and it's not injective it becomes very difficult to thread the term level evidence through</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189650951" name="189650951"><div>2020-03-04 00:53:42</div></a></div><div class="text"><p>like, this works:</p>
+<div class="codehilite"><pre><span></span>data EProd :: [*] -&gt; Exp *
+
+type instance Eval (EProd &#39;[]) = ()
+type instance Eval (EProd (x &#39;: xs)) = (x, Eval (EProd xs))
+
+data ESum :: [[*]] -&gt; Exp *
+
+type instance Eval (ESum &#39;[]) = Void
+type instance Eval (ESum (x &#39;: xs)) = Either (Eval (EProd x)) (Eval (ESum xs))
+
+type family Normalized x
+  where
+  Normalized (Either x Void) = Normalized x
+  Normalized (Either Void x) = Normalized x
+  Normalized (Either x y) = Either (Normalized x) (Normalized y)
+
+  Normalized ((), x) = Normalized x
+  Normalized (x, ()) = Normalized x
+  Normalized (x, y) = (Normalized x, Normalized y)
+
+  Normalized x = x
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189650959" name="189650959"><div>2020-03-04 00:53:54</div></a></div><div class="text"><p>yeah that's a common problem with closed type families</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189650995" name="189650995"><div>2020-03-04 00:54:03</div></a></div><div class="text"><p>but idk if there's any hope of me being able to teach it how to thread the term level stuff through</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189651031" name="189651031"><div>2020-03-04 00:55:22</div></a></div><div class="text"><p>do you think <code>Case</code> from <code>Fcf</code> can help me do this?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189651040" name="189651040"><div>2020-03-04 00:55:39</div></a></div><div class="text"><p>I couldn't figure out how to deal with the type parameters of <code>Either</code> or <code>(,)</code> when using it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189651047" name="189651047"><div>2020-03-04 00:55:57</div></a></div><div class="text"><p>That's why I prefer to use boolean equality tests instead of plain closed type families.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189651115" name="189651115"><div>2020-03-04 00:57:39</div></a></div><div class="text"><p>You'll have the same problem with <code>Case</code>... I should probably fix that.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189651173" name="189651173"><div>2020-03-04 00:58:21</div></a></div><div class="text"><p>Where do you get the boolean to test in the first place?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189651318" name="189651318"><div>2020-03-04 01:00:44</div></a></div><div class="text"><p>Use <code>Data.Type.Equality.==</code></p>
+<div class="codehilite"><pre><span></span><span class="kr">type</span> <span class="kr">family</span> <span class="kt">Normalized</span> <span class="n">x</span> <span class="kr">where</span>
+  <span class="kt">Normalized</span> <span class="p">(</span><span class="kt">Either</span> <span class="n">x</span> <span class="n">y</span><span class="p">)</span> <span class="ow">=</span> <span class="kt">If</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="kt">Void</span><span class="p">)</span> <span class="p">(</span><span class="kt">Normalized</span> <span class="n">y</span><span class="p">)</span> <span class="p">(</span><span class="kt">If</span> <span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="kt">Void</span><span class="p">)</span> <span class="p">(</span><span class="kt">Normalized</span> <span class="n">x</span><span class="p">)</span> <span class="p">(</span><span class="kt">Either</span> <span class="p">(</span><span class="kt">Normalized</span> <span class="n">x</span><span class="p">)</span> <span class="p">(</span><span class="kt">Normalized</span> <span class="n">y</span><span class="p">)))</span>
+  <span class="kt">Normalized</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">=</span> <span class="o">...</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189651335" name="189651335"><div>2020-03-04 01:01:07</div></a></div><div class="text"><p>I'm not sure what to do about the catchall though...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189651343" name="189651343"><div>2020-03-04 01:01:28</div></a></div><div class="text"><p>so the output of that is <code>Exp *</code>, right?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189651407" name="189651407"><div>2020-03-04 01:02:29</div></a></div><div class="text"><p>The snippet above does not use fcfs but you might want to use fcfs, I'm not sure.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189651500" name="189651500"><div>2020-03-04 01:04:33</div></a></div><div class="text"><p>Oh I forgot some nested calls to <code>Normalized</code>. This blows up exponentially if you don't use something like fcfs.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189651542" name="189651542"><div>2020-03-04 01:05:46</div></a></div><div class="text"><p>Do you even need overlap though? What if one of the fields is a pair? Why not mark fields with an <code>Identity</code> or something similar?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189651693" name="189651693"><div>2020-03-04 01:08:34</div></a></div><div class="text"><p>what I want ultimately is for <code>:kind! Magic [a]</code> to give me <code>() + (a, [a])</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189651718" name="189651718"><div>2020-03-04 01:09:16</div></a></div><div class="text"><p>it's fine for the stuff inside the fields to be a pair, I don't look past the structure of the outermost datatype</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189651725" name="189651725"><div>2020-03-04 01:09:36</div></a></div><div class="text"><p>I'm basically operating on the two level list thing SOP gives you</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189651777" name="189651777"><div>2020-03-04 01:10:34</div></a></div><div class="text"><p>it's easy to get to a point where you get something like <code>() + (a * [a] * ()) + Void</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189651780" name="189651780"><div>2020-03-04 01:10:47</div></a></div><div class="text"><p>I just want to get rid of those useless <code>()</code> and <code>Void</code> markers</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189651898" name="189651898"><div>2020-03-04 01:13:39</div></a></div><div class="text"><p>with fcf I can write this:</p>
+<div class="codehilite"><pre><span></span>data EProd :: [*] -&gt; Exp *
+
+type instance Eval (EProd &#39;[]) = ()
+type instance Eval (EProd (x &#39;: xs)) = (x, Eval (EProd xs))
+
+data ESum :: [[*]] -&gt; Exp *
+
+type instance Eval (ESum &#39;[]) = Void
+type instance Eval (ESum (x &#39;: xs)) = Either (Eval (EProd x)) (Eval (ESum xs))
+</pre></div>
+
+
+<p>and it's annoying but I can do the evidence threading for that, and the result is that I can do:</p>
+<div class="codehilite"><pre><span></span>λ&gt; :kind! Eval (ESum &#39;[ &#39;[], &#39;[Int] ])
+Eval (ESum &#39;[ &#39;[], &#39;[Int] ]) :: *
+= Either () (Either (Int, ()) Void)
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189651959" name="189651959"><div>2020-03-04 01:14:35</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225136">Asad Saeeduddin</span> <a href="#narrow/stream/201385-Haskell/topic/Type.20instances/near/189651718" title="#narrow/stream/201385-Haskell/topic/Type.20instances/near/189651718">said</a>:</p>
+<blockquote>
+<p>it's fine for the stuff inside the fields to be a pair, I don't look past the structure of the outermost datatype</p>
+</blockquote>
+<p>How can that work? If you  have <code>a = () * ()</code>, then <code>Normalize (() + ((() * ()) * [() * ()] * ())</code> will just destroy everything.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189652025" name="189652025"><div>2020-03-04 01:15:48</div></a></div><div class="text"><p>when I say "I don't look past the structure of the outermost datatype", I mean I don't look at the <code>(,)</code> in <code>data MyFoo = Foo (x, y) | Bar Int</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189652097" name="189652097"><div>2020-03-04 01:16:57</div></a></div><div class="text"><p>The definition of <code>Normalize</code> you gave seems like it's looking at it.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189652098" name="189652098"><div>2020-03-04 01:17:02</div></a></div><div class="text"><p>i'm starting out from a representation like <code>'[ '[(x, y)], '[Int] ]</code>. I fold the inner lists with <code>(,)</code> and <code>()</code>, and the outer list with <code>Either</code> and <code>Void</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189652118" name="189652118"><div>2020-03-04 01:17:47</div></a></div><div class="text"><p>hmm. idk exactly, maybe it is</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189652182" name="189652182"><div>2020-03-04 01:18:41</div></a></div><div class="text"><p>And I disagree those markers are useless, they make the structure regular so you don't have to deal with weird corner cases</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189652187" name="189652187"><div>2020-03-04 01:18:47</div></a></div><div class="text"><p>by my lights what I'd end up with is <code>((x, y), ()) + (Int, ()) + Void</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189652194" name="189652194"><div>2020-03-04 01:18:56</div></a></div><div class="text"><p>As evidenced by the trouble you're going through trying to get rid of them.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189652285" name="189652285"><div>2020-03-04 01:20:44</div></a></div><div class="text"><p>The markers make it too awkward to use this representation for anything useful</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189652370" name="189652370"><div>2020-03-04 01:22:05</div></a></div><div class="text"><p>what I want <code>Magic (((x, y), ()) + (Int, ()) + Void)</code> to give me is <code>(x, y) + Int</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189652416" name="189652416"><div>2020-03-04 01:23:22</div></a></div><div class="text"><p>so that the user, who will more naturally arrive at a <code>(x, y) + Int</code> than a <code>((x, y), ()) + (Int, ()) + Void</code>, will be able to convert their stuff to a <code>data MyFoo = Foo (x, y) | Bar Int</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189652424" name="189652424"><div>2020-03-04 01:23:35</div></a></div><div class="text"><p>and vice versa</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189652725" name="189652725"><div>2020-03-04 01:30:36</div></a></div><div class="text"><p>I think what I probably want is this:</p>
+<div class="codehilite"><pre><span></span>type family TNormalize x
+  where
+  TNormalize (x, ()) = x
+  TNormalize (x, y) = (x, TNormalize y)
+  TNormalize x = x
+
+type family ENormalize x
+  where
+  ENormalize (Either x Void) = TNormalize x
+  ENormalize (Either x y) = Either (TNormalize x) (ENormalize y)
+  ENormalize x = TNormalize x
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189652769" name="189652769"><div>2020-03-04 01:31:38</div></a></div><div class="text"><p>that gives:</p>
+<div class="codehilite"><pre><span></span>λ&gt; :kind! ENormalize (Eval (ESum &#39;[ &#39;[(String, Char)], &#39;[Int] ]))
+ENormalize (Eval (ESum &#39;[ &#39;[(String, Char)], &#39;[Int] ])) :: *
+= Either (String, Char) Int
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189653107" name="189653107"><div>2020-03-04 01:39:36</div></a></div><div class="text"><p>I wonder the corresponding term level recursion can be handled using something like <span class="user-mention" data-user-id="225127">@TheMatten</span>'s FCI library</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189653111" name="189653111"><div>2020-03-04 01:39:51</div></a></div><div class="text"><p>in the sense that I can have literal products and coproducts of instances</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189653162" name="189653162"><div>2020-03-04 01:40:31</div></a></div><div class="text"><p>if I can somehow reflect type level equality tests to the term level, I can use that to choose between instances</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189657478" name="189657478"><div>2020-03-04 03:21:04</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251302">@Lysxia</span> Do you think I can use <code>Data.Type.Equality</code> to automatically fill in the boolean in here and resolve the ambiguity:</p>
+<div class="codehilite"><pre><span></span>class TNormalize (b :: Bool) (p :: *) (n :: *)
+  where
+  tnormalize :: Proxy b -&gt; Iso&#39; p n
+
+instance TNormalize &#39;True (x, ()) x
+  where
+  tnormalize _ = iso fst (, ())
+
+instance
+  TNormalize b y y&#39; =&gt;
+  TNormalize &#39;False (x, y) (x, y&#39;)
+  where
+  tnormalize _ = iso (second $ fwd $ tnormalize $ Proxy @b) (second $ bwd $ tnormalize $ Proxy @b)
+
+class ENormalize (b :: Bool) (e :: *) (n :: *)
+  where
+  enormalize :: Proxy b -&gt; Iso&#39; e n
+
+instance
+  TNormalize b x x&#39; =&gt;
+  ENormalize &#39;False (x + Void) x&#39;
+  where
+  enormalize _ = iso (either (fwd (tnormalize $ Proxy @b)) absurd) (Left . bwd (tnormalize $ Proxy @b))
+
+instance
+  (TNormalize a x x&#39;, ENormalize b y y&#39;) =&gt;
+  ENormalize &#39;True (x + y) (x&#39; + y&#39;)
+  where
+  enormalize _ = iso
+    (bimap (fwd $ tnormalize $ Proxy @a) (fwd $ enormalize $ Proxy @b))
+    (bimap (bwd $ tnormalize $ Proxy @a) (bwd $ enormalize $ Proxy @b))
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189657486" name="189657486"><div>2020-03-04 03:21:21</div></a></div><div class="text"><p>Right now this only works with <code>AllowAmbiguousTypes</code> turned on</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189657712" name="189657712"><div>2020-03-04 03:26:07</div></a></div><div class="text"><div class="codehilite"><pre><span></span><span class="kr">class</span> <span class="p">(</span><span class="kt">IsRightUnit</span> <span class="n">p</span> <span class="o">~</span> <span class="n">b</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">TNormalize</span> <span class="n">b</span> <span class="n">p</span> <span class="n">n</span>
+  <span class="kr">where</span> <span class="o">...</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189657736" name="189657736"><div>2020-03-04 03:27:06</div></a></div><div class="text"><p>then the problem moves to how to instantiate <code>IsRightUnit</code>, no?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189657738" name="189657738"><div>2020-03-04 03:27:17</div></a></div><div class="text"><p>or is that a non-issue?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189657811" name="189657811"><div>2020-03-04 03:29:24</div></a></div><div class="text"><p>I tried this:</p>
+<div class="codehilite"><pre><span></span>type family IsRightUnit p :: Bool
+  where
+  IsRightUnit (x, ()) = &#39;True
+  IsRightUnit (x, y) = &#39;False
+
+class
+  (IsRightUnit p ~ b) =&gt;
+  TNormalize (b :: Bool) (p :: *) (n :: *)
+  where
+  tnormalize :: Proxy b -&gt; Iso&#39; p n
+
+instance TNormalize &#39;True (x, ()) x
+  where
+  tnormalize _ = iso fst (, ())
+
+instance
+  TNormalize b y y&#39; =&gt;
+  TNormalize &#39;False (x, y) (x, y&#39;)
+  where
+  tnormalize _ = iso (second $ fwd $ tnormalize $ Proxy @b) (second $ bwd $ tnormalize $ Proxy @b)
+</pre></div>
+
+
+<p>but it doesn't like the last instance anymore:</p>
+<div class="codehilite"><pre><span></span>[typecheck] [E] /mnt/data/depot/git/haskell/experiments/co-optics/src/SOP/Sums2.hs:80:3: error:
+    • Could not deduce: IsRightUnit (x, y) ~ &#39;False
+        arising from the superclasses of an instance declaration
+      from the context: TNormalize b y y&#39;
+        bound by the instance declaration
+        at /mnt/data/depot/git/haskell/experiments/co-optics/src/SOP/Sums2.hs:(80,3)-(81,34)
+    • In the instance declaration for
+        ‘TNormalize &#39;False (x, y) (x, y&#39;)’
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189657819" name="189657819"><div>2020-03-04 03:29:52</div></a></div><div class="text"><p>Yes you need to add it to your instance constraints</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189657886" name="189657886"><div>2020-03-04 03:30:42</div></a></div><div class="text"><p>ah yes, I was being stupid</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189657998" name="189657998"><div>2020-03-04 03:34:01</div></a></div><div class="text"><p>great. so do you know how to actually view what a functional dependency determines a parameter to be?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#189658038" name="189658038"><div>2020-03-04 03:34:09</div></a></div><div class="text"><p>the way <code>:kind!</code> does</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189658113" name="189658113"><div>2020-03-04 03:37:02</div></a></div><div class="text"><p>No idea</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189658128" name="189658128"><div>2020-03-04 03:37:33</div></a></div><div class="text"><p>other than hacks to just get type inference to run...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#189658175" name="189658175"><div>2020-03-04 03:38:29</div></a></div><div class="text"><div class="codehilite"><pre><span></span><span class="nf">evalFunDep</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">x</span> <span class="n">y</span><span class="o">.</span> <span class="kt">ClassWithFunDep</span> <span class="n">x</span> <span class="n">y</span> <span class="ow">=&gt;</span> <span class="kt">Proxy</span> <span class="n">y</span>
+<span class="nf">evalFunDep</span> <span class="ow">=</span> <span class="kt">Proxy</span>
+
+<span class="nf">test</span> <span class="ow">=</span> <span class="n">evalFunDep</span> <span class="o">@</span><span class="kt">MyX</span>
+
+<span class="c1">-- In ghci:</span>
+<span class="c1">-- :t test</span>
+</pre></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

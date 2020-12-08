@@ -1,0 +1,126 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Is there some nice way of composing functions, like the dot operator in Haskell, so I can avoid things like
+modifier = drv: foo (bar (baz drv))
+" name="description"><link href="https://funprog.srid.ca/nix/nix-and-composition.html" rel="canonical"><meta property="og:title" content="Nix and composition - Nix"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Nix"><meta property="og:article:modified_time" content="2019-11-26T22:52:35Z"><meta property="og:article:published_time" content="2019-11-26T22:17:12Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"><title>Nix and composition - Nix</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Nix and composition - Nix</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/nix/" class="section">#Nix</a><i class="right angle icon divider"></i><div class="active section">Nix and composition</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#181969533" name="181969533"><div>2019-11-26 22:17:12</div></a></div><div class="text"><p>Is there some nice way of composing functions, like the dot operator in Haskell, so I can avoid things like</p>
+<div class="codehilite"><pre><span></span>modifier = drv: foo (bar (baz drv))
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#181970188" name="181970188"><div>2019-11-26 22:25:47</div></a></div><div class="text"><p>There's <code>pipe</code> in <code>lib/trivial.nix</code>, though I've never actually used it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#181970262" name="181970262"><div>2019-11-26 22:26:28</div></a></div><div class="text"><p><a href="https://github.com/NixOS/nixpkgs/blob/8252861507ef85b45f739c63f27d4e9a80b31b31/lib/trivial.nix#L32" target="_blank" title="https://github.com/NixOS/nixpkgs/blob/8252861507ef85b45f739c63f27d4e9a80b31b31/lib/trivial.nix#L32">https://github.com/NixOS/nixpkgs/blob/8252861507ef85b45f739c63f27d4e9a80b31b31/lib/trivial.nix#L32</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/NixOS/nixpkgs/blob/8252861507ef85b45f739c63f27d4e9a80b31b31/lib/trivial.nix#L32" style="background-image: url(https://repository-images.githubusercontent.com/4542716/db161f80-7b49-11e9-9814-cf4d7cae408c)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/NixOS/nixpkgs/blob/8252861507ef85b45f739c63f27d4e9a80b31b31/lib/trivial.nix#L32" target="_blank" title="NixOS/nixpkgs">NixOS/nixpkgs</a></div><div class="message_embed_description">Nix Packages collection. Contribute to NixOS/nixpkgs development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#181970546" name="181970546"><div>2019-11-26 22:30:40</div></a></div><div class="text"><p>You could also just inline something like</p>
+<div class="codehilite"><pre><span></span><span class="ss">compose =</span> f<span class="p">:</span> g<span class="p">:</span> x<span class="p">:</span> f <span class="p">(</span>g x<span class="p">);</span>
+<span class="ss">composeAll =</span> <span class="nb">builtins</span><span class="o">.</span>foldl&#39; compose id<span class="p">;</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#181971282" name="181971282"><div>2019-11-26 22:40:35</div></a></div><div class="text"><p>I can't even figure out how to pull in <code>trivial.pipe</code>..</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#181971826" name="181971826"><div>2019-11-26 22:48:50</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251593">@Magnus Therning</span> Assuming you have <code>pkgs</code> or something in scope, I think you'd say <code>pkgs.lib.pipe</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#181971976" name="181971976"><div>2019-11-26 22:50:43</div></a></div><div class="text"><p>It's pretty new. You may not have it in your nixpkgs: <a href="https://github.com/NixOS/nixpkgs/commit/8252861507ef85b45f739c63f27d4e9a80b31b31" target="_blank" title="https://github.com/NixOS/nixpkgs/commit/8252861507ef85b45f739c63f27d4e9a80b31b31">https://github.com/NixOS/nixpkgs/commit/8252861507ef85b45f739c63f27d4e9a80b31b31</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/NixOS/nixpkgs/commit/8252861507ef85b45f739c63f27d4e9a80b31b31" style="background-image: url(https://avatars2.githubusercontent.com/u/3153638?s=200&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/NixOS/nixpkgs/commit/8252861507ef85b45f739c63f27d4e9a80b31b31" target="_blank" title="lib/trivial: add `pipe` function · NixOS/nixpkgs@8252861">lib/trivial: add `pipe` function · NixOS/nixpkgs@8252861</a></div><div class="message_embed_description">`pipe` is a useful operator for creating pipelines of functions.
+
+It works around the usual problem of e.g. string operations becoming
+deeply nested functions.
+
+In principle, there are four differe...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#181972114" name="181972114"><div>2019-11-26 22:52:35</div></a></div><div class="text"><p>I managed to find it under <code>pkgs.lib.trivial</code>.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

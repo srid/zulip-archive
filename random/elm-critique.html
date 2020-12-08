@@ -1,0 +1,115 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Scary stuff: https://lukeplant.me.uk/blog/posts/why-im-leaving-elm/" name="description"><link href="https://funprog.srid.ca/random/elm-critique.html" rel="canonical"><meta property="og:title" content="Elm critique - Random"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Random"><meta property="og:article:modified_time" content="2020-04-10T13:52:03Z"><meta property="og:article:published_time" content="2020-04-09T18:57:31Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>Elm critique - Random</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Elm critique - Random</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/random/" class="section">#Random</a><i class="right angle icon divider"></i><div class="active section">Elm critique</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#193494199" name="193494199"><div>2020-04-09 18:57:31</div></a></div><div class="text"><p>Scary stuff: <a href="https://lukeplant.me.uk/blog/posts/why-im-leaving-elm/" title="https://lukeplant.me.uk/blog/posts/why-im-leaving-elm/">https://lukeplant.me.uk/blog/posts/why-im-leaving-elm/</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#193496841" name="193496841"><div>2020-04-09 19:16:57</div></a></div><div class="text"><p>cf. <a href="https://www.srid.ca/1930301.html#where-civility-falls-short" title="https://www.srid.ca/1930301.html#where-civility-falls-short">https://www.srid.ca/1930301.html#where-civility-falls-short</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://www.srid.ca/1930301.html#where-civility-falls-short" style="background-image: url(https://www.srid.ca/static/parc-gerard-marchand.jpg)"></a><div class="data-container"><div class="message_embed_title"><a href="https://www.srid.ca/1930301.html#where-civility-falls-short" title="Handling conflicts">Handling conflicts</a></div><div class="message_embed_description">Conflicts---we are specifically referring to the affective experience of the same---may be triggered by either party. In my case, owning to my habitude of synoptic communication (result of childhood habit of reticence) the typical sequence of progression of conflict is as follows:</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#193503210" name="193503210"><div>2020-04-09 20:11:57</div></a></div><div class="text"><p>Whenever I see this "false kindness", it makes me feel uneasy - it's hard for me to carry discussion with someone who uses overly sensitive tone - I feel like they're not being honest with me and don't "believe" in me being able to talk in a polite, respectful way in case some disagreement arises. I'm trying to be kind myself to other people, though sometimes I may not choose the right words, but if disagreement arises, I would prefer (polite) honesty over fluffy responses about e.g. "difficulty of finding the right decision" or "complexity of the area". I believe that many disagreements come simply from misunderstanding and could be solved by further discussion and explanation.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#193513804" name="193513804"><div>2020-04-09 21:50:09</div></a></div><div class="text"><p>As an aside, "false kindness" reminded me of <a href="https://en.wikipedia.org/wiki/Effective_altruism" title="https://en.wikipedia.org/wiki/Effective_altruism">https://en.wikipedia.org/wiki/Effective_altruism</a> (disclaimer: I don't know much about it other than the synopsis, which stands in stark contrast to empathy/niceness/etc. as it is normally practiced these days).</p>
+<div class="message_embed"><a class="message_embed_image" href="https://en.wikipedia.org/wiki/Effective_altruism" style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/London_Thinks_-_Prof_Peter_Singer_-_What%27s_the_most_good_you_can_do.webm/1200px--London_Thinks_-_Prof_Peter_Singer_-_What%27s_the_most_good_you_can_do.webm.jpg)"></a><div class="data-container"><div class="message_embed_title"><a href="https://en.wikipedia.org/wiki/Effective_altruism" title="Effective altruism - Wikipedia">Effective altruism - Wikipedia</a></div><div class="message_embed_description">Effective altruism is a philosophy and social movement that advocates using evidence and reasoning to determine the most effective ways to benefit others.[1]:2[2]:4–7 Altruism refers to improving the lives of others—as opposed to egoism, which emphasizes only self-interest.[2]:4–5[3]:12 Effectiveness refers to doing the most good with whatever resources are available—as opposed to only doing some amount of good—as well as determining what is the most good by using evidence and reasoning—as opposed to only doing what feels good or appears intuitively appealing.[2]:6–7[3]:12
+</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#193540940" name="193540940"><div>2020-04-10 06:09:52</div></a></div><div class="text"><p>I guess they may be sort of orthagonal - "false kindness" or "polite honesty" could both be backed by good feeling instead of rational search for most effective solution</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#193569418" name="193569418"><div>2020-04-10 13:38:52</div></a></div><div class="text"><p>Oh yes. I didn't mean them to be the same, quite the opposite. "false kindness" falls under the same bucket as what is known as "feeling caring" in actualism, as distinct from "actual caring" which effective altruism might come close to (albeit in a laborious manner; because in an actual freedom this is all effortless, and becomes second nature): <a href="http://www.actualfreedom.com.au/sundry/frequentquestions/FAQ15.htm" title="http://www.actualfreedom.com.au/sundry/frequentquestions/FAQ15.htm">http://www.actualfreedom.com.au/sundry/frequentquestions/FAQ15.htm</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#193570733" name="193570733"><div>2020-04-10 13:52:03</div></a></div><div class="text"><p>Tangential to this, I've started collecting these discussions in a zettel: <a href="https://haskell.srid.ca/2012701.html" title="https://haskell.srid.ca/2012701.html">https://haskell.srid.ca/2012701.html</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

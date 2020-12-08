@@ -1,0 +1,324 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Do we say a function is monadic? Or do we say the context in which a function is _used_ was monadic?
+The distinction seems fuzzy so let me give an example in clojure (because its the language i know)
+;; i define my best interpretation of a monad. Conceptually a function that takes any number of func" name="description"><link href="https://funprog.srid.ca/general/monads-again-ikr.html" rel="canonical"><meta property="og:title" content="monads (again? ikr) - General"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="General"><meta property="og:article:modified_time" content="2020-12-03T08:29:55Z"><meta property="og:article:published_time" content="2020-11-23T14:03:25Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"><title>monads (again? ikr) - General</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">monads (again? ikr) - General</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/general/" class="section">#General</a><i class="right angle icon divider"></i><div class="active section">monads (again? ikr)</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#217630980" name="217630980"><div>2020-11-23 14:03:25</div></a></div><div class="text"><p>Do we say a function is monadic? Or do we say the context in which a function is _used_ was monadic?</p>
+<p>The distinction seems fuzzy so let me give an example in clojure (because its the language i know)</p>
+<div class="codehilite" data-code-language="Clojure"><pre><span></span><code><span class="c1">;; i define my best interpretation of a monad. Conceptually a function that takes any number of functions and returns a function.</span>
+<span class="p">(</span><span class="kd">defn </span><span class="nv">monad</span>
+  <span class="p">[</span><span class="o">&amp;</span> <span class="nv">fns</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">apply comp </span><span class="p">(</span><span class="nb">reverse </span><span class="nv">fns</span><span class="p">)))</span>
+
+<span class="c1">;; would we say this is monadic?</span>
+<span class="p">((</span><span class="nf">monad</span> <span class="nb">inc </span><span class="nv">dec</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c1">;; =&gt; 0</span>
+
+<span class="c1">;; would we say this isn't monadic?</span>
+<span class="p">((</span><span class="nf">monad</span> <span class="nb">inc </span><span class="nv">split-with</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c1">;; error</span>
+</code></pre></div>
+<p>If the answer is yes then no, then the context matters. If the answer is universally no, then the context doesn't, which implies there cant be an error. I believe the later is the case.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#217633196" name="217633196"><div>2020-11-23 14:24:09</div></a></div><div class="text"><p>Definition of monads isn't really about composition - it's about what you do "after" you compose things<br>
+If we were to specialize formal definition of monad to what we're doing with them, it would look something like this in Haskell:</p>
+<div class="codehilite"><pre><span></span><code>-- It&#39;s not about typeclasses, it&#39;s about tuple of operations that satisfy some laws, so let&#39;s define it as simple datatype instead
+data Monad m = Monad (a -&gt; m a) (m (m a) -&gt; a)
+-- This is really equivalent to `Monad` typeclass, it&#39;s just defined more &quot;directly&quot; and doesn&#39;t require single implementation per `m`
+</code></pre></div>
+<p>that is, <code>Monad</code> is some specific <code>m</code>, together with function that lifts pure value into context <code>a -&gt; m a</code> and function that can "append contexts" <code>m (m a) -&gt; m a</code></p>
+<p>You could make such tuple in any language that doesn't have problem with higher-kinded types (<code>m</code> takes type and returns type, it isn't inhabitated by itself), but it's hard to fit your definition <code>monad</code> into this specification - written in Haskell:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">monad</span> <span class="ow">::</span> <span class="p">[</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span>
+<span class="nf">monad</span> <span class="ow">=</span> <span class="n">foldr</span> <span class="p">(</span><span class="o">.</span><span class="p">)</span> <span class="n">id</span>
+</code></pre></div>
+<p>we could draw some connections to <code>State</code>:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">newtype</span> <span class="kt">State</span> <span class="n">s</span> <span class="n">a</span> <span class="ow">=</span> <span class="kt">State</span> <span class="p">(</span><span class="n">s</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+</code></pre></div>
+<p>where we can define</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">execState</span> <span class="ow">::</span> <span class="kt">State</span> <span class="n">s</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">s</span> <span class="ow">-&gt;</span> <span class="n">s</span>
+<span class="nf">execState</span> <span class="p">(</span><span class="kt">State</span> <span class="n">f</span><span class="p">)</span> <span class="n">s</span> <span class="ow">=</span> <span class="n">snd</span> <span class="p">(</span><span class="n">f</span> <span class="n">s</span><span class="p">)</span>
+</code></pre></div>
+<p>and thus your <code>monad</code> looks like composition of <code>State s a</code> actions where we ignore <code>a</code>s - it's just possible operation on one specific instance (<code>Monad (State s)</code>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#217634472" name="217634472"><div>2020-11-23 14:35:38</div></a></div><div class="text"><p>Back to your original question, I would say function is monadic if it's return type is <code>m a</code> for some <code>m</code>, <code>a</code> where exists <code>Monad m</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#217634956" name="217634956"><div>2020-11-23 14:39:38</div></a></div><div class="text"><p>Such function <code>f :: x -&gt; m a</code> can be composed with others (e.g <code>g :: a -&gt; m b</code>) using <code>join :: m (m a) -&gt; m a</code> by doing <code>join (fmap (fmap g) f)</code> (I forgot to mention that <code>Monad m</code> requires <code>Functor m</code> too)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#217635134" name="217635134"><div>2020-11-23 14:40:52</div></a></div><div class="text"><p>And that <code>(&gt;&gt;=)</code> thing is just more direct definition of that pattern which is equivalent in power to <code>join</code> + <code>fmap</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217637494" name="217637494"><div>2020-11-23 14:59:38</div></a></div><div class="text"><p>I am extemely confused by your explanation <span class="user-mention" data-user-id="225127">@TheMatten</span> lol</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#217638165" name="217638165"><div>2020-11-23 15:04:08</div></a></div><div class="text"><p>Thanks for responding,</p>
+<p>So i take it the answer was actually (at best) Yes followed by No based off the understanding that the context defines the meaning. In the later example, the context, which is just the set of integers, doesn't allow for an operation specific to strings (which additionally is over two arguments, not 1). </p>
+<p>The mind F*$# being that haskell forces that context be established at compile-time and clojure allows for it to trickle to run time. This isn't the burden people assume due to the repl... but that's not the topic at hand.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eec8691200732875d9d0a619ea1be7ca?d=identicon&amp;version=1"></a><div class="content"><a class="author">Albert ten Napel</a><div class="metadata"><a href="#217638250" name="217638250"><div>2020-11-23 15:04:51</div></a></div><div class="text"><p>How I see it: a monad for <code>M</code> is a way to compose functions of type <code>A -&gt; M&lt;B&gt;</code> (for some <code>A</code> and <code>B</code>).</p>
+<p>If you have a partial function <code>A -&gt; Option&lt;B&gt;</code> then you cannot compose it with another partial function <code>B -&gt; Option&lt;C&gt;</code> using normal function composition. Luckily because you can define a monad for <code>Option</code> we can use that to compose them anyway (as TheMatten showed).</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#217638442" name="217638442"><div>2020-11-23 15:06:17</div></a></div><div class="text"><p><span class="user-mention" data-user-id="345009">@Albert ten Napel</span>  and if your composition failed (you used the wrong types) then you didn't make a monad. Similarly, in the second example, i get an exception, and so that wasn't a monad. While understanding, not every working program is an example of a monad.</p>
+<p>;;monads<br>
+((comp dec inc) 0)<br>
+;; =&gt; 0</p>
+<p>((comp str inc) 0)<br>
+;; =&gt; "1"</p>
+<p>((comp conj inc) 0)<br>
+;; =&gt; 1</p>
+<p>((comp * inc) 0)<br>
+;; =&gt; 1</p>
+<p>((comp map inc) 0)<br>
+;; =&gt; #function[clojure.core/map/fn--5862]</p>
+<p>;; man its really hard to not write a monad i clojure...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eec8691200732875d9d0a619ea1be7ca?d=identicon&amp;version=1"></a><div class="content"><a class="author">Albert ten Napel</a><div class="metadata"><a href="#217639423" name="217639423"><div>2020-11-23 15:13:36</div></a></div><div class="text"><p>I would say that a type constructor <code>M</code> is monadic if you can define a monad for it, meaning that you can define an identity function <code>A -&gt; M&lt;A&gt;</code> (for any <code>A</code>) and you can define a composition function <code>(A -&gt; M&lt;B&gt;, B -&gt; M&lt;C&gt;) -&gt; (A -&gt; M&lt;C&gt;)</code> (for any <code>A</code>, <code>B</code>, <code>C</code>). So as TheMatten showed a monad structure is a pair of two functions (identity and composition), but TheMatten used a different style of composition (which is equivalent). Given that definition I don't see how your <code>monad</code> definition actually implements a monad structure for some <code>M</code>.</p>
+<p>Your <code>monad</code> function composes 0 or more functions and that may fail because Clojure is not statically typed (I think). I would not classify the result of your examples as being either a "monad" or not a "monad", but I would just say your examples fail or do not fail based on the specific functions your are trying to compose.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#217640436" name="217640436"><div>2020-11-23 15:20:57</div></a></div><div class="text"><p><span class="user-mention" data-user-id="345009">@Albert ten Napel</span> </p>
+<p>The category of integers and addition has an established identify function. (+ 0). My example stays within the same set (integers) and potentially doesn't have the wrapped context that gives the monad its meaning. Maybe this is closer:</p>
+<div class="codehilite" data-code-language="Clojure"><pre><span></span><code><span class="p">(</span><span class="nb">into </span><span class="p">[]</span>
+  <span class="p">(</span><span class="nf">comp</span>
+    <span class="p">(</span><span class="nb">map </span><span class="nv">inc</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">map </span><span class="nv">dec</span><span class="p">))</span>
+  <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="c1">;; =&gt; [0]</span>
+</code></pre></div>
+<p>or if its necessary to change types (e.g B-&gt;C) then...</p>
+<div class="codehilite" data-code-language="Clojure"><pre><span></span><code><span class="p">(</span><span class="nb">into </span><span class="p">[]</span>
+  <span class="p">(</span><span class="nf">comp</span>
+    <span class="p">(</span><span class="nb">map </span><span class="nv">inc</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">map </span><span class="nv">str</span><span class="p">))</span>
+  <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="c1">;; =&gt; ["1"]</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#217641226" name="217641226"><div>2020-11-23 15:26:56</div></a></div><div class="text"><blockquote>
+<p>I would just say your examples fail or do not fail based on the specific functions your are trying to compose.</p>
+</blockquote>
+<p>That't true. But that's also how i feel were defining a monad. If you give me:</p>
+<p>(A -&gt; M&lt;B&gt;, B -&gt; M&lt;D&gt;) -&gt; (A -&gt; M&lt;C&gt;)</p>
+<p>The compiler will reject it because of the specific Types you picked. But you wouldn't claim haskell couldn't express a monad, just that you had failed to do so in this case.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eec8691200732875d9d0a619ea1be7ca?d=identicon&amp;version=1"></a><div class="content"><a class="author">Albert ten Napel</a><div class="metadata"><a href="#217641728" name="217641728"><div>2020-11-23 15:30:24</div></a></div><div class="text"><p>with <code>(A -&gt; M&lt;B&gt;, B -&gt; M&lt;C&gt;) -&gt; (A -&gt; M&lt;C&gt;)</code> I meant that I do not pick specific <code>A</code>, <code>B</code> or <code>C</code>s. In Haskell (+extensions) I would write <br>
+<code>forall a b c. (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; (a -&gt; m c)</code>, meaning that it's up to you to pick whatever <code>a</code>, <code>b</code>, <code>c</code> you want. I think we may be misunderstanding each other <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#217642683" name="217642683"><div>2020-11-23 15:37:03</div></a></div><div class="text"><p>I feel i understand what your saying, I think the language is inverted between the communities so its hard to communicate because you have to establish meaning through smaller/broader categories than are precisely defined in either place. </p>
+<p>Here is an example question, does a monad exist at "run time"?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217642969" name="217642969"><div>2020-11-23 15:39:01</div></a></div><div class="text"><p>Yes and no, it depends what you mean</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217643015" name="217643015"><div>2020-11-23 15:39:17</div></a></div><div class="text"><p>(will explain)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217650844" name="217650844"><div>2020-11-23 16:33:34</div></a></div><div class="text"><p>Background: the notion of a monad is extremely abstract. In order to apply this idea to programming, we have to make certain choices in order how to apply these ideas.</p>
+<p>For example, an integer is an abstract idea. We might talk about integers in terms of programming, but really these are not the same thing. For example, there are infinite integers. But as no computer has infinite memory, any integer type within a computer may not actually "reflect" the reality of integers. And I might say "there are infinite integers", but in such a statement I am assuming it is understood that I am not necessarily talking about this specific implementation choices in programs.</p>
+<p>Why do I bring this up? Well, part of what makes monads confusing is the difference between:</p>
+<ul>
+<li>abstract, category-theoretic idea of a monad (do not worry about this right now)</li>
+<li>how monads are implemented in Haskell.</li>
+<li>how monads may be implemented in <em>other</em> languages besides Haskell. </li>
+<li>why these can be useful at times (for example, handling along multiple possible failures with the <code>Maybe</code> monad, or representing non-determinism with the <code>List</code> monad).</li>
+<li>The different kinds of monads that exist, how these behave, and why it matters. (For example, the List monad behaves very differently from the Maybe monad).</li>
+<li>annoyingly, "monads" usually get mixed up with the idea of pure functional programming and effect systems. </li>
+</ul>
+<p>...etc. I am sure this list is not exhaustive, this is just off the top of my head. Since is hard to talk about things unambiguously with human languages, these ideas are hard to suss apart as a beginner. People also tend to refer to these ideas without explicitly denoting when a statement is being made in one context vs another context. in fact, you allude to this very thing when you said "its hard to communicate because you have to establish meaning through broader categories than are precisely defined in either place."</p>
+<p><span class="user-mention silent" data-user-id="345177">drew verlee</span> <a href="#narrow/stream/201383-General/topic/monads.20(again.3F.20ikr)/near/217642683">said</a>:</p>
+<blockquote>
+<p>Here is an example question, does a monad exist at "run time"?</p>
+</blockquote>
+<p>Before answering, we need an illustration. </p>
+<p>In terms of programming and intuition, IMO the best way to think of a monad as as a "pattern" or an "interface" from OO. A type having an interface indicates that it supports the methods/operations/functions that interface requires.</p>
+<p>So, lets give an example to help clarify -- imagine you have a <code>ToJSONable</code> interface with a method <code>toJSON</code>. If we then have a type <code>User</code> which we say implements the <code>ToJSONable</code> interface, we can be sure that this has <code>toJSON</code> function. </p>
+<p>Ok; so lets apply this to your question. Would you say that <code>ToJSONable</code> exists at runtime? The data for the type User exists at runtime, and the compiled function <code>toJSON</code> exists at runtime, so many things <em>about</em> the interface exist at runtime. But as for <code>ToJSONable</code> existing? Hard to say, depends upon how you look at it. If you never actually call toJSON anywhere, would the compiler elide the compiled function? Does that somehow change the answer? When you ask if a monad exists at runtime, my brain thinks the same thing.</p>
+<p>(This is all I have time to finish at the moment; I really need to finish my monad tutorial that goes into depth. I'll try to revisit/finish if this doesn't clarify)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#217653055" name="217653055"><div>2020-11-23 16:51:31</div></a></div><div class="text"><p>Thanks for this,</p>
+<p>Thinking out load, if i want to teach myself a concept like monads, it would be wise to raise the level of abstraction above the Haskell implementation.</p>
+<p>I would tell myself:</p>
+<blockquote>
+<p>this function is monadic</p>
+</blockquote>
+<p>If my run time program contained an example of a monadic function (that wasn't removed by compiler optimizations) i would say i have </p>
+<blockquote>
+<p>"a monadic runtime function".</p>
+</blockquote>
+<p>It's not often i feel the need to explain this, so a long description is ok.</p>
+<p>It might be possible to describe a monad using clojure spec, in which case you could say:</p>
+<blockquote>
+<p>this spec is a monad</p>
+</blockquote>
+<p>In which case you should probably give it the name monad. </p>
+<p>I wonder if its easier to create monadic functions in clojure, but harder to know they are monads. As where in haskell its harder to create monadic functions, but easier to identify them.</p>
+<p>This would seem to describe the common grumblings both communities have. </p>
+<blockquote>
+<p>i can't get anything done!</p>
+</blockquote>
+<blockquote>
+<p>i don't know what anything is!</p>
+</blockquote></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217653284" name="217653284"><div>2020-11-23 16:53:16</div></a></div><div class="text"><p>If you want to understand monads, my strong, strong advice is to just learn haskell until you get to that point. There are many reasons for this</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217653574" name="217653574"><div>2020-11-23 16:55:30</div></a></div><div class="text"><p>but largely they all come down to that there are a number of ideas that you should have a good understanding of before tackling this concept</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217653736" name="217653736"><div>2020-11-23 16:56:24</div></a></div><div class="text"><p>but if your primary goal is to program better, I would say going to the "level above" haskell, which i believe you mean category theory, is going to be a long, long, long journey</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217653802" name="217653802"><div>2020-11-23 16:56:59</div></a></div><div class="text"><p>(unless perhaps you have a very strong grounding in math in general, but not category theory, in which case it might be faster?)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4d7e5bf37281d41829f7b8a95d15292ff274c327?x=x&amp;version=2"></a><div class="content"><a class="author">Vladimir Ciobanu</a><div class="metadata"><a href="#217654406" name="217654406"><div>2020-11-23 17:01:23</div></a></div><div class="text"><p>I mostly agree with Joel. The main reason, IMO, is that you don't really need a monad as much until you're faced with pure FP. And for most people, it's hard to accept this level of abstraction without relatively clear use cases.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#217655003" name="217655003"><div>2020-11-23 17:05:40</div></a></div><div class="text"><p><span class="user-mention" data-user-id="252949">@Joel McCracken</span>  What your suggesting has value, and i have done a bit of it. But its also useful to translate to a language you know, so communicate between groups and see similarities.</p>
+<p><span class="user-mention" data-user-id="250750">@Vladimir Ciobanu</span>  I would argue I create monadic functions all the time in my work and find them very useful. That i previously didn't care to describe them as monadic didn't lessen there usefulness, but it might limit my ability to communicate intent with others that did understand that relationship.</p>
+<p>I feel very enlightened by this conversation. I now feel I can correctly identify monads or the intent to want to create them. More generally though, i feel i understand more about the language mismatch that often causes confusion.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217655388" name="217655388"><div>2020-11-23 17:08:27</div></a></div><div class="text"><p>i mean, i am certailny not the smartest person in the world, but I tried really hard to make an IO monad implementation in Ruby without learning Haskell and I got so confused I just gave up and learned haskell</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217655908" name="217655908"><div>2020-11-23 17:13:08</div></a></div><div class="text"><p>i'd just like to point out that translating an idea while you understand it is much easier than trying to translate an idea without understanding it. Like, imagine trying to translate don quixote while studying spanish. Gonna probably be harder than learning spanish and then translating, I would think.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217656006" name="217656006"><div>2020-11-23 17:13:57</div></a></div><div class="text"><p>but yes, bridging communities is a great goal!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#217658357" name="217658357"><div>2020-11-23 17:33:09</div></a></div><div class="text"><p><span class="user-mention" data-user-id="252949">@Joel McCracken</span> </p>
+<p>Based off reading: <a href="https://en.wikibooks.org/wiki/Haskell/Understanding_monads/IO">https://en.wikibooks.org/wiki/Haskell/Understanding_monads/IO</a>, here is how i would describe them in clojure:</p>
+<div class="codehilite"><pre><span></span><code>;; this function is IO monadic
+(-&gt;&gt; [1 2 3]
+  (filter odd?)
+  (run! println))
+;; =&gt; nil
+;; prints 1 3
+
+;; this function is also IO monadic
+(-&gt;&gt; [1 2 3]
+  (run! println))
+;; =&gt; nil
+;; prints 1 2 3
+
+;; this function is not monadic
+(-&gt;&gt; [1 2 3]
+  (filter odd?))
+;; =&gt; (1 3)
+
+;; this function is just monadic
+(-&gt;&gt; [1 2 3]
+  (map odd?))
+;; =&gt; (true false true)
+</code></pre></div>
+<p>It might help to peek at the definition for run!</p>
+<div class="codehilite"><pre><span></span><code>= clojure.core/run!
+
+ [proc coll]
+
+Runs the supplied procedure (via reduce), for purposes of side
+  effects, on successive items in the collection. Returns nil
+</code></pre></div>
+<p>I think its easy to capture these concepts because Clojure puts a high emphasis on composability around the collections. </p>
+<blockquote>
+<p>i mean, i am certainly not the smartest person in the world</p>
+</blockquote>
+<p>A healthy dose of constant failure has taught me I'm as smart as I'm ever going to be so i might as well just deal with it rather than hoping enlightenment will land on my head one day.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#217658428" name="217658428"><div>2020-11-23 17:33:49</div></a></div><div class="text"><p>haha yeah, i am just tryign to say that you might succeed where I failed!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#217659172" name="217659172"><div>2020-11-23 17:40:39</div></a></div><div class="text"><p>Gotcha. <span aria-label="smiley" class="emoji emoji-1f603" role="img" title="smiley">:smiley:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#218413975" name="218413975"><div>2020-12-01 12:21:27</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="345177">drew verlee</span> <a href="#narrow/stream/201383-General/topic/monads.20(again.3F.20ikr)/near/217658357">said</a>:</p>
+<blockquote>
+<p>A healthy dose of constant failure has taught me I'm as smart as I'm ever going to be so i might as well just deal with it rather than hoping enlightenment will land on my head one day.</p>
+</blockquote>
+<p>Someone famous once said, "The man who never made a mistake never tried anything new, never tried to learn anything new."</p>
+<p>Especially with the material on monads, one must be careful with what one takes as gospel. Firstly, it's hard to distinguish what's signal and what's bunk, and secondly, the time it takes to do so could extend beyond one's working life. Learning monads could well be on someone's bucket list that might NEVER be crossed out.</p>
+<p>Unless.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#218416278" name="218416278"><div>2020-12-01 12:42:39</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="345177">drew verlee</span> <a href="#narrow/stream/201383-General/topic/monads.20(again.3F.20ikr)/near/217638442">said</a>:</p>
+<blockquote>
+<p>;; man its really hard to not write a monad i clojure...</p>
+</blockquote>
+<p>Absolutely true (and I don't need to know much clojure to see the truth of the statement). If by a monad we mean a context, and since everything can be a context, then everything one writes in clojure is monadic.</p>
+<p>In which case, what use is there of the word monadic?</p>
+<p>Something similar threatens the word "pure." There are haskell proselytizers who insist that everything in Haskell is pure.</p>
+<p>In which case, what use is there of the word "pure"?</p>
+<p>Also, canonical works in the literature actually use the word "pure" on some code and "impure" on other code. Could those academics have been misled all along?</p>
+<p>"Context" is a word that doesn't have a clear and precise meaning. To understand monads, maybe we should skip that word and look elsewhere?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#218491444" name="218491444"><div>2020-12-01 22:28:57</div></a></div><div class="text"><p>maybe? I'm not sure what your suggesting. Anything I seem to come up with goes straight into philosophizing at this point.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#218516017" name="218516017"><div>2020-12-02 05:08:49</div></a></div><div class="text"><p><span class="user-mention" data-user-id="345177">@drew verlee</span> You're doing good figuring out wth are monads. I'm suggesting that you take a closer look at the meaning of words people use to distinguish from <em>reliable</em> sources vs not-so-reliable ones.</p>
+<p>When evaluating a budget proposal, you might call out its bogosity if the numbers don't add up.</p>
+<p>When confronted with a document with words but without numbers, you can do the same thing if the word meanings and the logical sequence don't add up either.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8d7dd06bd18b8fce6a4c04dfede7f616?d=identicon&amp;version=1"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#218638800" name="218638800"><div>2020-12-03 00:10:37</div></a></div><div class="text"><p>Refining my previous guesses, here is monads in clojure as i understand them now.</p>
+<div class="codehilite" data-code-language="Clojure"><pre><span></span><code><span class="c1">;; state monad</span>
+<span class="c1">;; inc left dec right</span>
+<span class="c1">;; Left:l</span>
+<span class="c1">;; left value: lv</span>
+<span class="c1">;; right: r</span>
+<span class="c1">;; right value : rv</span>
+<span class="p">(</span><span class="nf">letfn</span> <span class="p">[(</span><span class="nf">m</span> <span class="p">[</span><span class="nv">l</span><span class="p">]</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">r</span><span class="p">]</span> <span class="p">[</span><span class="nv">l</span> <span class="nv">r</span><span class="p">]))</span>
+        <span class="p">(</span><span class="nf">b</span> <span class="p">[</span><span class="nv">mv</span> <span class="nv">f</span><span class="p">]</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">r</span><span class="p">]</span> <span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">l</span> <span class="nv">rv</span><span class="p">]</span> <span class="p">(</span><span class="nf">mv</span> <span class="nv">r</span><span class="p">)]</span> <span class="p">((</span><span class="nf">f</span> <span class="nv">l</span><span class="p">)</span> <span class="nv">rv</span><span class="p">))))</span>
+        <span class="c1">;; left right functions</span>
+        <span class="p">(</span><span class="nf">lf</span> <span class="p">[</span><span class="nv">mv</span><span class="p">]</span> <span class="p">(</span><span class="nf">b</span> <span class="nv">mv</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">l</span><span class="p">]</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">r</span><span class="p">]</span> <span class="p">[(</span><span class="nb">inc </span><span class="nv">l</span><span class="p">)</span> <span class="nv">r</span><span class="p">]))))</span>
+        <span class="p">(</span><span class="nf">rf</span> <span class="p">[</span><span class="nv">mv</span><span class="p">]</span> <span class="p">(</span><span class="nf">b</span> <span class="nv">mv</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">l</span><span class="p">]</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">r</span><span class="p">]</span> <span class="p">[</span><span class="nv">l</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">r</span><span class="p">)])</span> <span class="p">)))</span>
+        <span class="p">]</span>
+  <span class="p">(</span>
+   <span class="c1">;; left</span>
+   <span class="p">(</span><span class="nb">-&gt; </span><span class="p">(</span><span class="nf">m</span> <span class="mi">0</span><span class="p">)</span> <span class="p">(</span><span class="nf">lf</span><span class="p">)</span> <span class="p">(</span><span class="nf">rf</span><span class="p">)</span> <span class="p">(</span><span class="nf">lf</span><span class="p">)</span> <span class="p">(</span><span class="nf">rf</span><span class="p">))</span>
+   <span class="c1">;; right state</span>
+   <span class="mi">2</span><span class="p">)</span>
+  <span class="p">)</span>
+<span class="c1">;; =&gt; [2 0]</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eec8691200732875d9d0a619ea1be7ca?d=identicon&amp;version=1"></a><div class="content"><a class="author">Albert ten Napel</a><div class="metadata"><a href="#218664740" name="218664740"><div>2020-12-03 08:29:55</div></a></div><div class="text"><p>Here's how I would write the State monad in Javascript:</p>
+<div class="codehilite" data-code-language="JavaScript"><pre><span></span><code><span class="kr">const</span> <span class="nx">Return</span> <span class="o">=</span> <span class="nx">val</span> <span class="p">=&gt;</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="p">[</span><span class="nx">state</span><span class="p">,</span> <span class="nx">val</span><span class="p">];</span>
+<span class="kr">const</span> <span class="nx">Bind</span> <span class="o">=</span> <span class="p">(</span><span class="nx">prog</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="p">[</span><span class="nx">newstate</span><span class="p">,</span> <span class="nx">result</span><span class="p">]</span> <span class="o">=</span> <span class="nx">prog</span><span class="p">(</span><span class="nx">state</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">result</span><span class="p">)(</span><span class="nx">newstate</span><span class="p">)</span>
+<span class="p">};</span>
+
+<span class="kr">const</span> <span class="nx">Get</span> <span class="o">=</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="p">[</span><span class="nx">state</span><span class="p">,</span> <span class="nx">state</span><span class="p">];</span>
+<span class="kr">const</span> <span class="nx">Put</span> <span class="o">=</span> <span class="nx">val</span> <span class="p">=&gt;</span> <span class="nx">state</span> <span class="p">=&gt;</span> <span class="p">[</span><span class="nx">val</span><span class="p">,</span> <span class="kc">null</span><span class="p">];</span>
+
+<span class="kr">const</span> <span class="nx">runState</span> <span class="o">=</span> <span class="p">(</span><span class="nx">prog</span><span class="p">,</span> <span class="nx">state</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">prog</span><span class="p">(</span><span class="nx">state</span><span class="p">)[</span><span class="mf">1</span><span class="p">];</span>
+
+<span class="kr">const</span> <span class="nx">example</span> <span class="o">=</span>
+  <span class="nx">Bind</span><span class="p">(</span><span class="nx">Get</span><span class="p">,</span> <span class="nx">x</span> <span class="p">=&gt;</span>
+  <span class="nx">Bind</span><span class="p">(</span><span class="nx">Put</span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="mf">1</span><span class="p">),</span> <span class="nx">_</span> <span class="p">=&gt;</span>
+  <span class="nx">Bind</span><span class="p">(</span><span class="nx">Get</span><span class="p">,</span> <span class="nx">y</span> <span class="p">=&gt;</span>
+  <span class="nx">Return</span><span class="p">(</span><span class="nx">y</span><span class="p">))));</span>
+
+<span class="kr">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">runState</span><span class="p">(</span><span class="nx">example</span><span class="p">,</span> <span class="mf">10</span><span class="p">);</span> <span class="c1">// 11</span>
+</code></pre></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

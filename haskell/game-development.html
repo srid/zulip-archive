@@ -1,0 +1,142 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I did quite a few gamedev-related code and found it is very helpful in gaining insight into &quot;advanced&quot; Haskell. I touched stuff like pointer-wrangling and unpacked types, benchmarking, concurrency and signal processing. And there are lots of academic material on the domain. The field is deep.
+There " name="description"><link href="https://funprog.srid.ca/haskell/game-development.html" rel="canonical"><meta property="og:title" content="Game development - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-10-06T19:39:02Z"><meta property="og:article:published_time" content="2020-09-24T16:38:17Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/caa34946216201b3a3a04ae1aca21ef1?d=identicon&amp;version=1"><title>Game development - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Game development - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Game development</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/caa34946216201b3a3a04ae1aca21ef1?d=identicon&amp;version=1"></a><div class="content"><a class="author">IC Rainbow</a><div class="metadata"><a href="#211157450" name="211157450"><div>2020-09-24 16:38:17</div></a></div><div class="text"><p>I did quite a few gamedev-related code and found it is very helpful in gaining insight into "advanced" Haskell. I touched stuff like pointer-wrangling and unpacked types, benchmarking, concurrency and signal processing. And there are lots of academic material on the domain. The field is <em>deep</em>.</p>
+<p>There are few agoras on this:</p>
+<ul>
+<li><a href="https://www.reddit.com/r/haskellgamedev/">https://www.reddit.com/r/haskellgamedev/</a></li>
+<li>#haskell-game on freenode (there's a Matrix bridge: <a href="https://app.element.io/#/room/#freenode_#haskell-game:matrix.org">https://app.element.io/#/room/#freenode_#haskell-game:matrix.org</a>)</li>
+<li><a href="https://discord.gg/7pGNBSk">https://discord.gg/7pGNBSk</a></li>
+</ul>
+<p>There is another regular game jam (<a href="http://ldjam.com">ldjam.com</a>) in a week and I invite y'all to participate.</p>
+<p>Feel free to contatct me anywhere if you want mentoring, suggestions etc.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://app.element.io/#/room/#freenode_#haskell-game:matrix.org" style="background-image: url(https://app.element.io/themes/element/img/logos/opengraph.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://app.element.io/#/room/#freenode_#haskell-game:matrix.org" title="Element">Element</a></div></div></div><div class="message_embed"><a class="message_embed_image" href="https://discord.gg/7pGNBSk" style="background-image: url(https://cdn.discordapp.com/icons/688792755564052486/c3bc39e25ec0552013189f808a2775c5.jpg?size=256)"></a><div class="data-container"><div class="message_embed_title"><a href="https://discord.gg/7pGNBSk" title="Join the Haskell GameDev Discord Server!">Join the Haskell GameDev Discord Server!</a></div><div class="message_embed_description">Check out the Haskell GameDev community on Discord - hang out with 60 other members and enjoy free voice and text chat.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#211159791" name="211159791"><div>2020-09-24 16:56:24</div></a></div><div class="text"><p>I threw together the beginnings of a text-based game in Haskell to demonstrate some Haskell programming mini patterns from <a href="https://kowainik.github.io/posts/haskell-mini-patterns">https://kowainik.github.io/posts/haskell-mini-patterns</a> the code is at: <a href="https://github.com/agentultra/adventure-engine">https://github.com/agentultra/adventure-engine</a></p>
+<p>It's not much yet but feel free to fork to get started on your own :)</p>
+<div class="message_embed"><a class="message_embed_image" href="https://kowainik.github.io/posts/haskell-mini-patterns" style="background-image: url(https://kowainik.github.io/images/logo-yellow.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://kowainik.github.io/posts/haskell-mini-patterns" title="Kowainik - Haskell mini-patterns handbook">Kowainik - Haskell mini-patterns handbook</a></div><div class="message_embed_description">Collection of small Haskell patterns with detailed description, examples and exercises</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://github.com/agentultra/adventure-engine" style="background-image: url(https://avatars2.githubusercontent.com/u/120574?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/agentultra/adventure-engine" title="agentultra/adventure-engine">agentultra/adventure-engine</a></div><div class="message_embed_description">A small text adventure game written in Haskell. Contribute to agentultra/adventure-engine development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb?d=identicon&amp;version=1"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211160146" name="211160146"><div>2020-09-24 16:59:43</div></a></div><div class="text"><p>I came across something awesome the other day:</p>
+<p><a href="https://aas.sh/blog/making-a-game-with-haskell-and-apecs/">https://aas.sh/blog/making-a-game-with-haskell-and-apecs/</a></p>
+<p>I found a project using apecs and Polysemy the other day with procedural map generation too! I'll look for the link</p>
+<div class="message_embed"><a class="message_embed_image" href="https://aas.sh/blog/making-a-game-with-haskell-and-apecs/" style="background-image: url(https://raw.githubusercontent.com/Ashe/HSRogue/master/img/gameplay.gif)"></a><div class="data-container"><div class="message_embed_title"><a href="https://aas.sh/blog/making-a-game-with-haskell-and-apecs/" title="An Introduction to Developing games in Haskell with Apecs – aas.sh">An Introduction to Developing games in Haskell with Apecs – aas.sh</a></div><div class="message_embed_description">There have been so many frameworks, examples and prototypes released in an effort to pioneer games development in Haskell, and yet we still don't really have many (if any) commercial releases we can look to for inspiration. In this post I hope to clear the air a little bit and encourage new developers to try Haskell.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb?d=identicon&amp;version=1"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211160403" name="211160403"><div>2020-09-24 17:01:44</div></a></div><div class="text"><p><a href="https://github.com/rasendubi/hrogue">https://github.com/rasendubi/hrogue</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/rasendubi/hrogue" style="background-image: url(https://avatars0.githubusercontent.com/u/1366419?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/rasendubi/hrogue" title="rasendubi/hrogue">rasendubi/hrogue</a></div><div class="message_embed_description">A random game I build. Contribute to rasendubi/hrogue development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/caa34946216201b3a3a04ae1aca21ef1?d=identicon&amp;version=1"></a><div class="content"><a class="author">IC Rainbow</a><div class="metadata"><a href="#211473604" name="211473604"><div>2020-09-28 10:13:00</div></a></div><div class="text"><p>I finished concocting a minimal viable engine to experiment with vulkan rendering pipelines. You can start drawing triangles in no time and get as fancy as you like.</p>
+<ul>
+<li>The library part does only the common boilerplate bits and has some thin wrappers over <code>vulkan</code> types to simplify resource management.</li>
+<li>The examples are to be copypasted and stuffed with details.</li>
+</ul>
+<p>I expect there are few more areas that can be explored and promoted to a library, e.g. event loops part and frame resources.</p>
+<p><a href="https://gitlab.com/dpwiz/vulkan-setup-sdl">https://gitlab.com/dpwiz/vulkan-setup-sdl</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://gitlab.com/dpwiz/vulkan-setup-sdl" style="background-image: url(https://assets.gitlab-static.net/assets/gitlab_logo-7ae504fe4f68fdebb3c2034e36621930cd36ea87924c11ff65dbcb8ed50dca58.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://gitlab.com/dpwiz/vulkan-setup-sdl" title="Projects · Alexander Bondarenko / vulkan-setup-sdl">Projects · Alexander Bondarenko / vulkan-setup-sdl</a></div><div class="message_embed_description">GitLab.com</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/49728c9821ae019b34ffedde4f758018?d=identicon&amp;version=1"></a><div class="content"><a class="author">tristanC</a><div class="metadata"><a href="#211493994" name="211493994"><div>2020-09-28 13:46:59</div></a></div><div class="text"><p>That looks great and the example run fine on my x1 laptop, thanks for sharing! When trying the <code>vulkan</code> library I had issues with writing uniform values, is this managed through the <code>Vulkan.Setup.Render.Model</code> module?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/caa34946216201b3a3a04ae1aca21ef1?d=identicon&amp;version=1"></a><div class="content"><a class="author">IC Rainbow</a><div class="metadata"><a href="#212473358" name="212473358"><div>2020-10-06 19:26:02</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="282115">tristanC</span> <a href="#narrow/stream/201385-Haskell/topic/Game.20development/near/211493994">said</a>:</p>
+<blockquote>
+<p>That looks great and the example run fine on my x1 laptop, thanks for sharing! When trying the <code>vulkan</code> library I had issues with writing uniform values, is this managed through the <code>Vulkan.Setup.Render.Model</code> module?</p>
+</blockquote>
+<p><code>Model</code> is for vertex-related attribute bindings (<code>layout(location=0)</code>). <br>
+Uniform buffers (<code>layout(set=0, binding=0)</code> are descriptor sets + ordinary buffers from <code>Vulkan.Setup.Buffer</code>. You can keep them mapped and updatable or offload to GPU and release host memory.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/caa34946216201b3a3a04ae1aca21ef1?d=identicon&amp;version=1"></a><div class="content"><a class="author">IC Rainbow</a><div class="metadata"><a href="#212473632" name="212473632"><div>2020-10-06 19:28:17</div></a></div><div class="text"><p>I jammed a game with that library: <a href="https://gitlab.com/dpwiz/orboros">https://gitlab.com/dpwiz/orboros</a></p>
+<p>It's not too complicated, but demonstrates more things in a real environment.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://gitlab.com/dpwiz/orboros" style="background-image: url(https://gitlab.com/uploads/-/system/project/avatar/21243977/orboros.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://gitlab.com/dpwiz/orboros" title="Projects · Alexander Bondarenko / orboros">Projects · Alexander Bondarenko / orboros</a></div><div class="message_embed_description">An LD47 submission: https://ldjam.com/events/ludum-dare/47/orboros</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/49728c9821ae019b34ffedde4f758018?d=identicon&amp;version=1"></a><div class="content"><a class="author">tristanC</a><div class="metadata"><a href="#212474950" name="212474950"><div>2020-10-06 19:39:02</div></a></div><div class="text"><p>That's very helpful, thank you!</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

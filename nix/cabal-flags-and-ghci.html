@@ -1,0 +1,139 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I&#39;m trying to run ghcid/ghci in a nix-shell, which always presents the problem of test dependencies being invisible. As a workaround I wanted to try and use a cabal flag that adds those same dependencies to the library. Now the problem is that I have to activate that flag for the ghci session.
+My in" name="description"><link href="https://funprog.srid.ca/nix/cabal-flags-and-ghci.html" rel="canonical"><meta property="og:title" content="cabal flags and ghci - Nix"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Nix"><meta property="og:article:modified_time" content="2020-08-27T14:57:39Z"><meta property="og:article:published_time" content="2020-08-27T11:44:15Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"><title>cabal flags and ghci - Nix</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">cabal flags and ghci - Nix</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/nix/" class="section">#Nix</a><i class="right angle icon divider"></i><div class="active section">cabal flags and ghci</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208205602" name="208205602"><div>2020-08-27 11:44:15</div></a></div><div class="text"><p>I'm trying to run <code>ghcid</code>/<code>ghci</code> in a <code>nix-shell</code>, which always presents the problem of test dependencies being invisible. As a workaround I wanted to try and use a cabal flag that adds those same dependencies to the library. Now the problem is that I have to activate that flag for the ghci session.</p>
+<p>My intuition was that I would have to enable the flag on the package I pass to <code>nix-shell</code> as dependency, like so:</p>
+<div class="codehilite"><pre><span></span><code>ghc<span class="o">.</span>shellFor <span class="p">{</span>
+  <span class="ss">packages =</span> p<span class="p">:</span> <span class="p">[(</span>enableCabalFlag p<span class="o">.</span>mainPackage <span class="s2">&quot;devdeps&quot;</span><span class="p">)];</span>
+  <span class="ss">hook =</span> <span class="s2">&quot;ghcid ...&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>but that doesn't have the desired effect.<br>
+Anyone have an idea?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#208205800" name="208205800"><div>2020-08-27 11:46:51</div></a></div><div class="text"><p>I usually do something along the lines of</p>
+<div class="codehilite"><pre><span></span><code>mkShell <span class="p">{</span>
+  <span class="ss">name =</span> <span class="s2">&quot;foo-shell&quot;</span><span class="p">;</span>
+  <span class="ss">paths =</span> <span class="k">with</span> pkgs<span class="p">;</span> <span class="p">[</span> ghcid haskellPackages<span class="o">.</span>cabal-install <span class="p">(</span>haskellPackages<span class="o">.</span>ghcWithPackages<span class="p">(</span> _<span class="p">:</span> mypackage<span class="o">.</span>buildInputs <span class="o">++</span> mypackage<span class="o">.</span>propagatedBuildInputs<span class="p">)];</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>It's the <code>propagatedBuildInputs</code> which brings the test deps</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208208916" name="208208916"><div>2020-08-27 12:24:04</div></a></div><div class="text"><p>curious, <code>propagatedBuildInputs</code> doesn't seem to contain the test deps here (I looked at them with <code>builtins.trace</code>). Do you define them something like this?</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">tests</span><span class="p">:</span>
+  <span class="nt">suite-x</span><span class="p">:</span>
+    <span class="nt">dependencies</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">hedgehog</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#208209174" name="208209174"><div>2020-08-27 12:26:27</div></a></div><div class="text"><p>Yeah, although with cabal, but shouldn't make a difference</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208209336" name="208209336"><div>2020-08-27 12:27:53</div></a></div><div class="text"><p>hmm I think I have <code>dontCheck</code> somewhere, maybe that thwarts my efforts</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#208209503" name="208209503"><div>2020-08-27 12:29:29</div></a></div><div class="text"><p>Sounds sensible enough</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=3"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#208228130" name="208228130"><div>2020-08-27 14:57:39</div></a></div><div class="text"><p>looks like there's some weirdness going on in <code>ghc.shellFor</code> that I'm unable to figure out.<br>
+Despite the test deps being present in <code>buildInputs</code> of the package derivation and <code>shellFor</code> forwarding those to <code>mkDerivation</code>, <em>and</em> appending the <code>buildInputs</code> manually passed to <code>shellFor</code> (where I also tried adding <code>hedgehog</code> explicitly), the test dep isn't visible to <code>ghci</code>.</p>
+<p>However, replacing <code>shellFor</code> with <code>mkDerivation</code> and using your <code>ghcWithPackages</code> method seems to work just fine, so I guess I'll be using that for now <span aria-label="shrug" class="emoji emoji-1f937" role="img" title="shrug">:shrug:</span> </p>
+<p>in any case, thanks <span aria-label="100" class="emoji emoji-1f4af" role="img" title="100">:100:</span> for your input!</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>

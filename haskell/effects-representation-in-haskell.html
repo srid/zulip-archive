@@ -1,0 +1,455 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="How about this thing that Haskell still doesn&#39;t have?
+http://math.andrej.com/2008/11/17/not-all-computational-effects-are-monads/
+It puts the lie in the claim that Haskell is the world&#39;s finest imperative language." name="description"><link href="https://funprog.srid.ca/haskell/effects-representation-in-haskell.html" rel="canonical"><meta property="og:title" content="Effects representation in Haskell - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-10-24T19:22:53Z"><meta property="og:article:published_time" content="2020-10-22T13:25:53Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"><title>Effects representation in Haskell - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Effects representation in Haskell - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Effects representation in Haskell</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214186193" name="214186193"><div>2020-10-22 13:25:53</div></a></div><div class="text"><p>How about this thing that Haskell still doesn't have?</p>
+<p><a href="http://math.andrej.com/2008/11/17/not-all-computational-effects-are-monads/">http://math.andrej.com/2008/11/17/not-all-computational-effects-are-monads/</a></p>
+<p>It puts the lie in the claim that Haskell is the world's finest imperative language.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214189581" name="214189581"><div>2020-10-22 13:51:36</div></a></div><div class="text"><p><span class="user-mention" data-user-id="346527">@Kim-Ee Yeoh</span> would this qualify?:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">catch</span> <span class="ow">::</span> <span class="p">((</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Cont</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">a</span><span class="p">)</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Cont</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">a</span><span class="p">)</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="n">a</span>
+<span class="nf">catch</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">evalCont</span> <span class="o">$</span> <span class="kt">Nothing</span> <span class="o">&lt;$</span> <span class="n">f</span> <span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="n">shift</span> <span class="nf">\</span><span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="o">$</span> <span class="kt">Just</span> <span class="n">x</span>
+</code></pre></div>
+
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="o">&gt;</span> <span class="n">catch</span> <span class="p">(</span><span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="mi">42</span><span class="p">)</span>
+<span class="kt">Nothing</span>
+<span class="o">&gt;</span> <span class="n">catch</span> <span class="p">(</span><span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="n">g</span> <span class="o">=&lt;&lt;</span> <span class="n">g</span> <span class="n">x</span><span class="p">)</span>
+<span class="kt">Nothing</span>
+<span class="o">&gt;</span> <span class="n">catch</span> <span class="p">(</span><span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">g</span> <span class="mi">1</span> <span class="o">&lt;*&gt;</span> <span class="n">g</span> <span class="mi">2</span><span class="p">)</span>
+<span class="kt">Just</span> <span class="mi">1</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214195313" name="214195313"><div>2020-10-22 14:32:04</div></a></div><div class="text"><p>It's not hard to implement the other too using the same functionality under <code>State</code>:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">type</span> <span class="kt">Timeout</span> <span class="n">a</span> <span class="n">b</span> <span class="ow">=</span> <span class="kt">StateT</span> <span class="kt">Integer</span> <span class="p">(</span><span class="kt">Cont</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">a</span><span class="p">))</span> <span class="n">b</span>
+
+<span class="nf">tick</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Timeout</span> <span class="n">b</span> <span class="n">a</span>
+<span class="nf">tick</span> <span class="n">a</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">t</span> <span class="ow">&lt;-</span> <span class="n">get</span>
+  <span class="kr">if</span> <span class="n">t</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">0</span>
+    <span class="kr">then</span> <span class="n">lift</span> <span class="o">$</span> <span class="n">shift</span> <span class="nf">\</span><span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="kt">Nothing</span>
+    <span class="kr">else</span> <span class="n">put</span> <span class="o">$</span> <span class="n">t</span> <span class="o">-</span> <span class="mi">1</span>
+  <span class="n">pure</span> <span class="n">a</span>
+
+<span class="nf">timeout</span> <span class="ow">::</span> <span class="kt">Integer</span> <span class="ow">-&gt;</span> <span class="kt">Timeout</span> <span class="n">a</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="n">a</span>
+<span class="nf">timeout</span> <span class="n">n</span> <span class="ow">=</span> <span class="n">flip</span> <span class="n">runCont</span> <span class="kt">Just</span> <span class="o">.</span> <span class="n">flip</span> <span class="n">evalStateT</span> <span class="n">n</span>
+</code></pre></div>
+
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="o">&gt;</span> <span class="n">timeout</span> <span class="mi">5</span> <span class="p">(</span><span class="kr">do</span> <span class="n">x</span> <span class="ow">&lt;-</span> <span class="n">tick</span> <span class="mi">7</span><span class="p">;</span> <span class="n">y</span> <span class="ow">&lt;-</span> <span class="n">tick</span> <span class="mi">5</span><span class="p">;</span> <span class="n">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">))</span>
+<span class="kt">Just</span> <span class="mi">12</span>
+<span class="o">&gt;</span> <span class="n">timeout</span> <span class="mi">1</span> <span class="p">(</span><span class="kr">do</span> <span class="n">x</span> <span class="ow">&lt;-</span> <span class="n">tick</span> <span class="mi">7</span><span class="p">;</span> <span class="n">y</span> <span class="ow">&lt;-</span> <span class="n">tick</span> <span class="mi">5</span><span class="p">;</span> <span class="n">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">))</span>
+<span class="kt">Nothing</span>
+<span class="o">&gt;</span> <span class="n">timeout</span> <span class="mi">5</span> <span class="kr">let</span> <span class="n">omega</span> <span class="n">n</span> <span class="ow">=</span> <span class="n">tick</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;&gt;=</span> <span class="n">omega</span> <span class="kr">in</span> <span class="n">omega</span> <span class="mi">0</span>
+<span class="kt">Nothing</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d?d=identicon&amp;version=1"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#214203009" name="214203009"><div>2020-10-22 15:24:38</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> I do not know <code>Cont</code> so I might be missing your point but would the state monad not have sufficed?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214203297" name="214203297"><div>2020-10-22 15:26:31</div></a></div><div class="text"><p><span class="user-mention" data-user-id="318624">@rednaZ</span>  Do you have some example in mind?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d?d=identicon&amp;version=1"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#214203334" name="214203334"><div>2020-10-22 15:26:52</div></a></div><div class="text"><p>Ah, the problem might be coming up with a <code>b</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d?d=identicon&amp;version=1"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#214203551" name="214203551"><div>2020-10-22 15:28:07</div></a></div><div class="text"><p>I will have to try later.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d?d=identicon&amp;version=1"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#214257794" name="214257794"><div>2020-10-22 22:59:44</div></a></div><div class="text"><p>So I tried it out and I guess, you already knew this, but here is the result anyway.</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">catch</span> <span class="ow">::</span> <span class="p">((</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">State</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">a</span><span class="p">)</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">State</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">a</span><span class="p">)</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="n">a</span>
+<span class="nf">catch</span> <span class="n">f</span> <span class="ow">=</span>
+  <span class="n">execState</span> <span class="p">(</span><span class="n">f</span> <span class="n">g</span><span class="p">)</span> <span class="kt">Nothing</span>
+  <span class="kr">where</span>
+    <span class="n">g</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">State</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">a</span><span class="p">)</span> <span class="n">b</span>
+    <span class="n">g</span> <span class="n">a</span> <span class="ow">=</span>
+      <span class="n">put</span> <span class="p">(</span><span class="kt">Just</span> <span class="n">a</span><span class="p">)</span> <span class="o">*&gt;</span>
+      <span class="n">pure</span> <span class="n">undefined</span>
+</code></pre></div>
+
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="o">&gt;</span> <span class="n">catch</span> <span class="p">(</span><span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="mi">42</span><span class="p">)</span>
+<span class="kt">Nothing</span>
+
+<span class="o">&gt;</span> <span class="n">catch</span> <span class="p">(</span><span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="n">g</span> <span class="o">=&lt;&lt;</span> <span class="n">g</span> <span class="n">x</span><span class="p">))</span>
+<span class="kt">Nothing</span>
+
+<span class="o">&gt;</span> <span class="n">catch</span> <span class="p">(</span><span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">g</span> <span class="mi">1</span> <span class="o">&lt;*&gt;</span> <span class="n">g</span> <span class="mi">2</span><span class="p">)</span>
+<span class="kt">Just</span> <span class="mi">2</span>
+
+<span class="o">&gt;</span> <span class="n">catch</span> <span class="p">(</span><span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="kr">do</span> <span class="p">{</span><span class="n">result</span> <span class="ow">&lt;-</span> <span class="n">g</span> <span class="kt">False</span><span class="p">;</span> <span class="kr">case</span> <span class="n">result</span> <span class="kr">of</span> <span class="p">{</span><span class="kt">False</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="kt">True</span><span class="p">;</span> <span class="kt">True</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="kt">False</span><span class="p">}})</span>
+<span class="o">***</span> <span class="kt">Exception:</span> <span class="kt">Prelude</span><span class="o">.</span><span class="n">undefined</span>
+</code></pre></div>
+
+<p>So the two glaring problems are that we do not get the argument of the first invocation but of the last one and that divergence might happen where it is not supposed to.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d?d=identicon&amp;version=1"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#214301585" name="214301585"><div>2020-10-23 11:34:32</div></a></div><div class="text"><blockquote>
+<p>we do not get the argument of the first invocation but of the last one</p>
+</blockquote>
+<p>That is not actually a problem but a feature. You can get the argument of the first invocation if you want it.</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">catch</span> <span class="ow">::</span> <span class="p">((</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">State</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">a</span><span class="p">)</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">State</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">a</span><span class="p">)</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="n">a</span>
+<span class="nf">catch</span> <span class="n">f</span> <span class="ow">=</span>
+  <span class="n">execState</span> <span class="p">(</span><span class="n">f</span> <span class="n">g</span><span class="p">)</span> <span class="kt">Nothing</span>
+  <span class="kr">where</span>
+    <span class="n">g</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">State</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">a</span><span class="p">)</span> <span class="n">b</span>
+    <span class="n">g</span> <span class="n">a</span> <span class="ow">=</span>
+      <span class="n">modify</span> <span class="p">(</span><span class="kt">Just</span> <span class="o">.</span> <span class="n">fromMaybe</span> <span class="n">a</span><span class="p">)</span> <span class="o">*&gt;</span>
+      <span class="n">pure</span> <span class="n">undefined</span>
+</code></pre></div>
+
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="o">&gt;</span> <span class="n">catch</span> <span class="p">(</span><span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="mi">42</span><span class="p">)</span>
+<span class="kt">Nothing</span>
+
+<span class="o">&gt;</span> <span class="n">catch</span> <span class="p">(</span><span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="n">g</span> <span class="o">=&lt;&lt;</span> <span class="n">g</span> <span class="n">x</span><span class="p">))</span>
+<span class="kt">Nothing</span>
+
+<span class="o">&gt;</span> <span class="n">catch</span> <span class="p">(</span><span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">g</span> <span class="mi">1</span> <span class="o">&lt;*&gt;</span> <span class="n">g</span> <span class="mi">2</span><span class="p">)</span>
+<span class="kt">Just</span> <span class="mi">1</span>
+
+<span class="o">&gt;</span> <span class="n">catch</span> <span class="p">(</span><span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="kr">do</span> <span class="p">{</span><span class="n">result</span> <span class="ow">&lt;-</span> <span class="n">g</span> <span class="kt">False</span><span class="p">;</span> <span class="kr">case</span> <span class="n">result</span> <span class="kr">of</span> <span class="p">{</span><span class="kt">False</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="kt">True</span><span class="p">;</span> <span class="kt">True</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="kt">False</span><span class="p">}})</span>
+<span class="o">***</span> <span class="kt">Exception:</span> <span class="kt">Prelude</span><span class="o">.</span><span class="n">undefined</span>
+</code></pre></div>
+
+<p>But the other more serious problem remains of course.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214403776" name="214403776"><div>2020-10-24 01:59:40</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Extensible.20records.20in.20Hugs/near/214189581">said</a>:</p>
+<blockquote>
+<p><span class="user-mention silent" data-user-id="346527">Kim-Ee Yeoh</span> would this qualify?:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">catch</span> <span class="ow">::</span> <span class="p">((</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Cont</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">a</span><span class="p">)</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Cont</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">a</span><span class="p">)</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="n">a</span>
+<span class="nf">catch</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">evalCont</span> <span class="o">$</span> <span class="kt">Nothing</span> <span class="o">&lt;$</span> <span class="n">f</span> <span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="n">shift</span> <span class="nf">\</span><span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="o">$</span> <span class="kt">Just</span> <span class="n">x</span>
+</code></pre></div>
+
+</blockquote>
+<p>Note that Andrej Bauer gives a similar implementation but with the type signature</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">katsch</span> <span class="ow">::</span> <span class="p">((</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Exception</span> <span class="n">a</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Exception</span> <span class="n">a</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="n">a</span>
+</code></pre></div>
+
+<p>As he notes, "This works but is unsatisfactory. I don’t want to simulate catch with exceptions. <em>Is there a way to do catch directly?</em> I do not know, since it is not even clear to me that we have a monad" (emphasis mine).</p>
+<p>The backstory is actually here:</p>
+<p><a href="http://math.andrej.com/2006/03/27/sometimes-all-functions-are-continuous/">http://math.andrej.com/2006/03/27/sometimes-all-functions-are-continuous/</a></p>
+<p>starting with the paragraph "The program m is called a modulus of continuity functional ...."</p>
+<p>The function catch/katsch can be thought of as a simplification of the function m, written in Ocaml in the blogpost:</p>
+<div class="codehilite" data-code-language="OCaml"><pre><span></span><code><span class="k">let</span> <span class="n">m</span> <span class="n">f</span> <span class="n">x</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">k</span> <span class="o">=</span> <span class="n">ref</span> <span class="mi">0</span> <span class="k">in</span>
+  <span class="k">let</span> <span class="n">y</span> <span class="n">n</span> <span class="o">=</span> <span class="o">(</span><span class="n">k</span> <span class="o">:=</span> <span class="n">max</span> <span class="o">!</span><span class="n">k</span> <span class="n">n</span><span class="o">;</span> <span class="n">x</span> <span class="n">n</span><span class="o">)</span> <span class="k">in</span>
+    <span class="n">f</span> <span class="n">y</span> <span class="o">;</span> <span class="o">!</span><span class="n">k</span>
+</code></pre></div>
+
+<p>Notice how in Ocaml, the modulus function doesn't <em>monadify its type signature</em>. This is crucial. It means that the function f given as input to m doesn't need to be retrofitted with effect combinators plastered all over it. </p>
+<p><strong>This manual retrofitting/rewriting of what is essentially a pure function must be performed for every function given as input to m.</strong></p>
+<p>Back to the first blogpost with catch: For instance, <code>catch (\g -&gt; 42)</code> becomes <code>katsch (\g -&gt; return 42)</code>.</p>
+<p>And <code>catch (\g -&gt; \x -&gt; g (g x))</code> becomes <code>katsch (\g -&gt; return (\x -&gt; do { y &lt;- g x; z &lt;- g y; return z }))</code>.</p>
+<p>And <code>catch (\g -&gt; g 1 + g 2)</code> becomes <code>katsch (\g -&gt; do { x &lt;- g 1; y &lt;- g 2; return (x + y)})</code>.</p>
+<p>I hope you see how intolerable this is. And this is how Haskell loses out to Ocaml for the title of world's finest imperative language.</p>
+<p>(p.s. I actually don't hack Ocaml and find those *ML references an irredeemable spot of impurity on the language.)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214418414" name="214418414"><div>2020-10-24 09:47:00</div></a></div><div class="text"><blockquote>
+<p><em>Is there a way to do catch directly?</em></p>
+</blockquote>
+<p>If it means to avoid short-circuiting through rest of computation and just returning the result, then that's what <code>Cont</code> does compared to <code>Either</code>.</p>
+<p>But it probably means to not have to thread it through monadic context - in that case, that's nature of effectful computations in pure language - you have to have some notion of "threading", whether it's implicit on syntax level (Unison), or explicit (Haskell) - and in lazy language, you really need at least some syntax to distinguish it, though it could be more subtle, like e.g. <code>do</code> block that analyses types to automatically lift application into applicative operators in bindings</p>
+<blockquote>
+<p>Notice how in Ocaml, the modulus function doesn't monadify its type signature.</p>
+</blockquote>
+<p>That means that Ocaml isn't a pure language and assumes implicit context in all code - result is that first-class contexts are not as useful, because most interesting effects tend to be defined through this implicit one and thus can't be restricted or intercepted - you could enforce guidelines to not use it and model effects with first class structures and then... you end up with monads.</p>
+<blockquote>
+<p>This manual retrofitting/rewriting of what is essentially a pure function must be performed for every function given as input to m.</p>
+</blockquote>
+<p>"what is essentially" is actually "isn't" if we're precise - it's this tradeoff that if we want this mechanism to be actually useful, we have to stop "cheating" by using implicit context just to remove some syntactic overhead. I don't see why this is "intolerable" - it's a trade-off you learn to work with to get different advantages, and it's mostly straightforward plumbing. I think this plumbing could be made better, but it's not a trivial problem (probably reason why current approach is still status quo). While solution of OCaml and other languages is to just "give up" - fair enough, that works good enough for big chunk of software, but it's not an actual solution to the problem.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214419191" name="214419191"><div>2020-10-24 10:07:27</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Extensible.20records.20in.20Hugs/near/214418414">said</a>:</p>
+<blockquote>
+<blockquote>
+<p>This manual retrofitting/rewriting of what is essentially a pure function must be performed for every function given as input to m.</p>
+</blockquote>
+<p>"what is essentially" is actually "isn't" if we're precise - it's this tradeoff that if we want this mechanism to be actually useful, we have to stop "cheating" by using implicit context just to remove some syntactic overhead.</p>
+</blockquote>
+<p>It is understandable for <code>catch</code> to employ effects to produce its result. No-one is disputing that.</p>
+<p>But the inputs to <code>catch</code> <em>are</em> pure. So why do they have to be rewritten with effect combinators?</p>
+<p>Just to drive the point home, here's a type signature for a perfectly implementable <code>catch</code>:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">catch</span> <span class="ow">::</span> <span class="p">(</span><span class="n">forall</span> <span class="n">m</span><span class="o">.</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="n">a</span>
+</code></pre></div>
+
+<p>Universal effect parametricity of the function input sets a tight effect upper bound on it. The input function can be no more effectful than when m = Identity. In other words, the input has to be pure!</p>
+<p>All this points to something missing in Haskell. We should fix this.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214419512" name="214419512"><div>2020-10-24 10:15:26</div></a></div><div class="text"><blockquote>
+<p>It is understandable for <code>catch</code> to be effectful. No-one is disputing that.</p>
+<p>But the inputs to <code>catch</code> <em>are</em> pure. So why do they have to be rewritten with effect combinators?</p>
+</blockquote>
+<p>I guess it's actually the opposite way - <code>catch</code> is referentially transparent from the outside, while function passed in is effectful (<code>catch</code> is sort of an "effect interpreter")</p>
+<blockquote>
+<p>The input function can be no more effectful than when m = Identity. In other words, the input has to be pure!</p>
+</blockquote>
+<p><code>m</code> is existential from the point of <code>catch</code>, so the input function <code>a -&gt; m b</code> can use literally any <code>m</code> it wants, and thus it's not necessarily pure. Plus I'm not really sure how you implement exceptional behaviour just using <code>Monad</code> (ignoring <code>fail</code>, which was a quirk that is already solved in recent GHC versions)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214420420" name="214420420"><div>2020-10-24 10:39:44</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Extensible.20records.20in.20Hugs/near/214419512">said</a>:</p>
+<blockquote>
+<p>I guess it's actually the opposite way - <code>catch</code> is referentially transparent from the outside, while function passed in is effectful (<code>catch</code> is sort of an "effect interpreter")</p>
+</blockquote>
+<p>I agree that <code>catch</code> is like an effect interpreter. But when you say that the function passed in is effectful, that is not quite the case.</p>
+<p>We say that the Boolean function <code>(&amp;&amp;)</code> is pure. We also say that the image of it under <code>liftM2</code> is ... well, an image of a pure function. The image is <strong>not</strong> effectful in the same way that <code>putStr</code> <strong>is</strong> effectful.</p>
+<blockquote>
+<p><code>m</code> is existential from the point of <code>catch</code>, so the input function <code>a -&gt; m b</code> can use literally any <code>m</code> it wants, and thus it's not necessarily pure. Plus I'm not really sure how you implement exceptional behaviour just using <code>Monad</code> (ignoring <code>fail</code>, which was a quirk that is already solved in recent GHC versions)</p>
+</blockquote>
+<p>An <code>m</code> existential from the point of <code>catch</code> would make the <code>forall m</code> unnecessary. The type signature would then become</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">broken</span> <span class="ow">::</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="p">((</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="n">a</span>
+</code></pre></div>
+
+<p>This is not <code>catch</code>.</p>
+<p>Have you tried implementing <code>catch</code> with the type signature given earlier? It will clarify things.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214421168" name="214421168"><div>2020-10-24 10:57:52</div></a></div><div class="text"><blockquote>
+<p>We say that the Boolean function (&amp;&amp;) is pure. We also say that the image of it under liftM2 is ... well, an image of a pure function. The image is not effectful in the same way that putStr is effectful.</p>
+</blockquote>
+<p>You may use lifted pure functions throughout the function, but at some point you're going to use the provided callback, which is effectful, and thus the ultimate result is effectful too.</p>
+<p>Sorry, I meant it as "<code>catch</code> gets to pick <code>m</code>" - it sounds to be the opposite the way I said it <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span> But the point still holds</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214422151" name="214422151"><div>2020-10-24 11:20:40</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> I think we are making progress in this conversation. I appreciate your participation in it.</p>
+<p>So yes, <code>catch</code> gets to pick <code>m</code>. And lifted pure functions are a thing.</p>
+<p>So if we return to the original catch scenario, why can't we lift the inputs to catch? Where are the effect combinators to do that?</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="c1">-- These are the inputs to catch</span>
+<span class="nf">k1</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="mi">42</span>
+<span class="nf">k2</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="n">g</span> <span class="p">(</span><span class="n">g</span> <span class="n">x</span><span class="p">)</span>
+<span class="nf">k3</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">g</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">g</span> <span class="mi">2</span>
+</code></pre></div>
+
+<p>Consider that Haskell wouldn't take off the way it did if we had to <em>rewrite</em> <code>(&amp;&amp;)</code> each time we used it in an effectful context.</p>
+<p>Haskell wouldn't take off the way it did if we didn't have <code>liftM2</code> and friends.</p>
+<p>Where are the lift combinators for <code>k1</code>, <code>k2</code>, <code>k3</code> to serve as input to <code>catch</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214424418" name="214424418"><div>2020-10-24 12:14:36</div></a></div><div class="text"><blockquote>
+<p>I think we are making progress in this conversation. I appreciate your participation in it.</p>
+</blockquote>
+<p><span aria-label="heart" class="emoji emoji-2764" role="img" title="heart">:heart:</span> </p>
+<blockquote>
+<p>Where are the lift combinators for k1, k2, k3 to serve as input to catch?</p>
+</blockquote>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">pure</span> <span class="o">&lt;$&gt;</span> <span class="n">k1</span>
+<span class="nf">pure</span> <span class="o">&lt;$&gt;</span> <span class="n">k2</span>
+</code></pre></div>
+
+<p>but in case of <code>k3</code>, ordering matters, while <code>g 1 + g 2</code> in lazy language could be evaluated different ways depending on user of <code>k3</code> and behaviour of <code>(+)</code>. I've seen HS developers mention multiple times that reason they kept searching for solution to make effects in pure language possible (HS didn't use monads from the beginning), instead of making language impure, was that there wasn't other sensible option in presence of laziness.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214424492" name="214424492"><div>2020-10-24 12:16:35</div></a></div><div class="text"><p>In strict language, order of <code>g 1 + g 2</code> is usually defined as "left-to-right, inside-to-outside", and really, Unison would let you write it like this while tracking effects properly, because it would be equivalent to <code>(+) &lt;$&gt; g 1 &lt;*&gt; g 2</code> in Haskell</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214424500" name="214424500"><div>2020-10-24 12:16:52</div></a></div><div class="text"><p>What is HS?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214424507" name="214424507"><div>2020-10-24 12:17:04</div></a></div><div class="text"><p>Haskell <img alt=":rainbowhaskell:" class="emoji" src="https://zulip-avatars.s3.amazonaws.com/13896/emoji/images/14114.gif" title="rainbowhaskell"></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214424798" name="214424798"><div>2020-10-24 12:23:33</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Extensible.20records.20in.20Hugs/near/214424492">said</a>:</p>
+<blockquote>
+<p>In strict language, order of <code>g 1 + g 2</code> is usually defined as "left-to-right, inside-to-outside", and really, Unison would let you write it like this while tracking effects properly, because it would be equivalent to <code>(+) &lt;$&gt; g 1 &lt;*&gt; g 2</code> in Haskell</p>
+</blockquote>
+<p>Fine, let's fix that order then.</p>
+<p>So we have</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">liftM2</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">forall</span> <span class="n">m</span><span class="o">.</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">c</span><span class="p">)</span>
+</code></pre></div>
+
+<p>even though there exists an isotypical function with a different order of effects.</p>
+<p>Where is</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">lift</span> <span class="ow">::</span> <span class="p">((</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">forall</span> <span class="n">m</span><span class="o">.</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">c</span><span class="p">)</span>
+</code></pre></div>
+
+<p>so that we can pass <code>lift k{1,2,3}</code> to <code>catch</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214425416" name="214425416"><div>2020-10-24 12:36:25</div></a></div><div class="text"><p>Do you have a response other than, "Well that <code>lift</code> is in Unison, it's not in Haskell"?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214425514" name="214425514"><div>2020-10-24 12:39:09</div></a></div><div class="text"><p>Once you "prove" that you don't use <code>b</code> (using which would make your function effectful), you can do that:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">lift'</span> <span class="ow">::</span> <span class="p">((</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="nb">()</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">forall</span> <span class="n">m</span><span class="o">.</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">c</span><span class="p">)</span>
+<span class="nf">lift'</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">pure</span> <span class="o">.</span> <span class="n">f</span> <span class="o">.</span> <span class="p">(</span><span class="nb">()</span> <span class="o">&lt;$</span><span class="p">)</span>
+</code></pre></div>
+
+<p>But if you want to use <code>b</code>, then <code>lift</code> is not strong enough to give you that - it can only provide you with <code>m b</code>, which may depend on <code>m</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214425609" name="214425609"><div>2020-10-24 12:41:08</div></a></div><div class="text"><p>(You could replace <code>()</code> with <code>forall b. b</code> BTW - where <code>b</code> is scoped over whole <code>lift</code> argument of course)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214425762" name="214425762"><div>2020-10-24 12:44:13</div></a></div><div class="text"><p>In Unison, all values are technically in sort of "extensible effects" monad that provides needed sequencing - and thus you never <code>lift</code>, you just "specialize"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214428802" name="214428802"><div>2020-10-24 13:47:08</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Extensible.20records.20in.20Hugs/near/214425762">said</a>:</p>
+<blockquote>
+<p>In Unison, all values are technically in sort of "extensible effects" monad that provides needed sequencing - and thus you never <code>lift</code>, you just "specialize"</p>
+</blockquote>
+<p>You're saying that <code>lift</code> appears in Unison in the best way possible: invisibly and pre-applied to all the expressions it can possibly apply to.</p>
+<p>The type system of Unison should be interesting. All a search yields is a parenthetical remark from</p>
+<p><a href="https://www.unisonweb.org/docs/language-reference/#user-defined-data-types">https://www.unisonweb.org/docs/language-reference/#user-defined-data-types</a></p>
+<p>stating that "(See Types for an informal description of Unison's type system.)" This does not give confidence that the type system is fully cooked.</p>
+<p>Do you know of an authoritative description of Unison's type system?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214429212" name="214429212"><div>2020-10-24 13:55:47</div></a></div><div class="text"><p>AFAIK they're pretty canonical implementation of algebraic effects, see e.g. <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/08/algeff-tr-2016-v2.pdf">https://www.microsoft.com/en-us/research/wp-content/uploads/2016/08/algeff-tr-2016-v2.pdf</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214430092" name="214430092"><div>2020-10-24 14:15:11</div></a></div><div class="text"><p>That can't be it. I want the type system to Unison. The only language explicitly mentioned in the link you gave is Koka.</p>
+<p>At this link: <a href="https://www.unisonweb.org/docs/language-reference/#types">https://www.unisonweb.org/docs/language-reference/#types</a></p>
+<p>we get: "Formally, Unison’s type system is an implementation of the system described by Joshua Dunfield and Neelakantan R. Krishnaswami in their 2013 paper Complete and Easy Bidirectional Typechecking for Higher-Rank Polymorphism." <a href="https://arxiv.org/abs/1306.6032">https://arxiv.org/abs/1306.6032</a></p>
+<p>It then goes on to say: "Unison extends that type system with, pattern matching, scoped type variables, ability types (also known as algebraic effects). See the section on Abilities for details on ability types."</p>
+<p>And in the Abilities section we find this:</p>
+<blockquote>
+<p>Unison's system of abilities (often called "algebraic effects" in the literature) is based on the Frank language by Sam Lindley, Conor McBride, and Craig McLaughlin. Unison diverges slightly from the scheme detailed in this paper. In particular:</p>
+<ul>
+<li>
+<p>Unison's ability polymorphism is provided by ordinary polymorphic types, and a Unison type with an empty ability set explicitly disallows any abilities. In Frank, the empty ability set implies an ability-polymorphic type.</p>
+</li>
+<li>
+<p>Unison doesn't overload function application syntax to do ability handling; instead it has a separate handle construct for this purpose.</p>
+</li>
+</ul>
+</blockquote>
+<p>So what we are seeing is something cobbled together from at least 2 if not more papers with a dollop of Original Research (as wikipedia would describe it) spooned in for good measure. </p>
+<p>How could things go wrong?! </p>
+<p>Never mind a proof of soundness, it appears it's too much to ask for just ONE document describing the type system. Unison, it calls itself.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214431925" name="214431925"><div>2020-10-24 14:57:55</div></a></div><div class="text"><p>Hmm, yeah, would be nice for it to have formally proved soundness, but I guess it works good enough as an example here to get the idea about design space</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214439111" name="214439111"><div>2020-10-24 17:27:49</div></a></div><div class="text"><p>It's nice to savor the fruit of a proof of soundness and let the juice seep and nourish the programs written in the safety of the embodying type system.</p>
+<p>What we should ask is where does such a tree come from?</p>
+<p>And I submit that the answer lies in <strong>articulated and communicated design.</strong></p>
+<p>I've been informed that what I'm writing about Unison reads like kvetching for kvetching's sake.</p>
+<p>That's far from the truth.</p>
+<p>I write from a tradition that upholds the value of <strong>reflective work</strong>. The more complicated, novel, and unexplored the space; the more note-taking, reflection, and clarification-requesting dialogue is required.</p>
+<p>Edsger Dijkstra is no longer with us. But Leslie Lamport is. And here he is underlining the need for a <em>specification</em>, a blueprint before building anything:</p>
+<p><a href="https://www.youtube.com/watch?v=-4Yp3j_jk8Q&amp;t=5m">YouTube - Leslie Lamport: Thinking Above the Code</a></p>
+<div class="youtube-video message_inline_image"><a data-id="-4Yp3j_jk8Q" href="https://www.youtube.com/watch?v=-4Yp3j_jk8Q&amp;t=5m"><img src="https://i.ytimg.com/vi/-4Yp3j_jk8Q/default.jpg"></a></div><p>Drawing up a blueprint of a house is an example of reflective work. One imagines what one is building before reaching for the wood, the saws, the hammer, and the nails.</p>
+<p>That's how Haskell was created. A large team of people with different ideas of what the language should look like, sifted through the best of them, and imagined a reality better than each one of them--on their own--could have visualized.</p>
+<p>And once they've captured a clear vision of what they wanted to create, then--and only then--did they sit down at the keyboard to turn it into reality.</p>
+<p><strong>Not before.</strong></p>
+<p>Without specs, without blueprints, without documents describing the underpinnings of the design choices, any programming language exacts a massive tax on devs writing programs in it. Namely, the losers of such a language pay the imagination tax that the language designers absconded from.</p>
+<p>Are there at least notes about the various design choices of Unison? I hope there are. And I'm not merely alluding to how GHC's repo is replete with notes all over.</p>
+<p>Searching on "haskell design choices" will give you documents that have explored the design space of various aspects of Haskell.</p>
+<p>Are there such documents pertaining to Unison?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214439440" name="214439440"><div>2020-10-24 17:34:07</div></a></div><div class="text"><p>I'm not arguing with you, but I wasn't really interested in talking about Unison - I just used it as an example of design that makes use of strictness that I'm familiar with<br>
+If we want to talk about need for strong design (about which I agree with you fully), we should probably move it into separate topic <span aria-label="smile" class="emoji emoji-1f642" role="img" title="smile">:smile:</span><br>
+(I mean, I should probably split this discussion from this topic, because it's not really related too <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span> - edit: done)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214440277" name="214440277"><div>2020-10-24 17:52:47</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Effects.20representation.20in.20Haskell/near/214425514">said</a>:</p>
+<blockquote>
+<p>Once you "prove" that you don't use <code>b</code> (using which would make your function effectful), you can do that:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">lift'</span> <span class="ow">::</span> <span class="p">((</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="nb">()</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">forall</span> <span class="n">m</span><span class="o">.</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">c</span><span class="p">)</span>
+<span class="nf">lift'</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">pure</span> <span class="o">.</span> <span class="n">f</span> <span class="o">.</span> <span class="p">(</span><span class="nb">()</span> <span class="o">&lt;$</span><span class="p">)</span>
+</code></pre></div>
+
+<p>But if you want to use <code>b</code>, then <code>lift</code> is not strong enough to give you that - it can only provide you with <code>m b</code>, which may depend on <code>m</code>.</p>
+</blockquote>
+<p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Effects.20representation.20in.20Haskell/near/214425609">said</a>:</p>
+<blockquote>
+<p>(You could replace <code>()</code> with <code>forall b. b</code> BTW - where <code>b</code> is scoped over whole <code>lift</code> argument of course)</p>
+</blockquote>
+<p>You've lost me about the use of <code>b</code> making the input function effectful.</p>
+<p>Isn't it obvious that all the following are pure?</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="c1">-- These are the inputs to catch</span>
+<span class="nf">k1</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="mi">42</span>
+<span class="nf">k2</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="n">g</span> <span class="p">(</span><span class="n">g</span> <span class="n">x</span><span class="p">)</span>
+<span class="nf">k3</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">g</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">g</span> <span class="mi">2</span>
+</code></pre></div>
+
+<p>They all have the type signature (A -&gt; B) -&gt; C, for appropriately pure type values of A, B, and C.</p>
+<p>Let me repeat the request: where is this function</p>
+<div class="codehilite"><pre><span></span><code>lift :: ((a -&gt; b) -&gt; c) -&gt; (forall m. Monad m =&gt; (a -&gt; m b) -&gt; m c)
+</code></pre></div>
+
+
+<p>so that we can feed <code>lift k{1,2,3}</code> into</p>
+<div class="codehilite"><pre><span></span><code>catch :: (forall m. Monad m =&gt; (a -&gt; m b) -&gt; m c) -&gt; Maybe a
+</code></pre></div>
+
+
+<p>?</p>
+<p>We make progress in this convo by either</p>
+<ol>
+<li>Providing <code>lift</code></li>
+<li>Showing that <code>lift</code> cannot be written in existing Haskell</li>
+</ol>
+<p>If it's the latter, we can then proceed to investigate what's missing that we can add to the language.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214440939" name="214440939"><div>2020-10-24 18:05:22</div></a></div><div class="text"><blockquote>
+<p>You've lost me about the use of b making the input function effectful.</p>
+</blockquote>
+<p>If in definition of <code>catch</code> you say that you can provide <code>a -&gt; m b</code>, you're saying that user can get <code>b</code> as long as they can both provide <code>a</code> and get it from <code>m</code> - that means that they have to thread through <code>m</code>, because  they have to account for possibility of <code>m</code> being something other than <code>pure</code> and thus possibility of <code>b</code> not being directly retrievable, but they can't just <code>fmap</code> inside, because that <code>m</code> can depend on <code>a</code> according to the signature - thus they have to account for effects, even though they're not using them in their implemetantion</p>
+<blockquote>
+<p>Isn't it obvious that all the following are pure?</p>
+</blockquote>
+<p>First two are (you can use <code>pure</code>), but the third isn't - even though it only does effects through <code>g</code>, it does them - and in that case ordering matters, but pure code in Haskell doesn't give you any.<br>
+So I'm going to say that 2. holds, because lazy semantics is in a sense "bigger" than strict, providing multiple orders of evaluation which would result in different behaviour in presence of effects. Solution is to either ditch laziness globally (getting strict language), or locally (using e.g. applicative operators or special syntax to specify order)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214441004" name="214441004"><div>2020-10-24 18:06:10</div></a></div><div class="text"><p>In those local pieces of code, you can then "specialize" easily, because they have their order of evaluation specified (enough)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214443118" name="214443118"><div>2020-10-24 18:50:16</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Effects.20representation.20in.20Haskell/near/214440939">said</a>:</p>
+<blockquote>
+<blockquote>
+<p>You've lost me about the use of b making the input function effectful</p>
+</blockquote>
+<p>If in definition of <code>catch</code> you say that you can provide <code>a -&gt; m b</code>, you're saying that user can get <code>b</code> as long as they can both provide <code>a</code> and get it from <code>m</code> - that means that they have to thread through <code>m</code>, because  they have to account for possibility of <code>m</code> being something other than <code>pure</code> and thus possibility of <code>b</code> not being directly retrievable, but they can't just <code>fmap</code> inside, because that <code>m</code> can depend on <code>a</code> according to the signature - thus they have to account for effects, even though they're not using them in their implemetantion</p>
+</blockquote>
+<p>This leaves me even more confused than before. How can <code>m</code> depend on <code>a</code>? There are no dependent types anywhere!</p>
+<p>You are aware that universal polymorphism is an extremely constraining attribute? A function <code>Nat -&gt; Nat</code> could be any infinite number of possibilities. But a function <code>forall a. a -&gt; a</code> can only be <em>one</em>.</p>
+<p>Similarly I call <code>verytrue</code> in the snippet below pure, notwithstanding the presence of <code>m</code>, although I concede that there are good arguments to call it lifted pure instead of unqualified pure.</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">verytrue</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">m</span><span class="o">.</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="n">m</span> <span class="kt">Bool</span>
+<span class="nf">verytrue</span> <span class="ow">=</span> <span class="n">pure</span> <span class="kt">True</span>
+</code></pre></div>
+
+<p>Also, this focus on <code>catch</code> seems entirely misplaced. We have <code>catch</code>. We don't have <code>lift</code>. Why can't we write <code>lift</code>?</p>
+<blockquote>
+<p>First two are (you can use <code>pure</code>), but the third isn't - even though it only does effects through <code>g</code>, it does them - and in that case ordering matters, but pure code in Haskell doesn't give you any.</p>
+</blockquote>
+<p>How is <code>k3</code> not pure?! Here, I'll even give you the type signature:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">k3</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="kt">Int</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Int</span>
+<span class="nf">k3</span> <span class="ow">=</span> <span class="nf">\</span><span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">g</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">g</span> <span class="mi">2</span>
+</code></pre></div>
+
+<p>You say that "ordering matters" as if that's what's blocking us from writing <code>lift</code>. Well, <code>liftM2</code> as I mentioned earlier has a choice of order as well. The existence of <code>liftM2</code> is not disputed, is it? But we don't have <code>lift</code>. Why?</p>
+<blockquote>
+<p>So I'm going to say that 2. holds, because lazy semantics is in a sense "bigger" than strict, providing multiple orders of evaluation which would result in different behaviour in presence of effects. Solution is to either ditch laziness globally (getting strict language), or locally (using e.g. applicative operators or special syntax to specify order)</p>
+</blockquote>
+<p>Your reason doesn't hit the nail. Despite lazy semantics being bigger than strict, we have a whole bunch of effect combinators like <code>fmap</code>, <code>&gt;&gt;=</code>, <code>liftM2</code> that <em>lift</em> the smaller into the bigger. But the particular <code>lift</code> that we want is missing. Why?</p>
+<p>I hate repeating myself like this. But this convo seems to keep veering off the rails. <strong>Focus on the missing <code>lift</code>.</strong></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214443626" name="214443626"><div>2020-10-24 19:00:11</div></a></div><div class="text"><blockquote>
+<p>This leaves me even more confused than before. How can m depend on a? There are no dependent types anywhere!</p>
+</blockquote>
+<p>I mean as in "effect in result can depend on that input argument"</p>
+<blockquote>
+<p>You are aware that universal polymorphism is an extremely constraining attribute? A function Nat -&gt; Nat could be any infinite number of possibilities. But a function forall a. a -&gt; a can only be one.</p>
+</blockquote>
+<p>Yeah, that's the point</p>
+<blockquote>
+<p>How is k3 not pure?! Here, I'll even give you the type signature:</p>
+</blockquote>
+<p>From perspective of pure language, <code>g</code> is not pure and not of type <code>Int -&gt; Int</code></p>
+<blockquote>
+<p>The existence of liftM2 is not disputed, is it?</p>
+</blockquote>
+<p><code>liftM2</code> can define ordering, because it retrieves <code>f a b</code> decomposed into it's parts - but <code>lift</code> as declared above is trying to somehow inspect it's argument to do that - that's what meta-level constructs can do, but not normal functions.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?x=x&amp;version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#214444700" name="214444700"><div>2020-10-24 19:22:53</div></a></div><div class="text"><p>Gatekeepers don't have friends, they have bootlickers instead. That said, I must say that your assertion that <code>g</code> is not pure in <code>k3 = \g -&gt; g 1 + g 2</code>is as incorrect as it is bizarre, especially when I've already explicitly scoped the type of <code>k3 :: (Int -&gt; Int) -&gt; Int</code>.</p>
+<p>What "perspective of pure language" is this that leads you to such a judgment? Have you considered that such a perspective may be misleading?</p>
+<p>Be it as it may, in the interest of being constructive, what minimal construct--whether meta-level or otherwise--do you see as being required to write such a <code>lift</code>?</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a></div></div></body></html>
