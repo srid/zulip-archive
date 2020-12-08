@@ -72,20 +72,26 @@ main = do
       outputDir = "site"
   cfg <- Config.readConfig
   putTextLn $ "Running zulip-archive for: " <> Config.zulipDomain cfg
-  race_
-    do Rib.run inputDir outputDir $ generateSite cfg
-    do scheduleGeneration inputDir cfg
+  let gen = Rib.run inputDir outputDir $ generateSite cfg
+      freq = Config.fetchEveryMins cfg
+  if freq < 1
+    then gen
+    else do
+      race_
+        gen
+        do
+          scheduleGeneration inputDir freq
 
 -- | Periodically trigger site generation
 --
 -- For every `Config.fetchEveryMins`, this effectively induces rib to invoke
 -- `generateSite`
-scheduleGeneration :: FilePath -> Config -> IO ()
-scheduleGeneration inputDir cfg = do
+scheduleGeneration :: FilePath -> Natural -> IO ()
+scheduleGeneration inputDir freq = do
   hSetBuffering stdout LineBuffering
   forever $ do
-    putStrLn $ "Waiting for " <> show (Config.fetchEveryMins cfg) <> " min"
-    threadDelayMins $ Config.fetchEveryMins cfg
+    putStrLn $ "Waiting for " <> show freq <> " min"
+    threadDelayMins freq
     -- Modify a file under the input directory so that Rib runs site generation.
     touchFile $ inputDir </> ".rib-trigger"
   where

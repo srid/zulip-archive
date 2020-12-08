@@ -1,0 +1,32 @@
+name: "Publish"
+on:
+  # Run only when pushing to master branch
+  push:
+    branches:
+      - master
+  schedule:
+    - cron:  '*/15 * * * *'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v12
+    - name: Build
+      run: nix-build -j 4
+    # FIXME: Doesn't work?
+    # - uses: actions/cache@v2
+    #   with:
+    #     path: |
+    #       messages.json
+    - name: Generate site 🔧
+      env:
+        ZULIP_ARCHIVE_CONFIG: ${{ secrets.ZULIP_ARCHIVE_CONFIG }}
+      run: |
+        ./result/bin/zulip-archive
+    - name: Deploy to gh-pages 🚀
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: site
+        cname: funprog.srid.ca
