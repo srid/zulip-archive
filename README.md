@@ -32,7 +32,7 @@ cp config/config.example.dhall config/config.dhall
 vim config/config.dhall
 ```
 
-NOTE: You can also pass the contents of the config file in the environment variable `ZULIP_ARCHIVE_CONFIG` which takes precedence over the config file.
+NOTE: You can also pass the contents of the config file in the environment variable `ZULIP_ARCHIVE_CONFIG` which takes precedence over the config file. This can be used to setup GitHub Pages workflow (see `./.github/workflows`).
 
 To build and run the site:
 
