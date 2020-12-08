@@ -22,6 +22,9 @@ in
       rib-core = src.rib + /rib-core;
     };
     overrides = self: super: with pkgs.haskell.lib; {
+      # TODO: remove after https://github.com/srid/rib/issues/169
+      rib-core = doJailbreak super.rib-core;
+      rib = doJailbreak super.rib;
     };
     modifier = drv:
       pkgs.haskell.lib.addBuildTools drv extraDeps;
