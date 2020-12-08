@@ -9,14 +9,19 @@
 
 module Config where
 
-import Dhall
-import Dhall.TH
+import Dhall (auto, input)
+import Dhall.TH (makeHaskellTypeFromUnion)
 import Relude
 import System.Directory (withCurrentDirectory)
+import System.Environment (lookupEnv)
 
 makeHaskellTypeFromUnion "Config" "< Config : ./config/Type.dhall >"
 
 readConfig :: MonadIO m => m Config
-readConfig =
-  liftIO $ withCurrentDirectory "config" $
-    input auto "./config.dhall"
+readConfig = do
+  expr <-
+    fromMaybe "./config.dhall"
+      <$> liftIO (lookupEnv "ZULIP_ARCHIVE_CONFIG")
+  liftIO $
+    withCurrentDirectory "config" $
+      input auto (toText expr)

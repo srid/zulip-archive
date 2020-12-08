@@ -32,6 +32,8 @@ cp config/config.example.dhall config/config.dhall
 vim config/config.dhall
 ```
 
+NOTE: You can also pass the contents of the config file in the environment variable `ZULIP_ARCHIVE_CONFIG` which takes precedence over the config file.
+
 To build and run the site:
 
 ```bash

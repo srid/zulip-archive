@@ -71,6 +71,7 @@ main = do
   let inputDir = "static"
       outputDir = "site"
   cfg <- Config.readConfig
+  putTextLn $ "Running zulip-archive for: " <> Config.zulipDomain cfg
   race_
     do Rib.run inputDir outputDir $ generateSite cfg
     do scheduleGeneration inputDir cfg
