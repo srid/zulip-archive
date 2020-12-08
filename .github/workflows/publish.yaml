@@ -4,6 +4,8 @@ on:
   push:
     #branches:
     #  - master
+  #schedule:
+  #  - cron:  '*/15 * * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,6 +19,8 @@ jobs:
     #     path: |
     #       messages.json
     - name: Generate site 🔧
+      env:
+        ZULIP_ARCHIVE_CONFIG: ${{ secrets.ZULIP_ARCHIVE_CONFIG }}
       run: |
         ./result/bin/zulip-archive generate
     - name: Deploy to GitHub Pages 🚀
