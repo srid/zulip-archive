@@ -1,0 +1,136 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I think external links deserve special treatment.
+First, it would be cool if there was a way to see all external links in the current zettel, much like the &quot;external links&quot; section of wikipedia.
+But even cooler, we could generate some zettels that wrap around external links and find out their backli" name="description"><link href="https://funprog.srid.ca/neuron/external-links.html" rel="canonical"><meta property="og:title" content="External links - Neuron"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Neuron"><meta property="og:article:modified_time" content="2020-06-26T15:17:32Z"><meta property="og:article:published_time" content="2020-06-25T11:49:06Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"><title>External links - Neuron</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">External links - Neuron</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/neuron/" class="section">#Neuron</a><i class="right angle icon divider"></i><div class="active section">External links</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#201958576" name="201958576"><div>2020-06-25 11:49:06</div></a></div><div class="text"><p>I think external links deserve special treatment.<br>
+First, it would be cool if there was a way to see all external links in the current zettel, much like the "external links" section of wikipedia.<br>
+But even cooler, we could generate some zettels that wrap around external links and find out their backlinks.<br>
+Here is a proposal of how that could work:<br>
+There could be a new <code>z:external?url</code> query, which would make the link appear in the footer section, next to "more backlinks".<br>
+Then, a flag like <code>z:external?url&amp;wrap</code> generates an associated zettel that contains only the link (possibly embedded) + a backlink section.<br>
+Multiple occurences of the same external link point to the same zettel.<br>
+The point of doing this is that, because the zettel is entirely generated (without an user accessible markdown file), the zettel is guaranteed to be terminal, in the sense that it has no forward link. For now, I manually create these wrappers around external links, but they appear in my z-index which I'd rather avoid.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201974184" name="201974184"><div>2020-06-25 14:12:58</div></a></div><div class="text"><p>Reason for wanting this ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#201974390" name="201974390"><div>2020-06-25 14:14:49</div></a></div><div class="text"><p>For example, mentionning ideas from an article in multiple zettels. Then, I can see all zettels that refer to this article.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#201975562" name="201975562"><div>2020-06-25 14:23:15</div></a></div><div class="text"><p>I said "generate an associated zettel" but actually it's not a zettel, since there is no user written note besides the (possibly embedded) link, this is why I don't want them to appear in the z-index. This would introduce another type of page in the site, besides just zettels (and obviously the search page and z-index). <br>
+Another possibility would be to wait until this feature <a href="https://github.com/srid/neuron/issues/190">https://github.com/srid/neuron/issues/190</a> is implemented, and then we can reuse hovercards to show backlinks of external resources</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/issues/190" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/issues/190" title="Surrounding context · Issue #190 · srid/neuron">Surrounding context · Issue #190 · srid/neuron</a></div><div class="message_embed_description">The &quot;surrounding context&quot; of a link or a tag is the text surrounding it. When showing backlinks, we should as well display (in some manner) this surrounding context. When showing a list o...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#201975584" name="201975584"><div>2020-06-25 14:23:29</div></a></div><div class="text"><p>How does this relate to the citations feature request?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#201976101" name="201976101"><div>2020-06-25 14:27:35</div></a></div><div class="text"><p>I'm not familiar with pandoc citations but from the issue (<a href="https://github.com/srid/neuron/issues/134">https://github.com/srid/neuron/issues/134</a>) is seems to be reserved for academic content. What I'm proposing is something more generic that just link the thing. The two features are not exactly orthogonal, but I think there is no conflict between them</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/issues/134" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/issues/134" title="Feature Request: Support for citations · Issue #134 · srid/neuron">Feature Request: Support for citations · Issue #134 · srid/neuron</a></div><div class="message_embed_description">It would be good to be able to use pandoc-citations. In pandoc it is possible to use either a common references.yaml-file to which all Zettels could refer to. Or specify the reference in the meta-d...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#201976721" name="201976721"><div>2020-06-25 14:32:15</div></a></div><div class="text"><p>Also, citations don't provide backlinks</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#201976874" name="201976874"><div>2020-06-25 14:33:53</div></a></div><div class="text"><p>... unless a new query is implemented like <code>z:zettels?citing=DOI</code> but I think that's too specific for neuron</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#201989131" name="201989131"><div>2020-06-25 16:02:52</div></a></div><div class="text"><p>Heh, I've been creating reference zettels for external URLs manually for that purpose. I was planning on doing the same for citations, with the added benefit that this would give a title to citations and a way to get the full details</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#201989638" name="201989638"><div>2020-06-25 16:07:09</div></a></div><div class="text"><p>It's a bit annoying however because I have to click twice to get to the actual target of a link</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#201989830" name="201989830"><div>2020-06-25 16:08:47</div></a></div><div class="text"><p>I like the hovercards solution, it would avoid this pitfall</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#201995038" name="201995038"><div>2020-06-25 16:52:59</div></a></div><div class="text"><p>There's another problem: I'd like to be able to add tags on external links (e.g. <code>todo/watch</code> on a YT video), which implies that the external link has to exist as an actual file in the zettelkasten and not just as a neuron-generated HTML page. I'm not sure how to solve this problem</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#202003151" name="202003151"><div>2020-06-25 17:59:34</div></a></div><div class="text"><p>That is starting to sound out of scope of neuron. I personally have a shortcut in my task bar that creates a new zettel containing only whatever is in the clipboard as a link.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#202006054" name="202006054"><div>2020-06-25 18:23:11</div></a></div><div class="text"><blockquote>
+<p>That is starting to sound out of scope of neuron.</p>
+</blockquote>
+<p>Maybe. Though, if what makes you think that is the "neuron as a todo list" thing, then I can find other examples where tagged external links might be useful. For example, I like to have zettels about recurring people in my notes (mathematicians, writers, or even bloggers...), just to gather in one place what they've worked on. Being able to tag papers, articles, blog posts, etc... with the author name would allow me to do that, using queries.</p>
+<blockquote>
+<p>I personally have a shortcut in my task bar that creates a new zettel containing only whatever is in the clipboard as a link.</p>
+</blockquote>
+<p>That's a good idea <span aria-label="thumbs up" class="emoji emoji-1f44d" role="img" title="thumbs up">:thumbs_up:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#202018389" name="202018389"><div>2020-06-25 20:08:59</div></a></div><div class="text"><p>My impression is that if you want to attach metadata to links, it might make sense to just create the zettels yourself. Now what could be quite useful would be if your editor plugin could do that for you</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#202018445" name="202018445"><div>2020-06-25 20:09:32</div></a></div><div class="text"><p>Then the main remaining feature would be the ability to hide some zettels from the z-index</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#202018556" name="202018556"><div>2020-06-25 20:10:20</div></a></div><div class="text"><p>A neuron plugin could also easily scan your notes and create reference zettels for all the links. There's still the problem that it would take two clicks to get to the target of the link though</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#202081773" name="202081773"><div>2020-06-26 12:12:52</div></a></div><div class="text"><blockquote>
+<p>My impression is that if you want to attach metadata to links, it might make sense to just create the zettels yourself. Now what could be quite useful would be if your editor plugin could do that for you</p>
+</blockquote>
+<p>Alright I agree with you, I'll try to implement that in neuron-mode. That way it kinda encourages to write quick comments and summaries<br>
+As you said the only remaining feature is the ability to hide zettels, though I'd still like to to be able to see the external links on the footer of zettels</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#202100221" name="202100221"><div>2020-06-26 14:50:57</div></a></div><div class="text"><p>"ability to hide zettels" as in like <a href="https://github.com/srid/neuron/issues/158">https://github.com/srid/neuron/issues/158</a> - but exclude only from z-index?</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/issues/158" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/issues/158" title="Add unlisted property to zettels · Issue #158 · srid/neuron">Add unlisted property to zettels · Issue #158 · srid/neuron</a></div><div class="message_embed_description">Add an unlisted metadata property to effectivley hide the zettel from the z-index, backlinks, etc. --- title: My blog post WIP unlisted: true -- ... This is mainly to allow writing of draft zettels...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#202103616" name="202103616"><div>2020-06-26 15:17:32</div></a></div><div class="text"><p>yeah something like that</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

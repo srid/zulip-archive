@@ -1,0 +1,137 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="gilmi said:
+
+neuron-mode isn&#39;t really working for me :\ I get Wrong type argument: char-or-string-p, nil
+" name="description"><link href="https://funprog.srid.ca/neuron/neuron-mode-issues-on-ubuntu.html" rel="canonical"><meta property="og:title" content="neuron-mode issues on Ubuntu - Neuron"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Neuron"><meta property="og:article:modified_time" content="2020-05-02T17:49:10Z"><meta property="og:article:published_time" content="2020-05-02T15:25:14Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>neuron-mode issues on Ubuntu - Neuron</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">neuron-mode issues on Ubuntu - Neuron</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/neuron/" class="section">#Neuron</a><i class="right angle icon divider"></i><div class="active section">neuron-mode issues on Ubuntu</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196056487" name="196056487"><div>2020-05-02 15:25:14</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251051">gilmi</span> <a href="#narrow/pm-with/251051,251311-pm/near/196056341" title="#narrow/pm-with/251051,251311-pm/near/196056341">said</a>:</p>
+<blockquote>
+<p>neuron-mode isn't really working for me :\ I get <code>Wrong type argument: char-or-string-p, nil</code></p>
+</blockquote></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196056500" name="196056500"><div>2020-05-02 15:25:43</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251051">gilmi</span> <a href="#narrow/pm-with/251051,251311-pm/near/196056490" title="#narrow/pm-with/251051,251311-pm/near/196056490">said</a>:</p>
+<blockquote>
+<div class="codehilite"><pre><span></span><code>Command &quot;neuron --zettelkasten-dir /home/suppi/zettelkasten query --uri &#39;zquery://search&#39;&quot; exited with code 1: neuron: user error (Zettelkasten directory /home/suppi/zettelkasten/ does not exist.)
+
+neuron--read-query-result: Wrong type argument: char-or-string-p, nil
+</code></pre></div>
+
+
+</blockquote></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d3d2de116df80bc024b799e84dcdbc97?d=identicon&amp;version=1"></a><div class="content"><a class="author">gilmi</a><div class="metadata"><a href="#196056546" name="196056546"><div>2020-05-02 15:26:15</div></a></div><div class="text"><p>Right</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d3d2de116df80bc024b799e84dcdbc97?d=identicon&amp;version=1"></a><div class="content"><a class="author">gilmi</a><div class="metadata"><a href="#196056551" name="196056551"><div>2020-05-02 15:26:33</div></a></div><div class="text"><p>I think the first is because I'm using a local directory with -d</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196056559" name="196056559"><div>2020-05-02 15:27:00</div></a></div><div class="text"><p>So, you should execute <code>M-x neuron-select-zettelkasten</code> first ,and then choose the path to your haskell zettelkasten repo</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d3d2de116df80bc024b799e84dcdbc97?d=identicon&amp;version=1"></a><div class="content"><a class="author">gilmi</a><div class="metadata"><a href="#196056574" name="196056574"><div>2020-05-02 15:27:34</div></a></div><div class="text"><p>yeah I'm reading the manual for neuron-mode</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196056818" name="196056818"><div>2020-05-02 15:30:41</div></a></div><div class="text"><p>Basically,</p>
+<ol>
+<li><code>neuron-select-zettelkasten</code> - do once</li>
+<li><code>neuron-edit-zettel</code> to open a zettel by title</li>
+<li><code>neuron-rib-open-zettel</code> to view that zettel in the browser (assumes you have <code>neuron -d ... rib -wS</code> running in terminal; there is a command to run this in emacs too)</li>
+</ol></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196056838" name="196056838"><div>2020-05-02 15:31:16</div></a></div><div class="text"><p>And:</p>
+<ul>
+<li><code>neuron-new-zettel</code> to create a new zettel</li>
+<li><code>neuron-insert-zettel-link</code> to link to another zettel</li>
+</ul></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d3d2de116df80bc024b799e84dcdbc97?d=identicon&amp;version=1"></a><div class="content"><a class="author">gilmi</a><div class="metadata"><a href="#196056850" name="196056850"><div>2020-05-02 15:32:01</div></a></div><div class="text"><p>I managed editing a page!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196056982" name="196056982"><div>2020-05-02 15:34:47</div></a></div><div class="text"><p>Cool <span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196056993" name="196056993"><div>2020-05-02 15:35:06</div></a></div><div class="text"><p>this is basically my workflow for my personal website. i get static site for free, with 0 lines of haskell :-D <a href="https://www.srid.ca/" title="https://www.srid.ca/">https://www.srid.ca/</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://www.srid.ca/" style="background-image: url(https://srid.keybase.pub/me-small.jpeg)"></a><div class="data-container"><div class="message_embed_title"><a href="https://www.srid.ca/" title="Sridhar Ratnakumar">Sridhar Ratnakumar</a></div><div class="message_embed_description">Welcome to the personal home page of Sridhar Ratnakumar, a passionate Haskeller and an actualist. I work as a Haskell consultant (see résumé).</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d3d2de116df80bc024b799e84dcdbc97?d=identicon&amp;version=1"></a><div class="content"><a class="author">gilmi</a><div class="metadata"><a href="#196057708" name="196057708"><div>2020-05-02 15:53:26</div></a></div><div class="text"><p>nice</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#196057925" name="196057925"><div>2020-05-02 15:57:41</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251051">@gilmi</span> Do you remember the command that output <code>Wrong type argument: char-or-string-p, nil</code>?<br>
+I can change it to output a more understandable error message</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d3d2de116df80bc024b799e84dcdbc97?d=identicon&amp;version=1"></a><div class="content"><a class="author">gilmi</a><div class="metadata"><a href="#196057976" name="196057976"><div>2020-05-02 15:58:16</div></a></div><div class="text"><p>@felko it was <code>neuron--read-query-result</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#196058307" name="196058307"><div>2020-05-02 16:05:35</div></a></div><div class="text"><p>Did you call it directly or was it the name of the last function in the stacktrace?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#196058401" name="196058401"><div>2020-05-02 16:07:46</div></a></div><div class="text"><p>btw if you don't use evil I'd be glad to hear suggestions for the default emacs style keybindings.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d3d2de116df80bc024b799e84dcdbc97?d=identicon&amp;version=1"></a><div class="content"><a class="author">gilmi</a><div class="metadata"><a href="#196058684" name="196058684"><div>2020-05-02 16:13:45</div></a></div><div class="text"><p>it was the name of the last function in the stacktrace. I ran neuron-mode.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d3d2de116df80bc024b799e84dcdbc97?d=identicon&amp;version=1"></a><div class="content"><a class="author">gilmi</a><div class="metadata"><a href="#196058687" name="196058687"><div>2020-05-02 16:13:56</div></a></div><div class="text"><p>And sorry I do use evil-mode.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#196059490" name="196059490"><div>2020-05-02 16:33:50</div></a></div><div class="text"><p>Oh I forgot to tell you, the default zettelkasten location can be set using M-x customize (or in your config)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196059534" name="196059534"><div>2020-05-02 16:34:15</div></a></div><div class="text"><p>I think it was <code>neuron-edit-zettel</code> - when the default zettelkasten directory has not been created yet</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c?d=identicon&amp;version=1"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#196062666" name="196062666"><div>2020-05-02 17:49:10</div></a></div><div class="text"><p>Should be fixed now, all commands except <code>neuron-select-zettelkasten</code> check if the current zettelkasten exists and is a directory</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,175 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Would this function typecheck with -XLinear enabled?
+foo :: (Int -&gt; ()) ⊸ ()
+foo f = f 0 `seq` f 1
+" name="description"><link href="https://funprog.srid.ca/haskell/is-it-linear.html" rel="canonical"><meta property="og:title" content="Is it linear? - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-07-03T14:56:56Z"><meta property="og:article:published_time" content="2020-07-02T19:39:58Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"><title>Is it linear? - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Is it linear? - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Is it linear?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202735930" name="202735930"><div>2020-07-02 19:39:58</div></a></div><div class="text"><p>Would this function typecheck with <code>-XLinear</code> enabled?</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">foo</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="nb">()</span><span class="p">)</span> <span class="err">⊸</span> <span class="nb">()</span>
+<span class="nf">foo</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">f</span> <span class="mi">0</span> <span class="p">`</span><span class="n">seq</span><span class="p">`</span> <span class="n">f</span> <span class="mi">1</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202736191" name="202736191"><div>2020-07-02 19:41:59</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code>GHCi, version 8.11.0.20200331: https://www.haskell.org/ghc/  :? for help
+Loaded GHCi configuration from /home/matej/.ghci
+λ&gt; :set -XLinearTypes -XUnicodeSyntax
+λ&gt; foo :: (Int -&gt; ()) ⊸ (); foo f = f 0 `seq` f 1
+
+&lt;interactive&gt;:7:30: error:
+    • Couldn&#39;t match type ‘&#39;Many’ with ‘&#39;One’
+        arising from multiplicity of ‘f’
+    • In an equation for ‘foo’: foo f = f 0 `seq` f 1
+(0.01 secs,)
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202736305" name="202736305"><div>2020-07-02 19:42:39</div></a></div><div class="text"><p>(It's the older fork though, not sure if something changed in GHC HEAD)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202736811" name="202736811"><div>2020-07-02 19:46:14</div></a></div><div class="text"><p>That's about what I expected, but why?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202736828" name="202736828"><div>2020-07-02 19:46:23</div></a></div><div class="text"><p>Technically you're passing <code>f</code> in twice - and <code>seq</code> would be <code>a -o b -&gt; b</code>, wouldn't it?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202736862" name="202736862"><div>2020-07-02 19:46:44</div></a></div><div class="text"><p>sorry, I'm passing <code>f</code> in twice to what?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202736968" name="202736968"><div>2020-07-02 19:47:50</div></a></div><div class="text"><p>The definition I've been trying to understand this in terms of is: <a href="https://github.com/tweag/ghc-proposals/blob/6edfe1b836036755f8d48886639434b92fc90344/proposals/0000-linear-types.rst#31definition">https://github.com/tweag/ghc-proposals/blob/6edfe1b836036755f8d48886639434b92fc90344/proposals/0000-linear-types.rst#31definition</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/tweag/ghc-proposals/blob/6edfe1b836036755f8d48886639434b92fc90344/proposals/0000-linear-types.rst#31definition" style="background-image: url(https://avatars3.githubusercontent.com/u/6057932?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/tweag/ghc-proposals/blob/6edfe1b836036755f8d48886639434b92fc90344/proposals/0000-linear-types.rst#31definition" title="tweag/ghc-proposals">tweag/ghc-proposals</a></div><div class="message_embed_description">Proposed compiler and language changes for GHC and GHC/Haskell - tweag/ghc-proposals</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202737025" name="202737025"><div>2020-07-02 19:48:09</div></a></div><div class="text"><p>which says:</p>
+<blockquote>
+<p>Consuming a function exactly once means applying it and consuming its result exactly once</p>
+</blockquote></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202737096" name="202737096"><div>2020-07-02 19:48:47</div></a></div><div class="text"><p>what it doesn't say is "applying it <em>exactly once</em>", even though it does say something like that in the data value case</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202737183" name="202737183"><div>2020-07-02 19:49:45</div></a></div><div class="text"><p>So I apply <code>f</code> two times, and each time I consume its result exactly once AFAICT, no?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202737187" name="202737187"><div>2020-07-02 19:49:46</div></a></div><div class="text"><p>Hmm...:</p>
+<div class="codehilite"><pre><span></span><code>λ&gt; foo :: (Int -&gt; ()) ⊸ (); foo f = () `seq` f 1
+
+&lt;interactive&gt;:8:30: error:
+    • Couldn&#39;t match type ‘&#39;Many’ with ‘&#39;One’
+        arising from multiplicity of ‘f’
+    • In an equation for ‘foo’: foo f = () `seq` f 1
+(0.01 secs,)
+λ&gt; foo :: (Int -&gt; ()) ⊸ (); foo f = f 0 `seq` ()
+
+&lt;interactive&gt;:9:30: error:
+    • Couldn&#39;t match type ‘&#39;Many’ with ‘&#39;One’
+        arising from multiplicity of ‘f’
+    • In an equation for ‘foo’: foo f = f 0 `seq` ()
+(0.01 secs,)
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202737296" name="202737296"><div>2020-07-02 19:50:31</div></a></div><div class="text"><p>Alright, I guess it's <code>seq</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">λ</span><span class="o">&gt;</span> <span class="kt">:</span><span class="n">t</span> <span class="n">seq</span>
+<span class="nf">seq</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202737333" name="202737333"><div>2020-07-02 19:50:48</div></a></div><div class="text"><p>oh. can we define a linearly typed <code>seq</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202737374" name="202737374"><div>2020-07-02 19:51:11</div></a></div><div class="text"><p>well, we can specialize it anyway</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202737388" name="202737388"><div>2020-07-02 19:51:21</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code>seq&#39; :: () -&gt; () -&gt; ()
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202737452" name="202737452"><div>2020-07-02 19:52:00</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code><span class="nf">seq&#39;</span> <span class="ow">::</span> <span class="n">a</span> <span class="o">#-&gt;</span> <span class="n">b</span> <span class="o">#-&gt;</span> <span class="n">b</span>
+<span class="nf">seq&#39;</span> <span class="ow">=</span> <span class="n">unsafeCoerce</span> <span class="n">seq</span>
+</code></pre></div>
+
+
+<p><span aria-label="stuck out tongue wink" class="emoji emoji-1f61c" role="img" title="stuck out tongue wink">:stuck_out_tongue_wink:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202737530" name="202737530"><div>2020-07-02 19:52:34</div></a></div><div class="text"><p>does it work without unsafeCoerce if we just use <code>()</code>? i actually think it's wrong for it to be linear generally</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202737549" name="202737549"><div>2020-07-02 19:52:51</div></a></div><div class="text"><p>unless you use deepSeq</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202737582" name="202737582"><div>2020-07-02 19:53:18</div></a></div><div class="text"><p>Hmm - like that it doesn't consume it's fields?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202737619" name="202737619"><div>2020-07-02 19:53:42</div></a></div><div class="text"><p>yeah, if you make it parametric <code>a</code> could be a function or data type which you're not consuming</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202738208" name="202738208"><div>2020-07-02 19:58:41</div></a></div><div class="text"><p>so with this:</p>
+<div class="codehilite"><pre><span></span><code>seq&#39; :: () ⊸ () ⊸ ()
+seq&#39; () () = ()
+
+foo :: (Int -&gt; ()) ⊸ ()
+foo f = f 0 `seq&#39;` f 1
+</code></pre></div>
+
+
+<p>does it end up being linear?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202741681" name="202741681"><div>2020-07-02 20:35:24</div></a></div><div class="text"><p>How are you actually getting <code>-XLinear</code> btw? I'm building GHC master (I think) and I still only get 8.11.0.2020701, with no <code>-XLinear</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#202743798" name="202743798"><div>2020-07-02 20:58:57</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Is.20it.20linear.3F/near/202736305">said</a>:</p>
+<blockquote>
+<p>(It's the older fork though, not sure if something changed in GHC HEAD)</p>
+</blockquote></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202752685" name="202752685"><div>2020-07-02 22:46:22</div></a></div><div class="text"><p>oh, I see. I guess linear types being merged doesn't necessarily equate to being available for use yet</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202763619" name="202763619"><div>2020-07-03 02:33:06</div></a></div><div class="text"><p>DURRRRRR it's <code>-XLinearTypes</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202764791" name="202764791"><div>2020-07-03 03:04:43</div></a></div><div class="text"><p>Ok, so it's actually not linear, I get:</p>
+<div class="codehilite"><pre><span></span><code>Prelude&gt; foo :: (Int -&gt; ()) #-&gt; (); foo f = f 0 `seq&#39;` f 1
+
+&lt;interactive&gt;:23:32: error:
+    • Couldn&#39;t match type ‘&#39;Many’ with ‘&#39;One’
+        arising from multiplicity of ‘f’
+    • In an equation for ‘foo’: foo f = f 0 `seq&#39;` f 1
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202764809" name="202764809"><div>2020-07-03 03:05:17</div></a></div><div class="text"><p>but I don't quite get why</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d5f51e76392d18898a66faf360be0416?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Díaz Carrete</a><div class="metadata"><a href="#202788693" name="202788693"><div>2020-07-03 10:22:48</div></a></div><div class="text"><p>Pehaps "consuming a function exactly once means (applying it and consuming its result) exactly once".</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d5f51e76392d18898a66faf360be0416?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Díaz Carrete</a><div class="metadata"><a href="#202788797" name="202788797"><div>2020-07-03 10:24:07</div></a></div><div class="text"><p>or "consuming a function exactly once means (applying it and consuming its result exactly once) exactly once"."</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#202795798" name="202795798"><div>2020-07-03 11:56:23</div></a></div><div class="text"><p>maybe because it returns unit <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d5f51e76392d18898a66faf360be0416?d=identicon&amp;version=1"></a><div class="content"><a class="author">Daniel Díaz Carrete</a><div class="metadata"><a href="#202802031" name="202802031"><div>2020-07-03 13:09:30</div></a></div><div class="text"><p>Intuitively, I would find weird if  a function "that can be used once" could be applied two times.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#202802592" name="202802592"><div>2020-07-03 13:15:58</div></a></div><div class="text"><p>sounds reasonable</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#202812068" name="202812068"><div>2020-07-03 14:56:56</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251478">@Daniel Díaz Carrete</span> aha, that makes sense</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

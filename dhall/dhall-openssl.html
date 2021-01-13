@@ -1,0 +1,121 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I made something: https://github.com/jvanbruegge/dhall-openssl
+Got annoyed by not unterstanding my openssl configs. At the moment I only have code for CAs in there but I will add client certificates soon.
+I have to generate a buch of certificates with similar content and wanted the share the configs" name="description"><link href="https://funprog.srid.ca/dhall/dhall-openssl.html" rel="canonical"><meta property="og:title" content="dhall-openssl - Dhall"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Dhall"><meta property="og:article:modified_time" content="2020-04-09T16:08:42Z"><meta property="og:article:published_time" content="2020-03-05T14:31:15Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/93ea3d19789047de293970e997237325?d=identicon&amp;version=1"><title>dhall-openssl - Dhall</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">dhall-openssl - Dhall</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/dhall/" class="section">#Dhall</a><i class="right angle icon divider"></i><div class="active section">dhall-openssl</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/93ea3d19789047de293970e997237325?d=identicon&amp;version=1"></a><div class="content"><a class="author">Jan van Brügge</a><div class="metadata"><a href="#189796739" name="189796739"><div>2020-03-05 14:31:15</div></a></div><div class="text"><p>I made something: <a href="https://github.com/jvanbruegge/dhall-openssl" target="_blank" title="https://github.com/jvanbruegge/dhall-openssl">https://github.com/jvanbruegge/dhall-openssl</a></p>
+<p>Got annoyed by not unterstanding my openssl configs. At the moment I only have code for CAs in there but I will add client certificates soon.</p>
+<p>I have to generate a buch of certificates with similar content and wanted the share the configs (on a more granular level than just using sed for search and replace)</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/jvanbruegge/dhall-openssl" style="background-image: url(https://avatars0.githubusercontent.com/u/1529052?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/jvanbruegge/dhall-openssl" target="_blank" title="jvanbruegge/dhall-openssl">jvanbruegge/dhall-openssl</a></div><div class="message_embed_description">Generate a type-safe openssl configuration file with dhall - jvanbruegge/dhall-openssl</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/49728c9821ae019b34ffedde4f758018?d=identicon&amp;version=1"></a><div class="content"><a class="author">tristanC</a><div class="metadata"><a href="#193027619" name="193027619"><div>2020-04-06 11:27:54</div></a></div><div class="text"><p>I've proposed to add dhall-openssl to <a href="https://github.com/dhall-lang/awesome-dhall/pull/10" title="https://github.com/dhall-lang/awesome-dhall/pull/10">https://github.com/dhall-lang/awesome-dhall/pull/10</a> .</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/dhall-lang/awesome-dhall/pull/10" style="background-image: url(https://avatars3.githubusercontent.com/u/31601797?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/dhall-lang/awesome-dhall/pull/10" title="Add dhall-openssl by TristanCacqueray · Pull Request #10 · dhall-lang/awesome-dhall">Add dhall-openssl by TristanCacqueray · Pull Request #10 · dhall-lang/awesome-dhall</a></div><div class="message_embed_description">GitHub is home to over 40 million developers working together to host and review code, manage projects, and build software together.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/93ea3d19789047de293970e997237325?d=identicon&amp;version=1"></a><div class="content"><a class="author">Jan van Brügge</a><div class="metadata"><a href="#193464622" name="193464622"><div>2020-04-09 15:17:47</div></a></div><div class="text"><p>I've updated dhall-openssl with more options for CAs and user certificates. Now the readme contains a clear and easy series of commands to generate all of them.<br>
+<a href="https://github.com/jvanbruegge/dhall-openssl" title="https://github.com/jvanbruegge/dhall-openssl">https://github.com/jvanbruegge/dhall-openssl</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/jvanbruegge/dhall-openssl" style="background-image: url(https://avatars0.githubusercontent.com/u/1529052?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/jvanbruegge/dhall-openssl" title="jvanbruegge/dhall-openssl">jvanbruegge/dhall-openssl</a></div><div class="message_embed_description">Generate a type-safe openssl configuration file with dhall - jvanbruegge/dhall-openssl</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/93ea3d19789047de293970e997237325?d=identicon&amp;version=1"></a><div class="content"><a class="author">Jan van Brügge</a><div class="metadata"><a href="#193471966" name="193471966"><div>2020-04-09 16:08:42</div></a></div><div class="text"><p>Here is an example that I use for my personal stuff: <a href="https://github.com/jvanbruegge/kubernetes-config-v2/blob/eb54fddbe566412828d0bb6f4e11af6c48fa71ae/scripts/generate-certificates.sh" title="https://github.com/jvanbruegge/kubernetes-config-v2/blob/eb54fddbe566412828d0bb6f4e11af6c48fa71ae/scripts/generate-certificates.sh">https://github.com/jvanbruegge/kubernetes-config-v2/blob/eb54fddbe566412828d0bb6f4e11af6c48fa71ae/scripts/generate-certificates.sh</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/jvanbruegge/kubernetes-config-v2/blob/eb54fddbe566412828d0bb6f4e11af6c48fa71ae/scripts/generate-certificates.sh" style="background-image: url(https://avatars0.githubusercontent.com/u/1529052?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/jvanbruegge/kubernetes-config-v2/blob/eb54fddbe566412828d0bb6f4e11af6c48fa71ae/scripts/generate-certificates.sh" title="jvanbruegge/kubernetes-config-v2">jvanbruegge/kubernetes-config-v2</a></div><div class="message_embed_description">My new kubernetes setup with dhall. Contribute to jvanbruegge/kubernetes-config-v2 development by creating an account on GitHub.</div></div></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

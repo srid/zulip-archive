@@ -1,0 +1,192 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="When building on TravisCI we pull in the values of a few of Travis envvars (https://docs.travis-ci.com/user/environment-variables/#default-environment-variables). It seems they aren&#39;t pushed into the nix-build environment. Any pointers on how to do that would be most appreciated.
+Travis CI Documenta" name="description"><link href="https://funprog.srid.ca/nix/getting-envvars-into-haskell-builds.html" rel="canonical"><meta property="og:title" content="Getting envvars into Haskell builds - Nix"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Nix"><meta property="og:article:modified_time" content="2019-11-28T08:26:00Z"><meta property="og:article:published_time" content="2019-11-27T21:26:29Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"><title>Getting envvars into Haskell builds - Nix</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Getting envvars into Haskell builds - Nix</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/nix/" class="section">#Nix</a><i class="right angle icon divider"></i><div class="active section">Getting envvars into Haskell builds</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182059987" name="182059987"><div>2019-11-27 21:26:29</div></a></div><div class="text"><p>When building on TravisCI we pull in the values of a few of Travis envvars (<a href="https://docs.travis-ci.com/user/environment-variables/#default-environment-variables" target="_blank" title="https://docs.travis-ci.com/user/environment-variables/#default-environment-variables">https://docs.travis-ci.com/user/environment-variables/#default-environment-variables</a>). It seems they aren't pushed into the <code>nix-build</code> environment. Any pointers on how to do that would be most appreciated.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://docs.travis-ci.com/user/environment-variables/#default-environment-variables" style="background-image: url(https://docs.travis-ci.com/images/TravisCI-Full-Color.png)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://docs.travis-ci.com/user/environment-variables/#default-environment-variables" target="_blank" title="Travis CI Documentation">Travis CI Documentation</a></div><div class="message_embed_description">Environment Variables</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4d074af6cc341ef51b25bb2f738cdb11?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vaibhav Sagar</a><div class="metadata"><a href="#182068782" name="182068782"><div>2019-11-27 23:38:50</div></a></div><div class="text"><p>By default Nix doesn't have dependencies on your existing environment without them being explicitly specified. If you want to do this, I would suggest adding a parameter to the <code>.nix</code> file and then passing them in when you build using <code>--arg</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182069491" name="182069491"><div>2019-11-27 23:46:58</div></a></div><div class="text"><p>How can I explicitly specify that an envvar should be passed through?</p>
+<p>I don't succeed in getting anything I pass in via <code>--arg</code> to actually end up as an envvar in the build environment.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4d074af6cc341ef51b25bb2f738cdb11?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vaibhav Sagar</a><div class="metadata"><a href="#182069858" name="182069858"><div>2019-11-27 23:53:55</div></a></div><div class="text"><p>Here's an example:</p>
+<p><em>default.nix</em></p>
+<div class="codehilite"><pre><span></span><span class="p">{</span> environmentVariable <span class="o">?</span> <span class="no">null</span> <span class="p">}:</span> <span class="k">let</span>
+  <span class="ss">pkgs =</span> <span class="nb">import</span> <span class="l">&lt;nixpkgs&gt;</span> <span class="p">{};</span>
+<span class="k">in</span> pkgs<span class="o">.</span>runCommand <span class="s2">&quot;example&quot;</span> <span class="p">{</span>
+  <span class="k">inherit</span> environmentVariable<span class="p">;</span>
+<span class="p">}</span>
+<span class="s1">&#39;&#39;</span>
+<span class="s1">  echo $environmentVariable</span>
+<span class="s1">  touch $out</span>
+<span class="se">&#39;&#39;</span>
+</pre></div>
+
+
+<p>and you can use it as follows:</p>
+<div class="codehilite"><pre><span></span>$ nix-build
+these derivations will be built:
+  /nix/store/mcwn62zwczay4a06mk12zrs77424zgrj-example.drv
+building <span class="s1">&#39;/nix/store/mcwn62zwczay4a06mk12zrs77424zgrj-example.drv&#39;</span>...
+
+/nix/store/pa9p2zzmdgp8bgxw6qz42kdbrxdm9vr1-example
+
+$ nix-build --argstr environmentVariable <span class="s2">&quot;hello!&quot;</span>
+these derivations will be built:
+  /nix/store/2d5yzznb8wg721lblrcv5pv8wrxy2871-example.drv
+building <span class="s1">&#39;/nix/store/2d5yzznb8wg721lblrcv5pv8wrxy2871-example.drv&#39;</span>...
+hello!
+/nix/store/11gn4sppncwzqp9dnrbk9snvisvy3xlf-example
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182070457" name="182070457"><div>2019-11-28 00:05:21</div></a></div><div class="text"><p>Yes, that's how I can get an envvar into a <code>runCommand</code>, which takes envvars as an argument. I need the envvar to end up in a <code>haskellPackage.developPackage</code> which doesn't take envvars as an argument <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4d074af6cc341ef51b25bb2f738cdb11?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vaibhav Sagar</a><div class="metadata"><a href="#182071035" name="182071035"><div>2019-11-28 00:14:42</div></a></div><div class="text"><p>What is using these environment variables?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182071176" name="182071176"><div>2019-11-28 00:17:29</div></a></div><div class="text"><p>They are used during the build itself. Template Haskell picking them up and embedding them in the binary.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4d074af6cc341ef51b25bb2f738cdb11?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vaibhav Sagar</a><div class="metadata"><a href="#182072472" name="182072472"><div>2019-11-28 00:45:13</div></a></div><div class="text"><p>You can use <code>preBuild</code> to set those environment variables:</p>
+<p><em>default.nix</em></p>
+<div class="codehilite"><pre><span></span><span class="p">{</span> environmentVariable <span class="o">?</span> <span class="s2">&quot;&quot;</span> <span class="p">}:</span>
+<span class="k">let</span>
+  <span class="ss">pkgs =</span> <span class="nb">import</span> <span class="l">&lt;nixpkgs&gt;</span> <span class="p">{};</span>
+  <span class="ss">modifier =</span> drv<span class="p">:</span> pkgs<span class="o">.</span>haskell<span class="o">.</span>lib<span class="o">.</span>overrideCabal drv <span class="p">(</span>old<span class="p">:</span> <span class="p">{</span>
+    <span class="ss">preBuild =</span> <span class="s1">&#39;&#39;</span>
+<span class="s1">      export environmentVariable=</span><span class="si">${</span>environmentVariable<span class="si">}</span><span class="s1"></span>
+<span class="s1">    &#39;&#39;</span><span class="p">;</span>
+  <span class="p">});</span>
+<span class="k">in</span> pkgs<span class="o">.</span>haskellPackages<span class="o">.</span>developPackage <span class="p">{</span>
+  <span class="k">inherit</span> modifier<span class="p">;</span>
+  <span class="ss">root =</span> <span class="o">.</span><span class="l">/.</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p><em>Main.hs</em></p>
+<div class="codehilite"><pre><span></span><span class="cm">{-# LANGUAGE TemplateHaskell #-}</span>
+
+<span class="kr">module</span> <span class="nn">Main</span> <span class="kr">where</span>
+
+<span class="kr">import</span> <span class="nn">Language.Haskell.TH</span>
+<span class="kr">import</span> <span class="nn">System.Environment</span> <span class="p">(</span><span class="nf">lookupEnv</span><span class="p">)</span>
+<span class="kr">import</span> <span class="nn">Data.Maybe</span> <span class="p">(</span><span class="nf">fromMaybe</span><span class="p">)</span>
+
+<span class="nf">value</span> <span class="ow">::</span> <span class="kt">String</span>
+<span class="nf">value</span> <span class="ow">=</span> <span class="o">$</span><span class="p">(</span><span class="n">runIO</span> <span class="o">$</span> <span class="kr">do</span>
+  <span class="n">var</span> <span class="ow">&lt;-</span> <span class="n">lookupEnv</span> <span class="s">&quot;environmentVariable&quot;</span>
+  <span class="n">pure</span> <span class="o">$</span> <span class="kt">LitE</span> <span class="o">$</span> <span class="kt">StringL</span> <span class="o">$</span> <span class="n">fromMaybe</span> <span class="s">&quot;&quot;</span> <span class="n">var</span><span class="p">)</span>
+
+<span class="nf">main</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">main</span> <span class="ow">=</span> <span class="n">putStrLn</span> <span class="n">value</span>
+</pre></div>
+
+
+<p>I also needed a <code>.cabal</code> file but I haven't included it here. This is how you would use it:</p>
+<div class="codehilite"><pre><span></span>$ nix-build --argstr environmentVariable <span class="s2">&quot;hello!&quot;</span>
+&lt;...&gt;
+$ result/bin/environment-example
+hello!
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182072910" name="182072910"><div>2019-11-28 00:54:14</div></a></div><div class="text"><p>I can only have one <code>preBuild</code> right?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4d074af6cc341ef51b25bb2f738cdb11?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vaibhav Sagar</a><div class="metadata"><a href="#182073387" name="182073387"><div>2019-11-28 01:05:00</div></a></div><div class="text"><p>No, you can have multiple ones as long as you prepend previous overrides by doing something like</p>
+<div class="codehilite"><pre><span></span><span class="ss">preBuild =</span> <span class="p">(</span>old<span class="o">.</span>preBuild <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">++</span> <span class="s1">&#39;&#39;</span>
+<span class="s1">  &lt;whatever&gt;</span>
+<span class="se">&#39;&#39;</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182073564" name="182073564"><div>2019-11-28 01:08:44</div></a></div><div class="text"><p>Apparently the following works too:</p>
+<div class="codehilite"><pre><span></span>modifier = drv: drv.overrideAttrs (old: old // {
+    envvar = 17;
+  });
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4d074af6cc341ef51b25bb2f738cdb11?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vaibhav Sagar</a><div class="metadata"><a href="#182073682" name="182073682"><div>2019-11-28 01:11:19</div></a></div><div class="text"><p>Cool!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182090374" name="182090374"><div>2019-11-28 08:26:00</div></a></div><div class="text"><p>Thanks for your help. You put me on track to that <code>overrideAttrs</code> solution, which I rather like (easier to compose).</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

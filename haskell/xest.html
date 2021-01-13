@@ -1,0 +1,127 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Trying out https://jhgarner.github.io/Xest-Window-Manager/, and this thing honestly looks really cool - I had troubles navigating through XMonad, but this one just works out of the box" name="description"><link href="https://funprog.srid.ca/haskell/xest.html" rel="canonical"><meta property="og:title" content="Xest - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-01-08T13:45:25Z"><meta property="og:article:published_time" content="2021-01-08T11:18:34Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"><title>Xest - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Xest - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Xest</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#222061017" name="222061017"><div>2021-01-08 11:18:34</div></a></div><div class="text"><p>Trying out <a href="https://jhgarner.github.io/Xest-Window-Manager/">https://jhgarner.github.io/Xest-Window-Manager/</a>, and this thing honestly looks really cool - I had troubles navigating through XMonad, but this one just works out of the box</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061217" name="222061217"><div>2021-01-08 11:21:38</div></a></div><div class="text"><p>I don't quite understand the selling point they're making</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061229" name="222061229"><div>2021-01-08 11:21:47</div></a></div><div class="text"><p>are they saying you have "tiers" of workspaces</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061279" name="222061279"><div>2021-01-08 11:22:04</div></a></div><div class="text"><p>e.g. on tier 0 you have two "global" workspaces, and then you work within "tier 1" most of the time</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061289" name="222061289"><div>2021-01-08 11:22:18</div></a></div><div class="text"><p>and when you want to totally "context switch" you go to the different tier 0 one</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061310" name="222061310"><div>2021-01-08 11:22:37</div></a></div><div class="text"><p>and they suggest that you have completely different keybinds for switch tier 0s vs switching tier 1s?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#222061506" name="222061506"><div>2021-01-08 11:25:36</div></a></div><div class="text"><p>Playing with it a little bit, it seems like you have these "many" tilers that can contain multiple tilers with single or multiple windows<br>
+These tilers can be set to fullscreen mode, in which case you basically have multiple independent "workspaces" to manipulate<br>
+So if I setup some non-trivial layouts in tilers nested under this fullscreen one, I can switch between them as if I was switching between separate workspaces</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061564" name="222061564"><div>2021-01-08 11:26:07</div></a></div><div class="text"><p>so instead of having keybinds for different tiers, you have binds that "go down/up" in the tree</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061573" name="222061573"><div>2021-01-08 11:26:14</div></a></div><div class="text"><p>and then the binds manipulate the current layer/level of the tree?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#222061620" name="222061620"><div>2021-01-08 11:26:48</div></a></div><div class="text"><p>Yeah - basically, all you have is tiler for single window and tiler for multiple tilers, and you can nest them to create any layout you want, navigating through them as through some tree</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061654" name="222061654"><div>2021-01-08 11:27:16</div></a></div><div class="text"><p>sounds fun, might actually try it out too, I've been using using i3 for 3-4 years now, in a mostly disorganised fashion (apart from the "always there" stuff)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#222061758" name="222061758"><div>2021-01-08 11:28:42</div></a></div><div class="text"><p>Though I am yet to find out how to use multiple displays (did not find way to edit the second one <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span> )<br>
+And I am currently purposefully avoiding quotes because I am stuck at Slovak keyboard without shortcut to change it <span aria-label="joy" class="emoji emoji-1f602" role="img" title="joy">:joy:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061764" name="222061764"><div>2021-01-08 11:28:46</div></a></div><div class="text"><p>oh, haskell too, <em>I wonder</em> if they have a zipper in there :P</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061784" name="222061784"><div>2021-01-08 11:29:07</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Xest/near/222061758">said</a>:</p>
+<blockquote>
+<p>Though I am yet to find out how to use multiple displays (did not find way to edit the second one <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span> )</p>
+</blockquote>
+<p>this works with X, right? try <code>arandr</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061792" name="222061792"><div>2021-01-08 11:29:20</div></a></div><div class="text"><p>or do you mean, how to switch between displays in the wm?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#222061829" name="222061829"><div>2021-01-08 11:29:52</div></a></div><div class="text"><p>I mean, I see the second screen, but it is stuck in "normal" mode and all I can do is to hover mouse inside of it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061905" name="222061905"><div>2021-01-08 11:30:24</div></a></div><div class="text"><p>no focus on the other workspace when you do that?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222061970" name="222061970"><div>2021-01-08 11:31:43</div></a></div><div class="text"><p>OwO, recursion schemes and <code>freer-simple</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#222062042" name="222062042"><div>2021-01-08 11:32:18</div></a></div><div class="text"><p>I've yet to find recursion schemes other than <code>foldr</code> useful, but maybe I'm just thinking on too low a level/not working on something that requires them often</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#222062082" name="222062082"><div>2021-01-08 11:32:53</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/Xest/near/222061905">said</a>:</p>
+<blockquote>
+<p>no focus on the other workspace when you do that?</p>
+</blockquote>
+<p>Seems like not</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#222062258" name="222062258"><div>2021-01-08 11:34:37</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/Xest/near/222062042">said</a>:</p>
+<blockquote>
+<p>I've yet to find recursion schemes other than <code>foldr</code> useful, but maybe I'm just thinking on too low a level/not working on something that requires them often</p>
+</blockquote>
+<p>I mean, I guess most of transformations we usually do are just folds - even for that purpose, I would consider them to be pretty nice simply because they compose</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#222073237" name="222073237"><div>2021-01-08 13:45:25</div></a></div><div class="text"><p>Hmm, seems like second display works after all - after some clicking and switching between modes I've opened new windows there</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

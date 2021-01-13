@@ -1,0 +1,196 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="While I am searching on how to structure my project using Polysemy, I came accross this https://github.com/thma/PolysemyCleanArchitecture. Despite the clean code founder (which is Robert C. Martin), I found interest in pursuing what describe in this repo. Anyone has thought on this?
+I haven&#39;t seen p" name="description"><link href="https://funprog.srid.ca/polysemy/polysemy-clean-architecture.html" rel="canonical"><meta property="og:title" content="Polysemy Clean Architecture - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-11-05T02:34:52Z"><meta property="og:article:published_time" content="2020-10-31T10:39:40Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"><title>Polysemy Clean Architecture - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Polysemy Clean Architecture - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Polysemy Clean Architecture</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#215185316" name="215185316"><div>2020-10-31 10:39:40</div></a></div><div class="text"><p>While I am searching on how to structure my project using Polysemy, I came accross this <a href="https://github.com/thma/PolysemyCleanArchitecture">https://github.com/thma/PolysemyCleanArchitecture</a>. Despite the clean code founder (which is Robert C. Martin), I found interest in pursuing what describe in this repo. Anyone has thought on this?</p>
+<p>I haven't seen production-grade app which use Polysemy in anger. If anyone has an answer, please let me know.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/thma/PolysemyCleanArchitecture" style="background-image: url(https://avatars3.githubusercontent.com/u/11872995?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/thma/PolysemyCleanArchitecture" title="thma/PolysemyCleanArchitecture">thma/PolysemyCleanArchitecture</a></div><div class="message_embed_description">Showcasing how the Polysemy library can be used to implement a REST application conforming to the guidelines of the Clean Architecture model. - thma/PolysemyCleanArchitecture</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#215249098" name="215249098"><div>2020-11-01 15:35:36</div></a></div><div class="text"><p>one of the big differences between this and something more "real-world" is that you need more granular actions for your db</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#215249154" name="215249154"><div>2020-11-01 15:36:24</div></a></div><div class="text"><p>getting all the values and filtering in haskell obviously doesn't scale very well</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#215249177" name="215249177"><div>2020-11-01 15:38:00</div></a></div><div class="text"><p>you probably also want transactions as an effect, because otherwise you can't compose two db actions within the same transaction</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#215249228" name="215249228"><div>2020-11-01 15:38:43</div></a></div><div class="text"><p>(or you could do something more "heavy handed" like running all your actions for one query inside the same transaction I guess)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#215271964" name="215271964"><div>2020-11-02 01:16:39</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/216942-Polysemy/topic/Polysemy.20Clean.20Architecture/near/215249177">said</a>:</p>
+<blockquote>
+<p>you probably also want transactions as an effect, because otherwise you can't compose two db actions within the same transaction</p>
+</blockquote>
+<p>I just want to clarify, do you mean by transaction as an effect, is wrt this code? <a href="https://github.com/thma/PolysemyCleanArchitecture/blob/master/src/UseCases/ReservationUseCase.hs">https://github.com/thma/PolysemyCleanArchitecture/blob/master/src/UseCases/ReservationUseCase.hs</a> ?</p>
+<p>or the reservation in here: <a href="https://github.com/thma/PolysemyCleanArchitecture/blob/master/src/Domain/ReservationDomain.hs">https://github.com/thma/PolysemyCleanArchitecture/blob/master/src/Domain/ReservationDomain.hs</a>?</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/thma/PolysemyCleanArchitecture/blob/master/src/UseCases/ReservationUseCase.hs" style="background-image: url(https://avatars3.githubusercontent.com/u/11872995?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/thma/PolysemyCleanArchitecture/blob/master/src/UseCases/ReservationUseCase.hs" title="thma/PolysemyCleanArchitecture">thma/PolysemyCleanArchitecture</a></div><div class="message_embed_description">Showcasing how the Polysemy library can be used to implement a REST application conforming to the guidelines of the Clean Architecture model. - thma/PolysemyCleanArchitecture</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://github.com/thma/PolysemyCleanArchitecture/blob/master/src/Domain/ReservationDomain.hs" style="background-image: url(https://avatars3.githubusercontent.com/u/11872995?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/thma/PolysemyCleanArchitecture/blob/master/src/Domain/ReservationDomain.hs" title="thma/PolysemyCleanArchitecture">thma/PolysemyCleanArchitecture</a></div><div class="message_embed_description">Showcasing how the Polysemy library can be used to implement a REST application conforming to the guidelines of the Clean Architecture model. - thma/PolysemyCleanArchitecture</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#215271991" name="215271991"><div>2020-11-02 01:17:38</div></a></div><div class="text"><p>oh god, how do we remove thumbnail.. in discord I can just use <code>&lt;link&gt;</code>format</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#215285303" name="215285303"><div>2020-11-02 07:17:38</div></a></div><div class="text"><p>I'm still not sure if you can, after posting a message! unfortunately..</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#215285396" name="215285396"><div>2020-11-02 07:19:48</div></a></div><div class="text"><p>yep, I'm referring to the fact that if you call two KVS actions one after another, as it is implemented right now in the repo, they won't run in the same transaction<br>
+(if you use <code>runKvsAsSQLite</code>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#215285492" name="215285492"><div>2020-11-02 07:21:12</div></a></div><div class="text"><p>so unless you have some mechanism to express when you want to start and end a transaction in your "business logic" you will always have to "hardcode" when transactions start and end</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#215297197" name="215297197"><div>2020-11-02 09:44:25</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/216942-Polysemy/topic/Polysemy.20Clean.20Architecture/near/215285396">said</a>:</p>
+<blockquote>
+<p>yep, I'm referring to the fact that if you call two KVS actions one after another, as it is implemented right now in the repo, they won't run in the same transaction<br>
+(if you use <code>runKvsAsSQLite</code>)</p>
+</blockquote>
+<p>hmm I'm still confused (maybe because I don't have enough knowledge on Polysemy). After I search more, I found this repo (which I'm stealing some code from) <a href="https://github.com/fendor/ase-ss20-slacker-team/blob/master/src/Postgres/Polysemy.hs">https://github.com/fendor/ase-ss20-slacker-team/blob/master/src/Postgres/Polysemy.hs</a> that maybe close to what you mean.</p>
+<p>But then I wonder if I need to interpret twice? If from the following code, the <code>getAction k</code> is another effect. How do I do that?</p>
+<div class="codehilite"><pre><span></span><code>runKvsAsSQLite = interpret $ \case
+  GetKvs k      -&gt; getAction k
+  ListAllKvs    -&gt; listAction
+  InsertKvs k v -&gt; insertAction k v
+  DeleteKvs k   -&gt; deleteAction k
+</code></pre></div>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/fendor/ase-ss20-slacker-team/blob/master/src/Postgres/Polysemy.hs" style="background-image: url(https://avatars1.githubusercontent.com/u/8463814?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/fendor/ase-ss20-slacker-team/blob/master/src/Postgres/Polysemy.hs" title="fendor/ase-ss20-slacker-team">fendor/ase-ss20-slacker-team</a></div><div class="message_embed_description">Contribute to fendor/ase-ss20-slacker-team development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#215298522" name="215298522"><div>2020-11-02 09:58:21</div></a></div><div class="text"><p>What I mean is the following:<br>
+Your linked repo works like this<br>
+Effects:</p>
+<ul>
+<li>Database actions<ul>
+<li>get</li>
+<li>delete</li>
+<li>insert</li>
+</ul>
+</li>
+</ul>
+<p>Effect interpreters work like this:<br>
+<code>get</code> - start transaction, get data, end transaction<br>
+<code>delete</code> - start transaction, delete data, end transaction<br>
+<code>insert</code> - start transaction, insert data, end transaction</p>
+<p>so if you write</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">xKey</span> <span class="ow">&lt;-</span> <span class="n">insert</span> <span class="o">&lt;</span><span class="kr">data</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="kr">data</span><span class="o">&gt;</span> <span class="ow">&lt;-</span> <span class="n">get</span> <span class="n">xKey</span>
+</code></pre></div>
+<p>the <code>insert</code> and the <code>get</code> will run in different transactions, meaning that the <code>&lt;data&gt;</code> might already be gone or modified by the time you're <code>get</code>ing it</p>
+<p>instead you want some way to do</p>
+<p>Effects:</p>
+<ul>
+<li>
+<p>Transaction:</p>
+<ul>
+<li>transaction &lt;other database actions&gt;</li>
+</ul>
+</li>
+<li>
+<p>Database actions</p>
+<ul>
+<li>get</li>
+<li>insert</li>
+<li>delete</li>
+</ul>
+</li>
+</ul>
+<p>And your interpreters will do something like:<br>
+<code>transaction mx</code> - start transaction, run the <code>mx</code> action, end transaction</p>
+<p>so that you can now write</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">transaction</span> <span class="o">$</span> <span class="kr">do</span>
+  <span class="n">xKey</span> <span class="ow">&lt;-</span> <span class="n">insert</span> <span class="o">&lt;</span><span class="kr">data</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="kr">data</span><span class="o">&gt;</span> <span class="ow">&lt;-</span> <span class="n">get</span> <span class="n">xKey</span>
+</code></pre></div>
+<p>and be sure that your data is consistent<br>
+there were discussions and proposed solutions for this - <a href="https://github.com/polysemy-research/polysemy/issues/361#issuecomment-702344580">https://github.com/polysemy-research/polysemy/issues/361#issuecomment-702344580</a>, and <a href="https://funprog.srid.ca/polysemy/interpreter-for-action-that-adds-on-the-effect-stack.html#212801533">https://funprog.srid.ca/polysemy/interpreter-for-action-that-adds-on-the-effect-stack.html#212801533</a><br>
+(the second one is better)</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/polysemy-research/polysemy/issues/361#issuecomment-702344580" style="background-image: url(https://avatars1.githubusercontent.com/u/52079915?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/polysemy-research/polysemy/issues/361#issuecomment-702344580" title="Polysemy and Persistent: transactions at business level · Issue #361 · polysemy-research/polysemy">Polysemy and Persistent: transactions at business level · Issue #361 · polysemy-research/polysemy</a></div><div class="message_embed_description">Hi, I&#39;ve been pulling my hair for the last couple of days on this issue, but I can&#39;t manage to find a solution, I would appreciate if anyone can help me! Goal Use together Polysemy and Pers...</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://funprog.srid.ca/polysemy/interpreter-for-action-that-adds-on-the-effect-stack.html#212801533" style="background-image: url(https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1)"></a><div class="data-container"><div class="message_embed_title"><a href="https://funprog.srid.ca/polysemy/interpreter-for-action-that-adds-on-the-effect-stack.html#212801533" title="Interpreter for action that adds on the effect stack - Polysemy">Interpreter for action that adds on the effect stack - Polysemy</a></div><div class="message_embed_description">how can I implement runTransaction?
+data Db m a where
+  -- ...
+
+data Token
+
+runDb :: Member (Embed IO) r =&gt; Token -&gt; Sem (Db ': r) a -&gt; Sem r a
+runDb tok = interpret \case
+
+data Transaction m a where
+  InTransaction :: Sem (Db ': r) a -&gt; Transaction (Sem r) a
+
+inTransaction :: Member Transaction r =</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#215303275" name="215303275"><div>2020-11-02 10:48:00</div></a></div><div class="text"><p>Thank you, so it's been discussed previously.  I should search it before. I'll read that link. Thanks.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#215665533" name="215665533"><div>2020-11-05 02:34:52</div></a></div><div class="text"><p>After reading the link and trying to implement the solutions, I think I am gonna use with the current non-"real world" app approach.  It's a small playground to implement polysemy though.</p>
+<p>Maybe after I learned more about effect system, I'll get back to it.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,175 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I have 2 problem when dealing with reflex-platform and obelisk:
+
+
+when I use reflex-platform.nixpkgs.haskellPackages, it means that I use the ghc865 right? Because I can&#39;t see the haskellPackages mentioned anywhere in reflex-platform&#39;s default.nix. What I see is only ghc here https://github.com/refl" name="description"><link href="https://funprog.srid.ca/haskell/reflex-and-obelisk-question.html" rel="canonical"><meta property="og:title" content="reflex and obelisk question - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2019-12-10T07:34:22Z"><meta property="og:article:published_time" content="2019-12-08T01:42:12Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"><title>reflex and obelisk question - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">reflex and obelisk question - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">reflex and obelisk question</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#182870909" name="182870909"><div>2019-12-08 01:42:12</div></a></div><div class="text"><p>I have 2 problem when dealing with reflex-platform and obelisk:</p>
+<ol>
+<li>
+<p>when I use <code>reflex-platform.nixpkgs.haskellPackages</code>, it means that I use the ghc865 right? Because I can't see the <code>haskellPackages</code> mentioned anywhere in reflex-platform's <code>default.nix</code>. What I see is only <code>ghc</code> here <a href="https://github.com/reflex-frp/reflex-platform/blob/develop/default.nix#L192" target="_blank" title="https://github.com/reflex-frp/reflex-platform/blob/develop/default.nix#L192">https://github.com/reflex-frp/reflex-platform/blob/develop/default.nix#L192</a>.</p>
+</li>
+<li>
+<p>When I put haskell package inside </p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span>obelisk.project ./. ({ pkgs, ... }@args:
+  let
+    inherit (obelisk.reflex-platform) hackGet;
+
+  in {
+    staticFiles = pkgs.callPackage ./static { pkgs = obelisk.nixpkgs; };
+    # staticFilesImpure = toString ./result-static;
+    packages = {
+      ........  # My thunk packages
+    };
+
+    overrides = pkgs.lib.composeExtensions rhyolite.haskellOverrides (self: super: with pkgs.haskell.lib; {
+       ....... # My custom packages
+    });
+  })
+</pre></div>
+
+
+<p>are packages both in <code>packages</code> and <code>overrides</code> become accessible? How do I have <code>haskellPackages</code> contains those packages set?</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/reflex-frp/reflex-platform/blob/develop/default.nix#L192" style="background-image: url(https://avatars2.githubusercontent.com/u/11824260?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/reflex-frp/reflex-platform/blob/develop/default.nix#L192" target="_blank" title="reflex-frp/reflex-platform">reflex-frp/reflex-platform</a></div><div class="message_embed_description">Reflex FRP is a composable, cross-platform functional reactive programming framework for Haskell.  It allows you to build interactive components in pure functional style, working in harmony with es...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#182883985" name="182883985"><div>2019-12-08 08:49:41</div></a></div><div class="text"><p>Packages specifically has some extra magic in it to do with Thunks getting properly handled. Overrides is for your usual dontCheck / jailbreak, callHackage, etc.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#182884027" name="182884027"><div>2019-12-08 08:50:06</div></a></div><div class="text"><p>Ghc and ghcjs are both compilerWithPackages.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#182884041" name="182884041"><div>2019-12-08 08:51:06</div></a></div><div class="text"><p>Like <code>haskell.packages.ghc864.ghcWithPackages(ps: [ps.zlib ps.HsOpenSSL])</code> but for all the stuff that goes into the build across backend/frontend/common.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#182884094" name="182884094"><div>2019-12-08 08:52:10</div></a></div><div class="text"><p>I believe the packages being different is something to do with making sure they are in the ghcid repl properly when unpacked. But that may be wrong. <span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#182903359" name="182903359"><div>2019-12-08 18:29:17</div></a></div><div class="text"><blockquote>
+<p>Packages specifically has some extra magic in it to do with Thunks getting properly handled. Overrides is for your usual dontCheck / jailbreak, callHackage, etc.</p>
+</blockquote>
+<p>Did package that in the <code>packages</code> will be built using <code>callCabal2nix</code>in the directory that contains <code>.cabal</code> file? Or it will pick the <code>default.nix</code> if it is exists?</p>
+<p>For example, the directory structure is:</p>
+<div class="codehilite"><pre><span></span>src-packages
+|----&gt; packages
+           |------&gt; packages.cabal
+           |------&gt; default.nix
+           |------&gt; ...
+</pre></div>
+
+
+<p>and it seems using <code>hackGet</code> in the <code>packages</code> ignores the <code>default.nix</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#182903515" name="182903515"><div>2019-12-08 18:32:49</div></a></div><div class="text"><p>Yeah, it does a callCabal2nix on it iirc.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#182903976" name="182903976"><div>2019-12-08 18:45:01</div></a></div><div class="text"><p>Hackget itself doesn't do that, but something in obelisk does. Hackget is pretty simple and not magical: <a href="https://github.com/reflex-frp/reflex-platform/blob/develop/nixpkgs-overlays/hack-get/default.nix" target="_blank" title="https://github.com/reflex-frp/reflex-platform/blob/develop/nixpkgs-overlays/hack-get/default.nix">https://github.com/reflex-frp/reflex-platform/blob/develop/nixpkgs-overlays/hack-get/default.nix</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/reflex-frp/reflex-platform/blob/develop/nixpkgs-overlays/hack-get/default.nix" style="background-image: url(https://avatars2.githubusercontent.com/u/11824260?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/reflex-frp/reflex-platform/blob/develop/nixpkgs-overlays/hack-get/default.nix" target="_blank" title="reflex-frp/reflex-platform">reflex-frp/reflex-platform</a></div><div class="message_embed_description">Reflex FRP is a composable, cross-platform functional reactive programming framework for Haskell.  It allows you to build interactive components in pure functional style, working in harmony with es...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#182914106" name="182914106"><div>2019-12-08 23:35:25</div></a></div><div class="text"><blockquote>
+<p>Hackget itself doesn't do that, but something in obelisk does. Hackget is pretty simple and not magical: <a href="https://github.com/reflex-frp/reflex-platform/blob/develop/nixpkgs-overlays/hack-get/default.nix" target="_blank" title="https://github.com/reflex-frp/reflex-platform/blob/develop/nixpkgs-overlays/hack-get/default.nix">https://github.com/reflex-frp/reflex-platform/blob/develop/nixpkgs-overlays/hack-get/default.nix</a></p>
+</blockquote>
+<p>I see. I have seen some of OS project which only using <code>hackGet</code> on all the package that goes into <code>packages</code> attribute like here: <a href="https://gitlab.com/obsidian.systems/kiln/blob/develop/tezos-bake-central/default.nix#L42" target="_blank" title="https://gitlab.com/obsidian.systems/kiln/blob/develop/tezos-bake-central/default.nix#L42">https://gitlab.com/obsidian.systems/kiln/blob/develop/tezos-bake-central/default.nix#L42</a></p>
+<p>So the case that I am facing right now is I try to include hasktorch in my obelisk project (without obelisk, it builds fine). But I want to put it in the <code>packages</code> attribute. But, according to this <a href="https://github.com/hasktorch/hasktorch/tree/master/libtorch-ffi" target="_blank" title="https://github.com/hasktorch/hasktorch/tree/master/libtorch-ffi">https://github.com/hasktorch/hasktorch/tree/master/libtorch-ffi</a> and this <a href="https://github.com/hasktorch/hasktorch/blob/master/nix/shared.nix#L40" target="_blank" title="https://github.com/hasktorch/hasktorch/blob/master/nix/shared.nix#L40">https://github.com/hasktorch/hasktorch/blob/master/nix/shared.nix#L40</a>, I realized that I cannot rely only on <code>hackGet</code>. I already try to modify<code>default.nix</code>inside libtorch-ffi, but as I mentioned in my previous chat, when I build the project with <code>nix-build -A ghc.backend</code>,  the <code>default.nix</code>was ignored, and it uses <code>libtorch-ffi.cabal</code> to build the package.</p>
+<p>I'm getting <code>anonymus function at ... called without required argument c10</code>. So what is my best option here? Since I still want to put libtorch-ffi in my package.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://gitlab.com/obsidian.systems/kiln/blob/develop/tezos-bake-central/default.nix#L42" style="background-image: url(https://assets.gitlab-static.net/assets/gitlab_logo-7ae504fe4f68fdebb3c2034e36621930cd36ea87924c11ff65dbcb8ed50dca58.png)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://gitlab.com/obsidian.systems/kiln/blob/develop/tezos-bake-central/default.nix#L42" target="_blank" title="tezos-bake-central/default.nix · develop · obsidian.systems / kiln">tezos-bake-central/default.nix · develop · obsidian.systems / kiln</a></div><div class="message_embed_description">GitLab.com</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://github.com/hasktorch/hasktorch/tree/master/libtorch-ffi" style="background-image: url(https://avatars1.githubusercontent.com/u/27371826?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/hasktorch/hasktorch/tree/master/libtorch-ffi" target="_blank" title="hasktorch/hasktorch">hasktorch/hasktorch</a></div><div class="message_embed_description">Tensors and neural networks in Haskell. Contribute to hasktorch/hasktorch development by creating an account on GitHub.</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://github.com/hasktorch/hasktorch/blob/master/nix/shared.nix#L40" style="background-image: url(https://avatars1.githubusercontent.com/u/27371826?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/hasktorch/hasktorch/blob/master/nix/shared.nix#L40" target="_blank" title="hasktorch/hasktorch">hasktorch/hasktorch</a></div><div class="message_embed_description">Tensors and neural networks in Haskell. Contribute to hasktorch/hasktorch development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#182944421" name="182944421"><div>2019-12-09 10:54:24</div></a></div><div class="text"><p>I just realized that obelisk still uses ghc 8.4?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#182952072" name="182952072"><div>2019-12-09 12:51:53</div></a></div><div class="text"><p>okay, I just realized I use obelisk <code>master</code> branch instead of <code>develop</code> branch. I write here for my self reminder.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#182974844" name="182974844"><div>2019-12-09 16:47:06</div></a></div><div class="text"><p>I always use the <code>develop</code> branch.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#182974861" name="182974861"><div>2019-12-09 16:47:24</div></a></div><div class="text"><p>And then switch over the skeleton to that of develop's skeleton.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#183035795" name="183035795"><div>2019-12-10 07:31:16</div></a></div><div class="text"><blockquote>
+<p>And then switch over the skeleton to that of develop's skeleton.</p>
+</blockquote>
+<p>Yeah, that is what I am missing until I see the <code>.obelisk/impl</code> folder in kiln package.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#183035996" name="183035996"><div>2019-12-10 07:34:22</div></a></div><div class="text"><blockquote>
+<blockquote>
+<p>Hackget itself doesn't do that, but something in obelisk does. Hackget is pretty simple and not magical: <a href="https://github.com/reflex-frp/reflex-platform/blob/develop/nixpkgs-overlays/hack-get/default.nix" target="_blank" title="https://github.com/reflex-frp/reflex-platform/blob/develop/nixpkgs-overlays/hack-get/default.nix">https://github.com/reflex-frp/reflex-platform/blob/develop/nixpkgs-overlays/hack-get/default.nix</a></p>
+</blockquote>
+<p>I see. I have seen some of OS project which only using <code>hackGet</code> on all the package that goes into <code>packages</code> attribute like here: <a href="https://gitlab.com/obsidian.systems/kiln/blob/develop/tezos-bake-central/default.nix#L42" target="_blank" title="https://gitlab.com/obsidian.systems/kiln/blob/develop/tezos-bake-central/default.nix#L42">https://gitlab.com/obsidian.systems/kiln/blob/develop/tezos-bake-central/default.nix#L42</a></p>
+<p>So the case that I am facing right now is I try to include hasktorch in my obelisk project (without obelisk, it builds fine). But I want to put it in the <code>packages</code> attribute. But, according to this <a href="https://github.com/hasktorch/hasktorch/tree/master/libtorch-ffi" target="_blank" title="https://github.com/hasktorch/hasktorch/tree/master/libtorch-ffi">https://github.com/hasktorch/hasktorch/tree/master/libtorch-ffi</a> and this <a href="https://github.com/hasktorch/hasktorch/blob/master/nix/shared.nix#L40" target="_blank" title="https://github.com/hasktorch/hasktorch/blob/master/nix/shared.nix#L40">https://github.com/hasktorch/hasktorch/blob/master/nix/shared.nix#L40</a>, I realized that I cannot rely only on <code>hackGet</code>. I already try to modify<code>default.nix</code>inside libtorch-ffi, but as I mentioned in my previous chat, when I build the project with <code>nix-build -A ghc.backend</code>,  the <code>default.nix</code>was ignored, and it uses <code>libtorch-ffi.cabal</code> to build the package.</p>
+<p>I'm getting <code>anonymus function at ... called without required argument c10</code>. So what is my best option here? Since I still want to put libtorch-ffi in my package.</p>
+</blockquote>
+<p>I think I finally able to build this library with obelisk. One thing that I notice (as for my reminder here) is that <code>package</code> and <code>overrides</code> attribute is tied together. what I did is I <code>hackGet</code> hasktorch, and since it fails some test, I put the package in <code>overrides</code> and put <code>dontCheck</code> to avoid the test.</p>
+<p>I'm not sure how it works though. I thought that package and overrides will be evaluated together and package mentiond in <code>package</code> attribute can't be override anymore.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,146 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Are there any lazy impure languages? What consequences would lack of purity have on a language like Haskell? A couple come to mind:
+
+The order of effectful operations would be undefined
+You wouldn&#39;t be able to distinguish between an effectful operation returning a value and the value itself (oof, th" name="description"><link href="https://funprog.srid.ca/general/lazy-impure-language.html" rel="canonical"><meta property="og:title" content="lazy+impure language - General"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="General"><meta property="og:article:modified_time" content="2020-05-25T17:36:51Z"><meta property="og:article:published_time" content="2020-05-24T00:45:40Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"><title>lazy+impure language - General</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">lazy+impure language - General</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/general/" class="section">#General</a><i class="right angle icon divider"></i><div class="active section">lazy+impure language</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#198559204" name="198559204"><div>2020-05-24 00:45:40</div></a></div><div class="text"><p>Are there any lazy impure languages? What consequences would lack of purity have on a language like Haskell? A couple come to mind:</p>
+<ul>
+<li>The order of effectful operations would be undefined</li>
+<li>You wouldn't be able to distinguish between an effectful operation returning a value and the value itself (oof, that sounds quite limiting)</li>
+</ul></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#198560034" name="198560034"><div>2020-05-24 01:14:19</div></a></div><div class="text"><p>If the language is too lazy, entire effects might be dropped if you're not very careful. Typically, modifying a mutable reference returns (), so you'd need to evaluate the () for the effect to happen</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#198560092" name="198560092"><div>2020-05-24 01:16:18</div></a></div><div class="text"><p>Could that be solved with some language construct that says to "pass by value" rather than "pass the effectful value"?</p>
+<ul>
+<li><code>print (readFile "a.txt")</code> passes the effectful operation returning a value</li>
+<li><code>print *(readFile "a.txt")</code> passes the value itself</li>
+</ul></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#198560105" name="198560105"><div>2020-05-24 01:17:42</div></a></div><div class="text"><p>I'm not sure I see the difference: in both cases, when trying to evaluate the argument to print you'd evaluate the effect of readFile</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#198560146" name="198560146"><div>2020-05-24 01:18:14</div></a></div><div class="text"><p>Unless you mean something different</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#198560148" name="198560148"><div>2020-05-24 01:18:32</div></a></div><div class="text"><p>I think it would be different if you called <code>printtwice (appendFile "a.txt" "blah"\n)</code> (edit: changed to <code>appendFile</code>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#198560150" name="198560150"><div>2020-05-24 01:18:39</div></a></div><div class="text"><p>An alternative would be that <code>;</code> ensures that the effects all get evaluated when you evaluate the whole expression, which feels closer to what Haskell does. Not sure if WD want that</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#198560155" name="198560155"><div>2020-05-24 01:19:23</div></a></div><div class="text"><p>Oh I see, so call by name vs call by need</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#198560198" name="198560198"><div>2020-05-24 01:20:13</div></a></div><div class="text"><p>I definitely imagined that, like in Haskell, when you evaluate an expression its effect gets run and afterward it doesn't and the value is cached</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#198560256" name="198560256"><div>2020-05-24 01:22:56</div></a></div><div class="text"><p>Essentially my mental model is more or less what we currently get with Haskell+unsafePerformIO. I wonder what other possibilities could be sensible</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#198560319" name="198560319"><div>2020-05-24 01:24:13</div></a></div><div class="text"><p>(technicality) I believe <code>unsafePerformIO</code> is not quite call-by-need because the action <em>might</em> be run multiple times, not 100% sure about that, though</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#198560370" name="198560370"><div>2020-05-24 01:26:40</div></a></div><div class="text"><p>Ah yeah I heard that too. But you get the idea</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#198560398" name="198560398"><div>2020-05-24 01:28:02</div></a></div><div class="text"><p>Hypothetical strategy:</p>
+<ul>
+<li>Call-by-name <code>print (readFile "a.txt")</code> (runs effect n times, default)</li>
+<li>Call-by-need <code>print *(readFile "a.txt")</code> (runs effect once)</li>
+</ul>
+<p>Perhaps call-by-need is more frequently desired, and if so then that could be the default instead</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/31b0847ae161d8af30e1a2fcb059be4d?d=identicon&amp;version=1"></a><div class="content"><a class="author">Hazem</a><div class="metadata"><a href="#198561298" name="198561298"><div>2020-05-24 02:02:56</div></a></div><div class="text"><p>This might be relevant (I didn't read it)<br>
+<a href="https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.35.1663">https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.35.1663</a><br>
+and<br>
+<a href="https://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.47.5271">https://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.47.5271</a></p>
+<p>[edit: removed duplicate link]</p>
+<div class="message_embed"><a class="message_embed_image" href="https://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.47.5271" style="background-image: url(https://citeseer.ist.psu.edu/images/csx_logo_front.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.47.5271" title="CiteSeerX — Lazy Imperative Programming">CiteSeerX — Lazy Imperative Programming</a></div><div class="message_embed_description">CiteSeerX - Document Details (Isaac Councill, Lee Giles, Pradeep Teregowda): In this paper we argue for the importance of lazy state, that is, sequences of imperative (destructive) actions in which the actions are delayed until their results are required. This enables state-based computations to take advantage of the control power of lazy evaluation. We provide some examples of its use, and describe an implementation within Glasgow Haskell. 1 Introduction  There has long been a tension between functional programming languages and their more traditional imperative counterparts. On the one hand, functional languages are commonly more expressive and easier to reason about than imperative languages, but on the other hand, certain algorithms and interactions seem to rely fundamentally on state-based computation. It is clearly worth attempting to combine the strengths of each. Some languages like Scheme and ML have incorporated imperative actions as side effects. This approach only makes sense in a call-by-value language where the order of evaluation is statically de...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#198562777" name="198562777"><div>2020-05-24 02:51:49</div></a></div><div class="text"><p>Paraphrasing from the first:</p>
+<blockquote>
+<p>Nondeterministic order of evaluation of side-effecting expression rules out the general use of lazy evaluation in an imperative language.</p>
+</blockquote>
+<p>I'm actually curious if this wouldn't be so bad if there were a way to explicitly sequence evaluation (i.e. something akin to Haskell's <code>do</code> notation)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#198566512" name="198566512"><div>2020-05-24 04:54:59</div></a></div><div class="text"><p>Asking the Twittersphere <a href="https://twitter.com/ChrisMWendt/status/1264417442421329920">https://twitter.com/ChrisMWendt/status/1264417442421329920</a></p>
+<div class="inline-preview-twitter"><div class="twitter-tweet"><a href="https://twitter.com/ChrisMWendt/status/1264417442421329920"><img class="twitter-avatar" src="https://pbs.twimg.com/profile_images/1195550551401844736/2vtUd7Q9_normal.jpg"></a><p>Are there any programming languages that are lazy and impure? Think "Haskell without the IO monad". What would the practical implications of such a combination of language features be?</p><span>- Chris Wendt (@ChrisMWendt)</span></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/31b0847ae161d8af30e1a2fcb059be4d?d=identicon&amp;version=1"></a><div class="content"><a class="author">Hazem</a><div class="metadata"><a href="#198583880" name="198583880"><div>2020-05-24 13:40:37</div></a></div><div class="text"><p>Consider asking in the type theory channel on FP Slack</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/31b0847ae161d8af30e1a2fcb059be4d?d=identicon&amp;version=1"></a><div class="content"><a class="author">Hazem</a><div class="metadata"><a href="#198589756" name="198589756"><div>2020-05-24 16:21:53</div></a></div><div class="text"><p><span class="user-mention" data-user-id="294416">@Chris Wendt</span> the reply to your tweet reminded me of <code>#lang lazy</code> in Racket:<br>
+<a href="https://docs.racket-lang.org/lazy/index.html">https://docs.racket-lang.org/lazy/index.html</a></p>
+<blockquote>
+<p>I'm actually curious if this wouldn't be so bad if there were a way to explicitly sequence evaluation (i.e. something akin to Haskell's do notation)</p>
+</blockquote>
+<p>like this?</p>
+<blockquote>
+<p>Strict functionality is provided as-is: begin, I/O, mutation, parameterization, etc. To have your code make sense, you should chain side effects in begins, which will sequence things properly. (Note: This is similar to threading monads through your code—only use begin where order matters.)</p>
+</blockquote></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#198594184" name="198594184"><div>2020-05-24 18:27:30</div></a></div><div class="text"><p>Lazy Racket sounds like exactly what I'm looking for! I'll check it out</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#198629414" name="198629414"><div>2020-05-25 02:44:32</div></a></div><div class="text"><p>The second paper was more relevant, but I think it's outdated because <code>unsafeInterleaveIO</code> exists now and achieves the same outcome much more easily (i.e. make effects lazy)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#198689163" name="198689163"><div>2020-05-25 17:31:40</div></a></div><div class="text"><p>Lazy Racket is indeed lazy+impure, thanks <span aria-label="grinning" class="emoji emoji-1f600" role="img" title="grinning">:grinning:</span> I wonder what influence laziness has on its usefulness/popularity compared to strict Racket, and whether or not the addition of purity can explain the difference in popularity compared to Haskell. (strict Racket is ~1000x more popular based on GitHub code search)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/31b0847ae161d8af30e1a2fcb059be4d?d=identicon&amp;version=1"></a><div class="content"><a class="author">Hazem</a><div class="metadata"><a href="#198689515" name="198689515"><div>2020-05-25 17:36:51</div></a></div><div class="text"><p>In terms of popularity, I suspect a lot of <code>#lang Racket</code>(strict Racket) users use it because it's the standard version of Racket, and because many of them are introduced to Racket via textbooks like HtdP <a href="https://htdp.org/">https://htdp.org/</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,229 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hello guys, maybe you could help me with this.
+I am trying to build my own effect, which needs to start two or more threads initially and clean up on completion.
+I use bracket and async from Polysemy.Resource and Polysemy.Async for this.
+The DummyHandler interpreter part DOES NOT USE neither bracket" name="description"><link href="https://funprog.srid.ca/polysemy/create-my-own-effect-which-uses-resource-and-async.html" rel="canonical"><meta property="og:title" content="Create my own effect, which uses Resource and Async - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-01-03T19:57:19Z"><meta property="og:article:published_time" content="2020-01-03T11:32:27Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/d2db3d03d695bf8ed6212f413d1f44b3?d=identicon&amp;version=1"><title>Create my own effect, which uses Resource and Async - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Create my own effect, which uses Resource and Async - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Create my own effect, which uses Resource and Async</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d2db3d03d695bf8ed6212f413d1f44b3?d=identicon&amp;version=1"></a><div class="content"><a class="author">Martins</a><div class="metadata"><a href="#184726898" name="184726898"><div>2020-01-03 11:32:27</div></a></div><div class="text"><p>Hello guys, maybe you could help me with this.</p>
+<p>I am trying to <strong>build my own effect</strong>, which needs to <strong>start two or more threads initially</strong> and clean up on completion.<br>
+I use <em>bracket</em> and <em>async</em> from <a href="http://hackage.haskell.org/package/polysemy-1.2.3.0/docs/Polysemy-Resource.html" target="_blank" title="http://hackage.haskell.org/package/polysemy-1.2.3.0/docs/Polysemy-Resource.html">Polysemy.Resource</a> and <a href="http://hackage.haskell.org/package/polysemy-1.1.0.0/docs/Polysemy-Async.html" target="_blank" title="http://hackage.haskell.org/package/polysemy-1.1.0.0/docs/Polysemy-Async.html">Polysemy.Async</a> for this.<br>
+The <em>DummyHandler</em> interpreter part DOES NOT USE neither bracket nor async.</p>
+<p>Currently it looks similar to this:</p>
+<div class="codehilite"><pre><span></span>import           Polysemy
+import           Polysemy.Async
+import           Polysemy.Resource
+
+data DummyHandler m a where
+    GetDummy :: DummyHandler m ()
+
+-- First worker to be started asynchronously
+workerOne :: Members &#39;[Embed IO, Resource] r =&gt; Sem r ()
+workerOne = undefined
+{-
+If I use &#39;bracket&#39; from Resource in workerOne, I get exceptions like:
+thread blocked indefinitely in an MVar operation
+thread blocked indefinitely in an STM transaction
+-}
+
+-- Second worker to be started asynchronously
+workerTwo :: Members &#39;[Embed IO, Resource] r =&gt; Sem r ()
+workerTwo = undefined
+
+runDummyHandler :: Members &#39;[Embed IO, Async, Resource] r
+                =&gt; Sem (DummyHandler &#39;: r) a
+                -&gt; Sem r a
+runDummyHandler sem =
+    bracket
+        (do
+            threadOne &lt;- async workerOne
+            threadTwo &lt;- async workerTwo
+            return (threadOne, threadTwo)
+        )
+        (\(threadOne, threadTwo) -&gt; await threadOne &gt;&gt; await threadTwo)
+        $ \_ -&gt;
+            interpret (\case
+                GetDummy -&gt; return ()
+            ) sem
+
+program :: Member DummyHandler r =&gt; Sem r ()
+program = undefined
+
+test :: IO ()
+test = runM . resourceToIO . asyncToIO . runDummyHandler $ program
+</pre></div>
+
+
+<p>There are two problems with this:<br>
+1. <strong>runDummyHandler</strong> exposes the fact, that it needs Resource and Async. I would like to hide that from clients and somehow move <em>resourceToIO . asyncToIO</em> inside of <em>runDummyHandler</em>.<br>
+2. If I run another <strong>bracket</strong> inside of worker threads (workerOne - see above), I get STM related exceptions (I use STM there):</p>
+<div class="codehilite"><pre><span></span>thread blocked indefinitely in an MVar operation
+thread blocked indefinitely in an STM transaction
+</pre></div>
+
+
+<p>Could you guide me how should go about this? My feeling is I need to <em>raise :: forall e r a. Sem r a -&gt; Sem (e ': r) a</em> Resource and Async and then consume them.<br>
+But how exactly?<br>
+And what do you think causes STM timeouts in my case?</p>
+<div class="codehilite"><pre><span></span>desiredRunDummyHandler :: Members &#39;[Embed IO] r
+                       =&gt; Sem (DummyHandler &#39;: r) a
+                       -&gt; Sem r a
+desiredRunDummyHandler sem =
+    resourceToIO . asyncToIO $ runDummyHandler sem
+{-
+ src/BfHaskell/StreamingAPI/Temp.hs:51:32: error:
+    • Occurs check: cannot construct the infinite type:
+        r ~ Async : Resource : r
+      Expected type: Sem (Async : Resource : r) a
+        Actual type: Sem r a
+    • In the second argument of ‘($)’, namely ‘runDummyHandler sem’
+      In the expression: resourceToIO . asyncToIO $ runDummyHandler sem
+      In an equation for ‘desiredRunDummyHandler’:
+          desiredRunDummyHandler sem
+            = resourceToIO . asyncToIO $ runDummyHandler sem
+    • Relevant bindings include
+        sem :: Sem (DummyHandler : r) a
+          (bound at src/BfHaskell/StreamingAPI/Temp.hs:50:24)
+        desiredRunDummyHandler :: Sem (DummyHandler : r) a -&gt; Sem r a
+          (bound at src/BfHaskell/StreamingAPI/Temp.hs:50:1)
+   |
+51 |     resourceToIO . asyncToIO $ runDummyHandler sem
+   |                                ^^^^^^^^^^^^^^^^^^^
+-}
+
+desiredTest :: IO ()
+desiredTest = runM . desiredRunDummyHandler $ program
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#184753888" name="184753888"><div>2020-01-03 18:02:18</div></a></div><div class="text"><p><span class="user-mention" data-user-id="256297">@Martins</span> you did compile your code with <code>-threaded</code>, right?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d2db3d03d695bf8ed6212f413d1f44b3?d=identicon&amp;version=1"></a><div class="content"><a class="author">Martins</a><div class="metadata"><a href="#184755968" name="184755968"><div>2020-01-03 18:30:08</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> Yes, I compiled with <code>-threaded</code>. If I remove inner <em>bracket</em>, three threads run and intercommunicate alright. It's not the biggest problem.<br>
+Actually, I am more interested in my first question above. That is, how to rewrite <em>runDummyHandler</em> (get rid of Async and Resource members and move them inside of runDummyHandler).</p>
+<div class="codehilite"><pre><span></span>runDummyHandler :: Members &#39;[Embed IO, Async, Resource] r
+                =&gt; Sem (DummyHandler &#39;: r) a
+                -&gt; Sem r a
+</pre></div>
+
+
+<p>into</p>
+<div class="codehilite"><pre><span></span>runDummyHandler :: Members &#39;[Embed IO] r
+                       =&gt; Sem (DummyHandler &#39;: r) a
+                       -&gt; Sem r a
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#184760031" name="184760031"><div>2020-01-03 19:21:27</div></a></div><div class="text"><p><span class="user-mention" data-user-id="256297">@Martins</span> </p>
+<div class="codehilite"><pre><span></span><span class="nf">runDummyHandler</span> <span class="ow">::</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Embed</span> <span class="kt">IO</span><span class="p">)</span> <span class="n">r</span>
+                <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">DummyHandler</span> <span class="sc">&#39;</span><span class="err">: r) a</span>
+                <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">runDummyHandler</span> <span class="n">sem</span> <span class="ow">=</span>
+  <span class="n">resourceToIO</span> <span class="o">$</span> <span class="n">asyncToIO</span> <span class="o">$</span> <span class="n">bracket</span>
+    <span class="kr">do</span> <span class="n">threadOne</span> <span class="ow">&lt;-</span> <span class="n">async</span> <span class="n">workerOne</span>
+       <span class="n">threadTwo</span> <span class="ow">&lt;-</span> <span class="n">async</span> <span class="n">workerTwo</span>
+       <span class="n">pure</span> <span class="p">(</span><span class="n">threadOne</span><span class="p">,</span> <span class="n">threadTwo</span><span class="p">)</span>
+    <span class="kr">do</span> <span class="nf">\</span><span class="p">(</span><span class="n">threadOne</span><span class="p">,</span> <span class="n">threadTwo</span><span class="p">)</span> <span class="ow">-&gt;</span>
+         <span class="n">await</span> <span class="n">threadOne</span> <span class="o">&gt;&gt;</span> <span class="n">await</span> <span class="n">threadTwo</span>
+    <span class="kr">do</span> <span class="nf">\</span><span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">raise</span> <span class="o">$</span> <span class="n">raise</span> <span class="o">$</span>
+         <span class="n">interpret</span> <span class="p">(</span><span class="nf">\</span><span class="kt">GetDummy</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="nb">()</span><span class="p">)</span> <span class="n">sem</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#184760116" name="184760116"><div>2020-01-03 19:22:21</div></a></div><div class="text"><p>You can raise interpreted action inside of last argument and then interpret added effects on top</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/d2db3d03d695bf8ed6212f413d1f44b3?d=identicon&amp;version=1"></a><div class="content"><a class="author">Martins</a><div class="metadata"><a href="#184762808" name="184762808"><div>2020-01-03 19:57:19</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> Great, it compiles! Thank you very much!<br>
+I will try the same in real code now.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

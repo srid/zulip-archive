@@ -1,0 +1,161 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="One of the reasons I started looking at Nix was to take advantage of pre-built haskell binaries, in particular ghcide.
+Now it turns out ghcide is marked broken. I know what to do to fix it (set specific versions on two libs), but I don&#39;t know how to get it into a/my nixpkgs properly.
+Any pointers!" name="description"><link href="https://funprog.srid.ca/nix/fixing-a-haskell-package.html" rel="canonical"><meta property="og:title" content="Fixing a Haskell package - Nix"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Nix"><meta property="og:article:modified_time" content="2019-12-01T06:26:35Z"><meta property="og:article:published_time" content="2019-11-30T07:28:08Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"><title>Fixing a Haskell package - Nix</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Fixing a Haskell package - Nix</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/nix/" class="section">#Nix</a><i class="right angle icon divider"></i><div class="active section">Fixing a Haskell package</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182227628" name="182227628"><div>2019-11-30 07:28:08</div></a></div><div class="text"><p>One of the reasons I started looking at Nix was to take advantage of pre-built haskell binaries, in particular ghcide.</p>
+<p>Now it turns out ghcide is marked broken. I know what to do to fix it (set specific versions on two libs), but I don't know how to get it into a/my <code>nixpkgs</code> properly.</p>
+<p>Any pointers!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182229998" name="182229998"><div>2019-11-30 08:28:26</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251593">@Magnus Therning</span> I generally get <code>ghcide</code> from <a href="https://github.com/hercules-ci/ghcide-nix" target="_blank" title="https://github.com/hercules-ci/ghcide-nix">https://github.com/hercules-ci/ghcide-nix</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/hercules-ci/ghcide-nix" style="background-image: url(https://avatars2.githubusercontent.com/u/23378925?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/hercules-ci/ghcide-nix" target="_blank" title="hercules-ci/ghcide-nix">hercules-ci/ghcide-nix</a></div><div class="message_embed_description">Nix installation for ghcide. Contribute to hercules-ci/ghcide-nix development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182230000" name="182230000"><div>2019-11-30 08:28:45</div></a></div><div class="text"><p>the general pattern is called "IFD" (import from derivation)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182230019" name="182230019"><div>2019-11-30 08:29:53</div></a></div><div class="text"><p>instead of trying to get everything from nixpkgs, you have a Nix expression that evaluates to a derivation that downloads more Nix expressions, then import the result as a Nix expression</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182231661" name="182231661"><div>2019-11-30 09:24:53</div></a></div><div class="text"><p>Yes, I get the idea, but find the instructions in that repo a bit lacking.. what do I put in my <code>shell.nix</code> to get ghcide in my shell?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182231795" name="182231795"><div>2019-11-30 09:29:57</div></a></div><div class="text"><p>I import it using something like</p>
+<div class="codehilite"><pre><span></span>  ghcide-nix = import (builtins.fetchGit {
+    name = &quot;ghcide-nix&quot;;
+    url = https://github.com/hercules-ci/ghcide-nix;
+    rev = &quot;4f3e98f211f34698805eb7a3c5f7b4361d97f541&quot;;
+  }) {};
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182232002" name="182232002"><div>2019-11-30 09:36:45</div></a></div><div class="text"><p>I tried just adding <code>ghcide-nix</code> to my list of packages to bring in:</p>
+<div class="codehilite"><pre><span></span>  shell-pkgs = with haskellPackages;
+    [cabal-install
+     ghcid
+     ghcide-nix
+     ormolu];
+</pre></div>
+
+
+<p>but that resulted in an error I don't really know what to do with:</p>
+<div class="codehilite"><pre><span></span>error: cannot coerce a set to a string, at /nix/store/3abw7pkjmf850s048q45i203vj9z3czd-nixpkgs-20.03pre203317.8bb98968edf/nixpkgs/pkgs/development/haskell-modules/make-package-set.nix:311:9
+(use &#39;--show-trace&#39; to show detailed location information)
+</pre></div>
+
+
+<p>I'm guessing the added import isn't a derivation?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#182236178" name="182236178"><div>2019-11-30 11:47:38</div></a></div><div class="text"><blockquote>
+<p>I import it using something like</p>
+</blockquote>
+<p>ghcide-nix = import (builtins.fetchGit {<br>
+    name = "ghcide-nix";<br>
+    url = <a href="https://github.com/hercules-ci/ghcide-nix" target="_blank" title="https://github.com/hercules-ci/ghcide-nix">https://github.com/hercules-ci/ghcide-nix</a>;<br>
+    rev = "4f3e98f211f34698805eb7a3c5f7b4361d97f541";<br>
+  }) {};</p>
+<div class="codehilite"><pre><span></span>
+</pre></div>
+
+
+<p>ghcide-nix, is a set because you use {} at the end of import, while shell-pkgs, requires a list of string. So maybe  you can find ghcide, inside the set of ghcide-nix?</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/hercules-ci/ghcide-nix" style="background-image: url(https://avatars2.githubusercontent.com/u/23378925?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/hercules-ci/ghcide-nix" target="_blank" title="hercules-ci/ghcide-nix">hercules-ci/ghcide-nix</a></div><div class="message_embed_description">Nix installation for ghcide. Contribute to hercules-ci/ghcide-nix development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182237185" name="182237185"><div>2019-11-30 12:19:15</div></a></div><div class="text"><p>Ah, is that what the <code>{}</code> at the end does. I'll have to try it.</p>
+<p>If someone would write a guide on how to do introspection in Nix I'd be very happy <span aria-label="grinning face with smiling eyes" class="emoji emoji-1f601" role="img" title="grinning face with smiling eyes">:grinning_face_with_smiling_eyes:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182247243" name="182247243"><div>2019-11-30 17:17:34</div></a></div><div class="text"><p>Without the <code>{}</code> I instead get</p>
+<div class="codehilite"><pre><span></span>cannot coerce a function to a string, at /nix/store/3abw7pkjmf850s048q45i203vj9z3czd-nixpkgs-20.03pre203317.8bb98968edf/nixpkgs/pkgs/development/haskell-modules/make-package-set.nix:311:9
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182248806" name="182248806"><div>2019-11-30 17:59:31</div></a></div><div class="text"><p>I'm lost <span aria-label="disappointed" class="emoji emoji-1f61e" role="img" title="disappointed">:disappointed:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182251652" name="182251652"><div>2019-11-30 19:20:06</div></a></div><div class="text"><p>There's a function called <code>unmarkBroken</code> under <code>haskell.lib</code>. Example here: <a href="https://github.com/jhenahan/dotnix/blob/master/overlays/haskell.nix#L37" target="_blank" title="https://github.com/jhenahan/dotnix/blob/master/overlays/haskell.nix#L37">https://github.com/jhenahan/dotnix/blob/master/overlays/haskell.nix#L37</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/jhenahan/dotnix/blob/master/overlays/haskell.nix#L37" style="background-image: url(https://avatars3.githubusercontent.com/u/863367?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/jhenahan/dotnix/blob/master/overlays/haskell.nix#L37" target="_blank" title="jhenahan/dotnix">jhenahan/dotnix</a></div><div class="message_embed_description">Nix config, finally version controlled. Contribute to jhenahan/dotnix development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182251709" name="182251709"><div>2019-11-30 19:22:25</div></a></div><div class="text"><p>It looks like you'd want to put <code>ghcide-nixpkgs.&lt;some version&gt;</code> as listed here: <a href="https://github.com/hercules-ci/ghcide-nix/blob/master/nix/default.nix" target="_blank" title="https://github.com/hercules-ci/ghcide-nix/blob/master/nix/default.nix">https://github.com/hercules-ci/ghcide-nix/blob/master/nix/default.nix</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/hercules-ci/ghcide-nix/blob/master/nix/default.nix" style="background-image: url(https://avatars2.githubusercontent.com/u/23378925?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/hercules-ci/ghcide-nix/blob/master/nix/default.nix" target="_blank" title="hercules-ci/ghcide-nix">hercules-ci/ghcide-nix</a></div><div class="message_embed_description">Nix installation for ghcide. Contribute to hercules-ci/ghcide-nix development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182251714" name="182251714"><div>2019-11-30 19:22:47</div></a></div><div class="text"><p>Like this one <a href="https://github.com/hercules-ci/ghcide-nix/blob/4f3e98f211f34698805eb7a3c5f7b4361d97f541/nix/default.nix#L27" target="_blank" title="https://github.com/hercules-ci/ghcide-nix/blob/4f3e98f211f34698805eb7a3c5f7b4361d97f541/nix/default.nix#L27">https://github.com/hercules-ci/ghcide-nix/blob/4f3e98f211f34698805eb7a3c5f7b4361d97f541/nix/default.nix#L27</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/hercules-ci/ghcide-nix/blob/4f3e98f211f34698805eb7a3c5f7b4361d97f541/nix/default.nix#L27" style="background-image: url(https://avatars2.githubusercontent.com/u/23378925?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/hercules-ci/ghcide-nix/blob/4f3e98f211f34698805eb7a3c5f7b4361d97f541/nix/default.nix#L27" target="_blank" title="hercules-ci/ghcide-nix">hercules-ci/ghcide-nix</a></div><div class="message_embed_description">Nix installation for ghcide. Contribute to hercules-ci/ghcide-nix development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182251724" name="182251724"><div>2019-11-30 19:23:13</div></a></div><div class="text"><p>So <code>ghcide-nix.ghcide-ghc865</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923?d=identicon&amp;version=1"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182252183" name="182252183"><div>2019-11-30 19:35:49</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251593">@Magnus Therning</span> What <span class="user-mention" data-user-id="250761">@Jack Henahan</span> said. The README has an example of how to access a derivation representing ghcide for ghc 8.6.5:</p>
+<div class="codehilite"><pre><span></span>(import (builtins.fetchTarball &quot;https://github.com/hercules-ci/ghcide-nix/tarball/master&quot;) {}).ghcide-ghc865
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182253814" name="182253814"><div>2019-11-30 20:22:46</div></a></div><div class="text"><p>Yes, indeed. However, working that out of the source wasn't very easy at all.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182254005" name="182254005"><div>2019-11-30 20:29:33</div></a></div><div class="text"><p>I have to admit that, as an absolute beginner at Nix, I find that example completely  impenetrable.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182255008" name="182255008"><div>2019-11-30 20:57:38</div></a></div><div class="text"><p>It absolutely is. I basically just recommend reading Nix Pills, reading the bits of the manual about the particular languages you use, and then stealing everything else from other people. Basically how I learned Emacs</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182255055" name="182255055"><div>2019-11-30 20:58:44</div></a></div><div class="text"><p>Reading Matthew Bauer's blog helps, too (<a href="http://matthewbauer.us" target="_blank" title="http://matthewbauer.us">matthewbauer.us</a>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182255189" name="182255189"><div>2019-11-30 21:02:44</div></a></div><div class="text"><p>Already read Nix Pills, and the bits on Haskell in the Nix/Nixpkgs manual too. That didn't help much in working out how that particular derivation works though.</p>
+<p>I just wish there was some description on how to work things out on my own, stuff like how to visualize a derivation (with some limit on depth) would help immensely when trying to understand something.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#182259030" name="182259030"><div>2019-11-30 22:46:14</div></a></div><div class="text"><p>I am sorry that I couldn't explain it in detail. But I think others have replied with the answer. Did you finally able to build it?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182271940" name="182271940"><div>2019-12-01 06:26:35</div></a></div><div class="text"><p>No worries, <span class="user-mention" data-user-id="251394">@Rizary</span>, my frustrations is not at all due to a lack of help, so far you and the rest of the Nix community I've interacted with has been wonderfully helpful. My frustration comes more from my inability to work things out myself and having to ask so many questions.</p>
+<p>Yes I did get it to build.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,245 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I&#39;m working on an idea to stitch together lens-aeson and higgledy in order to construct types from partial data that we parse from aeson.  Right now I have, as an example:
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE TypeApplications #-}
+
+module Lib where
+
+import Control.Le" name="description"><link href="https://funprog.srid.ca/haskell/type-aware-setter-lens.html" rel="canonical"><meta property="og:title" content="type aware setter lens - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2019-12-10T16:34:03Z"><meta property="og:article:published_time" content="2019-12-06T17:00:51Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"><title>type aware setter lens - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">type aware setter lens - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">type aware setter lens</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#182780767" name="182780767"><div>2019-12-06 17:00:51</div></a></div><div class="text"><p>I'm working on an idea to stitch together <code>lens-aeson</code> and <code>higgledy</code> in order to construct types from partial data that we parse from <code>aeson</code>.  Right now I have, as an example:</p>
+<div class="codehilite"><pre><span></span><span class="cm">{-# LANGUAGE DataKinds #-}</span>
+<span class="cm">{-# LANGUAGE DeriveGeneric #-}</span>
+<span class="cm">{-# LANGUAGE TypeApplications #-}</span>
+
+<span class="kr">module</span> <span class="nn">Lib</span> <span class="kr">where</span>
+
+<span class="kr">import</span> <span class="nn">Control.Lens</span> <span class="k">hiding</span> <span class="p">((</span><span class="o">.=</span><span class="p">))</span>
+<span class="kr">import</span> <span class="nn">Data.Aeson</span>
+<span class="kr">import</span> <span class="nn">Data.Aeson.Lens</span>
+<span class="kr">import</span> <span class="nn">Data.Functor.Const</span>
+<span class="kr">import</span> <span class="nn">Data.Functor.Identity</span>
+<span class="kr">import</span> <span class="nn">Data.Generic.HKD</span>
+<span class="kr">import</span> <span class="nn">Data.Maybe</span>
+<span class="kr">import</span> <span class="nn">Data.Monoid</span>
+<span class="kr">import</span> <span class="nn">GHC.Generics</span>
+
+<span class="kr">data</span> <span class="kt">Department</span>
+  <span class="ow">=</span> <span class="kt">Sales</span>
+  <span class="o">|</span> <span class="kt">Engineering</span>
+  <span class="o">|</span> <span class="kt">Management</span>
+  <span class="o">|</span> <span class="kt">Support</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Eq</span><span class="p">,</span> <span class="kt">Generic</span><span class="p">,</span> <span class="kt">Show</span><span class="p">)</span>
+
+<span class="kr">instance</span> <span class="kt">ToJSON</span> <span class="kt">Department</span>
+<span class="kr">instance</span> <span class="kt">FromJSON</span> <span class="kt">Department</span>
+
+<span class="kr">data</span> <span class="kt">Employee</span>
+  <span class="ow">=</span> <span class="kt">Employee</span>
+  <span class="p">{</span> <span class="n">_employeeFirstName</span>  <span class="ow">::</span> <span class="kt">String</span>
+  <span class="p">,</span> <span class="n">_employeeLastName</span>   <span class="ow">::</span> <span class="kt">String</span>
+  <span class="p">,</span> <span class="n">_employeeNumber</span>     <span class="ow">::</span> <span class="kt">Int</span>
+  <span class="p">,</span> <span class="n">_employeeDepartment</span> <span class="ow">::</span> <span class="kt">Department</span>
+  <span class="p">}</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Eq</span><span class="p">,</span> <span class="kt">Generic</span><span class="p">,</span> <span class="kt">Show</span><span class="p">)</span>
+
+<span class="kr">type</span> <span class="kt">EmployeeF</span> <span class="n">f</span> <span class="ow">=</span> <span class="kt">HKD</span> <span class="kt">Employee</span> <span class="n">f</span>
+<span class="kr">type</span> <span class="kt">PartialEmployee</span> <span class="ow">=</span> <span class="kt">EmployeeF</span> <span class="kt">Last</span>
+
+<span class="nf">parseEmployee</span> <span class="ow">::</span> <span class="kt">Value</span> <span class="ow">-&gt;</span> <span class="kt">PartialEmployee</span>
+<span class="nf">parseEmployee</span> <span class="n">v</span> <span class="ow">=</span>
+  <span class="n">mempty</span>
+  <span class="o">&amp;</span> <span class="n">field</span> <span class="o">@</span><span class="s">&quot;_employeeFirstName&quot;</span> <span class="o">.~</span> <span class="p">(</span><span class="n">v</span> <span class="o">^.</span> <span class="n">key</span> <span class="s">&quot;firstName&quot;</span> <span class="o">.</span> <span class="n">_JSON</span><span class="p">)</span>
+</pre></div>
+
+
+<p>What I'm trying to figure out is how to get <code>parseEmployee</code> to have a type error if the lens focused on by the setter returns a value of the wrong type. For example:</p>
+<div class="codehilite"><pre><span></span>𝝀 let empObj = object [ &quot;firstName&quot; .= 123, &quot;somethingElse&quot; .= 123 ]
+𝝀 safeParseEmployee empObj
+Employee {_employeeFirstName = Last {getLast = Nothing}, _employeeLastName = Last {getLast = Nothing}, _employeeNumber = Last {getLast = Nothing}, _employeeDepartment = Last {getLast = Nothing}}
+</pre></div>
+
+
+<p>It would be better if, as <code>aeson</code> would, we have this become a type error. <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#182786677" name="182786677"><div>2019-12-06 18:00:54</div></a></div><div class="text"><p>Maybe a <span class="user-mention" data-user-id="250909">@Chris Penner</span> question. ;)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#182789093" name="182789093"><div>2019-12-06 18:28:55</div></a></div><div class="text"><p>No progress yet on getting a type error to show up but I have been able to be more specific by using the right prism, <code>_String</code> which actually returns <code>Text</code>... a bit of a misnomer.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#182789165" name="182789165"><div>2019-12-06 18:29:43</div></a></div><div class="text"><p>Now the trick seems to be finding a way to focus the prism that lets me return into <code>Last</code> instead of <code>Maybe</code>... I presently have:</p>
+<div class="codehilite"><pre><span></span><span class="nf">o</span> <span class="o">^.</span> <span class="n">key</span> <span class="s">&quot;firstName&quot;</span> <span class="o">^?</span> <span class="n">_String</span>
+</pre></div>
+
+
+<p>which isn't quite right... progress!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#182790027" name="182790027"><div>2019-12-06 18:37:23</div></a></div><div class="text"><p>Actually that does solve the type error issue. Now I just have to figure out how to get a <code>Value</code> into <code>Last</code> which seems to require a <code>Monoid</code> instance. <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#182800491" name="182800491"><div>2019-12-06 20:30:13</div></a></div><div class="text"><p>It only seems to mostly work if I use the <code>_JSON</code> prism -- <code>_String</code> and <code>_Integer</code> etc cause problems... the consequence is that if the type of the value in the parsed <code>Value</code> doesn't match up with what our record expects we simply get <code>Nothing</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4a9d7cdfc525e689e6baefb7d2158fb0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Penner</a><div class="metadata"><a href="#182819402" name="182819402"><div>2019-12-07 00:43:26</div></a></div><div class="text"><p>But yeah; should be able to:</p>
+<div class="codehilite"><pre><span></span>Last (o ^? key &quot;firstName&quot; . _String)
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4a9d7cdfc525e689e6baefb7d2158fb0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Penner</a><div class="metadata"><a href="#182819413" name="182819413"><div>2019-12-07 00:43:45</div></a></div><div class="text"><p>(Make sure you're using <code>Data.Monoid (Last)</code> instead of the Semigroup version</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4a9d7cdfc525e689e6baefb7d2158fb0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Chris Penner</a><div class="metadata"><a href="#182819520" name="182819520"><div>2019-12-07 00:45:45</div></a></div><div class="text"><p>Let me know if that's not what you're looking for :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#183003693" name="183003693"><div>2019-12-09 21:46:00</div></a></div><div class="text"><p>If I try to use <code>_String</code> it throws a type match error:</p>
+<div class="codehilite"><pre><span></span>    • Couldn&#39;t match type ‘Last Text’ with ‘Text’
+      Expected type: Getting (Last Text) Value (Last Text)
+        Actual type: (Text -&gt; Const (Last Text) Text)
+                     -&gt; Value -&gt; Const (Last Text) Value
+    • In the second argument of ‘(^.)’, namely ‘key &quot;firstName&quot; . _String’
+      In the second argument of ‘(.~)’, namely
+        ‘(o ^. key &quot;firstName&quot; . _String)’
+      In the second argument of ‘(&amp;)’, namely
+        ‘field @&quot;_employeeFirstName&quot; .~ (o ^. key &quot;firstName&quot; . _String)’
+   |
+33 |   &amp; field @&quot;_employeeFirstName&quot; .~ (o ^. key &quot;firstName&quot; . _String)
+   |                                           ^^^^^^^^^^^^^^^^^^^^
+</pre></div>
+
+
+<p>But <code>_JSON</code> compiles fine... the consequence is that if there is a type mismatch I get a value of <code>Nothing</code> for the field at run time.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#183003769" name="183003769"><div>2019-12-09 21:46:47</div></a></div><div class="text"><p>I guess I'd have to handle writing my own type validation.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#183003842" name="183003842"><div>2019-12-09 21:47:43</div></a></div><div class="text"><p>Something that would let me say, "You gave me an <code>Int</code> when I was expecting a <code>String</code> while parsing the value of the key <code>"foo"</code>"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#183007806" name="183007806"><div>2019-12-09 22:39:47</div></a></div><div class="text"><p><span class="user-mention" data-user-id="250729">@James King</span> It looks like it's mainly complaining about the lack of a <code>Last</code> in there. Am I reading it wrong?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#183075926" name="183075926"><div>2019-12-10 16:30:14</div></a></div><div class="text"><p><span class="user-mention" data-user-id="250761">@Jack Henahan</span> That's what it says, though as I've mentioned I'm not sure how to stuff the result of view into the <code>Last</code></p>
+<p>However, it seems like <code>aeson</code> can figure out the generic instance for <code>type MaybeEmployee = EmployeeF Maybe</code>! Which means I we can use <code>decodeEither</code> to recover those type mismatch errors instead of rolling our own parsing with <code>aeson-lens</code>.</p>
+<div class="codehilite"><pre><span></span><span class="cm">{-# LANGUAGE OverloadedStrings #-}</span>
+<span class="cm">{-# LANGUAGE DataKinds #-}</span>
+<span class="cm">{-# LANGUAGE DeriveGeneric #-}</span>
+<span class="cm">{-# LANGUAGE FlexibleInstances #-}</span>
+<span class="cm">{-# LANGUAGE TypeApplications #-}</span>
+<span class="cm">{-# LANGUAGE TypeSynonymInstances #-}</span>
+
+<span class="kr">module</span> <span class="nn">Lib</span> <span class="kr">where</span>
+
+<span class="kr">import</span> <span class="nn">Control.Lens</span> <span class="k">hiding</span> <span class="p">((</span><span class="o">.=</span><span class="p">))</span>
+<span class="kr">import</span> <span class="nn">Data.Aeson</span>
+<span class="kr">import</span> <span class="nn">Data.Aeson.Lens</span>
+<span class="kr">import</span> <span class="nn">Data.Functor.Const</span>
+<span class="kr">import</span> <span class="nn">Data.Functor.Identity</span>
+<span class="kr">import</span> <span class="nn">Data.Generic.HKD</span>
+<span class="kr">import</span> <span class="nn">Data.Maybe</span>
+<span class="kr">import</span> <span class="nn">Data.Monoid</span>
+<span class="kr">import</span> <span class="nn">Data.Text</span> <span class="p">(</span><span class="kt">Text</span><span class="p">())</span>
+<span class="kr">import</span> <span class="nn">GHC.Generics</span>
+
+<span class="kr">data</span> <span class="kt">Department</span>
+  <span class="ow">=</span> <span class="kt">Sales</span>
+  <span class="o">|</span> <span class="kt">Engineering</span>
+  <span class="o">|</span> <span class="kt">Management</span>
+  <span class="o">|</span> <span class="kt">Support</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Eq</span><span class="p">,</span> <span class="kt">Generic</span><span class="p">,</span> <span class="kt">Show</span><span class="p">)</span>
+
+<span class="kr">instance</span> <span class="kt">ToJSON</span> <span class="kt">Department</span>
+<span class="kr">instance</span> <span class="kt">FromJSON</span> <span class="kt">Department</span>
+
+<span class="kr">data</span> <span class="kt">Employee</span>
+  <span class="ow">=</span> <span class="kt">Employee</span>
+  <span class="p">{</span> <span class="n">_employeeFirstName</span>  <span class="ow">::</span> <span class="kt">Text</span>
+  <span class="p">,</span> <span class="n">_employeeLastName</span>   <span class="ow">::</span> <span class="kt">Text</span>
+  <span class="p">,</span> <span class="n">_employeeNumber</span>     <span class="ow">::</span> <span class="kt">Int</span>
+  <span class="p">,</span> <span class="n">_employeeDepartment</span> <span class="ow">::</span> <span class="kt">Department</span>
+  <span class="p">}</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Eq</span><span class="p">,</span> <span class="kt">Generic</span><span class="p">,</span> <span class="kt">Show</span><span class="p">)</span>
+
+<span class="kr">type</span> <span class="kt">EmployeeF</span> <span class="n">f</span> <span class="ow">=</span> <span class="kt">HKD</span> <span class="kt">Employee</span> <span class="n">f</span>
+<span class="kr">type</span> <span class="kt">PartialEmployee</span> <span class="ow">=</span> <span class="kt">EmployeeF</span> <span class="kt">Last</span>
+<span class="kr">type</span> <span class="kt">MaybeEmployee</span> <span class="ow">=</span> <span class="kt">EmployeeF</span> <span class="kt">Maybe</span>
+
+<span class="kr">instance</span> <span class="kt">ToJSON</span> <span class="kt">PartialEmployee</span>
+<span class="kr">instance</span> <span class="kt">FromJSON</span> <span class="kt">PartialEmployee</span>
+
+<span class="kr">instance</span> <span class="kt">ToJSON</span> <span class="kt">MaybeEmployee</span>
+<span class="kr">instance</span> <span class="kt">FromJSON</span> <span class="kt">MaybeEmployee</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#183076014" name="183076014"><div>2019-12-10 16:31:14</div></a></div><div class="text"><p>Niiiice</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#183076041" name="183076041"><div>2019-12-10 16:31:33</div></a></div><div class="text"><p>HKD is truly wonderful magic</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#183076323" name="183076323"><div>2019-12-10 16:34:03</div></a></div><div class="text"><p>It's pretty great. I deal with a lot of partial data on my inputs and having HKD is like having super powers.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
