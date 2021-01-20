@@ -1,6 +1,6 @@
 <html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I am trying to figure a development workflow for Haskell packages using nix, emacs, hls, lsp... 
 I am struggling with the nix part and esp. setting up a nix-shell following the instructions here: https://input-output-hk.github.io/haskell.nix/tutorials/development/#how-to-get-a-development-shell 
-I h" name="description"><link href="https://funprog.srid.ca/haskell/haskell-nix-hls-setup.html" rel="canonical"><meta property="og:title" content="Haskell/nix/HLS setup - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-01-20T13:56:28Z"><meta property="og:article:published_time" content="2021-01-20T13:29:25Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/48469162d45686615c6bf0eb4304bf26?d=identicon&amp;version=1"><title>Haskell/nix/HLS setup - Haskell</title><style type="text/css">
+I h" name="description"><link href="https://funprog.srid.ca/haskell/haskell-nix-hls-setup.html" rel="canonical"><meta property="og:title" content="Haskell/nix/HLS setup - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-01-20T14:18:34Z"><meta property="og:article:published_time" content="2021-01-20T13:29:25Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/48469162d45686615c6bf0eb4304bf26?d=identicon&amp;version=1"><title>Haskell/nix/HLS setup - Haskell</title><style type="text/css">
 div#thesite
 {
   font-family   : "Open Sans", sans-serif;
@@ -146,4 +146,59 @@ copy-pasting with minor adaptations the default.nix and shell.nix from <a href="
 </code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#223374810" name="223374810"><div>2021-01-20 13:56:28</div></a></div><div class="text"><ol>
 <li>do you call this file with arguments?</li>
 <li>if not, does it work with <code>haskellNix.sources.nixpkgs</code>?</li>
-</ol></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
+</ol></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/48469162d45686615c6bf0eb4304bf26?d=identicon&amp;version=1"></a><div class="content"><a class="author">Arnaud Bailly</a><div class="metadata"><a href="#223375187" name="223375187"><div>2021-01-20 13:59:32</div></a></div><div class="text"><p>I don't even understand the question :-D<br>
+What I did was:</p>
+<div class="codehilite"><pre><span></span><code>nix-build -A hydra-sim.components.exes.hydra-sim
+</code></pre></div>
+<p>and I got a compilation failure which is probably a problem with the package I am trying to build and that I can solve.<br>
+Then I tried </p>
+<div class="codehilite"><pre><span></span><code>nix-shell
+</code></pre></div>
+<p>and got the error I mentioned.<br>
+And now I am trying to run <code>nix-shell -A shellFor</code> without a <code>shell.nix</code> file and it is building a whole slew of packages and taking ages. I miss stack...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#223375346" name="223375346"><div>2021-01-20 14:00:44</div></a></div><div class="text"><p>ah. can you post the <code>shell.nix</code> as well?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/48469162d45686615c6bf0eb4304bf26?d=identicon&amp;version=1"></a><div class="content"><a class="author">Arnaud Bailly</a><div class="metadata"><a href="#223375640" name="223375640"><div>2021-01-20 14:02:53</div></a></div><div class="text"><p>Sure, here it is</p>
+<div class="codehilite"><pre><span></span><code># shell.nix
+{pkgs ? import &lt;nixpkgs&gt; {} }:
+
+let
+  hsPkgs = import ./default.nix { inherit pkgs; };
+  haskellNix = import (builtins.fetchTarball https://github.com/input-output-hk/haskell.nix/archive/master.tar.gz) {};
+in
+  hsPkgs.shellFor {
+    # Include only the *local* packages of your project.
+    packages = ps: with ps; [
+      hydra-sim
+    ];
+
+    # Builds a Hoogle documentation index of all dependencies,
+    # and provides a &quot;hoogle&quot; command to search the index.
+#    withHoogle = true;
+
+    # You might want some extra tools in the shell (optional).
+
+    # Some common tools can be added with the `tools` argument
+    tools = { cabal = &quot;3.2.0.0&quot;; hlint = &quot;2.2.11&quot;; };
+    # See overlays/tools.nix for more details
+
+    # Some you may need to get some other way.
+    buildInputs = with pkgs.haskellPackages;
+      [ ghcid
+        # (haskell-language-server.override { supportedGhcVersions = [ &quot;884&quot; &quot;8102&quot; ]; })
+      ];
+
+
+
+    # Prevents cabal from choosing alternate plans, so that
+    # *all* dependencies are provided by Nix.
+    exactDeps = true;
+  }
+</code></pre></div>
+<p>I tried adding stuff for HLS but commented it out for now</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#223375970" name="223375970"><div>2021-01-20 14:05:28</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code>{pkgs ? import &lt;nixpkgs&gt; {} }:
+</code></pre></div>
+<p>the problem is this, which you pass on to <code>default.nix</code>, overriding the default (after the <code>?</code>) there. that replaces the nixpkgs from haskell-nix with the system default.</p>
+<p>change it to</p>
+<div class="codehilite" data-code-language="Nix"><pre><span></span><code><span class="ss">hsPkgs =</span> <span class="nb">import</span> <span class="o">.</span><span class="l">/default.nix</span> <span class="p">{};</span>
+</code></pre></div>
+<p>and it should be fine.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/48469162d45686615c6bf0eb4304bf26?d=identicon&amp;version=1"></a><div class="content"><a class="author">Arnaud Bailly</a><div class="metadata"><a href="#223376406" name="223376406"><div>2021-01-20 14:09:24</div></a></div><div class="text"><p>I have this line  inside the <code>let</code> block so I assume you meant I should simply remove the declaration? But then when I do that, I got another error:</p>
+<div class="codehilite"><pre><span></span><code>error: undefined variable &#39;pkgs&#39; at /home/curry/hydra-sim/shell.nix:23:24
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#223376677" name="223376677"><div>2021-01-20 14:11:58</div></a></div><div class="text"><p>no, no line to remove. just don't pass <code>pkgs</code> on to the import of <code>default.nix</code>.<br>
+and I don't see where you use <code>pkgs</code> in <code>shell.nix:23</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/48469162d45686615c6bf0eb4304bf26?d=identicon&amp;version=1"></a><div class="content"><a class="author">Arnaud Bailly</a><div class="metadata"><a href="#223377321" name="223377321"><div>2021-01-20 14:17:04</div></a></div><div class="text"><p>Ah I see. It's used for <code>buildInputs</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#223377474" name="223377474"><div>2021-01-20 14:18:09</div></a></div><div class="text"><p>ah, yes</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#223377513" name="223377513"><div>2021-01-20 14:18:34</div></a></div><div class="text"><p>then you would have to use <code>hsPkgs</code> there too</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
