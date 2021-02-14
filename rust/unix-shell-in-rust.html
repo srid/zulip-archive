@@ -1,0 +1,119 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="
+A lot of great new/rethought Unix utilities have been written in Rust in recent years (fzf, rg, fd, dust etc) and so I have this naive gut feeling that a shell written in Rust might be rather good.
+
+https://lobste.rs/s/bhqflt/alternative_shells" name="description"><link href="https://funprog.srid.ca/rust/unix-shell-in-rust.html" rel="canonical"><meta property="og:title" content="Unix shell in Rust - Rust"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Rust"><meta property="og:article:modified_time" content="2021-02-14T17:59:29Z"><meta property="og:article:published_time" content="2021-02-14T02:18:07Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>Unix shell in Rust - Rust</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Unix shell in Rust - Rust</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/rust/" class="section">#Rust</a><i class="right angle icon divider"></i><div class="active section">Unix shell in Rust</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#226280989" name="226280989"><div>2021-02-14 02:18:07</div></a></div><div class="text"><blockquote>
+<p>A lot of great new/rethought Unix utilities have been written in Rust in recent years (fzf, rg, fd, dust etc) and so I have this naive gut feeling that a shell written in Rust might be rather good.</p>
+</blockquote>
+<p><a href="https://lobste.rs/s/bhqflt/alternative_shells">https://lobste.rs/s/bhqflt/alternative_shells</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#226293859" name="226293859"><div>2021-02-14 08:53:14</div></a></div><div class="text"><p>nushell is really nice - has structured data, combinators for manipulating tables, great type errors, good integrated documentation and even support for generating it, an recently got support for custom functions, which, similarly to PowerShell, can define named arguments and flags<br>
+Though it's still in alpha state, so there're some bugs here and there</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#226316405" name="226316405"><div>2021-02-14 17:46:20</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> What are your thoughts on the state of alternative shells? Time to experiment and switch now, or wait till the time comes when one of them matures enough to be a solid <code>bash</code> replacement?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#226316591" name="226316591"><div>2021-02-14 17:51:02</div></a></div><div class="text"><p>Depends on shell - Fish is already 16 years old, so there isn't much that would be missing from it, while Nu shell is still in alpha/beta stage</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#226316666" name="226316666"><div>2021-02-14 17:52:47</div></a></div><div class="text"><p>nu does interesting things. like real-time syntax highlighting as you type the command (before hitting Enter). its <code>open</code> command also highlights the file based on syntax</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#226316681" name="226316681"><div>2021-02-14 17:53:40</div></a></div><div class="text"><p>where does <code>nu</code> stand on interactive CLI apps UX? any builtin functions to say script popups, dialog input, etc.?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/1000/9fd9de59f964f6e3af477006ddd0116211347010?x=x&amp;version=2"></a><div class="content"><a class="author">Notification Bot</a><div class="metadata"><a href="#226316742" name="226316742"><div>2021-02-14 17:54:19</div></a></div><div class="text"><p>This topic was moved here from <a class="stream-topic" data-stream-id="201385" href="/#narrow/stream/201385-Haskell/topic/CLI.20apps.20to.20growing.20the.20Haskell.20Community">#Haskell &gt; CLI apps to growing the Haskell Community</a> by <span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#226316955" name="226316955"><div>2021-02-14 17:59:29</div></a></div><div class="text"><p>It's getting there when it comes to scripting - but commands showing GUI sounds like something more fitting for a separate CLI utility</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
