@@ -1,0 +1,123 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi,
+I&#39;d like to use optics in a purescript code but I think my question would apply to Haskell.
+I have a type data PerformanceAggregate = PerfAgg { cpuSum :: Int, categories :: List PerformanceAggregate}. I added a lens for the cpuSum (_cpuSum) and categories (_categories) field. Obviously I&#39;d like " name="description"><link href="https://funprog.srid.ca/haskell/optics-for-accessing-list-item.html" rel="canonical"><meta property="og:title" content="Optics for accessing list item - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-02-23T22:55:39Z"><meta property="og:article:published_time" content="2021-02-23T22:25:03Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"><title>Optics for accessing list item - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Optics for accessing list item - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Optics for accessing list item</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#227515479" name="227515479"><div>2021-02-23 22:25:03</div></a></div><div class="text"><p>Hi,<br>
+I'd like to use optics in a purescript code but I think my question would apply to Haskell.</p>
+<p>I have a type <code>data PerformanceAggregate = PerfAgg { cpuSum :: Int, categories :: List PerformanceAggregate}</code>. I added a lens for the cpuSum (<code>_cpuSum</code>) and categories (<code>_categories</code>) field. Obviously I'd like to use an optic to access element in the list, in my case I'm mostly interessed by the first one.</p>
+<p>I built an optic <code>_categories . (Lens.ix 0)</code> for this first item in the list. I'm using it with the preview function and it works just fine, returning a Maybe PerformanceAggregate. But updating it is a little more complicated.<br>
+What I want is :</p>
+<ul>
+<li>if there is an element in the list, I want to update it. </li>
+<li>if there is no element in the list, I want to insert one.</li>
+</ul>
+<p>I'd like to know if there is a way to have the 2 bullet points with a single function call. I'm not familiar with prism at all, I don't know what is the equivalent of <code>over</code> for instance, and for the second I don't know if it's possible to add an element a List with the composed optics. I currently call <code>Lens.set _categories</code> and use <code>fromMaybe</code> + <code>List.tail</code>ie something quite unelegant.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#227515936" name="227515936"><div>2021-02-23 22:28:18</div></a></div><div class="text"><p>it doesn't work with <code>over</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#227516213" name="227516213"><div>2021-02-23 22:30:40</div></a></div><div class="text"><p>oh eh, with <code>at</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#227516318" name="227516318"><div>2021-02-23 22:31:26</div></a></div><div class="text"><p>you're right, over works, I though it didn't (assuming we needed a preview instead of a view, and a review instead of... a set I guess)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#227516338" name="227516338"><div>2021-02-23 22:31:39</div></a></div><div class="text"><p>like <code>_categories . at 0 %~ (f :: Maybe a -&gt; Maybe a)</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#227516468" name="227516468"><div>2021-02-23 22:32:30</div></a></div><div class="text"><p>so <code>ix</code> also works?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#227516479" name="227516479"><div>2021-02-23 22:32:37</div></a></div><div class="text"><p>yes</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#227516477" name="227516477"><div>2021-02-23 22:32:37</div></a></div><div class="text"><p>what is the difference between ix and at ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#227516516" name="227516516"><div>2021-02-23 22:32:55</div></a></div><div class="text"><p>not sure, I always use <code>at</code>. I think <code>ix</code> is more flexible</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#227516571" name="227516571"><div>2021-02-23 22:33:13</div></a></div><div class="text"><p>it seems however that <code>at</code> is not available in purescript</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#227516600" name="227516600"><div>2021-02-23 22:33:34</div></a></div><div class="text"><p>there is no lens that will append an object if there is no object in a container ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#227516608" name="227516608"><div>2021-02-23 22:33:38</div></a></div><div class="text"><p>ah, right. then the specific semantics are probably not that important here</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#227516696" name="227516696"><div>2021-02-23 22:34:11</div></a></div><div class="text"><p>well my impression was that if you get a <code>Nothing</code> in <code>f</code> and return <code>Just</code>, it will append</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#227517038" name="227517038"><div>2021-02-23 22:37:33</div></a></div><div class="text"><p>will give a try. thanks !</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#227519274" name="227519274"><div>2021-02-23 22:55:39</div></a></div><div class="text"><p>actually there is <code>at</code> in purescript too, but not in the module I imported</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
