@@ -5,7 +5,7 @@ system-ghc: true
 skip-ghc-check: true
 
 because there are no pre-compiled ghc for openbsd.  
-Finally yesterday, I" name="description"><link href="https://funprog.srid.ca/haskell/openbsd.html" rel="canonical"><meta property="og:title" content="openbsd - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-02-23T16:41:08Z"><meta property="og:article:published_time" content="2021-02-23T16:27:24Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"><title>openbsd - Haskell</title><style type="text/css">
+Finally yesterday, I" name="description"><link href="https://funprog.srid.ca/haskell/openbsd.html" rel="canonical"><meta property="og:title" content="openbsd - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-02-23T17:48:06Z"><meta property="og:article:published_time" content="2021-02-23T16:27:24Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"><title>openbsd - Haskell</title><style type="text/css">
 div#thesite
 {
   font-family   : "Open Sans", sans-serif;
@@ -128,4 +128,16 @@ div#thesite .messages .message_inline_image img
 <div class="codehilite"><pre><span></span><code>$ cat ~/.stack/config.yaml
 nix: {enable: false}
 system-ghc: true
-</code></pre></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#227472887" name="227472887"><div>2021-02-23 17:48:06</div></a></div><div class="text"><p>I have changed the config.yaml and stack behaves differently with the changes.</p>
+<p>looking at the stack issue <a href="https://github.com/commercialhaskell/stack/issues/416#issuecomment-291756246">https://github.com/commercialhaskell/stack/issues/416#issuecomment-291756246</a></p>
+<p>following the instructions i have run <code>gmake binary-dist</code> to make ghc-8.81-x86_64-unknown-openbsd.tar.xz</p>
+<p>added to config.yaml</p>
+<div class="codehilite" data-code-language="YAML"><pre><span></span><code><span class="nt">setup-info</span><span class="p">:</span>
+  <span class="nt">ghc</span><span class="p">:</span>
+    <span class="nt">openbsd64-maj6-min7</span><span class="p">:</span>
+      <span class="nt">8.8.1</span><span class="p">:</span>
+        <span class="nt">url</span><span class="p">:</span> <span class="s">'home/user/ghc/ghc-8.81-x86_64-unknown-openbsd.tar.xz'</span>
+</code></pre></div>
+<p>run <code>stack setup</code></p>
+<p>however, I get the problem of gcc version, so time to sort that out now</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/commercialhaskell/stack/issues/416#issuecomment-291756246" style="background-image: url(https://avatars.githubusercontent.com/u/10633049?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/commercialhaskell/stack/issues/416#issuecomment-291756246" title="OpenBSD installer / instructions · Issue #416 · commercialhaskell/stack">OpenBSD installer / instructions · Issue #416 · commercialhaskell/stack</a></div><div class="message_embed_description">Any chance of getting a binary installer for OpenBSD (current, AMD64) or instructions on how to get it working from source? I develop Haskell on OpenBSD and would like to use stack.</div></div></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
