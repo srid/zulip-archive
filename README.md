@@ -2,6 +2,8 @@
 
 Zulip archive viewer written in Haskell, using the [rib](https://github.com/srid/rib) static site generator.
 
+[Demo](https://funprog.srid.ca/)
+
 ## Prerequisites
 
 First, install the [Nix package manager](https://nixos.org/nix/):
