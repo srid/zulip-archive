@@ -102,10 +102,11 @@ scheduleGeneration inputDir freq = do
 generateSite :: Config -> Action ()
 generateSite cfg = do
   -- Fetch (and/or load from cache) all zulip data
-  (server, streams) <- getArchive (Config.zulipDomain cfg) (Config.authEmail cfg) (Config.authApiKey cfg)
+  (server, streamsAll) <- getArchive (Config.zulipDomain cfg) (Config.authEmail cfg) (Config.authApiKey cfg)
   let writeHtmlRoute :: Route a -> a -> Action ()
       writeHtmlRoute r = Rib.writeRoute r . Lucid.renderText . renderPage server cfg r
-  streamRoutes <- forM streams $ \stream -> unless (_streamName stream == "#Random") $ do
+  let streams = flip filter streamsAll $ \s -> _streamName stream /= "#Random" 
+  streamRoutes <- forM streams $ \stream -> do
     forM_ (fromMaybe (error "No topics in stream") $ _streamTopics stream) $ \topic -> do
       let tr = Route_Stream stream $ StreamRoute_Topic topic
       writeHtmlRoute tr TopicR
