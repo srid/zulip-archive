@@ -4,7 +4,7 @@ My current approach,
 --
 -- one subscriber only (because of TMVar)
 data Changing a = Changing
-  { -- | A value th" name="description"><link href="https://funprog.srid.ca/haskell/tvar-with-change-notification.html" rel="canonical"><meta property="og:title" content="TVar with change notification - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-04-19T22:08:07Z"><meta property="og:article:published_time" content="2021-04-19T22:08:07Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>TVar with change notification - Haskell</title><style type="text/css">
+  { -- | Current va" name="description"><link href="https://funprog.srid.ca/haskell/tvar-with-change-notification.html" rel="canonical"><meta property="og:title" content="TVar with change notification - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-04-19T22:24:04Z"><meta property="og:article:published_time" content="2021-04-19T22:08:07Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>TVar with change notification - Haskell</title><style type="text/css">
 div#thesite
 {
   font-family   : "Open Sans", sans-serif;
@@ -121,11 +121,12 @@ div#thesite .messages .message_inline_image img
 <span class="c1">--</span>
 <span class="c1">-- one subscriber only (because of TMVar)</span>
 <span class="kr">data</span> <span class="kt">Changing</span> <span class="n">a</span> <span class="ow">=</span> <span class="kt">Changing</span>
-  <span class="p">{</span> <span class="c1">-- | A value that changes over time</span>
-    <span class="n">changingVar</span> <span class="ow">::</span> <span class="kt">TMVar</span> <span class="n">a</span><span class="p">,</span>
+  <span class="p">{</span> <span class="c1">-- | Current value</span>
+    <span class="n">changingCurrent</span>  <span class="ow">::</span> <span class="kt">TMVar</span> <span class="n">a</span><span class="p">,</span>
     <span class="c1">-- | To get notified of whenever the value changes.</span>
     <span class="c1">--</span>
     <span class="c1">-- Only one reader is supported.</span>
     <span class="n">changingUpdated</span> <span class="ow">::</span> <span class="kt">TMVar</span> <span class="nb">()</span>
   <span class="p">}</span>
-</code></pre></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#235258919" name="235258919"><div>2021-04-19 22:24:04</div></a></div><div class="text"><p><a href="https://github.com/srid/ema/blob/69c292f0f326cc572fd3975fb256ab821eb9ab75/src/Ema/Changing.hs">https://github.com/srid/ema/blob/69c292f0f326cc572fd3975fb256ab821eb9ab75/src/Ema/Changing.hs</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/ema/blob/69c292f0f326cc572fd3975fb256ab821eb9ab75/src/Ema/Changing.hs" style="background-image: url(https://opengraph.githubassets.com/cae66f295c77baa89d8c06f5f1a27809f6fd28bb46f82ca0c1a3d5abad4eb376/srid/ema)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/ema/blob/69c292f0f326cc572fd3975fb256ab821eb9ab75/src/Ema/Changing.hs" title="srid/ema">srid/ema</a></div><div class="message_embed_description">WIP: Static site generator that is change-aware. Contribute to srid/ema development by creating an account on GitHub.</div></div></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
