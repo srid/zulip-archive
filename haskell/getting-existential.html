@@ -1,0 +1,202 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="@rae (Simplifying Constraint Solving in GHC):
+
+I&#39;m hoping, in the next 6 months or something, to have a new extension for GHC that just makes existential types work as easily as universal types...
+
+People, if I understand it right, this is going to change programming with GADTs A LOT " name="description"><link href="https://funprog.srid.ca/haskell/getting-existential.html" rel="canonical"><meta property="og:title" content="Getting existential - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-12-07T14:38:23Z"><meta property="og:article:published_time" content="2020-12-02T18:09:22Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"><title>Getting existential - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Getting existential - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Getting existential</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218596312" name="218596312"><div>2020-12-02 18:09:22</div></a></div><div class="text"><p>@rae (Simplifying Constraint Solving in GHC):</p>
+<blockquote>
+<p>I'm hoping, in the next 6 months or something, to have a new extension for GHC that just makes existential types work as easily as universal types...</p>
+</blockquote>
+<p>People, if I understand it right, this is going to change programming with GADTs A LOT <img alt=":partyparrot:" class="emoji" src="https://zulip-avatars.s3.amazonaws.com/13896/emoji/images/16603.gif" title="partyparrot"></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218596836" name="218596836"><div>2020-12-02 18:13:10</div></a></div><div class="text"><p>If we get <code>exists</code> quantifier, we may be able to do stuff like</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kt">IsList</span> <span class="p">(</span><span class="n">exists</span> <span class="n">n</span><span class="o">.</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span><span class="p">)</span>
+</code></pre></div>
+<p>or</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">toSing</span> <span class="ow">::</span> <span class="n">exists</span> <span class="n">x</span><span class="o">.</span> <span class="kt">SingKind</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sing</span> <span class="p">(</span><span class="n">x</span> <span class="ow">::</span> <span class="n">a</span><span class="p">)</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#218776785" name="218776785"><div>2020-12-04 01:09:00</div></a></div><div class="text"><p>I don't understand what that's about. I only recently learned that <code>forall</code> just declares type variables, and doesn't require inscrutable mathematical knowledge. Is there a similar programmer-language explanation of <code>exists</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4?d=identicon&amp;version=1"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#218795365" name="218795365"><div>2020-12-04 05:18:29</div></a></div><div class="text"><p>I’m not quite sure what you’re talking about… Haskell doesn’t have an <code>exists</code> keyword. (Unless you’re talking about existential <em>types</em>, but those use <code>forall</code> as well.)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218798831" name="218798831"><div>2020-12-04 06:47:40</div></a></div><div class="text"><p>I'm talking about one of the GHC developers being interested in improving support for existential types in GHC - and what I'm saying is that if that means real existential quantifier, then it would unlock new abilities and remove wrappers in some existing code.</p>
+<p><span class="user-mention" data-user-id="282523">@Alex Chapman</span> Nothing advanced really, it's just difference in who get's to pick the concrete type in place of the variable - when you say <code>x :: forall a. Maybe a</code>, you say that given <code>x</code> will work for whatever <code>a</code> you choose as a user - so you could use it as <code>Maybe Int</code> or <code>Maybe String</code> etc. (BTW, that would mean that <code>x = Nothing</code>)<br>
+With <code>x :: exists a. Maybe a</code> for some hypothetical <code>exists</code> quantifier,  you say that <code>x</code> uses some concrete type in place of <code>a</code> which you don't know about, is opaque to you - so compared to first example, such <code>x</code> could be e.g. <code>Just 'x'</code> or <code>Just [1,2,3]</code> or whatever else, and it's user wouldn't be allowed to see what the concrete <code>a</code> is without more information.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218799296" name="218799296"><div>2020-12-04 06:59:20</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="269918">bradrn</span> <a href="#narrow/stream/201385-Haskell/topic/Getting.20existential/near/218795365">said</a>:</p>
+<blockquote>
+<p>I’m not quite sure what you’re talking about… Haskell doesn’t have an <code>exists</code> keyword. (Unless you’re talking about existential <em>types</em>, but those use <code>forall</code> as well.)</p>
+</blockquote>
+<p>The only use <code>forall</code> in a sense of being encoded by <code>forall</code> used in right way - e.g. with</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">data</span> <span class="kt">Some</span> <span class="kr">where</span>
+  <span class="kt">Some</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">a</span><span class="o">.</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Some</span>
+</code></pre></div>
+<p>when you treat constructor <code>Some</code> as a function, then the <code>a</code> is just an ordinary universally quantified variable - what matters is that in case of constructors, we can actually deconstruct them using patterns:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">case</span> <span class="n">x</span> <span class="ow">::</span> <span class="kt">Some</span> <span class="kr">of</span> <span class="kt">Some</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kr">_</span>
+</code></pre></div>
+<p>And when you do that, given that you were able to put anything into <code>Some</code> because of it's polymorphic type, what's the type of <code>a</code>? Well, it's <em>something</em> already picked which we don't get to choose - that is, existential variable. Compare this to:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">data</span> <span class="kt">Any</span> <span class="kr">where</span>
+  <span class="kt">Any</span> <span class="ow">::</span> <span class="p">(</span><span class="n">forall</span> <span class="n">a</span><span class="o">.</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Any</span>
+</code></pre></div>
+<p>where <code>Any</code> can only be supplied with <code>undefined</code>, but it's field can be used as any type once pattern-matched on.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4?d=identicon&amp;version=1"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#218827342" name="218827342"><div>2020-12-04 12:42:28</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Getting.20existential/near/218799296">said</a>:</p>
+<blockquote>
+<p><span class="user-mention silent" data-user-id="269918">bradrn</span> <a href="#narrow/stream/201385-Haskell/topic/Getting.20existential/near/218795365">said</a>:</p>
+<blockquote>
+<p>I’m not quite sure what you’re talking about… Haskell doesn’t have an <code>exists</code> keyword. (Unless you’re talking about existential <em>types</em>, but those use <code>forall</code> as well.)</p>
+</blockquote>
+<p>The only use <code>forall</code> in a sense of being encoded by <code>forall</code> used in right way …</p>
+</blockquote>
+<p>Yes, I do understand this (I’ve made heavy use of existential types myself); I was merely commenting on the syntax, that ‘existential types’ are still defined with <code>forall</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218827793" name="218827793"><div>2020-12-04 12:47:10</div></a></div><div class="text"><p>Oh, I see - I've mentioned <code>exists</code> under <em>If</em> - I'm not sure if that's what the quote actually implies, but I can't think of any other conclusion - the single big pain point of existentials in Haskell is that they always have to be wrapped, even though normal datypes in Haskell are boxed anyway</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218827840" name="218827840"><div>2020-12-04 12:47:42</div></a></div><div class="text"><p>(It doesn't matter whether they're wrapped in another datatype or CPS function)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4?d=identicon&amp;version=1"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#218919565" name="218919565"><div>2020-12-05 05:25:29</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Getting.20existential/near/218827793">said</a>:</p>
+<blockquote>
+<p>the single big pain point of existentials in Haskell is that they always have to be wrapped</p>
+</blockquote>
+<p>Oh, yes. Existential types are useful, but this makes them <em>such</em> a pain to work with. It’s particularly bad with existentially-quantified records, since record construction and field access doesn’t work properly under existentials. I end up having to create a special boxing type for the records, so I can unwrap it to modify the record and then re-wrap it to hide the type variable. (I have wondered on occasion why no-one seems to have defined a type <code>data Some t = Some (forall a. t a)</code> to make the boxing/unboxing a bit easier.)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218927020" name="218927020"><div>2020-12-05 09:19:46</div></a></div><div class="text"><p><span aria-label="100" class="emoji emoji-1f4af" role="img" title="100">:100:</span><br>
+I've seen <code>Some</code> defined here and there, but it seems like people usually define it themselves, maybe to avoid dependencies</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4?d=identicon&amp;version=1"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#218933274" name="218933274"><div>2020-12-05 12:31:16</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Getting.20existential/near/218927020">said</a>:</p>
+<blockquote>
+<p><span aria-label="100" class="emoji emoji-1f4af" role="img" title="100">:100:</span><br>
+I've seen <code>Some</code> defined here and there, but it seems like people usually define it themselves, maybe to avoid dependencies</p>
+</blockquote>
+<p>OK, I hadn’t known this… perhaps I’ll do the same next time I need to work with existentials.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#218934904" name="218934904"><div>2020-12-05 13:18:41</div></a></div><div class="text"><p><a href="https://hackage.haskell.org/package/some">https://hackage.haskell.org/package/some</a></p>
+<p>from the reflex-frp ecosystem</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4?d=identicon&amp;version=1"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#218973764" name="218973764"><div>2020-12-06 07:18:44</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/201385-Haskell/topic/Getting.20existential/near/218934904">said</a>:</p>
+<blockquote>
+<p><a href="https://hackage.haskell.org/package/some">https://hackage.haskell.org/package/some</a></p>
+<p>from the reflex-frp ecosystem</p>
+</blockquote>
+<p>Thanks for this, I didn’t know this package existed! I’ll probably end up using this one in my next project.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#219031569" name="219031569"><div>2020-12-07 00:14:45</div></a></div><div class="text"><p>Thanks for the explanation, <span class="user-mention" data-user-id="225127">@TheMatten</span>. So would it be right to say that with this hypothetical <code>exists</code> keyword, the implementer would choose the type to instantiate the type variable with, in contrast with <code>forall</code>, in which the caller chooses the type?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#219031582" name="219031582"><div>2020-12-07 00:15:09</div></a></div><div class="text"><p>But if the implementer wants to hide the type from the caller, why expose it in the type signature?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4?d=identicon&amp;version=1"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#219036199" name="219036199"><div>2020-12-07 02:19:12</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="282523">Alex Chapman</span> <a href="#narrow/stream/201385-Haskell/topic/Getting.20existential/near/219031582">said</a>:</p>
+<blockquote>
+<p>But if the implementer wants to hide the type from the caller, why expose it in the type signature?</p>
+</blockquote>
+<p>This is exactly correct. If the implementer wants to hide the type from the caller, they can define a type like <code>ThisHasAHiddenTypeVariable = Hide (forall a. Maybe a)</code>; they can then use the type <code>ThisHasAHiddenTypeVariable</code> without exposing the variable <code>a</code> in the type signature.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4?d=identicon&amp;version=1"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#219036263" name="219036263"><div>2020-12-07 02:21:08</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="282523">Alex Chapman</span> <a href="#narrow/stream/201385-Haskell/topic/Getting.20existential/near/219031569">said</a>:</p>
+<blockquote>
+<p>So would it be right to say that with this hypothetical <code>exists</code> keyword, the implementer would choose the type to instantiate the type variable with, in contrast with <code>forall</code>, in which the caller chooses the type?</p>
+</blockquote>
+<p>Almost, but not quite. You can get situations when using <code>forall</code> in which the implementer is the one to choose the type, e.g. in type signatures like <code>thisHasAHiddenTypeVariable :: (forall a. Maybe a -&gt; b) -&gt; b</code>. (Note that this type is in fact isomorphic to the <code>ThisHasAHiddenTypeVarible</code> type which I defined above.)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#219048889" name="219048889"><div>2020-12-07 07:35:56</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="269918">bradrn</span> <a href="#narrow/stream/201385-Haskell/topic/Getting.20existential/near/219036263">said</a>:</p>
+<blockquote>
+<p>Almost, but not quite. You can get situations when using <code>forall</code> in which the implementer is the one to choose the type, e.g. in type signatures like <code>thisHasAHiddenTypeVariable :: (forall a. Maybe a -&gt; b) -&gt; b</code>. (Note that this type is in fact isomorphic to the <code>ThisHasAHiddenTypeVarible</code> type which I defined above.)</p>
+</blockquote>
+<p>Actually, I would say that <span class="user-mention" data-user-id="282523">@Alex Chapman</span>'s description still applies, it's just  put on it's head because of <code>RankNTypes</code> - when you think about it, <code>thisHasAHiddenTypeVariable</code> chooses the type in place of <code>a</code> because it's actually the caller - it may take the function as an argument, but it still calls it in same way as any other polymorphic function, while the caller of <code>thisHasAHiddenTypeVariable</code> is actually the implementer of the provided continuation</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#219055662" name="219055662"><div>2020-12-07 09:13:03</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="282523">Alex Chapman</span> <a href="#narrow/stream/201385-Haskell/topic/Getting.20existential/near/219031582">said</a>:</p>
+<blockquote>
+<p>But if the implementer wants to hide the type from the caller, why expose it in the type signature?</p>
+</blockquote>
+<p>Because often you don't really want to hide it, you just "can't expose it" - this is often the case with dynamically constructed <code>GADTs</code><br>
+E.g. in case of</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">fromList</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">a</span><span class="o">.</span> <span class="n">exists</span> <span class="n">n</span><span class="o">.</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span>
+</code></pre></div>
+<p>you may want to immediately pass such value some other function, e.g. with signature</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span>
+</code></pre></div>
+<p>Compared to</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+</code></pre></div>
+<p>such type is actually more precise because it forces length of the vector to stay the same. For that, you don't need to know the precise length of the vector, but you need to be able to talk about it to say that you want to preserve it. Compare this to current approach of doing</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">data</span> <span class="kt">SomeVec</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">SomeVec</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">n</span><span class="o">.</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">SomeVec</span> <span class="n">a</span>
+
+<span class="nf">withVec</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">a</span> <span class="n">r</span><span class="o">.</span> <span class="kt">SomeVec</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">forall</span> <span class="n">n</span><span class="o">.</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">r</span>
+<span class="nf">withVec</span> <span class="p">(</span><span class="kt">SomeVec</span> <span class="n">v</span><span class="p">)</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">f</span> <span class="n">v</span>
+
+<span class="nf">toList</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">a</span><span class="o">.</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="kt">SomeVec</span> <span class="n">a</span>
+</code></pre></div>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="o">&gt;</span> <span class="n">withVec</span> <span class="n">sv</span> <span class="nf">\</span><span class="n">v</span> <span class="ow">-&gt;</span> <span class="o">...</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#219064422" name="219064422"><div>2020-12-07 10:46:15</div></a></div><div class="text"><p>BTW, totally irrelevant in practice, but if someone wonders why you can encode these quantifiers in terms of each other, it's because they're <a href="https://en.wikipedia.org/wiki/Universal_quantification#As_adjoint">adjoint</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#219085201" name="219085201"><div>2020-12-07 14:23:18</div></a></div><div class="text"><p>I wouldn't say totally irrelevant - isn't there some systematic way to get the adjoint of something?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#219085233" name="219085233"><div>2020-12-07 14:23:40</div></a></div><div class="text"><p>so then, if someone doesn't know how to do the encoding, they could consult the systematic way</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#219085462" name="219085462"><div>2020-12-07 14:25:27</div></a></div><div class="text"><p>should be possible, but I'd assume it's harder to get you head around than the haskell part <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#219086831" name="219086831"><div>2020-12-07 14:35:34</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span> there's is, but in Haskell the existing implementation is limited to <code>Hask</code> endofunctors: <a href="https://hackage.haskell.org/package/adjunctions-4.4/docs/Data-Functor-Adjunction.html">https://hackage.haskell.org/package/adjunctions-4.4/docs/Data-Functor-Adjunction.html</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#219086945" name="219086945"><div>2020-12-07 14:36:23</div></a></div><div class="text"><p>I assumed <span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span> meant to derive the equation in your head with galois connections</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#219087015" name="219087015"><div>2020-12-07 14:36:57</div></a></div><div class="text"><p>no clue what galois connections mean in CT but yeah</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#219087098" name="219087098"><div>2020-12-07 14:37:52</div></a></div><div class="text"><p>just a generalization of adjunctions to posets, I think</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#219087169" name="219087169"><div>2020-12-07 14:38:23</div></a></div><div class="text"><p>Ah, I see</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

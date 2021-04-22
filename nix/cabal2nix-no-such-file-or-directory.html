@@ -1,0 +1,162 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi. I&#39;m having a sudden problem with callCabal2nix on a local package:
+cabal2nix: nix-prefetch-url: createProcess: runInteractiveProcess: exec: does not exist (No such file or directory)
+
+It worked earlier today (and before) and just promptly stopped. Any ideas why could it be? I don&#39;t even know whe" name="description"><link href="https://funprog.srid.ca/nix/cabal2nix-no-such-file-or-directory.html" rel="canonical"><meta property="og:title" content="cabal2nix - No such file or directory - Nix"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Nix"><meta property="og:article:modified_time" content="2020-10-31T19:34:50Z"><meta property="og:article:published_time" content="2020-10-31T18:32:07Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/b32606244b969cd58b20b9af417072af?d=identicon&amp;version=1"><title>cabal2nix - No such file or directory - Nix</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">cabal2nix - No such file or directory - Nix</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/nix/" class="section">#Nix</a><i class="right angle icon divider"></i><div class="active section">cabal2nix - No such file or directory</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b32606244b969cd58b20b9af417072af?d=identicon&amp;version=1"></a><div class="content"><a class="author">Cyril Valyavin</a><div class="metadata"><a href="#215205185" name="215205185"><div>2020-10-31 18:32:07</div></a></div><div class="text"><p>Hi. I'm having a sudden problem with <code>callCabal2nix</code> on a local package:</p>
+<div class="codehilite"><pre><span></span><code>cabal2nix: nix-prefetch-url: createProcess: runInteractiveProcess: exec: does not exist (No such file or directory)
+</code></pre></div>
+<p>It worked earlier today (and before) and just promptly stopped. Any ideas why could it be? I don't even know where to start looking.<br>
+The cabal2nix executable works just fine though.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#215205375" name="215205375"><div>2020-10-31 18:36:26</div></a></div><div class="text"><p>I would guess that <code>nix-prefetch-url</code> is somehow not in the <code>$PATH</code>…maybe something broke in your env that's calling cabal2nix?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#215205406" name="215205406"><div>2020-10-31 18:37:26</div></a></div><div class="text"><p>otherwise running the command with <code>strace -f -eopenat &lt;nix command&gt;</code> might show what it's trying to run</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b32606244b969cd58b20b9af417072af?d=identicon&amp;version=1"></a><div class="content"><a class="author">Cyril Valyavin</a><div class="metadata"><a href="#215206124" name="215206124"><div>2020-10-31 18:52:35</div></a></div><div class="text"><p><code>nix-prefetch-url</code> is in <code>$PATH</code>.  strace output shows</p>
+<div class="codehilite"><pre><span></span><code>[pid 10555] openat(AT_FDCWD, &quot;/nix/store/piy9qp1h7mmicxban3sr0wq8na9x5k2z-source&quot;, O_RDONLY|O_NOCTTY|O_NONBLOCK) = 3
+strace: Process 10556 attached
+[pid 10556] +++ exited with 127 +++
+[pid 10555] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=4, si_uid=1000, si_status=127, si_utime=0, si_stime=0} ---
+cabal2nix: nix-prefetch-url: createProcess: runInteractiveProcess: exec: does not exist (No such file or directory)
+</code></pre></div>
+<p>Which I'm not sure how to interpret...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#215206534" name="215206534"><div>2020-10-31 19:01:08</div></a></div><div class="text"><p>curious. just to be safe: you did include the <code>-f</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b32606244b969cd58b20b9af417072af?d=identicon&amp;version=1"></a><div class="content"><a class="author">Cyril Valyavin</a><div class="metadata"><a href="#215206631" name="215206631"><div>2020-10-31 19:02:45</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/214966-Nix/topic/Questions/near/215206534">said</a>:</p>
+<blockquote>
+<p>curious. just to be safe: you did include the <code>-f</code>?</p>
+</blockquote>
+<p>Yep</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#215206632" name="215206632"><div>2020-10-31 19:02:47</div></a></div><div class="text"><p>oh, maybe try <code>-eopen</code> instead of <code>-eopenat</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b32606244b969cd58b20b9af417072af?d=identicon&amp;version=1"></a><div class="content"><a class="author">Cyril Valyavin</a><div class="metadata"><a href="#215206739" name="215206739"><div>2020-10-31 19:04:17</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/214966-Nix/topic/Questions/near/215206632">said</a>:</p>
+<blockquote>
+<p>oh, maybe try <code>-eopen</code> instead of <code>-eopenat</code></p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code>[pid 10802] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=2, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+strace: Process 10804 attached
+strace: Process 10805 attached
+[pid 10805] +++ exited with 127 +++
+[pid 10804] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=4, si_uid=1000, si_status=127, si_utime=0, si_stime=0} ---
+cabal2nix: nix-prefetch-url: createProcess: runInteractiveProcess: exec: does not exist (No such file or directory)
+[pid 10804] +++ exited with 1 +++
+[pid 10802] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=3, si_uid=1000, si_status=1, si_utime=0, si_stime=1} ---
+[pid 10802] +++ exited with 1 +++
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#215206780" name="215206780"><div>2020-10-31 19:05:41</div></a></div><div class="text"><p>you need to look further up, the target is a line with <code>open</code> that returns something like <code>ENOENT</code> on the rhs of the <code>=</code>!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#215206861" name="215206861"><div>2020-10-31 19:07:05</div></a></div><div class="text"><p>is your commandline something like <code>nix-shell --pure</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b32606244b969cd58b20b9af417072af?d=identicon&amp;version=1"></a><div class="content"><a class="author">Cyril Valyavin</a><div class="metadata"><a href="#215207007" name="215207007"><div>2020-10-31 19:10:05</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/214966-Nix/topic/Questions/near/215206780">said</a>:</p>
+<blockquote>
+<p>you need to look further up, the target is a line with <code>open</code> that returns something like <code>ENOENT</code> on the rhs of the <code>=</code>!</p>
+</blockquote>
+<p>I don't really see even a single <code>open</code><br>
+<span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/214966-Nix/topic/Questions/near/215206861">said</a>:</p>
+<blockquote>
+<p>is your commandline something like <code>nix-shell --pure</code>?</p>
+</blockquote>
+<p>It's just <code>nix-shell</code>. <code>--pure</code> fails in the same way though</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b32606244b969cd58b20b9af417072af?d=identicon&amp;version=1"></a><div class="content"><a class="author">Cyril Valyavin</a><div class="metadata"><a href="#215207127" name="215207127"><div>2020-10-31 19:12:38</div></a></div><div class="text"><p>Oh, but with --openat I do see a crap ton of .so files missing</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#215207140" name="215207140"><div>2020-10-31 19:13:02</div></a></div><div class="text"><p>I have experienced problems with files not found by cabal2nix if, for example, the source tree copied to the store was wrong (subdirectory, missing the cabal file). though that doesn't explain that <code>nix-prefetch-url</code> is in the error.</p>
+<p>in any case, the store path printed in your first output is worth taking a look at, maybe it's empty</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#215207226" name="215207226"><div>2020-10-31 19:14:30</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="271903">Cyril Valyavin</span> <a href="#narrow/stream/214966-Nix/topic/Questions/near/215207127">said</a>:</p>
+<blockquote>
+<p>Oh, but with --openat I do see a crap ton of .so files missing</p>
+</blockquote>
+<p>that's normal, it's trying out different locations to find a library. only if they aren't followed by a final success are interesting</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#215207239" name="215207239"><div>2020-10-31 19:15:01</div></a></div><div class="text"><p>with parallel subprocesses, it's possible that it's not the absolute last entry in the output, however</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b32606244b969cd58b20b9af417072af?d=identicon&amp;version=1"></a><div class="content"><a class="author">Cyril Valyavin</a><div class="metadata"><a href="#215207351" name="215207351"><div>2020-10-31 19:17:05</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/214966-Nix/topic/Questions/near/215207140">said</a>:</p>
+<blockquote>
+<p>I have experienced problems with files not found by cabal2nix if, for example, the source tree copied to the store was wrong (subdirectory, missing the cabal file). though that doesn't explain that <code>nix-prefetch-url</code> is in the error.</p>
+<p>in any case, the store path printed in your first output is worth taking a look at, maybe it's empty</p>
+</blockquote>
+<p>The source file is legit. I should probably try to reinstall Nix altogether</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b32606244b969cd58b20b9af417072af?d=identicon&amp;version=1"></a><div class="content"><a class="author">Cyril Valyavin</a><div class="metadata"><a href="#215208052" name="215208052"><div>2020-10-31 19:32:25</div></a></div><div class="text"><p>Didn't work. Well that's weird.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b32606244b969cd58b20b9af417072af?d=identicon&amp;version=1"></a><div class="content"><a class="author">Cyril Valyavin</a><div class="metadata"><a href="#215208154" name="215208154"><div>2020-10-31 19:34:50</div></a></div><div class="text"><p>OH. Case closed, the culprit is me, I called cabal2nix with a file name, not the containing directory!</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

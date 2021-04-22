@@ -1,0 +1,112 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi All! Is there a way (probably an unsafe primitive) to get the address of an object in Haskell? I&#39;d like to use it to optimize search in a cache" name="description"><link href="https://funprog.srid.ca/haskell/object-address.html" rel="canonical"><meta property="og:title" content="Object Address - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-02-04T04:22:31Z"><meta property="og:article:published_time" content="2020-01-31T20:47:06Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/6bc72887d0b9f71cdbc2eeb5f9899d8f?d=identicon&amp;version=1"><title>Object Address - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Object Address - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Object Address</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6bc72887d0b9f71cdbc2eeb5f9899d8f?d=identicon&amp;version=1"></a><div class="content"><a class="author">Simon Hudon</a><div class="metadata"><a href="#187121844" name="187121844"><div>2020-01-31 20:47:06</div></a></div><div class="text"><p>Hi All! Is there a way (probably an unsafe primitive) to get the address of an object in Haskell? I'd like to use it to optimize search in a cache</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6bc72887d0b9f71cdbc2eeb5f9899d8f?d=identicon&amp;version=1"></a><div class="content"><a class="author">Simon Hudon</a><div class="metadata"><a href="#187132233" name="187132233"><div>2020-01-31 23:00:01</div></a></div><div class="text"><p>Found part of my answer: <code>GHC.Exts</code> exports <code>reallyUnsafePtrEquality : a -&gt; a -&gt; #Int</code> with appropriate warnings. I still wish I could use an object's address to calculate an unsound hash code but this is a good start</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8ae3c3a98eb73541a0a410e92b025ebd?d=identicon&amp;version=1"></a><div class="content"><a class="author">Reed Mullanix</a><div class="metadata"><a href="#187135751" name="187135751"><div>2020-01-31 23:55:08</div></a></div><div class="text"><p><code>anyToAddr# :: a -&gt; State# RealWorld -&gt; (#State# RealWorld, Addr##) </code> might also fit the bill</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6bc72887d0b9f71cdbc2eeb5f9899d8f?d=identicon&amp;version=1"></a><div class="content"><a class="author">Simon Hudon</a><div class="metadata"><a href="#187136399" name="187136399"><div>2020-02-01 00:04:52</div></a></div><div class="text"><p>Nice! Thanks! I assume I would take the <code>RealWorld</code> from inside the <code>IO</code> monad, right?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8ae3c3a98eb73541a0a410e92b025ebd?d=identicon&amp;version=1"></a><div class="content"><a class="author">Reed Mullanix</a><div class="metadata"><a href="#187138203" name="187138203"><div>2020-02-01 00:37:56</div></a></div><div class="text"><p>Yeah, that would be my guess!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6bc72887d0b9f71cdbc2eeb5f9899d8f?d=identicon&amp;version=1"></a><div class="content"><a class="author">Simon Hudon</a><div class="metadata"><a href="#187139623" name="187139623"><div>2020-02-01 01:06:52</div></a></div><div class="text"><p>Ah and now I see <code>addr2Int# :: Addr# -&gt; Int#</code> if I want to use it to calculate a hash</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543?d=identicon&amp;version=1"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#187148975" name="187148975"><div>2020-02-01 06:01:06</div></a></div><div class="text"><p>can you be more specific about your problem? this strikes me as almost certainly the wrong approach!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6bc72887d0b9f71cdbc2eeb5f9899d8f?d=identicon&amp;version=1"></a><div class="content"><a class="author">Simon Hudon</a><div class="metadata"><a href="#187150346" name="187150346"><div>2020-02-01 06:45:54</div></a></div><div class="text"><p>There's are data structures in automated reasoning (such as BDDs) that can be implemented quite efficiently in C / C++ because of the kind of pointer trick that I mentioned but in higher level languages such as ML and Haskell, we systematically lose orders of magnitude in performance. I'm trying to see how to use the pointer tricks in pure functional languages and prove that we still have referential transparency.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#187268662" name="187268662"><div>2020-02-03 14:53:11</div></a></div><div class="text"><p>If you're working on what I think you're working on I hope you'll find the time and energy to write about your findings. <span aria-label="surprise" class="emoji emoji-1f62e" role="img" title="surprise">:surprise:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6bc72887d0b9f71cdbc2eeb5f9899d8f?d=identicon&amp;version=1"></a><div class="content"><a class="author">Simon Hudon</a><div class="metadata"><a href="#187292853" name="187292853"><div>2020-02-03 19:05:14</div></a></div><div class="text"><p>No worries, I started writing already. I have a bunch of my examples already implemented in Lean. I'll show you when I have something readable</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/6bc72887d0b9f71cdbc2eeb5f9899d8f?d=identicon&amp;version=1"></a><div class="content"><a class="author">Simon Hudon</a><div class="metadata"><a href="#187292892" name="187292892"><div>2020-02-03 19:05:56</div></a></div><div class="text"><p>I actually managed to write an address-based hashmap in Haskell too. It was a pleasant surprise</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2?d=identicon&amp;version=1"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#187329361" name="187329361"><div>2020-02-04 04:22:31</div></a></div><div class="text"><p>Awesome!</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

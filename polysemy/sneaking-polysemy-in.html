@@ -1,0 +1,168 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="So in my neuron project I have a pure function that looks at an ADT, does bunch of checks and returns something. But one of the constructors will have to use nextRandom :: IO UUID to create a random string, and that&#39;s an IO action. Everything else is pure code. 
+It would suck to make this entire fun" name="description"><link href="https://funprog.srid.ca/polysemy/sneaking-polysemy-in.html" rel="canonical"><meta property="og:title" content="Sneaking polysemy in - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-04-30T19:58:45Z"><meta property="og:article:published_time" content="2020-04-30T16:51:31Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>Sneaking polysemy in - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Sneaking polysemy in - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Sneaking polysemy in</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195868543" name="195868543"><div>2020-04-30 16:51:31</div></a></div><div class="text"><p>So in my <a href="https://neuron.zettel.page/" title="https://neuron.zettel.page/">neuron</a> project I have a pure function that looks at an ADT, does bunch of checks and returns something. But one of the constructors will have to use <code>nextRandom :: IO UUID</code> to create a random string, and that's an IO action. Everything else is pure code. </p>
+<p>It would suck to make this entire function an IO action just for that one constructor. </p>
+<p>I'm wondering if it would be unsuitable to sneak in polysemy just for this function. And then create a separate effect for the test (where I pass a predetermined "random" hash). Makes every thing else pure, and would give me an excuse to use and learn the newer effects system, but in a smaller part of the code.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195868858" name="195868858"><div>2020-04-30 16:53:19</div></a></div><div class="text"><p>how "deep in the stack" is this function, i.e. from <code>main</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195869099" name="195869099"><div>2020-04-30 16:54:46</div></a></div><div class="text"><p>Very close to <code>main</code>. In CLI argument handlers. But the function is small and you can tell what it does from its argument (without knowing the rest of the code base)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195869195" name="195869195"><div>2020-04-30 16:55:23</div></a></div><div class="text"><p>Well, here it is in its entirety (minus the IO action):</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- | Create a new zettel ID based on the given scheme without conflicting with</span>
+<span class="c1">-- the IDs of existing zettels.</span>
+<span class="nf">nextAvailableZettelID</span>
+  <span class="c1">-- | Existing zettels</span>
+  <span class="ow">::</span> <span class="kt">Set</span> <span class="kt">ZettelID</span>
+  <span class="ow">-&gt;</span> <span class="kt">IDScheme</span>
+  <span class="ow">-&gt;</span> <span class="kt">Either</span> <span class="kt">Text</span> <span class="kt">ZettelID</span>
+<span class="nf">nextAvailableZettelID</span> <span class="n">zs</span> <span class="ow">=</span> <span class="nf">\</span><span class="kr">case</span>
+  <span class="kt">IDSchemeDate</span> <span class="n">day</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+    <span class="kr">let</span> <span class="n">dayIndices</span> <span class="ow">=</span> <span class="n">nonEmpty</span> <span class="o">$</span> <span class="n">sort</span> <span class="o">$</span> <span class="n">flip</span> <span class="n">mapMaybe</span> <span class="p">(</span><span class="kt">Set</span><span class="o">.</span><span class="n">toList</span> <span class="n">zs</span><span class="p">)</span> <span class="o">$</span> <span class="nf">\</span><span class="kr">case</span>
+          <span class="kt">ZettelDateID</span> <span class="n">d</span> <span class="n">x</span>
+            <span class="o">|</span> <span class="n">d</span> <span class="o">==</span> <span class="n">day</span> <span class="ow">-&gt;</span> <span class="kt">Just</span> <span class="n">x</span>
+          <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="kt">Nothing</span>
+    <span class="kr">case</span> <span class="n">last</span> <span class="o">&lt;$&gt;</span> <span class="n">dayIndices</span> <span class="kr">of</span>
+      <span class="kt">Nothing</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="o">$</span> <span class="kt">ZettelDateID</span> <span class="n">day</span> <span class="mi">1</span>
+      <span class="kt">Just</span> <span class="mi">99</span> <span class="ow">-&gt;</span> <span class="n">throwError</span> <span class="s">&quot;Ran out of date ID indices&quot;</span>
+      <span class="kt">Just</span> <span class="n">idx</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="o">$</span> <span class="kt">ZettelDateID</span> <span class="n">day</span> <span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="kt">IDSchemeHash</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+    <span class="c1">-- TODO: IO!!!!!!!!!!!!!!!</span>
+    <span class="c1">-- let h = T.take 8 $ UUID.toText</span>
+    <span class="n">undefined</span>
+  <span class="kt">IDSchemeCustom</span> <span class="n">s</span> <span class="ow">-&gt;</span> <span class="n">runExcept</span> <span class="o">$</span> <span class="kr">do</span>
+    <span class="n">zid</span> <span class="ow">&lt;-</span>
+      <span class="n">fmap</span> <span class="kt">ZettelCustomID</span>
+        <span class="o">$</span> <span class="n">liftEither</span>
+        <span class="o">$</span> <span class="n">first</span> <span class="p">(</span><span class="s">&quot;Bad custom ID: &quot;</span> <span class="o">&lt;&gt;</span><span class="p">)</span>
+        <span class="o">$</span> <span class="n">parse</span> <span class="n">customIDParser</span> <span class="s">&quot;&lt;next-id&gt;&quot;</span> <span class="n">s</span>
+    <span class="kr">if</span> <span class="n">zid</span> <span class="p">`</span><span class="kt">Set</span><span class="o">.</span><span class="n">member</span><span class="p">`</span> <span class="n">zs</span>
+      <span class="kr">then</span> <span class="n">throwError</span> <span class="s">&quot;An zettel with that ID already exists&quot;</span>
+      <span class="kr">else</span> <span class="n">pure</span> <span class="n">zid</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195869266" name="195869266"><div>2020-04-30 16:55:54</div></a></div><div class="text"><p><code>IDSchemeHash</code> is the constructor that will require <code>IO</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195869881" name="195869881"><div>2020-04-30 16:59:26</div></a></div><div class="text"><p>I would do manual <code>UUID</code> passing in this case, if you don't actively plan on having more effects</p>
+<p>idk, seems like overkill for a single thing</p>
+<p>even with some kind of effect system, I think it would still be better to have this function be effect-less, because all your other cases (the majority of your cases) would get "polluted" with more <code>pure</code>s</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195869971" name="195869971"><div>2020-04-30 17:00:02</div></a></div><div class="text"><p>Well, it is already in an error monad (Either or ExceptT)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195870207" name="195870207"><div>2020-04-30 17:01:22</div></a></div><div class="text"><p>and a <code>Reader</code>/<code>Input</code> (over <code>Set ZettelID</code>) I guess, if we're going to go looking for effects to insert</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195870244" name="195870244"><div>2020-04-30 17:01:34</div></a></div><div class="text"><p><code>(Member (Error ZettelIDConflict) r,  Member UUID r) =&gt; m ZettelID</code> kind of looks niiiice</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195870434" name="195870434"><div>2020-04-30 17:03:03</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code><span class="nf">nextZettel</span> <span class="ow">::</span>
+  <span class="kt">Members</span> <span class="p">[</span><span class="kt">Error</span> <span class="kt">ZettelIDConflict</span><span class="p">,</span> <span class="kt">Input</span> <span class="p">(</span><span class="kt">Set</span> <span class="kt">ZettelID</span><span class="p">),</span> <span class="kt">UUID</span><span class="p">]</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="kt">ZettelID</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195870455" name="195870455"><div>2020-04-30 17:03:15</div></a></div><div class="text"><p>Or <code>Polysemy.Random</code>. I just want to produce hashes like <code>cc982318</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195870581" name="195870581"><div>2020-04-30 17:04:10</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code><span class="nf">nextZettel</span> <span class="ow">::</span>
+  <span class="kt">Members</span> <span class="kt">&#39;[Error ZettelIDConflict, Input (Set ZettelID), UUID]</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">IDScheme</span> <span class="ow">-&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="kt">ZettelID</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195870599" name="195870599"><div>2020-04-30 17:04:22</div></a></div><div class="text"><p>What's the benefit of using <code>Input</code> as opposed to passing it as a function argument?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195870622" name="195870622"><div>2020-04-30 17:04:43</div></a></div><div class="text"><p>If you pass around the <code>Set</code> a lot it's worth it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195870628" name="195870628"><div>2020-04-30 17:04:47</div></a></div><div class="text"><p>I guess</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195870654" name="195870654"><div>2020-04-30 17:04:58</div></a></div><div class="text"><p>same as the <code>Either</code>/<code>Except</code> - if you have a lot of stuff that could fail it's worth it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195870676" name="195870676"><div>2020-04-30 17:05:04</div></a></div><div class="text"><p>Oh right. The familiar config threading annoyance.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195870692" name="195870692"><div>2020-04-30 17:05:12</div></a></div><div class="text"><p>(In this case, though, it won't be passed further)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195871278" name="195871278"><div>2020-04-30 17:09:33</div></a></div><div class="text"><p>From the changelog,</p>
+<blockquote>
+<p>Moved Random effect to polysemy-zoo</p>
+</blockquote>
+<p>Ah</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195871673" name="195871673"><div>2020-04-30 17:12:39</div></a></div><div class="text"><p>polysemy-zoo has unwieldy deps</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195873232" name="195873232"><div>2020-04-30 17:25:26</div></a></div><div class="text"><p>Painful deps, I'm going with GADTs</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">IDScheme</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">IDSchemeDate</span> <span class="ow">::</span> <span class="kt">Day</span> <span class="ow">-&gt;</span> <span class="kt">IDScheme</span> <span class="nb">()</span>
+  <span class="kt">IDSchemeHash</span> <span class="ow">::</span> <span class="kt">IDScheme</span> <span class="kt">UUID</span>
+  <span class="kt">IDSchemeCustom</span> <span class="ow">::</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">IDScheme</span> <span class="nb">()</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195893141" name="195893141"><div>2020-04-30 19:57:55</div></a></div><div class="text"><p>FWIW, here it is <a href="https://github.com/srid/neuron/pull/152/files#diff-73c560a0a454d2da4e37d64aaabb9b92" title="https://github.com/srid/neuron/pull/152/files#diff-73c560a0a454d2da4e37d64aaabb9b92">https://github.com/srid/neuron/pull/152/files#diff-73c560a0a454d2da4e37d64aaabb9b92</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/pull/152/files#diff-73c560a0a454d2da4e37d64aaabb9b92" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/pull/152/files#diff-73c560a0a454d2da4e37d64aaabb9b92" title="Add `neuron new --id-hash` for random hash IDs by srid · Pull Request #152 · srid/neuron">Add `neuron new --id-hash` for random hash IDs by srid · Pull Request #152 · srid/neuron</a></div><div class="message_embed_description">Also adds --id=&lt;custom&gt; and --id-date.
+Date ID is still the default .
+And neuron new adds the creation date to the zettel metadata regardless of the ID scheme used.
+For #151</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195893244" name="195893244"><div>2020-04-30 19:58:21</div></a></div><div class="text"><p>Separates out IO stuff in <code>genVal</code>, leaving the rest of mechanism in the pure function.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#195893300" name="195893300"><div>2020-04-30 19:58:45</div></a></div><div class="text"><p>^^ dependent type <span class="user-mention" data-user-id="225127">@TheMatten</span>  ?</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

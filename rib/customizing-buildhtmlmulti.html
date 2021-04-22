@@ -1,0 +1,122 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="So, I notice that the selection of files (via the glob sent into build html multi) is done at the same step as when files are rendered" name="description"><link href="https://funprog.srid.ca/rib/customizing-buildhtmlmulti.html" rel="canonical"><meta property="og:title" content="Customizing buildHtmlMulti - Rib"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Rib"><meta property="og:article:modified_time" content="2020-01-11T21:25:18Z"><meta property="og:article:published_time" content="2020-01-11T03:44:07Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"><title>Customizing buildHtmlMulti - Rib</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Customizing buildHtmlMulti - Rib</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/rib/" class="section">#Rib</a><i class="right angle icon divider"></i><div class="active section">Customizing buildHtmlMulti</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#185372297" name="185372297"><div>2020-01-11 03:44:07</div></a></div><div class="text"><p>So, I notice that the selection of files (via the glob sent into build html multi) is done at the same step as when files are rendered</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#185372298" name="185372298"><div>2020-01-11 03:44:12</div></a></div><div class="text"><p>however, I need to insert a previous step</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#185372299" name="185372299"><div>2020-01-11 03:44:39</div></a></div><div class="text"><p>basically soemthing like </p>
+<ol>
+<li>find relevant files</li>
+<li>process them (find all the valid links)</li>
+<li>render files</li>
+</ol></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#185372308" name="185372308"><div>2020-01-11 03:45:14</div></a></div><div class="text"><p>right now in order to do this, I am learning shake APIs</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#185372313" name="185372313"><div>2020-01-11 03:46:01</div></a></div><div class="text"><p>I figure I can use writeHtml itself manually</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#185372353" name="185372353"><div>2020-01-11 03:46:14</div></a></div><div class="text"><p>if you have any thoughts, please let me know, i might be missing something</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#185394803" name="185394803"><div>2020-01-11 15:52:44</div></a></div><div class="text"><p><code>buildHtmlMulti</code> is a small function, composing two other functions: <code>getDirectoryFiles'</code> and <code>buildHtml</code>. And <code>buildHtml</code> too is a small function composing two other functions: <code>readSource</code> and <code>writeHtml</code>. You can always use these other functions to do what you specifically want.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#185394865" name="185394865"><div>2020-01-11 15:54:53</div></a></div><div class="text"><p>The only recommended 'requirement' is that you use <code>writeHtml</code> (or <code>writeFileCached</code> if writing a non-HTML) ultimately, to actually write the generated file to disk, because it takes care of caching it using the mechanism provided by Shake (so you never write the same file twice, unnecessarily)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#185394924" name="185394924"><div>2020-01-11 15:56:12</div></a></div><div class="text"><p>Aside from that, you can drop down to the low-level of Shake and use that if you want. After all the third argument to <code>Rib.App.run</code> is simply a shake's <code>Action</code> monad.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#185394929" name="185394929"><div>2020-01-11 15:56:30</div></a></div><div class="text"><p>(Of course, use <code>ribInputDir</code> and <code>ribOutDir</code> to get the two directory arguments you passed to <code>run</code>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#185395005" name="185395005"><div>2020-01-11 15:58:55</div></a></div><div class="text"><p>Here's an example: <a href="https://github.com/open-editions/open-editions.org/pull/5/files#diff-98a3ddc5c474fd14c4ee9401c03197a1R113" target="_blank" title="https://github.com/open-editions/open-editions.org/pull/5/files#diff-98a3ddc5c474fd14c4ee9401c03197a1R113">https://github.com/open-editions/open-editions.org/pull/5/files#diff-98a3ddc5c474fd14c4ee9401c03197a1R113</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/open-editions/open-editions.org/pull/5/files#diff-98a3ddc5c474fd14c4ee9401c03197a1R113" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/open-editions/open-editions.org/pull/5/files#diff-98a3ddc5c474fd14c4ee9401c03197a1R113" target="_blank" title="Clean URL slug (/about.md -&gt; /about/index.html) by srid · Pull Request #5 · open-editions/open-editions.org">Clean URL slug (/about.md -&gt; /about/index.html) by srid · Pull Request #5 · open-editions/open-editions.org</a></div><div class="message_embed_description">To do this we simply extend Rib.s buildHtmlMulti to our custom target
+HTML path. This mechanism should probably be implemented upstream, in
+customizabe fashion.
+Also update URLs in the HTML.
+Includ...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#185395036" name="185395036"><div>2020-01-11 16:00:02</div></a></div><div class="text"><p>In a way, ultimately you can dropdown to Shake and use only <code>readSource</code> and <code>writeHtml</code> from Rib.Shake without bothering about the higher-level functions.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#185395097" name="185395097"><div>2020-01-11 16:01:33</div></a></div><div class="text"><p>In 0.6 all these functions in Rib/Shake.hs have been dramatically simplified, so take a look at the source. The intention is to let the user use what they want, and skip the rest. These functions can also provide a 'template' for writing your own.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#185405898" name="185405898"><div>2020-01-11 21:25:18</div></a></div><div class="text"><p>good advice, thanks, I think this looks like its going to work.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

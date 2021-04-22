@@ -1,0 +1,120 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="may I ask why not just use the current directory always for all neuron things?" name="description"><link href="https://funprog.srid.ca/neuron/removing-the-default-directory.html" rel="canonical"><meta property="og:title" content="removing the default directory - Neuron"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Neuron"><meta property="og:article:modified_time" content="2020-09-10T00:11:14Z"><meta property="og:article:published_time" content="2020-09-08T21:14:28Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"><title>removing the default directory - Neuron</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">removing the default directory - Neuron</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/neuron/" class="section">#Neuron</a><i class="right angle icon divider"></i><div class="active section">removing the default directory</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209445134" name="209445134"><div>2020-09-08 21:14:28</div></a></div><div class="text"><p>may I ask why not just use the current directory always for all <code>neuron</code> things?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209465124" name="209465124"><div>2020-09-09 02:07:26</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="337908">fiatjaf</span> <a href="#narrow/stream/231929-Neuron/topic/new.20neuron.2Evim.20plugin/near/209445134">said</a>:</p>
+<blockquote>
+<p>may I ask why not just use the current directory always for all <code>neuron</code> things?</p>
+</blockquote>
+<p>never thought about it, but it looks like a good idea. so what about ~/zettelkasten?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209520112" name="209520112"><div>2020-09-09 14:40:58</div></a></div><div class="text"><p>as I said, I didn't even know there was such a hardcoded default. by first instinct when I installed neuron was: create a directory (which was coincidentally named ~/zettelkasten), move into it and start creating zettels inside.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209520212" name="209520212"><div>2020-09-09 14:41:47</div></a></div><div class="text"><p>since subdirectories are not supported there's no way the policy of just-use-the-current-directory will fail or cause confusion</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209520341" name="209520341"><div>2020-09-09 14:42:25</div></a></div><div class="text"><p>actually it was far more confusing to me when I tried to create zettels on a different directory just to test the vim plugin and only after creating 4 I realized they were all in my default zettelkasten</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209520486" name="209520486"><div>2020-09-09 14:43:31</div></a></div><div class="text"><blockquote>
+<p>so what about ~/zettelkasten?</p>
+</blockquote>
+<p>in my opinion it should be trashed out of code, but I don't know about backwards-compatibility etc.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209581780" name="209581780"><div>2020-09-09 23:36:45</div></a></div><div class="text"><p><span class="user-mention" data-user-id="337908">@fiatjaf</span> That makes sense. I wouldn't worry about backwards compat here. I'm all for switching to current-directory entirely. And just don't have a default. BUT ... I think neuron should fail if there is no neuron.dhall (you just don't want to <code>cd ~/code/someproj</code> and then run neuron by mistake and it treating it as zettelksaten with just README.md in it)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209581783" name="209581783"><div>2020-09-09 23:36:52</div></a></div><div class="text"><p>PR welcome :-)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209581813" name="209581813"><div>2020-09-09 23:37:21</div></a></div><div class="text"><p>So in a way, <code>neuron.dhall</code> :: neuron == <code>.git</code> :: git</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209581955" name="209581955"><div>2020-09-09 23:39:35</div></a></div><div class="text"><p><a href="https://github.com/srid/neuron/issues/161#issuecomment-689880375">https://github.com/srid/neuron/issues/161#issuecomment-689880375</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/issues/161#issuecomment-689880375" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/issues/161#issuecomment-689880375" title="Idea: User interface inspired by git · Issue #161 · srid/neuron">Idea: User interface inspired by git · Issue #161 · srid/neuron</a></div><div class="message_embed_description">Following suggestions for the user-interface Switch program name from neuron to zk for faster typing Have a default Zettelkasten directory per project e.g. .zk/ Use per default the Zettelkasten (.z...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209583922" name="209583922"><div>2020-09-10 00:08:29</div></a></div><div class="text"><p>great! that's the best solution in my opinion</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/b760f503c84d1bf47322f401066c753f?d=identicon&amp;version=1"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209583963" name="209583963"><div>2020-09-10 00:09:48</div></a></div><div class="text"><p>I'll try to do the PR but first I must get my haskell skills up to date and a development environment running well on my relatively ancient computer, then find some time, so please don't wait for me! if I take too long I can try another PR in the future.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209584057" name="209584057"><div>2020-09-10 00:11:14</div></a></div><div class="text"><p>I'm in no rush either :-P Remember, development workflow is pretty fun with neuron (checkout CONTRIBUTING.md; in nvim you can try coc.vim)</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

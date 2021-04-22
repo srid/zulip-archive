@@ -1,0 +1,143 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="How to get stack to use compiled ghc?
+I&#39;m working on openbsd and have gotten stack compiled/installed but can only use the ported ghc 8.6.4 installed on the system with
+install-ghc: false
+system-ghc: true
+skip-ghc-check: true
+
+because there are no pre-compiled ghc for openbsd.  
+Finally yesterday, I" name="description"><link href="https://funprog.srid.ca/haskell/openbsd.html" rel="canonical"><meta property="og:title" content="openbsd - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-02-23T17:48:06Z"><meta property="og:article:published_time" content="2021-02-23T16:27:24Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"><title>openbsd - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">openbsd - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">openbsd</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#227459439" name="227459439"><div>2021-02-23 16:27:24</div></a></div><div class="text"><p>How to get stack to use compiled ghc?</p>
+<p>I'm working on openbsd and have gotten stack compiled/installed but can only use the ported ghc 8.6.4 installed on the system with</p>
+<div class="codehilite" data-code-language="YAML"><pre><span></span><code><span class="nt">install-ghc</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">system-ghc</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">skip-ghc-check</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<p>because there are no pre-compiled ghc for openbsd.  </p>
+<p>Finally yesterday, I have been able to compile ghc but have found no instructions on how to get stack to use what I have compiled. I have tried a symbolic link to .stack/programs/x86_64-openbsd/ghc-8.8.1 . Is there anything I can do with the .stack/config.yaml for it to use my compiled ghc?</p>
+<p>I have removed the system-ghc and skip-ghc-check config.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#227461814" name="227461814"><div>2021-02-23 16:41:08</div></a></div><div class="text"><p>Is it possible that stack isn't reading the config (permission issue or the like)?  There are also matching command line arguments you can try to keep stack from trying to build GHC.  I also <em>never</em> want stack to build a GHC so I have this:</p>
+<div class="codehilite"><pre><span></span><code>$ cat ~/.stack/config.yaml
+nix: {enable: false}
+system-ghc: true
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#227472887" name="227472887"><div>2021-02-23 17:48:06</div></a></div><div class="text"><p>I have changed the config.yaml and stack behaves differently with the changes.</p>
+<p>looking at the stack issue <a href="https://github.com/commercialhaskell/stack/issues/416#issuecomment-291756246">https://github.com/commercialhaskell/stack/issues/416#issuecomment-291756246</a></p>
+<p>following the instructions i have run <code>gmake binary-dist</code> to make ghc-8.81-x86_64-unknown-openbsd.tar.xz</p>
+<p>added to config.yaml</p>
+<div class="codehilite" data-code-language="YAML"><pre><span></span><code><span class="nt">setup-info</span><span class="p">:</span>
+  <span class="nt">ghc</span><span class="p">:</span>
+    <span class="nt">openbsd64-maj6-min7</span><span class="p">:</span>
+      <span class="nt">8.8.1</span><span class="p">:</span>
+        <span class="nt">url</span><span class="p">:</span> <span class="s">'home/user/ghc/ghc-8.81-x86_64-unknown-openbsd.tar.xz'</span>
+</code></pre></div>
+<p>run <code>stack setup</code></p>
+<p>however, I get the problem of gcc version, so time to sort that out now</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/commercialhaskell/stack/issues/416#issuecomment-291756246" style="background-image: url(https://avatars.githubusercontent.com/u/10633049?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/commercialhaskell/stack/issues/416#issuecomment-291756246" title="OpenBSD installer / instructions · Issue #416 · commercialhaskell/stack">OpenBSD installer / instructions · Issue #416 · commercialhaskell/stack</a></div><div class="message_embed_description">Any chance of getting a binary installer for OpenBSD (current, AMD64) or instructions on how to get it working from source? I develop Haskell on OpenBSD and would like to use stack.</div></div></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

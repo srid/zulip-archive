@@ -1,0 +1,123 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I may be just starting to understand where dependent types could be useful but am unsure if this is actually an example of them. Is the following an example of dependent types composeFold :: [a -&gt; b, c -&gt; d, ..., y -&gt; z] -&gt; a -&gt; z? If that type doesn&#39;t make sense, composeFold is a function that take" name="description"><link href="https://funprog.srid.ca/type-theory/dependent-types.html" rel="canonical"><meta property="og:title" content="dependent types - Type Theory"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Type Theory"><meta property="og:article:modified_time" content="2021-02-09T20:10:46Z"><meta property="og:article:published_time" content="2021-02-09T16:13:15Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"><title>dependent types - Type Theory</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">dependent types - Type Theory</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/type-theory/" class="section">#Type Theory</a><i class="right angle icon divider"></i><div class="active section">dependent types</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#225713512" name="225713512"><div>2021-02-09 16:13:15</div></a></div><div class="text"><p>I may be just starting to understand where dependent types could be useful but am unsure if this is actually an example of them. Is the following an example of dependent types <code>composeFold :: [a -&gt; b, c -&gt; d, ..., y -&gt; z] -&gt; a -&gt; z</code>? If that type doesn't make sense, composeFold is a function that takes a list of functions and composes them into a function that takes the argument type of the first function in the list and returns the return type of the last function in the list. Somehow, the static type checker would have to ensure that only a list of composable functions is constructed.</p>
+<p>I find it funny how new type ideas start springing out at me when I start programming some JavaScript again because of how free flowing and unsafe the language is.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#225713919" name="225713919"><div>2021-02-09 16:15:58</div></a></div><div class="text"><p>JavaScript awful for programming but amazing for coming up with strange new type usages that need to be formalized</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#225717987" name="225717987"><div>2021-02-09 16:40:04</div></a></div><div class="text"><p>Maybe one way to think about practical application of dependent types is that they can encode things usually represented by predicates - e.g. proof that value is element of some container, or list has length equal to something etc.<br>
+In those cases where you use <code>if</code> and assume some fact in some of it's branches, you can often come up with actual proofs that you can pass down to functions in those branches in languages with DT. They don't magically make dynamic problems static - instead, they let you reason about dynamic information in safe way, prohibiting you from making wrong assumptions</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#225718308" name="225718308"><div>2021-02-09 16:42:06</div></a></div><div class="text"><p>BTW, your example is usually represented by special list defined as GADT:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">data</span> <span class="kt">ComposeList</span> <span class="n">a</span> <span class="n">b</span> <span class="kr">where</span>
+  <span class="kt">CNil</span> <span class="ow">::</span> <span class="kt">ComposeList</span> <span class="n">a</span> <span class="n">a</span>
+  <span class="kt">CCons</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">ComposeList</span> <span class="n">b</span> <span class="n">c</span> <span class="ow">-&gt;</span> <span class="kt">ComposeList</span> <span class="n">a</span> <span class="n">c</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#225718937" name="225718937"><div>2021-02-09 16:46:05</div></a></div><div class="text"><p>technically you could do something like this too if you want to match on specific pipelines:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">data</span> <span class="kt">CList</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Type</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="kt">Type</span> <span class="kr">where</span>
+  <span class="kt">CNil</span> <span class="ow">::</span> <span class="kt">ComposeList</span> <span class="kt">'[a, a]</span>
+  <span class="kt">CCons</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">ComposeList</span> <span class="p">(</span><span class="n">b'</span><span class="kt">:</span><span class="n">l</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">ComposeList</span> <span class="p">(</span><span class="n">a'</span><span class="kt">:</span><span class="n">b'</span><span class="kt">:</span><span class="n">l</span><span class="p">)</span>
+</code></pre></div>
+<p>though I'm not sure where it would be useful</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#225733078" name="225733078"><div>2021-02-09 18:17:38</div></a></div><div class="text"><p>I was looking at compiler pipelines and being able to switch compiler components without recompiling. Example trying different combinations of optimizers. Or being able to switch frontends to add a different programming language.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#225733363" name="225733363"><div>2021-02-09 18:19:30</div></a></div><div class="text"><p>The GADT is a cool way to accomplish this.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#225749962" name="225749962"><div>2021-02-09 20:10:46</div></a></div><div class="text"><p>What you describe sounds like a good fit for simple record - one where elements are functions handling specific parts of pipeline</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

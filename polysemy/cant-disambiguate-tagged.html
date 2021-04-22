@@ -1,0 +1,173 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi. I&#39;m able to do this:
+taggedLookupKV :: forall t k v r a
+             . Members &#39;[Tagged t (KVStore k v)] r
+            =&gt; k
+            -&gt; Sem r v
+taggedLookupKV k = tag @t @(KVStore k v) (lookupKV @k @v k)
+
+
+
+But if I try to add a second store (to say model the one updating the other), then thi" name="description"><link href="https://funprog.srid.ca/polysemy/cant-disambiguate-tagged.html" rel="canonical"><meta property="og:title" content="Can&#39;t disambiguate Tagged. - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-10-22T13:08:03Z"><meta property="og:article:published_time" content="2020-10-22T12:46:38Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/3f02fadd6146855b37247afc22b39685?d=identicon&amp;version=1"><title>Can&#39;t disambiguate Tagged. - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Can&#39;t disambiguate Tagged. - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Can&#39;t disambiguate Tagged.</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3f02fadd6146855b37247afc22b39685?d=identicon&amp;version=1"></a><div class="content"><a class="author">locallycompact</a><div class="metadata"><a href="#214181192" name="214181192"><div>2020-10-22 12:46:38</div></a></div><div class="text"><p>Hi. I'm able to do this:</p>
+<div class="codehilite"><pre><span></span><code>taggedLookupKV :: forall t k v r a
+             . Members &#39;[Tagged t (KVStore k v)] r
+            =&gt; k
+            -&gt; Sem r v
+taggedLookupKV k = tag @t @(KVStore k v) (lookupKV @k @v k)
+</code></pre></div>
+
+
+<p>But if I try to add a second store (to say model the one updating the other), then this instantly fails to type check.</p>
+<div class="codehilite"><pre><span></span><code>taggedLookupKV :: forall t t&#39; k v r a
+             . Members &#39;[Tagged t (KVStore k v), Tagged t&#39; (KVStore k v)] r
+            =&gt; k
+            -&gt; Sem r v
+taggedLookupKV k = tag @t @(KVStore k v) (lookupKV @k @v k)
+</code></pre></div>
+
+
+<div class="codehilite"><pre><span></span><code>    • Could not deduce: Polysemy.Internal.Union.LocateEffect
+                          (Tagged t0 (KVStore k4 v)) r
+                        ~ &#39;()
+      from the context: Members
+                          &#39;[Tagged t (KVStore k4 v), Tagged t&#39; (KVStore k4 v)] r
+        bound by the type signature for:
+                   taggedLookupKV&#39; :: forall k k2 k3 (t :: k) (t&#39; :: k2) k4 v
+                                             (r :: [(* -&gt; *) -&gt; * -&gt; *]) (a :: k3).
+                                      Members
+                                        &#39;[Tagged t (KVStore k4 v), Tagged t&#39; (KVStore k4 v)] r =&gt;
+                                      k4 -&gt; Sem r v
+      The type variable ‘t0’ is ambiguous
+    • In the ambiguity check for ‘taggedLookupKV’
+      To defer the ambiguity check to use sites, enable AllowAmbiguousTypes
+      In the type signature:
+        taggedLookupKV :: forall t t&#39; k v r a.
+                           Members &#39;[Tagged t (KVStore k v), Tagged t&#39; (KVStore k v)] r =&gt;
+                           k -&gt; Sem r v
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214181389" name="214181389"><div>2020-10-22 12:48:37</div></a></div><div class="text"><p>that's how hs type inference for type variables works</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214181421" name="214181421"><div>2020-10-22 12:49:04</div></a></div><div class="text"><p>your <code>taggedLookupKV</code> doesn't have an argument which uses <code>t</code> or <code>t'</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214181436" name="214181436"><div>2020-10-22 12:49:17</div></a></div><div class="text"><p>so callers will be forced to manually specify what <code>t</code> and <code>t'</code> are, using <code>TypeApplications</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214181451" name="214181451"><div>2020-10-22 12:49:30</div></a></div><div class="text"><p>that's why ghc is asking you to enable <code>AllowAmbiguousTypes</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214181500" name="214181500"><div>2020-10-22 12:50:02</div></a></div><div class="text"><p>because hs was originally designed with the thought of the user <em>never</em> having to do manual type annotations, and this breaks that "rule"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214181829" name="214181829"><div>2020-10-22 12:52:57</div></a></div><div class="text"><p>if you want to avoid <code>TypeApplications</code>, you can add a <code>Proxy t</code> argument, but usually people prefer <code>TypeApplications</code> because it's less noisy (imo)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3f02fadd6146855b37247afc22b39685?d=identicon&amp;version=1"></a><div class="content"><a class="author">locallycompact</a><div class="metadata"><a href="#214181950" name="214181950"><div>2020-10-22 12:54:03</div></a></div><div class="text"><p>Oh ok, so just to clarify if this is the whole prog</p>
+<div class="codehilite"><pre><span></span><code>prog :: forall t t&#39; k v r. Members &#39;[Input k, Tagged t (KVStore k v), Tagged t&#39; (KVStore k v)] r =&gt; Sem r ()
+prog = do
+  a &lt;- input @k
+  z &lt;- tag @t @(KVStore k v) (existsKV @k @v a)
+  if z
+    then return ()
+  else
+    do
+      x &lt;- tag @t&#39; @(KVStore k v) (lookupKV @k @v a)
+      case x of
+        Nothing -&gt; return ()
+        Just x&#39; -&gt; tag @t @(KVStore k v) (writeKV @k @v a x&#39;)
+</code></pre></div>
+
+
+<p>So I turn on ambiguous types then I just have to specify that whenever I use this, which is to be expected anyway.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214182057" name="214182057"><div>2020-10-22 12:55:06</div></a></div><div class="text"><p>think so</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214183547" name="214183547"><div>2020-10-22 13:08:03</div></a></div><div class="text"><p>oh and of note - I'm pretty sure the first one doesn't complain about ambiguous types only because of the plugin</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

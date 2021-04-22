@@ -1,0 +1,120 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I want to create CLI using Haskell, what library that I need? I found byline here: https://github.com/pjones/byline. Anyone have another idea?
+pjones/bylineHaskell library for creating command-line interfaces (colors, menus, etc.)  - pjones/byline" name="description"><link href="https://funprog.srid.ca/haskell/developing-haskell-cli.html" rel="canonical"><meta property="og:title" content="Developing Haskell CLI - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-12-22T23:04:14Z"><meta property="og:article:published_time" content="2020-12-19T02:48:49Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"><title>Developing Haskell CLI - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Developing Haskell CLI - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Developing Haskell CLI</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#220449647" name="220449647"><div>2020-12-19 02:48:49</div></a></div><div class="text"><p>I want to create CLI using Haskell, what library that I need? I found <code>byline</code> here: <a href="https://github.com/pjones/byline">https://github.com/pjones/byline</a>. Anyone have another idea?</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/pjones/byline" style="background-image: url(https://avatars1.githubusercontent.com/u/3737?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/pjones/byline" title="pjones/byline">pjones/byline</a></div><div class="message_embed_description">Haskell library for creating command-line interfaces (colors, menus, etc.)  - pjones/byline</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#220451847" name="220451847"><div>2020-12-19 03:40:56</div></a></div><div class="text"><p>There is the relatively unknown / undocumented <a href="https://github.com/obsidiansystems/cli-extras">https://github.com/obsidiansystems/cli-extras</a> extracted out of <code>obelisk</code></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/obsidiansystems/cli-extras" style="background-image: url(https://avatars2.githubusercontent.com/u/11916262?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/obsidiansystems/cli-extras" title="obsidiansystems/cli-extras">obsidiansystems/cli-extras</a></div><div class="message_embed_description">Contribute to obsidiansystems/cli-extras development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#220468612" name="220468612"><div>2020-12-19 12:51:03</div></a></div><div class="text"><p>maybe brick?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#220468619" name="220468619"><div>2020-12-19 12:51:13</div></a></div><div class="text"><p>im not sure what "cli" you want</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#220468630" name="220468630"><div>2020-12-19 12:51:30</div></a></div><div class="text"><p>is it a repl, arguments for a program, or a TUI interface</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#220468682" name="220468682"><div>2020-12-19 12:52:15</div></a></div><div class="text"><p>haskeline, optparse-applicative, brick, for each of the above, in that order</p>
+<p>that said, I haven't actually used haskeline and brick <span aria-label="grinning face with smiling eyes" class="emoji emoji-1f601" role="img" title="grinning face with smiling eyes">:grinning_face_with_smiling_eyes:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#220478939" name="220478939"><div>2020-12-19 17:19:05</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251394">@Rizary</span> Also see this previous topic: <a href="https://funprog.srid.ca/haskell/cli-apps-to-growing-the-haskell-community.html">https://funprog.srid.ca/haskell/cli-apps-to-growing-the-haskell-community.html</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://funprog.srid.ca/haskell/cli-apps-to-growing-the-haskell-community.html" style="background-image: url(https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1)"></a><div class="data-container"><div class="message_embed_title"><a href="https://funprog.srid.ca/haskell/cli-apps-to-growing-the-haskell-community.html" title="CLI apps to growing the Haskell Community - Haskell">CLI apps to growing the Haskell Community - Haskell</a></div><div class="message_embed_description">So to some extent I think an answer to this can be CLI scripting</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#220744284" name="220744284"><div>2020-12-22 23:01:39</div></a></div><div class="text"><p>I have just put in a lot of time improving commander-cli <a href="https://hackage.haskell.org/package/commander-cli">https://hackage.haskell.org/package/commander-cli</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#220744342" name="220744342"><div>2020-12-22 23:02:04</div></a></div><div class="text"><p>Many pull requests pending</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#220744416" name="220744416"><div>2020-12-22 23:03:01</div></a></div><div class="text"><p>Also just added a reference section to cli tools <a href="https://github.com/SamuelSchlesinger/commander-cli/pull/27/files">https://github.com/SamuelSchlesinger/commander-cli/pull/27/files</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/SamuelSchlesinger/commander-cli/pull/27/files" style="background-image: url(https://avatars3.githubusercontent.com/u/10747532?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/SamuelSchlesinger/commander-cli/pull/27/files" title="Reference other similar projects by BebeSparkelSparkel · Pull Request #27 · SamuelSchlesinger/commander-cli">Reference other similar projects by BebeSparkelSparkel · Pull Request #27 · SamuelSchlesinger/commander-cli</a></div><div class="message_embed_description">
+Have a question about this project? Sign up for a free GitHub account to open an issue and contact its maintainers and the community.
+  </div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ab9eda4f7b8c088d2b98539634c62149?d=identicon&amp;version=1"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#220744519" name="220744519"><div>2020-12-22 23:04:14</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251394">@Rizary</span> let me know if you have any ideas</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

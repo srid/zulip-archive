@@ -1,0 +1,127 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="... all suck in one way or the other." name="description"><link href="https://funprog.srid.ca/haskell/github-api-libraries.html" rel="canonical"><meta property="og:title" content="Github API libraries - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-06T19:50:17Z"><meta property="og:article:published_time" content="2020-05-02T02:41:02Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>Github API libraries - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Github API libraries - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Github API libraries</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196028823" name="196028823"><div>2020-05-02 02:41:02</div></a></div><div class="text"><p>... all suck in one way or the other.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196028827" name="196028827"><div>2020-05-02 02:41:15</div></a></div><div class="text"><p>Going back to good ol' <code>req</code>. </p>
+<div class="codehilite"><pre><span></span><code><span class="nf">demo</span> <span class="ow">::</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">IO</span> <span class="kt">Text</span>
+<span class="nf">demo</span> <span class="n">authToken</span> <span class="ow">=</span> <span class="n">runReq</span> <span class="n">defaultHttpConfig</span> <span class="o">$</span> <span class="kr">do</span>
+  <span class="kr">let</span> <span class="n">auth</span> <span class="ow">=</span> <span class="n">oAuth2Token</span> <span class="o">$</span> <span class="n">encodeUtf8</span> <span class="n">authToken</span>
+      <span class="n">userAgent</span> <span class="ow">=</span> <span class="n">header</span> <span class="s">&quot;User-Agent&quot;</span> <span class="s">&quot;github.com/srid/someapp&quot;</span>
+  <span class="n">r</span> <span class="ow">&lt;-</span>
+    <span class="n">req</span>
+      <span class="kt">GET</span>
+      <span class="p">(</span><span class="n">https</span> <span class="s">&quot;api.github.com&quot;</span> <span class="o">/:</span> <span class="s">&quot;repos&quot;</span> <span class="o">/:</span> <span class="s">&quot;srid&quot;</span> <span class="o">/:</span> <span class="s">&quot;somerepo&quot;</span> <span class="o">/:</span> <span class="s">&quot;git&quot;</span> <span class="o">/:</span> <span class="s">&quot;ref&quot;</span> <span class="o">/:</span> <span class="s">&quot;heads&quot;</span> <span class="o">/:</span> <span class="s">&quot;master&quot;</span><span class="p">)</span>
+      <span class="kt">NoReqBody</span>
+      <span class="n">jsonResponse</span>
+      <span class="p">(</span><span class="n">auth</span> <span class="o">&lt;&gt;</span> <span class="n">userAgent</span><span class="p">)</span>
+  <span class="n">liftIO</span> <span class="o">$</span> <span class="n">print</span> <span class="p">(</span><span class="n">responseBody</span> <span class="n">r</span> <span class="ow">::</span> <span class="kt">Value</span><span class="p">)</span>
+  <span class="n">pure</span> <span class="o">$</span> <span class="n">toText</span> <span class="o">$</span> <span class="n">shower</span> <span class="p">(</span><span class="n">responseBody</span> <span class="n">r</span> <span class="ow">::</span> <span class="kt">Value</span><span class="p">)</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12?d=identicon&amp;version=1"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#196680648" name="196680648"><div>2020-05-06 18:57:31</div></a></div><div class="text"><p>I'd be interested in what ways they suck <span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span></p>
+<p>I did a quick hack in Python this morning, but plan to rewrite it in Haskell if it proves to be useful so knowing of limitations of the various libs available on Hackage would be very useful.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196680779" name="196680779"><div>2020-05-06 18:58:31</div></a></div><div class="text"><p><code>github</code> library is good, if you can get it to work (its got its strange problems when using in obelisk as a override; so I use the stable hackage version only for its types).</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed?d=identicon&amp;version=1"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#196687727" name="196687727"><div>2020-05-06 19:50:17</div></a></div><div class="text"><p>Sometimes Its just easier to do it manually. Like, I was looking at the available haskell stripe API and it was very confusing; I ended up just using req and it was a lot simpler</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

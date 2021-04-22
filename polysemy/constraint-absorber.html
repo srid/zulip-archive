@@ -1,0 +1,197 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Was tinkering with possibility of making even simpler version of absorber interface:
+import qualified Control.Monad.Reader as R
+import Data.Coerce
+import Data.Kind
+import Polysemy
+import Polysemy.Reader
+import Unsafe.Coerce
+
+---------------------------------------------------------------------------" name="description"><link href="https://funprog.srid.ca/polysemy/constraint-absorber.html" rel="canonical"><meta property="og:title" content="Constraint absorber - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-07-01T13:55:06Z"><meta property="og:article:published_time" content="2020-06-30T19:37:19Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"><title>Constraint absorber - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Constraint absorber - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Constraint absorber</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202484355" name="202484355"><div>2020-06-30 19:37:19</div></a></div><div class="text"><p>Was tinkering with possibility of making even simpler version of absorber interface:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">import</span> <span class="k">qualified</span> <span class="nn">Control.Monad.Reader</span> <span class="k">as</span> <span class="n">R</span>
+<span class="kr">import</span> <span class="nn">Data.Coerce</span>
+<span class="kr">import</span> <span class="nn">Data.Kind</span>
+<span class="kr">import</span> <span class="nn">Polysemy</span>
+<span class="kr">import</span> <span class="nn">Polysemy.Reader</span>
+<span class="kr">import</span> <span class="nn">Unsafe.Coerce</span>
+
+<span class="c1">-------------------------------------------------------------------------------</span>
+<span class="kr">newtype</span> <span class="kt">Absorber</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">k</span><span class="o">.</span> <span class="n">k</span> <span class="ow">-&gt;</span> <span class="kt">EffectRow</span> <span class="ow">-&gt;</span> <span class="kt">Type</span> <span class="ow">-&gt;</span> <span class="kt">Type</span> <span class="kr">where</span>
+  <span class="kt">Absorber</span> <span class="ow">::</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Absorber</span> <span class="n">i</span> <span class="n">r</span> <span class="n">a</span>
+  <span class="kr">deriving</span> <span class="kr">newtype</span> <span class="p">(</span><span class="kt">Functor</span><span class="p">,</span> <span class="kt">Applicative</span><span class="p">,</span> <span class="kt">Monad</span><span class="p">)</span>
+
+<span class="kr">type</span> <span class="kt">Absorption</span> <span class="n">p</span> <span class="n">i</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">p</span> <span class="p">(</span><span class="kt">Absorber</span> <span class="n">i</span> <span class="n">r</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">p</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+
+<span class="nf">absorb</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">p</span> <span class="n">i</span> <span class="n">r</span> <span class="n">a</span><span class="o">.</span> <span class="kt">Absorption</span> <span class="n">p</span> <span class="n">i</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">absorb</span> <span class="n">ma</span> <span class="ow">=</span> <span class="n">unsafeCoerceConstraint</span> <span class="o">@</span><span class="p">(</span><span class="n">p</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">))</span> <span class="o">@</span><span class="p">(</span><span class="n">p</span> <span class="p">(</span><span class="kt">Absorber</span> <span class="n">i</span> <span class="n">r</span><span class="p">))</span> <span class="n">ma</span>
+
+<span class="c1">-------------------------------------------------------------------------------</span>
+<span class="nf">unsafeCoerceConstraint</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">p</span> <span class="n">q</span> <span class="n">a</span><span class="o">.</span> <span class="p">(</span><span class="n">p</span> <span class="ow">=&gt;</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">q</span> <span class="ow">=&gt;</span> <span class="n">a</span>
+<span class="nf">unsafeCoerceConstraint</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">unsafeCoerce</span> <span class="o">@</span><span class="kr">_</span> <span class="o">@</span><span class="p">(</span><span class="n">q</span> <span class="ow">=&gt;</span> <span class="n">a</span><span class="p">)</span> <span class="p">(</span><span class="kt">Wants</span> <span class="o">@</span><span class="n">p</span> <span class="o">@</span><span class="n">a</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="kr">newtype</span> <span class="n">c</span> <span class="kt">:=&gt;</span> <span class="n">a</span> <span class="ow">=</span> <span class="kt">Wants</span> <span class="p">(</span><span class="n">c</span> <span class="ow">=&gt;</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="c1">-------------------------------------------------------------------------------</span>
+<span class="kr">instance</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Reader</span> <span class="n">i</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">R</span><span class="o">.</span><span class="kt">MonadReader</span> <span class="n">i</span> <span class="p">(</span><span class="kt">Absorber</span> <span class="n">i</span> <span class="n">r</span><span class="p">)</span> <span class="kr">where</span>
+  <span class="n">ask</span>     <span class="ow">=</span> <span class="kt">Absorber</span> <span class="n">ask</span>
+  <span class="n">local</span> <span class="n">f</span> <span class="ow">=</span> <span class="kt">Absorber</span> <span class="o">.</span> <span class="n">local</span> <span class="n">f</span> <span class="o">.</span> <span class="n">coerce</span>
+
+<span class="nf">absorbReader</span>
+  <span class="ow">::</span> <span class="n">forall</span> <span class="n">i</span> <span class="n">r</span> <span class="n">a</span><span class="o">.</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Reader</span> <span class="n">i</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Absorption</span> <span class="p">(</span><span class="kt">R</span><span class="o">.</span><span class="kt">MonadReader</span> <span class="n">i</span><span class="p">)</span> <span class="n">i</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">absorbReader</span> <span class="ow">=</span> <span class="n">absorb</span> <span class="o">@</span><span class="p">(</span><span class="kt">R</span><span class="o">.</span><span class="kt">MonadReader</span> <span class="n">i</span><span class="p">)</span> <span class="o">@</span><span class="n">i</span>
+
+<span class="c1">-------------------------------------------------------------------------------</span>
+<span class="nf">test</span> <span class="ow">::</span> <span class="kt">String</span>
+<span class="nf">test</span> <span class="ow">=</span> <span class="n">run</span> <span class="o">$</span> <span class="n">runReader</span> <span class="s">&quot;a&quot;</span> <span class="o">$</span> <span class="n">absorbReader</span> <span class="o">$</span> <span class="n">fmap</span> <span class="n">concat</span> <span class="o">$</span>
+  <span class="n">sequence</span> <span class="p">[</span><span class="kt">R</span><span class="o">.</span><span class="n">ask</span><span class="p">,</span> <span class="kt">R</span><span class="o">.</span><span class="n">local</span> <span class="p">(</span><span class="n">const</span> <span class="s">&quot;b&quot;</span><span class="p">)</span> <span class="kt">R</span><span class="o">.</span><span class="n">ask</span><span class="p">,</span> <span class="kt">R</span><span class="o">.</span><span class="n">asks</span> <span class="p">(</span><span class="o">++</span> <span class="s">&quot;b&quot;</span><span class="p">)]</span>
+
+<span class="c1">-- $&gt; test</span>
+<span class="c1">-- &quot;abab&quot;</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#202486021" name="202486021"><div>2020-06-30 19:50:52</div></a></div><div class="text"><p>awesome</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#202492029" name="202492029"><div>2020-06-30 20:42:15</div></a></div><div class="text"><p>hm, but if we live in the unreal ideal world where everything gets inlined away, doesn't the <code>unsafeCoerce</code> get in the way of ghc?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#202492050" name="202492050"><div>2020-06-30 20:42:27</div></a></div><div class="text"><p>or does the existing one also use <code>unsafeCoerce</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#202492102" name="202492102"><div>2020-06-30 20:42:56</div></a></div><div class="text"><p>also, is this simpler for usage/creating user "absorb" functions? not too familiar with the other one</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202492567" name="202492567"><div>2020-06-30 20:46:49</div></a></div><div class="text"><p>It does - as it does in current version in <code>zoo</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#202492984" name="202492984"><div>2020-06-30 20:50:31</div></a></div><div class="text"><p>oh yeah, cause <code>reflection</code> itself also does</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202492996" name="202492996"><div>2020-06-30 20:50:37</div></a></div><div class="text"><p>The other one uses custom "dictionaries" and wrapping newtypes for every class - I don't think it makes much sense, because the former isn't that different from writing instance that interprets directly into some special-purpose effect, while the latter seems to only exist to safely allow passing the former into instance using <code>reflection</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202493060" name="202493060"><div>2020-06-30 20:51:12</div></a></div><div class="text"><p>I will investigate possibility of using <code>magicDict</code>, which is compile-time only and replaced using builtin rule</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#202493079" name="202493079"><div>2020-06-30 20:51:31</div></a></div><div class="text"><p>I didn't know it does that</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202493182" name="202493182"><div>2020-06-30 20:52:25</div></a></div><div class="text"><p>See <a href="https://hackage.haskell.org/package/polysemy-zoo-0.7.0.0/docs/src/Polysemy.ConstraintAbsorber.html#absorbWithSem">https://hackage.haskell.org/package/polysemy-zoo-0.7.0.0/docs/src/Polysemy.ConstraintAbsorber.html#absorbWithSem</a> and <a href="https://hackage.haskell.org/package/polysemy-zoo-0.7.0.0/docs/src/Polysemy.ConstraintAbsorber.MonadReader.html#ReaderDict">https://hackage.haskell.org/package/polysemy-zoo-0.7.0.0/docs/src/Polysemy.ConstraintAbsorber.MonadReader.html#ReaderDict</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202555660" name="202555660"><div>2020-07-01 11:02:30</div></a></div><div class="text"><p><img alt=":partyparrot:" class="emoji" src="https://zulip-avatars.s3.amazonaws.com/13896/emoji/images/16603.gif" title="partyparrot"> </p>
+<div class="codehilite"><pre><span></span><code><span class="kr">instance</span> <span class="p">(</span><span class="kt">Members</span> <span class="kt">&#39;[Final m, NonDet]</span> <span class="n">r</span><span class="p">,</span> <span class="kt">MonadParsec</span> <span class="n">e</span> <span class="n">s</span> <span class="n">m</span><span class="p">)</span>
+      <span class="ow">=&gt;</span> <span class="kt">MonadParsec</span> <span class="n">e</span> <span class="n">s</span> <span class="p">(</span><span class="kt">Absorber</span> <span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">m</span> <span class="n">_0</span><span class="p">)</span> <span class="n">r</span><span class="p">)</span> <span class="kr">where</span>
+  <span class="n">parseError</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">.</span> <span class="n">embedFinal</span> <span class="o">.</span> <span class="n">parseError</span>
+  <span class="n">label</span> <span class="n">l</span> <span class="p">(</span><span class="kt">Abs</span> <span class="n">ma</span><span class="p">)</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">$</span> <span class="n">withStrategicToFinal</span> <span class="o">$</span> <span class="n">label</span> <span class="n">l</span> <span class="o">&lt;$&gt;</span> <span class="n">runS</span> <span class="n">ma</span>
+  <span class="n">try</span> <span class="p">(</span><span class="kt">Abs</span> <span class="n">ma</span><span class="p">)</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">$</span> <span class="n">withStrategicToFinal</span> <span class="o">$</span> <span class="n">try</span> <span class="o">&lt;$&gt;</span> <span class="n">runS</span> <span class="n">ma</span>
+  <span class="n">lookAhead</span> <span class="p">(</span><span class="kt">Abs</span> <span class="n">ma</span><span class="p">)</span> <span class="ow">=</span>
+    <span class="kt">Abs</span> <span class="o">$</span> <span class="n">withStrategicToFinal</span> <span class="o">$</span> <span class="n">lookAhead</span> <span class="o">&lt;$&gt;</span> <span class="n">runS</span> <span class="n">ma</span>
+  <span class="n">notFollowedBy</span> <span class="p">(</span><span class="kt">Abs</span> <span class="n">ma</span><span class="p">)</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">$</span> <span class="n">withStrategicToFinal</span> <span class="o">$</span>
+    <span class="n">liftA2</span> <span class="p">(</span><span class="o">&lt;$</span><span class="p">)</span> <span class="n">getInitialStateS</span> <span class="o">$</span> <span class="n">notFollowedBy</span> <span class="o">&lt;$&gt;</span> <span class="n">runS</span> <span class="n">ma</span>
+  <span class="n">withRecovery</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Abs</span> <span class="n">ma</span><span class="p">)</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">$</span> <span class="n">withStrategicToFinal</span> <span class="kr">do</span>
+    <span class="n">s</span>  <span class="ow">&lt;-</span> <span class="n">getInitialStateS</span>
+    <span class="n">f&#39;</span> <span class="ow">&lt;-</span> <span class="n">bindS</span> <span class="o">$</span> <span class="n">un</span> <span class="kt">Abs</span> <span class="o">&lt;$&gt;</span> <span class="n">f</span>
+    <span class="n">withRecovery</span> <span class="p">(</span><span class="n">f&#39;</span> <span class="o">.</span> <span class="p">(</span><span class="n">s</span> <span class="o">$&gt;</span><span class="p">))</span> <span class="o">&lt;$&gt;</span> <span class="n">runS</span> <span class="n">ma</span>
+  <span class="n">observing</span> <span class="p">(</span><span class="kt">Abs</span> <span class="n">ma</span><span class="p">)</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">$</span> <span class="n">withStrategicToFinal</span> <span class="kr">do</span>
+    <span class="n">s</span> <span class="ow">&lt;-</span> <span class="n">getInitialStateS</span>
+    <span class="p">(</span><span class="n">fmap</span> <span class="o">.</span> <span class="n">fmap</span><span class="p">)</span> <span class="p">(</span><span class="n">either</span> <span class="p">((</span><span class="n">s</span> <span class="o">$&gt;</span><span class="p">)</span> <span class="o">.</span> <span class="kt">Left</span><span class="p">)</span> <span class="p">(</span><span class="n">fmap</span> <span class="kt">Right</span><span class="p">))</span> <span class="o">$</span> <span class="n">observing</span> <span class="o">&lt;$&gt;</span> <span class="n">runS</span> <span class="n">ma</span>
+  <span class="n">eof</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">$</span> <span class="n">embedFinal</span> <span class="n">eof</span>
+  <span class="n">token</span> <span class="n">f</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">.</span> <span class="n">embedFinal</span> <span class="o">.</span> <span class="n">token</span> <span class="n">f</span>
+  <span class="n">tokens</span> <span class="n">f</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">.</span> <span class="n">embedFinal</span> <span class="o">.</span> <span class="n">tokens</span> <span class="n">f</span>
+  <span class="n">takeWhileP</span> <span class="n">f</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">.</span> <span class="n">embedFinal</span> <span class="o">.</span> <span class="n">takeWhileP</span> <span class="n">f</span>
+  <span class="n">takeWhile1P</span> <span class="n">f</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">.</span> <span class="n">embedFinal</span> <span class="o">.</span> <span class="n">takeWhile1P</span> <span class="n">f</span>
+  <span class="n">takeP</span> <span class="n">f</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">.</span> <span class="n">embedFinal</span> <span class="o">.</span> <span class="n">takeP</span> <span class="n">f</span>
+  <span class="n">getParserState</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">$</span> <span class="n">embedFinal</span> <span class="n">getParserState</span>
+  <span class="n">updateParserState</span> <span class="ow">=</span> <span class="kt">Abs</span> <span class="o">.</span> <span class="n">embedFinal</span> <span class="o">.</span> <span class="n">updateParserState</span>
+
+<span class="nf">absorbParsec</span>
+  <span class="ow">::</span> <span class="n">forall</span> <span class="n">e</span> <span class="n">s</span> <span class="n">m</span> <span class="n">r</span> <span class="n">a</span>
+   <span class="o">.</span> <span class="p">(</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Final</span> <span class="n">m</span><span class="p">)</span> <span class="n">r</span>
+     <span class="p">,</span> <span class="kt">MonadParsec</span> <span class="n">e</span> <span class="n">s</span> <span class="n">m</span>
+     <span class="p">,</span> <span class="kt">MonadParsec</span> <span class="n">e</span> <span class="n">s</span> <span class="p">(</span><span class="kt">Absorber</span> <span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">m</span> <span class="nb">()</span><span class="p">)</span> <span class="p">(</span><span class="kt">NonDet:</span><span class="n">r</span><span class="p">))</span>
+     <span class="p">)</span>
+  <span class="ow">=&gt;</span> <span class="p">(</span><span class="kt">MonadParsec</span> <span class="n">e</span> <span class="n">s</span> <span class="p">(</span><span class="kt">Sem</span> <span class="p">(</span><span class="kt">NonDet:</span><span class="n">r</span><span class="p">))</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">NonDet:</span><span class="n">r</span><span class="p">)</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">absorbParsec</span> <span class="n">ma</span> <span class="ow">=</span> <span class="n">interpretFinal</span> <span class="p">(</span><span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">Empty</span>      <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="n">empty</span>
+    <span class="kt">Choose</span> <span class="n">l</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="o">&lt;|&gt;</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">runS</span> <span class="n">l</span> <span class="o">&lt;*&gt;</span> <span class="n">runS</span> <span class="n">r</span>
+  <span class="p">)</span> <span class="o">$</span> <span class="n">absorb</span> <span class="o">@</span><span class="p">(</span><span class="kt">MonadParsec</span> <span class="n">e</span> <span class="n">s</span><span class="p">)</span> <span class="o">@</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">m</span> <span class="nb">()</span><span class="p">)</span> <span class="n">ma</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#202555688" name="202555688"><div>2020-07-01 11:03:04</div></a></div><div class="text"><p>Haven't tested it thoughtfully yet, but it seems to work</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#202571335" name="202571335"><div>2020-07-01 13:55:06</div></a></div><div class="text"><p>the only thing left now is for NonDet to behave :P</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,127 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="    • You cannot bind scoped type variable ‘a’
+        in a pattern binding signature
+
+
+why tho?" name="description"><link href="https://funprog.srid.ca/haskell/cant-bind-with-scopedtypevariables-in-a-let.html" rel="canonical"><meta property="og:title" content="Can&#39;t bind with ScopedTypeVariables in a let - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-10-12T10:04:15Z"><meta property="og:article:published_time" content="2020-10-12T09:37:23Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"><title>Can&#39;t bind with ScopedTypeVariables in a let - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Can&#39;t bind with ScopedTypeVariables in a let - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Can&#39;t bind with ScopedTypeVariables in a let</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213016851" name="213016851"><div>2020-10-12 09:37:23</div></a></div><div class="text"><div class="codehilite" data-code-language="Haskell"><pre><span></span><code>    <span class="err">•</span> <span class="kt">You</span> <span class="n">cannot</span> <span class="n">bind</span> <span class="n">scoped</span> <span class="kr">type</span> <span class="n">variable</span> <span class="err">‘</span><span class="n">a</span><span class="err">’</span>
+        <span class="kr">in</span> <span class="n">a</span> <span class="n">pattern</span> <span class="n">binding</span> <span class="n">signature</span>
+</code></pre></div>
+
+<p>why tho?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213016871" name="213016871"><div>2020-10-12 09:37:39</div></a></div><div class="text"><div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">let</span> <span class="p">(</span><span class="n">smth</span> <span class="ow">::</span> <span class="kt">Smth</span> <span class="n">a</span><span class="p">)</span> <span class="ow">=</span> <span class="o">...</span>
+ <span class="kr">in</span> <span class="o">...</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213016947" name="213016947"><div>2020-10-12 09:38:05</div></a></div><div class="text"><p>help <span aria-label="bow" class="emoji emoji-1f647" role="img" title="bow">:bow:</span> <span class="user-mention" data-user-id="251302">@Lysxia</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#213018284" name="213018284"><div>2020-10-12 09:51:33</div></a></div><div class="text"><p>Try <code>case</code> - I think there were some technicalities behind that decision</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213018305" name="213018305"><div>2020-10-12 09:51:53</div></a></div><div class="text"><p>yeah, but I'm interested in why</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213018370" name="213018370"><div>2020-10-12 09:52:17</div></a></div><div class="text"><p>if you have a link handy?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#213018497" name="213018497"><div>2020-10-12 09:53:49</div></a></div><div class="text"><p><a href="https://stackoverflow.com/questions/46077442/why-do-haskells-scoped-type-variables-not-allow-binding-of-type-variables-in-pa">https://stackoverflow.com/questions/46077442/why-do-haskells-scoped-type-variables-not-allow-binding-of-type-variables-in-pa</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://stackoverflow.com/questions/46077442/why-do-haskells-scoped-type-variables-not-allow-binding-of-type-variables-in-pa" style="background-image: url(https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon@2.png?v=73d79a89bded)"></a><div class="data-container"><div class="message_embed_title"><a href="https://stackoverflow.com/questions/46077442/why-do-haskells-scoped-type-variables-not-allow-binding-of-type-variables-in-pa" title="Why do Haskell's scoped type variables not allow binding of type variables in pattern bindings?">Why do Haskell's scoped type variables not allow binding of type variables in pattern bindings?</a></div><div class="message_embed_description">I noticed that GHC's ScopedTypeVariables is able to bind type variables in function patterns but not let patterns.
+
+As a minimal example, consider the type
+
+data Foo where Foo :: Typeable a  =&gt; ...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213018657" name="213018657"><div>2020-10-12 09:55:43</div></a></div><div class="text"><p>thanks for using google in my stead!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213018663" name="213018663"><div>2020-10-12 09:55:46</div></a></div><div class="text"><p><span aria-label="grinning face with smiling eyes" class="emoji emoji-1f601" role="img" title="grinning face with smiling eyes">:grinning_face_with_smiling_eyes:</span> sorry</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#213018716" name="213018716"><div>2020-10-12 09:56:05</div></a></div><div class="text"><p>honestly wasn't expecting to find an answer so I didn't even bother..</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#213019445" name="213019445"><div>2020-10-12 10:04:15</div></a></div><div class="text"><p>I additionally found <a href="https://mail.haskell.org/pipermail/glasgow-haskell-users/2006-January/009565.html">this</a> (see <code>5)</code>)</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

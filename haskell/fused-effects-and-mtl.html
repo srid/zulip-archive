@@ -1,0 +1,147 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="That article reminded me that I need to look at fused-effects again.  I used it in an app about a year ago and it was pretty painful.  Internal code was easy enough to write, but using any libraries that assumed mtl classes was horrible." name="description"><link href="https://funprog.srid.ca/haskell/fused-effects-and-mtl.html" rel="canonical"><meta property="og:title" content="fused-effects and mtl - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-02-22T15:22:00Z"><meta property="og:article:published_time" content="2021-02-19T21:06:05Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0?d=identicon&amp;version=1"><title>fused-effects and mtl - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">fused-effects and mtl - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">fused-effects and mtl</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#227028278" name="227028278"><div>2021-02-19 21:06:05</div></a></div><div class="text"><p>That article reminded me that I need to look at <code>fused-effects</code> again.  I used it in an app about a year ago and it was pretty painful.  Internal code was easy enough to write, but using any libraries that assumed mtl classes was horrible.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/0f8afbd0e37518b6c741fe60b8105ab4?d=identicon&amp;version=1"></a><div class="content"><a class="author">Alistair Burrowes</a><div class="metadata"><a href="#227043672" name="227043672"><div>2021-02-19 23:05:31</div></a></div><div class="text"><p><span class="user-mention" data-user-id="365737">@Peter J. Jones</span> they do have 'Algebra' instances for the mtl types <a href="https://hackage.haskell.org/package/fused-effects-1.1.1.0/docs/Control-Algebra.html">https://hackage.haskell.org/package/fused-effects-1.1.1.0/docs/Control-Algebra.html</a> (search for StateT etc.). I haven't done it but I think this means you can just put plain old MTL types in your fused-effects 'carrier' stack.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/0f8afbd0e37518b6c741fe60b8105ab4?d=identicon&amp;version=1"></a><div class="content"><a class="author">Alistair Burrowes</a><div class="metadata"><a href="#227043796" name="227043796"><div>2021-02-19 23:06:40</div></a></div><div class="text"><p>It did find it quite challenging wiring up <code>mtl</code> and <code>fused-effects</code>, but other than that I don't think any of the other libraries I used exposed a <code>mtl</code> style interface.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#227044108" name="227044108"><div>2021-02-19 23:09:54</div></a></div><div class="text"><p><span class="user-mention" data-user-id="317501">@Allan Erskine</span> I think you are correct.  IIRC, the problem is with using functions that have mtl-like type constraints.  I suppose you just end up with a mess of constraints like <code>MonadSomething m, Has (Reader x) sig m =&gt; ...</code>.  It's been awhile so I'm drawing a blank as to why I had so many problems.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#227044311" name="227044311"><div>2021-02-19 23:11:52</div></a></div><div class="text"><p>I think my biggest issue was using <code>MonadRandom</code> from cryptonite and an orphan instance in the jwt library.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/0f8afbd0e37518b6c741fe60b8105ab4?d=identicon&amp;version=1"></a><div class="content"><a class="author">Alistair Burrowes</a><div class="metadata"><a href="#227044576" name="227044576"><div>2021-02-19 23:14:54</div></a></div><div class="text"><p>yeah interesting. I wonder if it easier now.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#227044799" name="227044799"><div>2021-02-19 23:17:19</div></a></div><div class="text"><p>In the end I'm not sure it's worth all the trouble.  MTL-style classes work well most of the time.  In practice you hit the n+m instance problem rarely.  I think I prefer to encode my business logic as an EDSL via Free Monads vs. using an effect system.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#227044937" name="227044937"><div>2021-02-19 23:18:48</div></a></div><div class="text"><p>Effect systems are super interesting, and on paper they are really exciting.  But when you just want to get work done I think they get in the way.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/0f8afbd0e37518b6c741fe60b8105ab4?d=identicon&amp;version=1"></a><div class="content"><a class="author">Alistair Burrowes</a><div class="metadata"><a href="#227045652" name="227045652"><div>2021-02-19 23:25:45</div></a></div><div class="text"><p>I agree, I think people should default to MTL style. It is easier to learn / less magic and integrates better with the rest of the ecosystem. Ergonomically I think effect systems are nicer to work with though. <code>polysemy</code> showed me how nice they can be. Although I went with <code>fused-effects</code> because I trusted it to have better performance / memory usage. <code>fused-effects</code> is quite ugly to work with though.. :) (at least until your learn it)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#227046697" name="227046697"><div>2021-02-19 23:36:40</div></a></div><div class="text"><p>A lesson that I've recently (re-)learned is that MTL (and other effect systems) can be a crutch for when our minds are stuck in an imperative programming world.  It's a good exercise to try writing a function without them, and almost always you can.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#227072821" name="227072821"><div>2021-02-20 07:06:39</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="365737">Peter J. Jones</span> <a href="#narrow/stream/201385-Haskell/topic/fused-effects.20and.20mtl/near/227044799">said</a>:</p>
+<blockquote>
+<p>MTL-style classes work well most of the time. </p>
+</blockquote>
+<p>One immediate common use case where mtl falls apart is having more than one error type. Sure you could patch that up with the various hacks cooked up exactly for this purpose but it feels bad having to hack around it in the first place</p>
+<blockquote>
+<p>In practice you hit the n+m instance problem rarely.</p>
+</blockquote>
+<p>This is only "true" imo, because mtl has already conditioned us to avoid making new effects exactly because of this reason. In systems where it's not boilerplatey it's very convenient to make many custom effects, even ones that are only used for intermediate interpretation.</p>
+<blockquote>
+<p>I think I prefer to encode my business logic as an EDSL via Free Monads vs. using an effect system.</p>
+</blockquote>
+<p>That's exactly what things like <code>freer-simple</code> and <code>polysemy</code> do. What's the difference between what you're thinking and those?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4?d=identicon&amp;version=1"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#227076218" name="227076218"><div>2021-02-20 08:14:56</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/fused-effects.20and.20mtl/near/227072821">said</a>:</p>
+<blockquote>
+<blockquote>
+<p>In practice you hit the n+m instance problem rarely.</p>
+</blockquote>
+<p>This is only "true" imo, because mtl has already conditioned us to avoid making new effects exactly because of this reason. In systems where it's not boilerplatey it's very convenient to make many custom effects, even ones that are only used for intermediate interpretation.</p>
+</blockquote>
+<p>Could you give an example of this please?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950?d=identicon&amp;version=1"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#227079805" name="227079805"><div>2021-02-20 09:30:11</div></a></div><div class="text"><p>I think the 04m-10m segment in this talk is a good "example" - <a href="https://www.youtube.com/watch?v=-dHFOjcK6pA">YouTube - Polysemy: Chasing Performance in Free Monads — Sandy Maguire</a></p>
+<div class="youtube-video message_inline_image"><a data-id="-dHFOjcK6pA" href="https://www.youtube.com/watch?v=-dHFOjcK6pA"><img src="https://i.ytimg.com/vi/-dHFOjcK6pA/default.jpg"></a></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#227202802" name="227202802"><div>2021-02-21 23:36:57</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span> you have some really good insight, thank you for sharing.</p>
+<p>I let this bounce around in my mind for a couple of days and you are absolutely right.  MTL has conditioned me to think  in a specific way.  Your example w.r.t. multiple error types makes your point very clearly.  Because of such pain I've completely given up on using <code>MonadError</code> and instead have such functions return <code>m (Either e a)</code>.  It's pretty easy to use the <code>Bifunctor</code> instance of <code>Either</code> to change the error type as needed.  I'm curious though, how do you deal with the multiple error issue?  Do you write functions with constraints that allow them to throw many different types of errors?  </p>
+<p>As far as effects vs. EDSLs: First, let me admit that I've not used <code>freer-simple</code> or <code>polysemy</code>.  My experience mostly involves <code>mtl</code> and <code>fused-effects</code>.  I also need to admit that, as far as I can tell, I only have an emotional response to give you: coding to an EDSL feels more restrictive---in a good way.  A function using the EDSL can't add any additional effects.  To do so requires changing the EDSL itself, forcing me to think more about what I'm doing and if that effect is really needed.  On the other hand, writing functions that can run in any monad given some constraints makes it really easy to add new effects.  When using something like <code>fused-effects</code> I found myself constantly adding more effects that then get inherited up the call stack.  A large part of this problem was probably my immaturity with an effect system.  </p>
+<p>Hmm, as I think on this I realize that my EDSL idea could be written as a large, single effect.  Then as individual functions require additional effects I could localize those without needing to alter the EDSL.  It sounds like I have some more thinking to do on this. <span aria-label="smile" class="emoji emoji-1f642" role="img" title="smile">:smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#227202918" name="227202918"><div>2021-02-21 23:39:32</div></a></div><div class="text"><p><span class="user-mention" data-user-id="365737">@Peter J. Jones</span> if you want some more inspiration about errors in polysemy, I recommend looking at the readme of my library for cross-interpreter error tracking: <a href="https://github.com/tek/polysemy-resume">https://github.com/tek/polysemy-resume</a> <span aria-label="smile" class="emoji emoji-1f642" role="img" title="smile">:smile:</span></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/tek/polysemy-resume" style="background-image: url(https://avatars.githubusercontent.com/u/2632?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/tek/polysemy-resume" title="tek/polysemy-resume">tek/polysemy-resume</a></div><div class="message_embed_description">cross-interpreter errors for polysemy. Contribute to tek/polysemy-resume development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#227226178" name="227226178"><div>2021-02-22 06:51:25</div></a></div><div class="text"><blockquote>
+<p>On the other hand, writing functions that can run in any monad given some constraints makes it really easy to add new effects.  When using something like <code>fused-effects</code> I found myself constantly adding more effects that then get inherited up the call stack.  A large part of this problem was probably my immaturity with an effect system.</p>
+</blockquote>
+<p>Hmm, those effects still need to be interpreted somewhere - if you don't add them to your interpreter, they shouldn't work, should they?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0?d=identicon&amp;version=1"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#227282296" name="227282296"><div>2021-02-22 15:22:00</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/fused-effects.20and.20mtl/near/227226178">said</a>:</p>
+<blockquote>
+<blockquote>
+<p>On the other hand, writing functions that can run in any monad given some constraints makes it really easy to add new effects.  When using something like <code>fused-effects</code> I found myself constantly adding more effects that then get inherited up the call stack.  A large part of this problem was probably my immaturity with an effect system.</p>
+</blockquote>
+<p>Hmm, those effects still need to be interpreted somewhere - if you don't add them to your interpreter, they shouldn't work, should they?</p>
+</blockquote>
+<p>Obviously this isn't very clear in my head.  I don't think of functions written in an EDSL to be using effects per se.   However, the interpreter may need to use various effects while evaluating the EDSL.  I believe that I see it this way because the EDSLs that I write only allow functions to use a single "effect", the EDSL itself.</p>
+<p>At this point I feel like the EDSL vs. effects points I was trying (and failing) to make are two sides of the same coin.  The EDSL itself could be implemented as an effect, allowing programmers who use the EDSL to mix in other effects as needed.  I suppose it depends on the domain and the target programmers whether you want to allow that sort of freedom.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

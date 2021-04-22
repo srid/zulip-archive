@@ -1,0 +1,112 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Someone should write an orgmode parser using megaparsec." name="description"><link href="https://funprog.srid.ca/haskell/orgmode-parser.html" rel="canonical"><meta property="og:title" content="Orgmode parser - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2019-11-26T15:32:20Z"><meta property="og:article:published_time" content="2019-11-25T20:13:45Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>Orgmode parser - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Orgmode parser - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Orgmode parser</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#181858353" name="181858353"><div>2019-11-25 20:13:45</div></a></div><div class="text"><p>Someone should write an orgmode parser using <code>megaparsec</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/df54558cfdb150d321e6907b6ec1a67caa846127?x=x&amp;version=2"></a><div class="content"><a class="author">Solomon Bothwell</a><div class="metadata"><a href="#181859865" name="181859865"><div>2019-11-25 20:34:04</div></a></div><div class="text"><p>Interesting project idea. What would be the use case for it?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#181859960" name="181859960"><div>2019-11-25 20:35:18</div></a></div><div class="text"><p>Writing a (interactive) reflex based UI for diary entries stored in org files.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8ae3c3a98eb73541a0a410e92b025ebd?d=identicon&amp;version=1"></a><div class="content"><a class="author">Reed Mullanix</a><div class="metadata"><a href="#181867161" name="181867161"><div>2019-11-25 21:52:00</div></a></div><div class="text"><p>Properly parsing org is a nightmare</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8ae3c3a98eb73541a0a410e92b025ebd?d=identicon&amp;version=1"></a><div class="content"><a class="author">Reed Mullanix</a><div class="metadata"><a href="#181867220" name="181867220"><div>2019-11-25 21:52:22</div></a></div><div class="text"><p>There isn't a formal spec, and it's insanely complicated</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/8ae3c3a98eb73541a0a410e92b025ebd?d=identicon&amp;version=1"></a><div class="content"><a class="author">Reed Mullanix</a><div class="metadata"><a href="#181867775" name="181867775"><div>2019-11-25 21:58:54</div></a></div><div class="text"><p>Yeah, it's a bit of a bummer. Getting the basic structure is easy, but when you start mixing in inline latex + source blocks + tables + deadlines things get really hard really fast</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#181886948" name="181886948"><div>2019-11-26 03:35:55</div></a></div><div class="text"><p>Also, persisting things as text isn't really the best persistence mechanism with respect to merging simultaneous client edits anyway. Not only would you have to write a parser for something where the spec is just a pile of semi-related elisp, but you'd have to write an editing algebra over that AST that would allow you to nicely serialise edits. As someone who has tried editing org files on the go on their phone with orgzly and committing to git; the conflict resolution strategy of line by line diff edit merging is not fun.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#181887014" name="181887014"><div>2019-11-26 03:37:27</div></a></div><div class="text"><p>Maybe I complicate matters by my entry level org mode needs requiring org-brain for better hyperlinking between entries, lol.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#181887023" name="181887023"><div>2019-11-26 03:37:55</div></a></div><div class="text"><p>But it fell off the rails super quickly even with a pretty good existing org UI.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#181932537" name="181932537"><div>2019-11-26 15:32:20</div></a></div><div class="text"><p>Probably the right thing to do would be to first write a specification for some subset of Org (since that would benefit both the parser project and the Org project) and then extend that. <a href="https://orgmode.org/worg/dev/org-syntax.html" target="_blank" title="https://orgmode.org/worg/dev/org-syntax.html">https://orgmode.org/worg/dev/org-syntax.html</a> is something, but I'm not sure how binding that is. Might just take some work to stabilize it and get it standardized.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

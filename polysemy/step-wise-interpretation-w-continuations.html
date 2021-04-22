@@ -1,0 +1,180 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi there! I have a scenario where I want to decompose a Sem computation the following way:
+Sem (MyEff &#39;: r) a -&gt; Sem r (MyEff m b, b -&gt; Either a (Sem (MyEff &#39;: r) a))
+
+
+
+(As there might be r effects before MyEff)
+in order to handle the effect step-wise.
+My use case is having a bunch of these effectf" name="description"><link href="https://funprog.srid.ca/polysemy/step-wise-interpretation-w-continuations.html" rel="canonical"><meta property="og:title" content="Step-wise interpretation w/ continuations - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-05-10T21:26:55Z"><meta property="og:article:published_time" content="2020-05-02T09:43:25Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/3bbfae902e1399d8ff4ad1c4a8d7b0d2?d=identicon&amp;version=1"><title>Step-wise interpretation w/ continuations - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Step-wise interpretation w/ continuations - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Step-wise interpretation w/ continuations</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/3bbfae902e1399d8ff4ad1c4a8d7b0d2?d=identicon&amp;version=1"></a><div class="content"><a class="author">Ilan Godik</a><div class="metadata"><a href="#196043496" name="196043496"><div>2020-05-02 09:43:25</div></a></div><div class="text"><p>Hi there! I have a scenario where I want to decompose a Sem computation the following way:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">Sem</span> <span class="p">(</span><span class="kt">MyEff</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="p">(</span><span class="kt">MyEff</span> <span class="n">m</span> <span class="n">b</span><span class="p">,</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="kt">Either</span> <span class="n">a</span> <span class="p">(</span><span class="kt">Sem</span> <span class="p">(</span><span class="kt">MyEff</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span><span class="p">))</span>
+</code></pre></div>
+
+
+<p>(As there might be <code>r</code> effects before <code>MyEff</code>)<br>
+in order to handle the effect step-wise.</p>
+<p>My use case is having a bunch of these effectful programs in a collection, and moving them forward together whenever I have a <code>b</code> available.</p>
+<p>How would I go about doing this with Polysemy?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?x=x&amp;version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197076689" name="197076689"><div>2020-05-10 20:29:32</div></a></div><div class="text"><p>Short answer: you can't do this in a safe way. This is one of the flaws inherent to the Effect Handlers In Scope approach (what I call "the <code>weave</code> abstraction") that polysemy is based upon. The same reason is why polysemy doesn't have a <code>Coroutine</code> effect, and why the continuation effects in <code>polysemy-zoo</code> have very restrictive interpreters.<br>
+<em>However</em>, the unsafe interaction is specifically that if you try to do this, higher-order actions of effects after <code>MyEff</code> get messed up (the ones that have already been interpreted are fine). So if you, say, have no higher-order effects of interest, you <em>can</em> do this.<br>
+The implementation would be messy and ugly and convoluted. But if you really want it, I can cook it up.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?x=x&amp;version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197079741" name="197079741"><div>2020-05-10 21:26:55</div></a></div><div class="text"><p>Figured "what the hell" and made it anyway:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">import</span> <span class="nn">Polysemy</span>
+
+<span class="c1">-- For evil internal magic</span>
+<span class="kr">import</span> <span class="nn">Polysemy.Internal</span>
+<span class="kr">import</span> <span class="nn">Polysemy.Internal.Union</span>
+
+<span class="c1">-- From the &#39;free&#39; package</span>
+<span class="kr">import</span> <span class="nn">Control.Monad.Free</span>
+<span class="kr">import</span> <span class="nn">Control.Monad.Free.Church</span>
+
+
+<span class="c1">-- Boilerplate</span>
+<span class="nf">cataSem</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Union</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<span class="nf">cataSem</span> <span class="n">b</span> <span class="n">c</span> <span class="n">sem</span> <span class="ow">=</span> <span class="n">runF</span> <span class="p">(</span><span class="n">runSem</span> <span class="n">sem</span> <span class="n">liftF</span><span class="p">)</span> <span class="n">b</span> <span class="n">c</span>
+
+<span class="nf">stackify</span> <span class="ow">::</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Free</span> <span class="p">(</span><span class="kt">Union</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">))</span> <span class="n">a</span>
+<span class="nf">stackify</span> <span class="ow">=</span> <span class="n">cataSem</span> <span class="kt">Pure</span> <span class="kt">Free</span>
+
+<span class="nf">unstackify</span> <span class="ow">::</span> <span class="kt">Free</span> <span class="p">(</span><span class="kt">Union</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">))</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">unstackify</span> <span class="n">fm</span> <span class="ow">=</span> <span class="kt">Sem</span> <span class="o">$</span> <span class="nf">\</span><span class="n">k</span> <span class="ow">-&gt;</span> <span class="n">foldFree</span> <span class="n">k</span> <span class="n">fm</span>
+
+<span class="nf">bomb</span> <span class="ow">::</span> <span class="n">a</span>
+<span class="nf">bomb</span> <span class="ow">=</span> <span class="ne">error</span> <span class="s">&quot;step/s: Don&#39;t use any higher-order effects that are further down the </span><span class="se">\</span>
+<span class="se">                    \</span><span class="s"> effect stack than the effect you step through!&quot;</span>
+
+<span class="c1">-- Here&#39;s what you&#39;re interested in</span>
+<span class="kr">data</span> <span class="kt">Steps</span> <span class="n">e</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">Done</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Steps</span> <span class="n">e</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="kt">More</span> <span class="ow">::</span> <span class="n">e</span> <span class="n">z</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="p">(</span><span class="kt">Steps</span> <span class="n">e</span> <span class="n">m</span> <span class="n">b</span><span class="p">))</span> <span class="ow">-&gt;</span> <span class="kt">Steps</span> <span class="n">e</span> <span class="n">m</span> <span class="n">b</span>
+
+<span class="kr">data</span> <span class="kt">Step</span> <span class="n">e</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">Floor</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Step</span> <span class="n">e</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="kt">Step</span>  <span class="ow">::</span> <span class="n">e</span> <span class="n">z</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Step</span> <span class="n">e</span> <span class="n">m</span> <span class="n">a</span>
+
+<span class="nf">steps</span> <span class="ow">::</span> <span class="kt">Sem</span> <span class="p">(</span><span class="n">e</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Steps</span> <span class="n">e</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span><span class="p">)</span>
+<span class="nf">steps</span> <span class="ow">=</span> <span class="n">cataSem</span> <span class="p">(</span><span class="n">pure</span> <span class="o">.</span> <span class="kt">Done</span><span class="p">)</span> <span class="o">$</span> <span class="nf">\</span><span class="n">u</span> <span class="ow">-&gt;</span> <span class="kr">case</span> <span class="n">decomp</span> <span class="n">u</span> <span class="kr">of</span>
+  <span class="kt">Right</span> <span class="p">(</span><span class="kt">Weaving</span> <span class="n">e</span> <span class="n">s</span> <span class="kr">_</span> <span class="n">ex</span> <span class="kr">_</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="p">(</span><span class="kt">More</span> <span class="n">e</span> <span class="p">(</span><span class="n">ex</span> <span class="o">.</span> <span class="p">(</span><span class="o">&lt;$</span> <span class="n">s</span><span class="p">)))</span>
+  <span class="kt">Left</span> <span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">join</span> <span class="o">$</span> <span class="n">liftSem</span> <span class="o">$</span> <span class="n">hoist</span> <span class="n">bomb</span> <span class="n">g</span>
+
+
+<span class="nf">step</span> <span class="ow">::</span> <span class="kt">Sem</span> <span class="p">(</span><span class="n">e</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Step</span> <span class="n">e</span> <span class="p">(</span><span class="kt">Sem</span> <span class="p">(</span><span class="n">e</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">))</span> <span class="n">a</span><span class="p">)</span>
+<span class="nf">step</span> <span class="ow">=</span> <span class="n">go</span> <span class="o">.</span> <span class="n">stackify</span>
+  <span class="kr">where</span>
+    <span class="n">go</span> <span class="p">(</span><span class="kt">Pure</span> <span class="n">a</span><span class="p">)</span> <span class="ow">=</span> <span class="n">pure</span> <span class="p">(</span><span class="kt">Floor</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">go</span> <span class="p">(</span><span class="kt">Free</span> <span class="n">u</span><span class="p">)</span> <span class="ow">=</span> <span class="kr">case</span> <span class="n">decomp</span> <span class="n">u</span> <span class="kr">of</span>
+      <span class="kt">Right</span> <span class="p">(</span><span class="kt">Weaving</span> <span class="n">e</span> <span class="n">s</span> <span class="kr">_</span> <span class="n">ex</span> <span class="kr">_</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="p">(</span><span class="kt">Step</span> <span class="n">e</span> <span class="p">(</span><span class="n">unstackify</span> <span class="o">.</span> <span class="n">ex</span> <span class="o">.</span> <span class="p">(</span><span class="o">&lt;$</span> <span class="n">s</span><span class="p">)))</span>
+      <span class="kt">Left</span> <span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">liftSem</span> <span class="p">(</span><span class="n">hoist</span> <span class="n">bomb</span> <span class="n">g</span><span class="p">)</span> <span class="o">&gt;&gt;=</span> <span class="n">go</span>
+</code></pre></div>
+
+
+<p><em>Maybe</em> it's worth adding to <code>polysemy-zoo</code> but that's a pretty big maybe seeing how unsafe it is. Also it's heavily dependant on <code>Sem</code>'s internal representation as a free monad.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
