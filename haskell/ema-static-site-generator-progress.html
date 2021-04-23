@@ -1,0 +1,141 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Thought I&#39;d dedicate a topic for it. 
+https://github.com/srid/ema is a static site generator that does more than that; I pretty much use it as a light weight web framework for writing static-site&#39;ish apps, like rendering my .org files as a nice online diary. So far, the main feature that has been pe" name="description"><link href="https://funprog.srid.ca/haskell/ema-static-site-generator-progress.html" rel="canonical"><meta property="og:title" content="Ema static site generator progress - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-04-23T17:46:29Z"><meta property="og:article:published_time" content="2021-04-23T17:35:22Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>Ema static site generator progress - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Ema static site generator progress - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Ema static site generator progress</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#235879558" name="235879558"><div>2021-04-23 17:35:22</div></a></div><div class="text"><p>Thought I'd dedicate a topic for it. </p>
+<p><a href="https://github.com/srid/ema">https://github.com/srid/ema</a> is a static site generator that does more than that; I pretty much use it as a light weight web framework for writing static-site'ish apps, like rendering my .org files as a nice online diary. So far, the main feature that has been perfected is the <em>hot reload</em> feature. </p>
+<p>When you develop ema sites, and when you change either .html, .hs code (DSL included), or the .md or whatever files your site uses as a source, the web browser will instantly reload. And it won't do a 'refresh' - nor will there be a setInnerHTML (which is slow), but the DOM is actually patched (so it is damn fast) based on what Ema sends the browser.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/ema" style="background-image: url(https://opengraph.githubassets.com/491d0f3826b2bfe2e3570b9ee8789960dc10286509bdc0c0820de756fadeffe8/srid/ema)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/ema" title="srid/ema">srid/ema</a></div><div class="message_embed_description">WIP: Static site generator that is change-aware. Contribute to srid/ema development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#235879789" name="235879789"><div>2021-04-23 17:36:46</div></a></div><div class="text"><p>I'm currently working on a documentation site for ema based on the principles laid out by <a href="https://diataxis.fr/">https://diataxis.fr/</a> (PR open as draft).</p>
+<p>As part of it -- and since hot reload for data (not only code) requires that you monitor your data (which in our case are markdown files) for changes -- I decided to pull out the fsnotify code (used by <a href="https://github.com/srid/orgself">https://github.com/srid/orgself</a> - an ema site) and re-use it for the documentation site. But for DRY, I made it a helper module <code>Ema.Helper.FileSystem</code>.</p>
+<p>Using that, the main entry point of the documentation site looks like this:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">main</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">main</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">mainWith</span> <span class="s">"docs"</span>
+
+<span class="nf">mainWith</span> <span class="ow">::</span> <span class="kt">FilePath</span> <span class="ow">-&gt;</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">mainWith</span> <span class="n">folder</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">runEma</span> <span class="n">render</span> <span class="o">$</span> <span class="nf">\</span><span class="n">model</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+    <span class="kt">LVar</span><span class="o">.</span><span class="n">set</span> <span class="n">model</span> <span class="o">=&lt;&lt;</span> <span class="kr">do</span>
+      <span class="n">putStrLn</span> <span class="o">$</span> <span class="s">"Loading .md files from "</span> <span class="o">&lt;&gt;</span> <span class="n">folder</span>
+      <span class="n">mdFiles</span> <span class="ow">&lt;-</span> <span class="kt">FileSystem</span><span class="o">.</span><span class="n">filesMatching</span> <span class="n">folder</span> <span class="p">[</span><span class="s">"**/*.md"</span><span class="p">]</span>
+      <span class="n">forM</span> <span class="n">mdFiles</span> <span class="n">readSource</span>
+        <span class="o">&lt;&amp;&gt;</span> <span class="kt">Tagged</span> <span class="o">.</span> <span class="kt">Map</span><span class="o">.</span><span class="n">fromList</span> <span class="o">.</span> <span class="n">catMaybes</span>
+    <span class="kt">FileSystem</span><span class="o">.</span><span class="n">onChange</span> <span class="n">folder</span> <span class="o">$</span> <span class="nf">\</span><span class="n">fp</span> <span class="ow">-&gt;</span> <span class="nf">\</span><span class="kr">case</span>
+      <span class="kt">FileSystem</span><span class="o">.</span><span class="kt">Update</span> <span class="ow">-&gt;</span>
+        <span class="n">whenJustM</span> <span class="p">(</span><span class="n">readSource</span> <span class="n">fp</span><span class="p">)</span> <span class="o">$</span> <span class="nf">\</span><span class="p">(</span><span class="n">spath</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+          <span class="n">putStrLn</span> <span class="o">$</span> <span class="s">"Update: "</span> <span class="o">&lt;&gt;</span> <span class="n">show</span> <span class="n">spath</span>
+          <span class="kt">LVar</span><span class="o">.</span><span class="n">modify</span> <span class="n">model</span> <span class="o">$</span> <span class="kt">Tagged</span> <span class="o">.</span> <span class="kt">Map</span><span class="o">.</span><span class="n">insert</span> <span class="n">spath</span> <span class="n">s</span> <span class="o">.</span> <span class="n">untag</span>
+      <span class="kt">FileSystem</span><span class="o">.</span><span class="kt">Delete</span> <span class="ow">-&gt;</span>
+        <span class="n">whenJust</span> <span class="p">(</span><span class="n">mkSourcePath</span> <span class="n">fp</span><span class="p">)</span> <span class="o">$</span> <span class="nf">\</span><span class="n">spath</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+          <span class="n">putStrLn</span> <span class="o">$</span> <span class="s">"Delete: "</span> <span class="o">&lt;&gt;</span> <span class="n">show</span> <span class="n">spath</span>
+          <span class="kt">LVar</span><span class="o">.</span><span class="n">modify</span> <span class="n">model</span> <span class="o">$</span> <span class="kt">Tagged</span> <span class="o">.</span> <span class="kt">Map</span><span class="o">.</span><span class="n">delete</span> <span class="n">spath</span> <span class="o">.</span> <span class="n">untag</span>
+</code></pre></div>
+<div class="message_embed"><a class="message_embed_image" href="https://diataxis.fr/" style="background-image: url(https://diataxis.fr/_images/overview.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://diataxis.fr/" title="Home - Diátaxis">Home - Diátaxis</a></div><div class="message_embed_description">The Diátaxis framework solves the problem of structure in technical documentation, making it easier to create, maintain and use.</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/orgself" style="background-image: url(https://opengraph.githubassets.com/f77d0b2a3674cd0e566db1f05e3f983ad5bde337a9a5b4f1c55ff2ba9a24d5ac/srid/orgself)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/orgself" title="srid/orgself">srid/orgself</a></div><div class="message_embed_description">Create beautiful journal website with self-tracking. Using org-mode. - srid/orgself</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#235881208" name="235881208"><div>2021-04-23 17:45:48</div></a></div><div class="text"><p>Note that <code>Data.LVar</code> thing will be published to Hackage, and this is what I was talking about in an earlier topic: <a href="#narrow/stream/201385-Haskell/topic/TVar.20with.20change.20notification">https://funprog.zulipchat.com/#narrow/stream/201385-Haskell/topic/TVar.20with.20change.20notification</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#235881320" name="235881320"><div>2021-04-23 17:46:29</div></a></div><div class="text"><p>(the LVar in conjunction with Ema's websocket machinary is how when you edit a .md file in VSCode, it propagates instantly to the browser view)</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
