@@ -1,6 +1,6 @@
 <html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Is anyone aware of any HTML template library that supports recursion (eg: to render a tree)? While also supporting scoped variable bindings.
 Just learned that Heist does: https://github.com/srid/emabook/pull/7/files
-Heist recursive tree template by srid · Pull Request #7 · srid/emabookRewrite the ha" name="description"><link href="https://funprog.srid.ca/haskell/html-templates-recursion.html" rel="canonical"><meta property="og:title" content="HTML templates &amp; recursion - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-05-17T08:09:36Z"><meta property="og:article:published_time" content="2021-05-16T04:40:08Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>HTML templates &amp; recursion - Haskell</title><style type="text/css">
+Heist recursive tree template by srid · Pull Request #7 · srid/emabookRewrite the ha" name="description"><link href="https://funprog.srid.ca/haskell/html-templates-recursion.html" rel="canonical"><meta property="og:title" content="HTML templates &amp; recursion - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-05-17T08:31:53Z"><meta property="og:article:published_time" content="2021-05-16T04:40:08Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>HTML templates &amp; recursion - Haskell</title><style type="text/css">
 div#thesite
 {
   font-family   : "Open Sans", sans-serif;
@@ -118,4 +118,17 @@ Use &lt;apply&gt; to recursively invoke the self template.</div></div></div></di
 <blockquote>
 <p>My biggest gripe on using dhall for this, is the lack of text operations, not possible to do html escaping</p>
 </blockquote>
-<p>Yeah - should be easy enough to extend it using HS API if we were to write templating engine based on it though</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
+<p>Yeah - should be easy enough to extend it using HS API if we were to write templating engine based on it though</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#239051004" name="239051004"><div>2021-05-17 08:27:43</div></a></div><div class="text"><p>Wait, it seems like there's XML support: <a href="https://store.dhall-lang.org/Prelude-v20.1.0/XML/index.html">https://store.dhall-lang.org/Prelude-v20.1.0/XML/index.html</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#239051174" name="239051174"><div>2021-05-17 08:29:21</div></a></div><div class="text"><p>Yeah, I went through the XML source a while ago. There's no escaping there either :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#239051476" name="239051476"><div>2021-05-17 08:31:22</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code>let XML =
+      https://prelude.dhall-lang.org/XML/package.dhall sha256:137e7b106b2e9743970e5d37b21a165f2e40f56ab593a4dd10605c9acd686fc6
+
+in  XML.render
+      ( XML.element
+          { name = &quot;foo&quot;
+          , attributes = XML.emptyAttributes
+          , content =
+            [ XML.leaf { name = &quot;bar&quot;, attributes = XML.emptyAttributes }
+            , XML.text &quot;asd &lt;asd /&gt;&quot;
+            ]
+          }
+      )
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#239051509" name="239051509"><div>2021-05-17 08:31:53</div></a></div><div class="text"><p>Practical concerns aside; It's cool that the XML stuff <em>is</em> based on a recursive tree.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
