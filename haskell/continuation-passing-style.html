@@ -1,0 +1,160 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi,
+I have a code that I&#39;d like to port to CPS ; I&#39;d like to have an &quot;early return&quot; in my code : the function looks for a file, and if it&#39;s not present, it returns an empty list, otherwise it parses the content of the file and return a list of strings coming from some regex matching in this file.
+Th" name="description"><link href="https://funprog.srid.ca/haskell/continuation-passing-style.html" rel="canonical"><meta property="og:title" content="continuation passing style - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-05-29T22:08:36Z"><meta property="og:article:published_time" content="2021-05-29T20:21:34Z"><meta property="og:image" content="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"><title>continuation passing style - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">continuation passing style - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">continuation passing style</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#240719239" name="240719239"><div>2021-05-29 20:21:34</div></a></div><div class="text"><p>Hi,</p>
+<p>I have a code that I'd like to port to CPS ; I'd like to have an "early return" in my code : the function looks for a file, and if it's not present, it returns an empty list, otherwise it parses the content of the file and return a list of strings coming from some regex matching in this file.</p>
+<p>The current code is </p>
+<div class="codehilite"><pre><span></span><code> getRenduTxtNums :: FilePath -&gt; IO [String]
+ getRenduTxtNums path = do
+         let rendu_txt = path &lt;/&gt; &quot;rendu.txt&quot;
+         fileExists &lt;- testfile rendu_txt
+         if not fileExists
+           then return []
+           else get_nums_from_file rendu_txt
+   where
+     get_nums_from_file rendu_txt = do
+             content &lt;- unpack &lt;$&gt; readTextFile rendu_txt -- readFile rendu_txt
+             let res = getAllTextMatches $ content =~ (unpack &quot;([[:digit:]])+&quot;) :: [String]
+             return res
+</code></pre></div>
+<p>I started by writing the "root function" which run the continuation :</p>
+<div class="codehilite"><pre><span></span><code>getRenduTxtNums :: FilePath -&gt; IO [String]
+getRenduTxtNums path = runCont (testing path) id
+</code></pre></div>
+<p>which means I need a <code>testing :: FilePath -&gt; Cont r (IO [String])</code>function. I tried the following :</p>
+<div class="codehilite"><pre><span></span><code>testing path = callCC $ \earlyret -&gt; do
+  let rendu_txt = path &lt;/&gt; &quot;rendu.txt&quot;
+  return $ do
+    fileExists &lt;- testfile rendu_txt
+    when (not fileExists) $ earlyret []
+    undefined
+</code></pre></div>
+<p>but it doesn't work. The funny thing is, if I remove <code>when (not fileExists) $ earlyret []</code>, it works so it looks a lot like I have issue by stacking monads.</p>
+<p>How can I do what I have in mind ? Do I miss some <code>lift</code>call at some place ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#240720206" name="240720206"><div>2021-05-29 20:45:47</div></a></div><div class="text"><p>(by the way is there a way to put "placeholder function" to get type hint from Haskell ? like undefined, but GHC would tell me "please use something of type X instead of undefined")</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#240721231" name="240721231"><div>2021-05-29 21:07:27</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="295094">Vincent L</span> <a href="#narrow/stream/201385-Haskell/topic/continuation.20passing.20style/near/240720206">said</a>:</p>
+<blockquote>
+<p>(by the way is there a way to put "placeholder function" to get type hint from Haskell ? like undefined, but GHC would tell me "please use something of type X instead of undefined")</p>
+</blockquote>
+<p>a typed hole is an underscore followed by an optional name, i.e. <code>_</code> or <code>_value</code>, and will result in a compiler message</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#240721249" name="240721249"><div>2021-05-29 21:07:47</div></a></div><div class="text"><p>thank you</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#240722357" name="240722357"><div>2021-05-29 21:28:41</div></a></div><div class="text"><p>by the way I don't understand something</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#240722382" name="240722382"><div>2021-05-29 21:29:30</div></a></div><div class="text"><p><code>ContT r IO [String]</code>is not the same as <code>ContT r (IO [String])</code> ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#240722596" name="240722596"><div>2021-05-29 21:33:44</div></a></div><div class="text"><p>ho I confused <code>Cont</code>and <code>ContT</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#240723159" name="240723159"><div>2021-05-29 21:45:48</div></a></div><div class="text"><p>So for the record here is the version that works :</p>
+<div class="codehilite"><pre><span></span><code>getRenduTxtNums :: FilePath -&gt; IO [String]
+getRenduTxtNums path = runContT (testing path) return
+
+testing :: FilePath -&gt; ContT r IO [String]
+testing path = callCC $ \earlyret -&gt; do
+  let rendu_txt = path &lt;/&gt; &quot;rendu.txt&quot;
+  fileExists &lt;- lift $ testfile @IO rendu_txt
+  unless fileExists $ earlyret []
+  content &lt;- lift $ unpack &lt;$&gt; readTextFile rendu_txt
+  let res = getAllTextMatches $ content =~ (unpack &quot;([[:digit:]])+&quot;) :: [String]
+  return res
+</code></pre></div>
+<p>The issue was that I need to use <code>runContT</code> and not just <code>runCont</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#240723604" name="240723604"><div>2021-05-29 21:55:58</div></a></div><div class="text"><p>congrats! I'm getting pretty curious now about what a <em>Rendu</em> is <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#240724068" name="240724068"><div>2021-05-29 22:06:34</div></a></div><div class="text"><p>It's a "deliverable"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95?d=identicon&amp;version=1"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#240724142" name="240724142"><div>2021-05-29 22:08:36</div></a></div><div class="text"><p>(I'm mixing english and french, I wrote a tool in Haskell which uncompress some archives, run some script on their content and report the result. I was a beginner so it was quite awkward, I'm spending some time to write it in a more Haskellish way</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
