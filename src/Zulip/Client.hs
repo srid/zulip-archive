@@ -89,8 +89,8 @@ data Users = Users
   deriving (Eq, Show)
 
 data User = User
-  { _userAvatarUrl :: Text,
-    _userId :: Int,
+  { _userAvatarUrl :: Maybe Text,
+    _userUserId :: Int,
     _userFullName :: Text
   }
   deriving (Eq, Show)
@@ -107,7 +107,7 @@ data ServerSettings = ServerSettings
 mkArchive :: [Stream] -> [User] -> [Message] -> [Stream]
 mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
   -- TODO: Verify that stream names are unique.
-  let avatarMap = Map.fromList $ flip fmap users $ _userId &&& _userAvatarUrl
+  let avatarMap = Map.fromList $ flip mapMaybe users $ \u -> (_userUserId u,) <$> _userAvatarUrl u
       msgs = flip fmap msgsWithoutAvatar $ \msg ->
         msg
           { _messageAvatarUrl =
