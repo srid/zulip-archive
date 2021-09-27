@@ -1,0 +1,125 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="The elephant in the room?" name="description"><link href="https://funprog.srid.ca/rust/haskell-vs-rust.html" rel="canonical"><meta property="og:title" content="Haskell vs Rust - Rust"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Rust"><meta property="og:article:modified_time" content="2021-04-09T11:52:07Z"><meta property="og:article:published_time" content="2020-02-04T21:03:12Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>Haskell vs Rust - Rust</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Haskell vs Rust - Rust</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/rust/" class="section">#Rust</a><i class="right angle icon divider"></i><div class="active section">Haskell vs Rust</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#187399852" name="187399852"><div>2020-02-04 21:03:12</div></a></div><div class="text"><p>The elephant in the room?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#187399860" name="187399860"><div>2020-02-04 21:03:17</div></a></div><div class="text"><p><a href="https://www.fpcomplete.com/blog/2018/11/haskell-and-rust" target="_blank" title="https://www.fpcomplete.com/blog/2018/11/haskell-and-rust">https://www.fpcomplete.com/blog/2018/11/haskell-and-rust</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://www.fpcomplete.com/blog/2018/11/haskell-and-rust" style="background-image: url(https://www.fpcomplete.com/hubfs/Blog/Haskell%20and%20Rust%20Blog%20Image.jpg#keepProtocol)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://www.fpcomplete.com/blog/2018/11/haskell-and-rust" target="_blank" title="Haskell and Rust">Haskell and Rust</a></div><div class="message_embed_description">Learn more about how the Rust programming language shares many of the advantages offered by Haskell such as a strong type system, great tooling, polymorphism, immutability, concurrency, and great software testing methodologies.  Rust is a good choice when you need to squeeze in extra performance.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#218541696" name="218541696"><div>2020-12-02 11:04:58</div></a></div><div class="text"><p>it seems that fpcomplete do more rust stuff than haskell these days. I kept seeing snoyman appear in rust channel very often.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218542018" name="218542018"><div>2020-12-02 11:08:04</div></a></div><div class="text"><p>I mean, it's a pretty good language <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#218542260" name="218542260"><div>2020-12-02 11:10:38</div></a></div><div class="text"><p>I miss Haskell...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#218542483" name="218542483"><div>2020-12-02 11:13:16</div></a></div><div class="text"><p>But yeah - in same way as low-level/performance/mutable stuff in Haskell is inconvenient, high-level/reusable/elegant code can be hard in language with primary purpose of making mutability safe...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#233221020" name="233221020"><div>2021-04-05 19:55:33</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251394">Rizary</span> <a href="#narrow/stream/222445-Rust/topic/Haskell.20vs.20Rust/near/218541696">said</a>:</p>
+<blockquote>
+<p>it seems that fpcomplete do more rust stuff than haskell these days. I kept seeing snoyman appear in rust channel very often.</p>
+</blockquote>
+<p>Which rust channel were you referring to Rizary?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#233807754" name="233807754"><div>2021-04-09 11:52:07</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span> <a href="#narrow/stream/222445-Rust/topic/Haskell.20vs.20Rust/near/233221020">said</a>:</p>
+<blockquote>
+<p><span class="user-mention silent" data-user-id="251394">Rizary</span> <a href="#narrow/stream/222445-Rust/topic/Haskell.20vs.20Rust/near/218541696">said</a>:</p>
+<blockquote>
+<p>it seems that fpcomplete do more rust stuff than haskell these days. I kept seeing snoyman appear in rust channel very often.</p>
+</blockquote>
+<p>Which rust channel were you referring to Rizary?</p>
+</blockquote>
+<p>rust-lang's zulip server</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

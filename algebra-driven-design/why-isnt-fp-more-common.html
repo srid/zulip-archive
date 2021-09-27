@@ -1,0 +1,201 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="The forward posed this question and by and large, i agree with the author&#39;s point but ill add one more. I accuse Haskell of ignoring physics. e.g what is the type for all my data is stored in one building and so if the network goes down my customers can&#39;t get their information? Is the leaky abstract" name="description"><link href="https://funprog.srid.ca/algebra-driven-design/why-isnt-fp-more-common.html" rel="canonical"><meta property="og:title" content="Why isn&#39;t FP more common? - Algebra Driven Design"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Algebra Driven Design"><meta property="og:article:modified_time" content="2020-09-27T16:43:34Z"><meta property="og:article:published_time" content="2020-09-27T16:04:01Z"><title>Why isn&#39;t FP more common? - Algebra Driven Design</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Why isn&#39;t FP more common? - Algebra Driven Design</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/algebra-driven-design/" class="section">#Algebra Driven Design</a><i class="right angle icon divider"></i><div class="active section">Why isn&#39;t FP more common?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#211422610" name="211422610"><div>2020-09-27 16:04:01</div></a></div><div class="text"><p>The forward posed this question and by and large, i agree with the author's point but ill add one more. I accuse Haskell of ignoring physics. e.g what is the type for all my data is stored in one building and so if the network goes down my customers can't get their information? Is the leaky abstraction problem?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211422846" name="211422846"><div>2020-09-27 16:09:46</div></a></div><div class="text"><p>I would say that example is actually great fit for Haskell - I could define</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">module</span> <span class="nn">Data.BackedUp</span> <span class="p">(</span><span class="kt">BackedUp</span><span class="p">)</span> <span class="kr">where</span>
+
+<span class="kr">data</span> <span class="kt">BackedUp</span> <span class="n">a</span> <span class="ow">=</span> <span class="kt">UnsafeBackedUp</span> <span class="o">...</span>
+</code></pre></div>
+
+<p>where <code>BackedUp</code> is opaque datatype that users can't create themselves and provide some</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">backedUp</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="o">...</span> <span class="ow">-&gt;</span> <span class="kt">IO</span> <span class="p">(</span><span class="kt">BackedUp</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="kr">instance</span> <span class="kt">Functor</span> <span class="kt">BackedUp</span> <span class="kr">where</span> <span class="o">...</span>
+
+<span class="nf">fromBackedUp</span> <span class="ow">::</span> <span class="kt">BackedUp</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span>
+</code></pre></div>
+
+<p>which force users to only manipulate my value through interface that handles backing up automatically</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211422987" name="211422987"><div>2020-09-27 16:13:15</div></a></div><div class="text"><p>My friend said the problem is that haskellers write programs backwards</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">f</span> <span class="o">.</span> <span class="n">g</span> <span class="o">.</span> <span class="n">h</span> <span class="o">$</span> <span class="n">x</span>
+</code></pre></div>
+
+<p>I tried to point out to him that he could just define and use</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="p">(</span><span class="o">.&gt;</span><span class="p">)</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">c</span>
+<span class="p">(</span><span class="o">|&gt;</span><span class="p">)</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+</code></pre></div>
+
+<p>but he wasn't having it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211423054" name="211423054"><div>2020-09-27 16:14:39</div></a></div><div class="text"><p>I guess convention still applies though - but I wonder whether he finds</p>
+<div class="codehilite" data-code-language="Python"><pre><span></span><code><span class="n">f</span><span class="p">(</span><span class="n">g</span><span class="p">(</span><span class="n">h</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+</code></pre></div>
+
+<p>better for some reason <span aria-label="stuck out tongue" class="emoji emoji-1f61b" role="img" title="stuck out tongue">:stuck_out_tongue:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423075" name="211423075"><div>2020-09-27 16:15:47</div></a></div><div class="text"><p>Right, but a non functional programmer would do, like</p>
+<div class="codehilite" data-code-language="Python"><pre><span></span><code><span class="n">a</span> <span class="o">=</span> <span class="n">h</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</code></pre></div>
+
+<p>or something</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423080" name="211423080"><div>2020-09-27 16:15:57</div></a></div><div class="text"><p>maybe</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423082" name="211423082"><div>2020-09-27 16:15:58</div></a></div><div class="text"><p>idk</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211423129" name="211423129"><div>2020-09-27 16:16:39</div></a></div><div class="text"><p>So the answer is to "avoid" the problem <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423138" name="211423138"><div>2020-09-27 16:17:04</div></a></div><div class="text"><p>When writing languages with poor support for function composition I find myself constantly coming up with terrible variable names for intermediate values that I only care about as a means to an end</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423143" name="211423143"><div>2020-09-27 16:17:15</div></a></div><div class="text"><p>Right haha</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211423146" name="211423146"><div>2020-09-27 16:17:23</div></a></div><div class="text"><p>(BTW, there's</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="p">(</span><span class="o">&amp;</span><span class="p">)</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+</code></pre></div>
+
+<p>in <code>Data.Function</code>)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423155" name="211423155"><div>2020-09-27 16:17:43</div></a></div><div class="text"><p>yeah, I'm familiar, I like Flow</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211423156" name="211423156"><div>2020-09-27 16:17:46</div></a></div><div class="text"><p>I once had an algebra instructor who wished that functions were written to the right of their arguments.<br>
+So (x)f would mean plug x into f.<br>
+And, in that world Haskell would probably look like</p>
+<div class="codehilite"><pre><span></span><code>arg3 arg2 arg1 func
+</code></pre></div>
+
+
+<p>What's doubly interesting is how close this looks to Forth code.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423203" name="211423203"><div>2020-09-27 16:18:18</div></a></div><div class="text"><p>Just for consistency of operator names<br>
+<code>(|&gt;) (&lt;|) (.&gt;) (&lt;.)</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423208" name="211423208"><div>2020-09-27 16:18:39</div></a></div><div class="text"><p>Right, the concatenative paradigm</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211423235" name="211423235"><div>2020-09-27 16:19:29</div></a></div><div class="text"><p>Or <a href="https://en.wikipedia.org/wiki/Function-level_programming">Function-level programming</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423241" name="211423241"><div>2020-09-27 16:19:44</div></a></div><div class="text"><p>I'm sympathetic to left to right. I like </p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">x</span> <span class="o">|&gt;</span> <span class="n">h</span> <span class="o">.&gt;</span> <span class="n">g</span> <span class="o">.&gt;</span> <span class="n">f</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423321" name="211423321"><div>2020-09-27 16:21:36</div></a></div><div class="text"><p>The problem is that these kind of piplines are nice til you need multiple arguments. Then in concatenative langs you're <code>dup</code>ing and <code>swap</code>ing and whatnot all the time</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423380" name="211423380"><div>2020-09-27 16:23:05</div></a></div><div class="text"><p>you can do stuff like </p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">uncurry</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">.&gt;</span> <span class="p">(</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423392" name="211423392"><div>2020-09-27 16:23:19</div></a></div><div class="text"><p>But I hate that</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211423439" name="211423439"><div>2020-09-27 16:24:19</div></a></div><div class="text"><p>And thus we come full circle and arrive to <a href="https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts/arrows.html?highlight=arrow">Arrow notation</a> <span aria-label="joy" class="emoji emoji-1f602" role="img" title="joy">:joy:</span> <br>
+(JK, this is actually meant for composing more restricted things than functions)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211423450" name="211423450"><div>2020-09-27 16:24:47</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/258464-Algebra-Driven.20Design/topic/Why.20isn't.20FP.20more.20common.3F/near/211423235">said</a>:</p>
+<blockquote>
+<p>Or <a href="https://en.wikipedia.org/wiki/Function-level_programming">Function-level programming</a></p>
+</blockquote>
+<p>My example is still application based (instead of concatenative), it's just that functions are to the right of their arguments and function application is right-associative (just like types are)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423452" name="211423452"><div>2020-09-27 16:24:59</div></a></div><div class="text"><p>I've tried to learn arrows a few times, but I haven't been able to grok it yet</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#211423462" name="211423462"><div>2020-09-27 16:25:11</div></a></div><div class="text"><p>If your native language reads left to write then its a bridge you have to cross.  (to get to anything right to left)<br>
+If your group is heterogenous its unlikely the operations wil be performed uniformly over all the elements. What you want at that point is a way to easily query/separate/isolate the groups. </p>
+<p>I believe in haskell this is a lens? but filter is a lightweight version of this.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211423474" name="211423474"><div>2020-09-27 16:25:46</div></a></div><div class="text"><p>(<span class="user-mention" data-user-id="345870">@Daniel Bramucci</span> I meant to answer to <span class="user-mention" data-user-id="251123">@James Sully</span> - sorry if it wasn't clear)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423533" name="211423533"><div>2020-09-27 16:27:00</div></a></div><div class="text"><p><span class="user-mention" data-user-id="345870">@Daniel Bramucci</span> ah ok. I'm not familiar enough with concatenative to understand the operational difference</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423554" name="211423554"><div>2020-09-27 16:27:48</div></a></div><div class="text"><p>Oh wait no, I see</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423555" name="211423555"><div>2020-09-27 16:27:50</div></a></div><div class="text"><p>nevermind</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211423585" name="211423585"><div>2020-09-27 16:28:04</div></a></div><div class="text"><blockquote>
+<p>If your group is heterogenous its unlikely the operations wil be performed uniformly over all the elements. What you want at that point is a way to easily query/separate/isolate the groups. </p>
+</blockquote>
+<p>You mean in relation to function composition?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211423614" name="211423614"><div>2020-09-27 16:28:56</div></a></div><div class="text"><p>As an interesting side note:</p>
+<p>In today's Haskell, functions types are right-associative but function application is left associative</p>
+<div class="codehilite"><pre><span></span><code>myFunc :: Int -&gt; (String -&gt; String)
+(myFunc n) txt = ...
+</code></pre></div>
+
+
+<p>In postfix function world, we would have both be right-associative</p>
+<div class="codehilite"><pre><span></span><code>myFunc :: String -&gt; (Int -&gt; String)
+txt (n myFunc) = ...
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#211423670" name="211423670"><div>2020-09-27 16:30:11</div></a></div><div class="text"><blockquote>
+<p>You mean in relation to function composition?</p>
+</blockquote>
+<p>I mean, its conceptually easier to isolate out a group then perform an action. Rather than to have an action that handles every group.</p>
+<p>Because if someone asks you what that action does, your like "um, everything"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211423686" name="211423686"><div>2020-09-27 16:31:34</div></a></div><div class="text"><p>Sorry, I'm not sure which part of discussion this applies to <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Daniel Bramucci</a><div class="metadata"><a href="#211423741" name="211423741"><div>2020-09-27 16:32:14</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251123">@James Sully</span> Just in case</p>
+<p>Haskell assumes by default that</p>
+<div class="codehilite"><pre><span></span><code>foo x y z =foo $ x $ y $ z
+</code></pre></div>
+
+
+<p>Function-level programming<br>
+gives you function composition by default</p>
+<div class="codehilite"><pre><span></span><code>foo bar quox quoz = foo . bar . quox . quoz
+</code></pre></div>
+
+
+<p>And concatenative programming does something like function composition, but it's not exactly the same.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#211423820" name="211423820"><div>2020-09-27 16:34:57</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span>  It relates back to this comment. </p>
+<p>The problem is that these kind of piplines are nice til you need multiple arguments. </p>
+<p>Pipelines are nice because they imply you don't have multiple types in the collection your operation over. As in, everything will be treated the same way. It's easier on us humans to separate things into different groups, then perform a pipeline of transformation on them. Rather than having one big reduction over the set and an action that does all the work. </p>
+<p>This is why people like to seperate GET TRANSFORM and SET.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#211423902" name="211423902"><div>2020-09-27 16:37:05</div></a></div><div class="text"><p>Right, theoretically you ought to be able to write any non-branching program as a pipeline if you do enough tupling and untupling. It's just extremely unwieldy</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">drew verlee</a><div class="metadata"><a href="#211424033" name="211424033"><div>2020-09-27 16:40:43</div></a></div><div class="text"><p>Yep. Which is why I'm such a fan of datomic. As it's untuples with a minmal set of instructions all the way from a persistent store.</p>
+<p>But I might need to make another channel for that topic.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#211424130" name="211424130"><div>2020-09-27 16:43:34</div></a></div><div class="text"><p>Yeah, absolutely - I'm not saying that pipelines are good as a general style of programming - just that they work well for single value transformations, which are pretty common</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

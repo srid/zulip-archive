@@ -1,0 +1,227 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi Polysemisers, I&#39;m trying to implement an effect that caches the results of data obtained using other effects. I have code that feels close, but I&#39;m stuck:
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE PolyKinds #-}
+{-#" name="description"><link href="https://funprog.srid.ca/polysemy/implementing-a-high-order-cache-effect.html" rel="canonical"><meta property="og:title" content="Implementing a high-order Cache effect - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-07-29T12:07:54Z"><meta property="og:article:published_time" content="2020-07-28T07:44:45Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"><title>Implementing a high-order Cache effect - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Implementing a high-order Cache effect - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Implementing a high-order Cache effect</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#205205802" name="205205802"><div>2020-07-28 07:44:45</div></a></div><div class="text"><p>Hi Polysemisers, I'm trying to implement an effect that caches the results of data obtained using other effects. I have code that feels close, but I'm stuck:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">{-# LANGUAGE DataKinds #-}</span>
+<span class="cm">{-# LANGUAGE FlexibleContexts #-}</span>
+<span class="cm">{-# LANGUAGE GADTs #-}</span>
+<span class="cm">{-# LANGUAGE LambdaCase #-}</span>
+<span class="cm">{-# LANGUAGE PolyKinds #-}</span>
+<span class="cm">{-# LANGUAGE ScopedTypeVariables #-}</span>
+<span class="cm">{-# LANGUAGE TemplateHaskell #-}</span>
+<span class="cm">{-# LANGUAGE TypeApplications #-}</span>
+<span class="cm">{-# LANGUAGE TypeOperators #-}</span>
+
+<span class="kr">import</span> <span class="nn">Data.Hashable</span> <span class="p">(</span><span class="kt">Hashable</span><span class="p">)</span>
+<span class="kr">import</span> <span class="nn">Data.HashMap.Strict</span> <span class="p">(</span><span class="kt">HashMap</span><span class="p">)</span>
+<span class="kr">import</span> <span class="k">qualified</span> <span class="nn">Data.HashMap.Strict</span> <span class="k">as</span> <span class="n">HM</span>
+<span class="kr">import</span> <span class="nn">Polysemy</span>
+<span class="kr">import</span> <span class="nn">Polysemy.State</span>
+<span class="c1">-- import Polysemy.AtomicState -- TODO: thread safety</span>
+
+<span class="kr">data</span> <span class="kt">Cache</span> <span class="n">k</span> <span class="n">v</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">CacheGet</span>
+    <span class="ow">::</span> <span class="p">(</span><span class="n">k</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">v</span><span class="p">)</span> <span class="c1">-- ^ How to retrieve a value if it doesn&#39;t exist in the cache</span>
+    <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">v</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">v</span><span class="p">)</span> <span class="c1">-- ^ How to return a value if it does exist in the cache (useful to e.g. add logging, otherwise just use &#39;pure&#39;</span>
+    <span class="ow">-&gt;</span> <span class="n">k</span> <span class="c1">-- ^ The key to retrieve</span>
+    <span class="ow">-&gt;</span> <span class="kt">Cache</span> <span class="n">k</span> <span class="n">v</span> <span class="n">m</span> <span class="n">v</span> <span class="c1">-- ^ Returns the value</span>
+
+<span class="nf">makeSem</span> <span class="kt">&#39;&#39;Cache</span>
+
+<span class="nf">runCacheAsHashMap</span>
+  <span class="ow">::</span> <span class="n">forall</span> <span class="n">k</span> <span class="n">v</span> <span class="n">r</span> <span class="n">a</span>
+   <span class="o">.</span> <span class="p">(</span><span class="kt">Eq</span> <span class="n">k</span><span class="p">,</span> <span class="kt">Hashable</span> <span class="n">k</span><span class="p">)</span>
+  <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Cache</span> <span class="n">k</span> <span class="n">v</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">runCacheAsHashMap</span> <span class="ow">=</span> <span class="n">evalState</span> <span class="p">(</span><span class="kt">HM</span><span class="o">.</span><span class="n">empty</span> <span class="o">@</span><span class="n">k</span> <span class="o">@</span><span class="n">v</span><span class="p">)</span> <span class="o">.</span> <span class="n">reinterpretH</span>
+  <span class="p">(</span><span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">CacheGet</span> <span class="n">fetch</span> <span class="n">returnFromCache</span> <span class="n">k</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+      <span class="n">cache</span> <span class="ow">&lt;-</span> <span class="n">get</span>
+      <span class="kr">case</span> <span class="kt">HM</span><span class="o">.</span><span class="n">lookup</span> <span class="n">k</span> <span class="n">cache</span> <span class="kr">of</span>
+        <span class="kt">Just</span> <span class="n">v</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+          <span class="n">returnFromCache&#39;</span> <span class="ow">&lt;-</span> <span class="n">bindT</span> <span class="n">returnFromCache</span> <span class="c1">-- f v -&gt; Sem (Cache k v &#39;: State (HashMap k v) &#39;: r) (f v)</span>
+          <span class="n">pureT</span> <span class="n">v</span> <span class="o">&gt;&gt;=</span> <span class="n">returnFromCache&#39;</span>
+        <span class="kt">Nothing</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+          <span class="n">fetch&#39;</span> <span class="ow">&lt;-</span> <span class="n">bindT</span> <span class="n">fetch</span>                     <span class="c1">-- f k -&gt; Sem (Cache k v &#39;: State (HashMap k v) &#39;: r) (f v)</span>
+          <span class="n">fv</span> <span class="ow">&lt;-</span> <span class="n">pureT</span> <span class="n">k</span> <span class="o">&gt;&gt;=</span> <span class="n">fetch&#39;</span>
+          <span class="kr">let</span> <span class="n">fcache</span> <span class="ow">=</span> <span class="p">(</span><span class="nf">\</span><span class="n">v&#39;</span> <span class="ow">-&gt;</span> <span class="kt">HM</span><span class="o">.</span><span class="n">insert</span> <span class="n">k</span> <span class="n">v&#39;</span> <span class="n">cache</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">fv</span>
+          <span class="n">put&#39;</span> <span class="ow">&lt;-</span> <span class="n">bindT</span> <span class="n">put</span>
+          <span class="n">put&#39;</span> <span class="n">fcache</span>
+          <span class="n">pure</span> <span class="n">fv</span>
+  <span class="p">)</span>
+</code></pre></div>
+
+
+<p>The error I'm getting is:</p>
+<div class="codehilite"><pre><span></span><code>src/Cache.hs:61:25-27: error:
+    • Ambiguous use of effect &#39;State&#39;
+      Possible fix:
+        add (Member (State (HashMap k v)) r0) to the context of
+          the type signature
+      If you already have the constraint you want, instead
+        add a type application to specify
+          &#39;HashMap k v&#39; directly, or activate polysemy-plugin which
+            can usually infer the type correctly.
+    • In the first argument of ‘bindT’, namely ‘put’
+      In a stmt of a &#39;do&#39; block: put&#39; &lt;- bindT put
+      In the expression:
+        do fetch&#39; &lt;- bindT fetch
+           fv &lt;- pureT k &gt;&gt;= fetch&#39;
+           let fcache = (\ v&#39; -&gt; ...) &lt;$&gt; fv
+           put&#39; &lt;- bindT put
+           ....
+   |
+61 |           put&#39; &lt;- bindT put
+   |                         ^^^
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#205206227" name="205206227"><div>2020-07-28 07:50:53</div></a></div><div class="text"><p>Oh, and it's not as simple as the error suggests: I already have polysemy-plugin running, and if I add a type application so the line is <code>put' &lt;- bindT (put @(HashMap k v))</code> then I still get the same error.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#205220523" name="205220523"><div>2020-07-28 10:37:28</div></a></div><div class="text"><p><code>put</code> isn't an <code>m a</code> in your effect, it's a <code>Sem</code>! you used <code>get</code> without <code>bindT</code>, same here.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#205222467" name="205222467"><div>2020-07-28 11:05:30</div></a></div><div class="text"><p>I think <code>Cache</code> could be simplified a little bit: first, <code>(k, k -&gt; m v)</code> can be turned into <code>(k , m v)</code> unless you want to modify <code>k</code> dynamically before feeding it into the action for retrieval.<br>
+Second, instead of carrying e.g. logging action around, you could possibly <code>intercept</code> the effect, thus getting rid of one more field?</p>
+<p>In case we apply these changes, maybe something like this would work:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">Cache</span> <span class="n">k</span> <span class="n">v</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">Cache</span> <span class="ow">::</span> <span class="n">k</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">v</span> <span class="ow">-&gt;</span> <span class="kt">Cache</span> <span class="n">k</span> <span class="n">v</span> <span class="n">m</span> <span class="n">v</span>
+
+<span class="nf">runCache</span>
+  <span class="ow">::</span> <span class="p">(</span><span class="kt">Ord</span> <span class="n">k</span><span class="p">,</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">State</span> <span class="p">(</span><span class="kt">M</span><span class="o">.</span><span class="kt">Map</span> <span class="n">k</span> <span class="n">v</span><span class="p">))</span> <span class="n">r</span><span class="p">)</span>
+  <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Cache</span> <span class="n">k</span> <span class="n">v</span> <span class="kt">:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">runCache</span> <span class="ow">=</span> <span class="n">interpretH</span> <span class="nf">\</span><span class="p">(</span><span class="kt">Cache</span> <span class="n">k</span> <span class="n">mv</span><span class="p">)</span> <span class="ow">-&gt;</span>
+  <span class="n">gets</span> <span class="p">(</span><span class="kt">M</span><span class="o">.!?</span> <span class="n">k</span><span class="p">)</span> <span class="o">&gt;&gt;=</span> <span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">Just</span> <span class="n">v</span>  <span class="ow">-&gt;</span> <span class="n">pureT</span> <span class="n">v</span>
+    <span class="kt">Nothing</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+      <span class="n">fv</span> <span class="ow">&lt;-</span> <span class="n">join</span> <span class="o">$</span> <span class="n">raise</span> <span class="o">.</span> <span class="n">runCache</span> <span class="o">&lt;$&gt;</span> <span class="n">runT</span> <span class="n">mv</span>
+      <span class="p">(`</span><span class="n">inspect</span><span class="p">`</span> <span class="n">fv</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">getInspectorT</span> <span class="o">&gt;&gt;=</span>
+        <span class="n">maybe</span> <span class="p">(</span><span class="n">pure</span> <span class="nb">()</span><span class="p">)</span> <span class="p">(</span><span class="n">modify</span> <span class="o">.</span> <span class="kt">M</span><span class="o">.</span><span class="n">insert</span> <span class="n">k</span><span class="p">)</span>
+      <span class="n">pure</span> <span class="n">fv</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#205223419" name="205223419"><div>2020-07-28 11:19:21</div></a></div><div class="text"><p>Thanks! I'll take a look tomorrow morning.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#205311218" name="205311218"><div>2020-07-29 02:07:12</div></a></div><div class="text"><p>Thanks <span class="user-mention" data-user-id="225127">@TheMatten</span>, starting with your code I got something working the way I wanted:</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">runCacheInHashMap</span>
+  <span class="ow">::</span> <span class="p">(</span><span class="kt">Eq</span> <span class="n">k</span><span class="p">,</span> <span class="kt">Hashable</span> <span class="n">k</span><span class="p">,</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">State</span> <span class="p">(</span><span class="kt">HashMap</span> <span class="n">k</span> <span class="n">v</span><span class="p">))</span> <span class="n">r</span><span class="p">)</span>
+  <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Cache</span> <span class="n">k</span> <span class="n">v</span> <span class="kt">:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">runCacheInHashMap</span> <span class="ow">=</span> <span class="n">interpretH</span> <span class="o">$</span> <span class="nf">\</span><span class="p">(</span><span class="kt">Cache</span> <span class="n">k</span> <span class="n">mv</span><span class="p">)</span> <span class="ow">-&gt;</span>
+  <span class="n">gets</span> <span class="p">(</span><span class="kt">HM</span><span class="o">.</span><span class="n">lookup</span> <span class="n">k</span><span class="p">)</span> <span class="o">&gt;&gt;=</span> <span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">Just</span> <span class="n">v</span>  <span class="ow">-&gt;</span> <span class="n">pureT</span> <span class="n">v</span>
+    <span class="kt">Nothing</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+      <span class="n">fv</span> <span class="ow">&lt;-</span> <span class="n">runT</span> <span class="n">mv</span> <span class="o">&gt;&gt;=</span> <span class="n">raise</span> <span class="o">.</span> <span class="n">runCacheInHashMap</span>
+      <span class="p">(`</span><span class="n">inspect</span><span class="p">`</span> <span class="n">fv</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">getInspectorT</span> <span class="o">&gt;&gt;=</span>
+        <span class="n">maybe</span> <span class="p">(</span><span class="n">pure</span> <span class="nb">()</span><span class="p">)</span> <span class="p">(</span><span class="n">modify</span> <span class="o">.</span> <span class="kt">HM</span><span class="o">.</span><span class="n">insert</span> <span class="n">k</span><span class="p">)</span>
+      <span class="n">pure</span> <span class="n">fv</span>
+
+<span class="nf">runCacheAsHashMap</span>
+  <span class="ow">::</span> <span class="p">(</span><span class="kt">Eq</span> <span class="n">k</span><span class="p">,</span> <span class="kt">Hashable</span> <span class="n">k</span><span class="p">)</span>
+  <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Cache</span> <span class="n">k</span> <span class="n">v</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">runCacheAsHashMap</span> <span class="ow">=</span> <span class="n">evalState</span> <span class="kt">HM</span><span class="o">.</span><span class="n">empty</span> <span class="o">.</span> <span class="n">runCacheInHashMap</span> <span class="o">.</span> <span class="n">raiseUnder</span>
+</code></pre></div>
+
+
+<p>I have no idea how that recursive call to runCacheInHashMap works. All this Tactical stuff is mind bending. But it works!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#205324971" name="205324971"><div>2020-07-29 07:18:49</div></a></div><div class="text"><p>Great!<br>
+That recursive call is really us saying "we want to run that effectful argument  to <code>Cache</code> in same way as the computation we're in". Reason why <code>polysemy</code> doesn't do this for you is that you may want to run it in a different way.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#205347489" name="205347489"><div>2020-07-29 12:07:43</div></a></div><div class="text"><p>Maybe this thing could be documented somewhere close to Tactics/Strategy "you may often have to recursively blabla..", I had the same question before and it was the same answer too.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#205347503" name="205347503"><div>2020-07-29 12:07:54</div></a></div><div class="text"><p>(or I just missed it in the docs <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span> )</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

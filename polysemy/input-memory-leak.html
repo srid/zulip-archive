@@ -1,0 +1,183 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="leak :: IO ()
+leak =
+  runM $ runInputViaStream (Stream.repeat ()) prog
+  where
+    prog =
+      input &gt;&gt; prog
+
+
+
+can someone explain why this grows unbounded, and how to avoid it?" name="description"><link href="https://funprog.srid.ca/polysemy/input-memory-leak.html" rel="canonical"><meta property="og:title" content="Input memory leak - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-06-30T23:19:24Z"><meta property="og:article:published_time" content="2020-06-22T22:39:00Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"><title>Input memory leak - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Input memory leak - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Input memory leak</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201669747" name="201669747"><div>2020-06-22 22:39:00</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code><span class="nf">leak</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">leak</span> <span class="ow">=</span>
+  <span class="n">runM</span> <span class="o">$</span> <span class="n">runInputViaStream</span> <span class="p">(</span><span class="kt">Stream</span><span class="o">.</span><span class="n">repeat</span> <span class="nb">()</span><span class="p">)</span> <span class="n">prog</span>
+  <span class="kr">where</span>
+    <span class="n">prog</span> <span class="ow">=</span>
+      <span class="n">input</span> <span class="o">&gt;&gt;</span> <span class="n">prog</span>
+</code></pre></div>
+
+
+<p>can someone explain why this grows unbounded, and how to avoid it?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201676115" name="201676115"><div>2020-06-23 00:10:24</div></a></div><div class="text"><p>I see that it can be avoided by forcing evaluation of the input element, so this test case isn't representative of my real world problem. I'll have to revisit</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201736893" name="201736893"><div>2020-06-23 14:57:22</div></a></div><div class="text"><p>I'm not getting anywhere. One thing that appears quite obviously to me is that the more interpreters I remove from my problematic program, the smaller the memory growth, going down from 10MB/s to almost nothing. I assume that the interpreter state is somehow flooded, but even this trivial recursion grows:</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">loop</span> <span class="ow">::</span>
+  <span class="kt">Members</span> <span class="kt">&#39;[Embed IO, Input (Maybe Int)]</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Int</span> <span class="ow">-&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span>
+<span class="nf">loop</span> <span class="n">n</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">input</span> <span class="o">&gt;&gt;=</span> <span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">Just</span> <span class="o">!</span><span class="kr">_</span> <span class="o">|</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">100000</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+      <span class="n">printCurrentMemory</span> <span class="n">blah</span>
+      <span class="n">loop</span> <span class="mi">0</span>
+    <span class="kt">Just</span> <span class="o">!</span><span class="kr">_</span> <span class="ow">-&gt;</span>
+      <span class="n">loop</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="kr">_</span> <span class="ow">-&gt;</span>
+      <span class="n">pure</span> <span class="nb">()</span>
+
+<span class="nf">runInputList</span> <span class="p">(</span><span class="n">repeat</span> <span class="mi">100</span><span class="p">)</span> <span class="p">(</span><span class="n">loop</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>In this case, it increases only by 100 bytes per second.<br>
+Is this unavoidable, and should it scale that massively with the size of the interpreter stack?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201741681" name="201741681"><div>2020-06-23 15:31:05</div></a></div><div class="text"><p>btw profiling shows polysemy as the main cost center</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201743430" name="201743430"><div>2020-06-23 15:43:51</div></a></div><div class="text"><p>after substituting some <code>*&gt;</code> with bind, the main app now appears to be constant, while the test case still grows. weird</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#201769057" name="201769057"><div>2020-06-23 19:09:27</div></a></div><div class="text"><p>hm, this reminds me of the disclaimer on <a href="https://hackage.haskell.org/package/parser-combinators-1.2.1/docs/Control-Applicative-Combinators.html"><code>parser-combinators</code></a>, warning that <code>Applicative</code> versions may leak memory, while <code>Monad</code> ones don't</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#201769232" name="201769232"><div>2020-06-23 19:10:44</div></a></div><div class="text"><p>did you also try using <code>-fexpose-all-unfoldings</code>, or is it unfeasible?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#201769245" name="201769245"><div>2020-06-23 19:10:57</div></a></div><div class="text"><p>not sure if it will actually help, just randomly guessing</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201769717" name="201769717"><div>2020-06-23 19:14:57</div></a></div><div class="text"><p>thanks, I'll give that a look</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201800581" name="201800581"><div>2020-06-24 00:25:41</div></a></div><div class="text"><p>added that ghc option, appears to have no impact</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201850155" name="201850155"><div>2020-06-24 13:59:31</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/216942-Polysemy/topic/Input.20memory.20leak/near/201743430">said</a>:</p>
+<blockquote>
+<p>after substituting some <code>*&gt;</code> with bind, the main app now appears to be constant, while the test case still grows. weird</p>
+</blockquote>
+<p>so that was a lie, it just looked fine in htop. measuring inside the program shows that it's growing at 5MB/s with 10 recursions/s</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#201863489" name="201863489"><div>2020-06-24 15:32:17</div></a></div><div class="text"><p>your current minimal repro is the "loop" thing from above?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201864493" name="201864493"><div>2020-06-24 15:40:29</div></a></div><div class="text"><p>not really, I'm struggling to produce a sensible test case. The leak is proportional to the number of interpreters in the stack, so it's very visible in a larger program, but for the thing I posted even the version with <code>IO</code> grows, about 100 times slower than with <code>Sem</code>(I removed <code>Input</code> and just recursed). I would speculate that it's the calls to <code>getRTSStats</code>, but if I run only those it stays constant.</p>
+<p>Maybe it's ghci, I only ran a slightly larger test case as native code. I'm going to do more analysis of my dev environment</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201900290" name="201900290"><div>2020-06-24 20:35:49</div></a></div><div class="text"><p><strong>finally</strong> I have a reliable case where the same semi-dummy recursion with 200k loops takes 500k constant memory with a small interpreter stack, while the large stack grows up to 190M. <strong>But</strong> only when compiled to native code, in ghci they just grow at different rates <span aria-label="joy" class="emoji emoji-1f602" role="img" title="joy">:joy:</span> ridiculous</p>
+<p>And in ghci, the larger stack is about 10 times faster than in native, and grows to 150M <span aria-label="dizzy" class="emoji emoji-1f635" role="img" title="dizzy">:dizzy:</span> </p>
+<p>Now to find out which interpreter causes all that drama <span aria-label="upside down" class="emoji emoji-1f643" role="img" title="upside down">:upside_down:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#201901161" name="201901161"><div>2020-06-24 20:43:53</div></a></div><div class="text"><p>could be the machinery itself, there was another space leak issue reported - <a href="https://github.com/polysemy-research/polysemy/issues/340">https://github.com/polysemy-research/polysemy/issues/340</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/polysemy-research/polysemy/issues/340" style="background-image: url(https://avatars1.githubusercontent.com/u/52079915?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/polysemy-research/polysemy/issues/340" title="Possible Space Leak · Issue #340 · polysemy-research/polysemy">Possible Space Leak · Issue #340 · polysemy-research/polysemy</a></div><div class="message_embed_description">I&#39;ve been using Polysemy in a larger project and have run into some memory problems. I was able to create a super simple example at https://github.com/jhgarner/Polysemy-Testing where I compare ...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201901563" name="201901563"><div>2020-06-24 20:47:04</div></a></div><div class="text"><p>damn</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201905403" name="201905403"><div>2020-06-24 21:21:52</div></a></div><div class="text"><p>closing in!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201909497" name="201909497"><div>2020-06-24 22:04:26</div></a></div><div class="text"><p>got the fucker!!</p>
+<p>in this interpreter, I used</p>
+<div class="codehilite"><pre><span></span><code>  <span class="n">atomicModify&#39;</span> <span class="o">$</span> <span class="n">over</span> <span class="n">someLens</span> <span class="p">(</span><span class="n">items</span> <span class="o">&lt;&gt;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>and apparently that is lazy in the existing value in the field. So I replaced the lens with a function with strictness annotation and the problem disappeared <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span> Both the old value and <code>items</code> are empty lists btw.</p>
+<p>now when running the entire app, the space still grows, but slower, so I assume that there's another one of those rascals lurking somewhere in there.<br>
+but at least I'm on the right track now.</p>
+<p>thanks for coming to my show! <span aria-label="mic" class="emoji emoji-1f3a4" role="img" title="mic">:mic:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#201913531" name="201913531"><div>2020-06-24 22:54:43</div></a></div><div class="text"><p>nice</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#201913541" name="201913541"><div>2020-06-24 22:54:49</div></a></div><div class="text"><p>but wait, so it wasn't actually polysemy</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#201913561" name="201913561"><div>2020-06-24 22:55:04</div></a></div><div class="text"><p>was this the biggest memory leak?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201915421" name="201915421"><div>2020-06-24 23:18:30</div></a></div><div class="text"><p>not sure yet, but pretty likely</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201962136" name="201962136"><div>2020-06-25 12:32:02</div></a></div><div class="text"><p>found another one, this time more obvious: using <code>modify</code> instead of <code>modify'</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201972057" name="201972057"><div>2020-06-25 13:56:31</div></a></div><div class="text"><p>so, interestingly, when I run this program as native code with <code>-O2</code>, it uses constant memory, as expected:</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">memTestIO</span> <span class="ow">::</span>
+  <span class="kt">Word64</span> <span class="ow">-&gt;</span>
+  <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">memTestIO</span> <span class="n">base</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">loop</span> <span class="p">(</span><span class="mi">0</span> <span class="ow">::</span> <span class="kt">Int</span><span class="p">)</span>
+  <span class="kr">where</span>
+    <span class="n">loop</span> <span class="n">n</span> <span class="ow">=</span> <span class="kr">do</span>
+      <span class="n">when</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1000000</span><span class="p">)</span> <span class="o">$</span> <span class="kr">do</span>
+        <span class="n">cur</span> <span class="ow">&lt;-</span> <span class="n">currentMemRelIO</span> <span class="n">base</span>
+        <span class="n">print</span> <span class="n">cur</span>
+      <span class="n">loop</span> <span class="p">(</span><span class="kr">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1000000</span> <span class="kr">then</span> <span class="mi">0</span> <span class="kr">else</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p><strong>But</strong>, if I replace <code>IO</code> with <code>Sem</code> and use <code>Embed IO</code> or <code>Final IO</code>, the space grows linearly.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201972174" name="201972174"><div>2020-06-25 13:57:28</div></a></div><div class="text"><p>also when running the <code>IO</code> version in ghci, as said before, there's also growth.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201973168" name="201973168"><div>2020-06-25 14:04:34</div></a></div><div class="text"><p>so I'm wondering, is this related to the issue you linked, <span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span> ?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#201973285" name="201973285"><div>2020-06-25 14:05:35</div></a></div><div class="text"><p>I unfortunately have no clue or time to investigate right now :( but it is definitely worth posting about this in that issue, or a new one, because it's a huge effort to track these things down!</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#201973311" name="201973311"><div>2020-06-25 14:05:51</div></a></div><div class="text"><p>(thanks!!)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#201973315" name="201973315"><div>2020-06-25 14:05:52</div></a></div><div class="text"><p>I'll do that right away!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#202506925" name="202506925"><div>2020-06-30 23:17:45</div></a></div><div class="text"><p>small update: I found the worst culprit in my memory problems story, an unbounded queue.<br>
+Now I still have a bit of leaking space, but it's relatively small, about 200kB/s with ten threads.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#202507036" name="202507036"><div>2020-06-30 23:19:24</div></a></div><div class="text"><p>seems I didn't predict that one item per second with a no-op as consumer would be too much for the queue. though maybe the stream that's feeding the queue is somehow being consumed eagerly…</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,149 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Why do notation needs type a annotation in this case? Doesn&#39;t the do notation of test1 and test2 desugar to an expression like test4?
+{-# LANGUAGE TypeApplications #-}
+
+module Inference where
+
+import Control.Carrier.Reader
+import Data.Functor.Identity
+
+test1 :: Int
+test1 = runIdentity . runReader (1" name="description"><link href="https://funprog.srid.ca/haskell/why-ghc-cant-infer-this-type.html" rel="canonical"><meta property="og:title" content="Why GHC can&#39;t infer this type? - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-03-09T10:49:44Z"><meta property="og:article:published_time" content="2021-03-08T21:10:07Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?x=x&amp;version=2"><title>Why GHC can&#39;t infer this type? - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Why GHC can&#39;t infer this type? - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Why GHC can&#39;t infer this type?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?x=x&amp;version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#229374213" name="229374213"><div>2021-03-08 21:10:07</div></a></div><div class="text"><p>Why <code>do</code> notation needs type a annotation in this case? Doesn't the <code>do</code> notation of <code>test1</code> and <code>test2</code> desugar to an expression like <code>test4</code>?</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="cm">{-# LANGUAGE TypeApplications #-}</span>
+
+<span class="kr">module</span> <span class="nn">Inference</span> <span class="kr">where</span>
+
+<span class="kr">import</span> <span class="nn">Control.Carrier.Reader</span>
+<span class="kr">import</span> <span class="nn">Data.Functor.Identity</span>
+
+<span class="nf">test1</span> <span class="ow">::</span> <span class="kt">Int</span>
+<span class="nf">test1</span> <span class="ow">=</span> <span class="n">runIdentity</span> <span class="o">.</span> <span class="n">runReader</span> <span class="p">(</span><span class="mi">10</span> <span class="ow">::</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">$</span> <span class="kr">do</span>
+  <span class="n">x</span> <span class="ow">&lt;-</span> <span class="n">ask</span> <span class="ow">::</span> <span class="kt">ReaderC</span> <span class="kt">Int</span> <span class="kt">Identity</span> <span class="kt">Int</span>
+  <span class="n">return</span> <span class="n">x</span>
+
+<span class="nf">test2</span> <span class="ow">::</span> <span class="kt">Int</span>
+<span class="nf">test2</span> <span class="ow">=</span> <span class="n">runIdentity</span> <span class="o">.</span> <span class="n">runReader</span> <span class="p">(</span><span class="mi">10</span> <span class="ow">::</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">$</span> <span class="kr">do</span>
+  <span class="n">x</span> <span class="ow">&lt;-</span> <span class="n">ask</span> <span class="o">@</span><span class="kt">Int</span>
+  <span class="n">return</span> <span class="n">x</span>
+
+<span class="nf">test3</span> <span class="ow">::</span> <span class="kt">Int</span>
+<span class="nf">test3</span> <span class="ow">=</span> <span class="n">runIdentity</span> <span class="o">$</span> <span class="n">runReader</span> <span class="p">(</span><span class="mi">10</span> <span class="ow">::</span> <span class="kt">Int</span><span class="p">)</span> <span class="n">ask</span>
+
+<span class="nf">test4</span> <span class="ow">::</span> <span class="kt">Int</span>
+<span class="nf">test4</span> <span class="ow">=</span> <span class="n">runIdentity</span> <span class="o">$</span> <span class="n">runReader</span> <span class="p">(</span><span class="mi">10</span> <span class="ow">::</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">(</span><span class="n">ask</span> <span class="o">&gt;&gt;=</span> <span class="n">return</span><span class="p">)</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#229412164" name="229412164"><div>2021-03-09 02:36:00</div></a></div><div class="text"><p>What error message are you getting?  I suspect that <code>10</code> is the thing that is ambiguous since it could be any type that implements <code>Num</code>.  Or are you saying you need the <code>:: Int</code> annotation in both locations (on <code>runReader</code> and again on <code>ask</code>)?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#229454412" name="229454412"><div>2021-03-09 10:27:24</div></a></div><div class="text"><p>I'm curious to see what the carrier reader is</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#229456200" name="229456200"><div>2021-03-09 10:42:56</div></a></div><div class="text"><p><span class="user-mention" data-user-id="346868">@Pedro Minicz</span></p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">ask</span> <span class="ow">::</span> <span class="kt">Has</span> <span class="p">(</span><span class="kt">Reader</span> <span class="n">r</span><span class="p">)</span> <span class="n">sig</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="n">m</span> <span class="n">r</span>
+</code></pre></div>
+<ul>
+<li>because return type is <code>m r</code>, it's not getting bound to <code>r</code> in <code>ReaderC r</code> in any way, so GHC has no way to find out what <code>r</code> is. When you add <code>@Int</code>, you tell it to search for <code>Has (Reader Int) sig m</code> specifically, which it finds because <code>m = ReaderC Int Identity _</code></li>
+</ul></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#229456259" name="229456259"><div>2021-03-09 10:43:34</div></a></div><div class="text"><p>(<span class="user-mention" data-user-id="251082">@Mats Rauhala</span> it's <code>fused-effects</code>: <a href="https://hackage.haskell.org/package/fused-effects-1.1.1.0/docs/Control-Carrier-Reader.html">https://hackage.haskell.org/package/fused-effects-1.1.1.0/docs/Control-Carrier-Reader.html</a>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#229456661" name="229456661"><div>2021-03-09 10:46:17</div></a></div><div class="text"><p><code>mtl</code> doesn't need these because it uses fundeps (which can be used to infer <code>r</code> from <code>ReaderT r</code>). Similarly, <code>polysemy</code> has plugin which mimics this behaviour when possible</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#229457050" name="229457050"><div>2021-03-09 10:49:44</div></a></div><div class="text"><p>Problem with fundeps is that they don't allow you to add multiple <code>Reader</code>-s to your stack, because that would break assumption about stack determining <code>r</code> - <code>polysemy</code> "cheats" by not enforcing the dependency when there're multiple options in scope, requiring you to use type applications in those cases</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

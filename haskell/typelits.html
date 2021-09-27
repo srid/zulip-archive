@@ -1,0 +1,126 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Is there an equivalent of symbolVal for Char like charVal :: forall n proxy. KnownChar n =&gt; Char? I am trying to realize the char kind in runtime." name="description"><link href="https://funprog.srid.ca/haskell/typelits.html" rel="canonical"><meta property="og:title" content="typelits - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-09-23T11:21:31Z"><meta property="og:article:published_time" content="2020-09-23T01:29:52Z"><title>typelits - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">typelits - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">typelits</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#210950608" name="210950608"><div>2020-09-23 01:29:52</div></a></div><div class="text"><p>Is there an equivalent of <code>symbolVal</code> for Char like <code>charVal :: forall n proxy. KnownChar n =&gt; Char</code>? I am trying to realize the char kind in runtime.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#210961976" name="210961976"><div>2020-09-23 05:58:07</div></a></div><div class="text"><p>don't think so, what are you trying to do?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#210962234" name="210962234"><div>2020-09-23 06:05:00</div></a></div><div class="text"><p>There isn't support for type level chars yet - issue on GHC tracker exists, I just can't find it <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Jakob Brünker</a><div class="metadata"><a href="#210964950" name="210964950"><div>2020-09-23 06:58:57</div></a></div><div class="text"><p><a href="https://gitlab.haskell.org/ghc/ghc/-/merge_requests/3598">https://gitlab.haskell.org/ghc/ghc/-/merge_requests/3598</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://gitlab.haskell.org/ghc/ghc/-/merge_requests/3598" style="background-image: url(https://gitlab.haskell.org/uploads/-/system/project/avatar/1/ghc.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://gitlab.haskell.org/ghc/ghc/-/merge_requests/3598" title="!3598: The char kind: type families, functionality, and submodule updates · Merge Requests · Glasgow Haskell Compiler / GHC">!3598: The char kind: type families, functionality, and submodule updates · Merge Requests · Glasgow Haskell Compiler / GHC</a></div><div class="message_embed_description">The patch fixes #11342. In this patch, we introduced the Char Kind, a kind of type-level characters, with the additional type-families, type-level counterparts of functions from the `Data.Char` module. We...</div></div></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#210985644" name="210985644"><div>2020-09-23 10:47:58</div></a></div><div class="text"><p>I am trying to strip the prefix chars from a JSON string. I would like to specify which char to strip at the type level.</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">newtype</span> <span class="kt">StripPrefixes</span> <span class="p">(</span><span class="n">c</span> <span class="ow">::</span> <span class="kt">Char</span><span class="p">)</span> <span class="n">a</span> <span class="ow">=</span> <span class="kt">StripPrefixes</span> <span class="n">a</span>
+<span class="kr">instance</span> <span class="kt">FromJSON</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="kt">FromJSON</span> <span class="p">(</span><span class="kt">StripPrefixes</span> <span class="n">c</span> <span class="n">a</span><span class="p">)</span> <span class="kr">where</span> <span class="n">parseJSON</span> <span class="ow">=</span> <span class="o">...</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#210986095" name="210986095"><div>2020-09-23 10:55:04</div></a></div><div class="text"><p>at least you can strip entire strings for now instead so it's not a blocker (?)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#210986109" name="210986109"><div>2020-09-23 10:55:14</div></a></div><div class="text"><p>if you're interested, here's some hacky stuff with <code>Symbol</code>s - <a href="https://kcsongor.github.io/symbol-parsing-haskell/">https://kcsongor.github.io/symbol-parsing-haskell/</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://kcsongor.github.io/symbol-parsing-haskell/" style="background-image: url(https://kcsongor.github.io/images/default-thumb.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://kcsongor.github.io/symbol-parsing-haskell/" title="Parsing type-level strings in Haskell">Parsing type-level strings in Haskell</a></div><div class="message_embed_description">A technique for manipulating Symbols in GHC for type-level programming.</div></div></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#210986542" name="210986542"><div>2020-09-23 11:01:20</div></a></div><div class="text"><p>I'd wager you can use these things to error out if the user uses a <code>Symbol</code> with more than one character <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#210988020" name="210988020"><div>2020-09-23 11:21:31</div></a></div><div class="text"><p>Currently just doing</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">instance</span> <span class="p">(</span><span class="kt">KnownSymbol</span> <span class="n">s</span><span class="p">,</span> <span class="kt">FromJson</span> <span class="n">a</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">FromJSON</span> <span class="p">(</span><span class="kt">StripPrefixes</span> <span class="n">s</span> <span class="n">a</span><span class="p">)</span> <span class="kr">where</span>
+  <span class="n">parseJSON</span> <span class="ow">=</span> <span class="kr">case</span> <span class="n">prefix</span> <span class="kr">of</span>
+    <span class="s">""</span> <span class="ow">-&gt;</span> <span class="n">parseJSON</span>
+    <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="nf">\</span><span class="kr">case</span>
+      <span class="kt">String</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="n">whileJust</span> <span class="p">(</span><span class="kt">T</span><span class="o">.</span><span class="n">stripPrefix</span> <span class="n">prefix</span><span class="p">)</span> <span class="o">&gt;&gt;&gt;</span> <span class="kt">String</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">parseJSON</span>
+      <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">fail</span> <span class="s">"Expecting String"</span>
+
+<span class="nf">whileJust</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span>
+</code></pre></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

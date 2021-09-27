@@ -1,0 +1,129 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="My plan:
+
+cut a 0.4 release to hackage 
+write a blog post highlighting the notable changes (short links, hierarchical changes, link style changes, tag tree, etc)
+as well as include some screenshots/ screencasts of neuron-mode/doom-emacs in the blog post (visual eyecandy is very important I think)
+
+t" name="description"><link href="https://funprog.srid.ca/neuron/0-4-release.html" rel="canonical"><meta property="og:title" content="0.4 release - Neuron"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Neuron"><meta property="og:article:modified_time" content="2020-05-13T21:30:14Z"><meta property="og:article:published_time" content="2020-05-02T22:28:20Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>0.4 release - Neuron</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">0.4 release - Neuron</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/neuron/" class="section">#Neuron</a><i class="right angle icon divider"></i><div class="active section">0.4 release</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196072919" name="196072919"><div>2020-05-02 22:28:20</div></a></div><div class="text"><p>My plan:</p>
+<ul>
+<li>cut a 0.4 release to hackage </li>
+<li>write a blog post highlighting the notable changes (short links, hierarchical changes, link style changes, tag tree, etc)</li>
+<li>as well as include some screenshots/ screencasts of neuron-mode/doom-emacs in the blog post (visual eyecandy is very important I think)</li>
+</ul>
+<p>then post it to the usual places.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#196073075" name="196073075"><div>2020-05-02 22:32:25</div></a></div><div class="text"><p>idea: write the features introduced in each version in zettels tagged <code>changelog</code> and make a zettel that contains <code>&lt;z:zettels?tag=changelog&amp;timeline&gt;</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196073086" name="196073086"><div>2020-05-02 22:33:16</div></a></div><div class="text"><p>good idea!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196073251" name="196073251"><div>2020-05-02 22:38:08</div></a></div><div class="text"><p>Related to that, I'd like to expand <a href="https://neuron.zettel.page/2011401.html" title="https://neuron.zettel.page/2011401.html">https://neuron.zettel.page/2011401.html</a> with more zettels ... to become <em>the</em> place where people can go to to read all about Zettelkasten. each zettels should be small, concepts explained in simple language, etc.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196073257" name="196073257"><div>2020-05-02 22:38:23</div></a></div><div class="text"><p>contributions much appreciated in that regard</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197480334" name="197480334"><div>2020-05-13 21:30:14</div></a></div><div class="text"><p>Blog post, <a href="https://www.srid.ca/5b963b1c.html">https://www.srid.ca/5b963b1c.html</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://www.srid.ca/5b963b1c.html" style="background-image: url(https://asciinema.org/a/329911.svg)"></a><div class="data-container"><div class="message_embed_title"><a href="https://www.srid.ca/5b963b1c.html" title="Neuron 0.4 released">Neuron 0.4 released</a></div><div class="message_embed_description">Neuron is a Zettelkasten note taking app I originally open sourced about
+two months ago (see Announcing Neuron - Zettelkasten in Haskell).
+Recently a new version was released incorporating some interesting
+improvements, many of them were inspired by invaluable user feedback.
+</div></div></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,135 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Does it make sense to say a functor is applicative iff it distributes over heterogeneous lists?" name="description"><link href="https://funprog.srid.ca/haskell/applicatives-and-hlists.html" rel="canonical"><meta property="og:title" content="Applicatives and hlists - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-04-20T17:15:39Z"><meta property="og:article:published_time" content="2020-04-20T16:56:39Z"><title>Applicatives and hlists - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Applicatives and hlists - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Applicatives and hlists</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194703810" name="194703810"><div>2020-04-20 16:56:39</div></a></div><div class="text"><p>Does it make sense to say a functor is applicative iff it distributes over heterogeneous lists?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194704080" name="194704080"><div>2020-04-20 16:58:45</div></a></div><div class="text"><div class="codehilite"><pre><span></span>type family (f :: a -&gt; b) &lt;$&gt; (xs :: [a]) :: [b]
+  where
+  _ &lt;$&gt; []       = []
+  f &lt;$&gt; (x : xs) = f x : f &lt;$&gt; xs
+
+class Functor f =&gt; Applicative&#39; f
+  where
+  distrib :: HList (f &lt;$&gt; xs) -&gt; f (HList xs)
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#194704119" name="194704119"><div>2020-04-20 16:59:11</div></a></div><div class="text"><p>That's just generalization of <code>Monoidal</code>, isn't it?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194704307" name="194704307"><div>2020-04-20 17:00:39</div></a></div><div class="text"><p>Well what I'm claiming is that it's neither a generalization nor a specialization, it's exactly equivalent. I'm not sure though. Do you think there's more <code>Applicative'</code>s than <code>Monoidal</code>/<code>Applicative</code>s?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#194704392" name="194704392"><div>2020-04-20 17:01:25</div></a></div><div class="text"><p>"Generalization" as in "it uses more general version of product, not just 2-tuple"</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194704670" name="194704670"><div>2020-04-20 17:03:18</div></a></div><div class="text"><p>Ah, I see. What I'm hoping is that the 2-tuple + 0-tuple version is nevertheless equivalent.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#194706007" name="194706007"><div>2020-04-20 17:15:39</div></a></div><div class="text"><p>You can write</p>
+<div class="codehilite"><pre><span></span><span class="nf">distrib&#39;</span> <span class="ow">::</span> <span class="kt">Applicative</span> <span class="n">f</span> <span class="ow">=&gt;</span> <span class="kt">HList</span> <span class="p">(</span><span class="n">f</span> <span class="o">&lt;$&gt;</span> <span class="n">xs</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="kt">HList</span> <span class="n">xs</span><span class="p">)</span>
+<span class="nf">distrib&#39;</span> <span class="ow">=</span> <span class="nf">\</span><span class="kr">case</span>
+  <span class="kt">HNil</span>    <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="kt">HNil</span>
+  <span class="n">x</span> <span class="kt">:*</span> <span class="n">xs</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">:*</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">x</span> <span class="o">&lt;*&gt;</span> <span class="n">distrib&#39;</span> <span class="n">xs</span>
+
+<span class="nf">pure&#39;</span> <span class="ow">::</span> <span class="kt">Applicative&#39;</span> <span class="n">f</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">a</span>
+<span class="nf">pure&#39;</span> <span class="ow">=</span> <span class="p">(</span><span class="nf">\</span><span class="p">(</span><span class="n">a</span> <span class="kt">:*</span> <span class="kt">HNil</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">distrib</span> <span class="p">(</span><span class="n">a</span> <span class="kt">:*</span> <span class="kt">HNil</span><span class="p">)</span>
+
+<span class="p">(</span><span class="o">&lt;*|&gt;</span><span class="p">)</span> <span class="ow">::</span> <span class="kt">Applicative&#39;</span> <span class="n">f</span> <span class="ow">=&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span>
+<span class="nf">f</span> <span class="o">&lt;*|&gt;</span> <span class="n">a</span> <span class="ow">=</span> <span class="p">(</span><span class="nf">\</span><span class="p">(</span><span class="n">f&#39;</span> <span class="kt">:*</span> <span class="n">a&#39;</span> <span class="kt">:*</span> <span class="kt">HNil</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">f&#39;</span> <span class="n">a&#39;</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">distrib</span> <span class="p">(</span><span class="n">f</span> <span class="kt">:*</span> <span class="n">a</span> <span class="kt">:*</span> <span class="kt">HNil</span><span class="p">)</span>
+</pre></div>
+
+
+<p>so they should be I guess<br>
+(haven't typechecked this though)</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

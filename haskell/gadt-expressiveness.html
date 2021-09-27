@@ -1,0 +1,112 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="What&#39;s the expressiveness of GADTs? Or conversely, what inductive types (that would be expressible in Coq or any fancier dependently typed language for example) are not expressible with GADTs?" name="description"><link href="https://funprog.srid.ca/haskell/gadt-expressiveness.html" rel="canonical"><meta property="og:title" content="GADT expressiveness - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2019-12-06T22:33:40Z"><meta property="og:article:published_time" content="2019-12-05T00:56:34Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"><title>GADT expressiveness - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">GADT expressiveness - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">GADT expressiveness</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#182617342" name="182617342"><div>2019-12-05 00:56:34</div></a></div><div class="text"><p>What's the expressiveness of GADTs? Or conversely, what inductive types (that would be expressible in Coq or any fancier dependently typed language for example) are not expressible with GADTs?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#182670423" name="182670423"><div>2019-12-05 15:33:04</div></a></div><div class="text"><p>Well formed inductive types? <span aria-label="wink" class="emoji emoji-1f609" role="img" title="wink">:wink:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#182773152" name="182773152"><div>2019-12-06 15:44:55</div></a></div><div class="text"><p>Are you referring to the way types in Haskell are full of weird inhabitants?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#182773235" name="182773235"><div>2019-12-06 15:45:45</div></a></div><div class="text"><p>Apparently the only difference other than that is the lack of type-level lambdas.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#182778074" name="182778074"><div>2019-12-06 16:34:28</div></a></div><div class="text"><p>I was being cheeky -- I'm far from an expert but yes, inhabitants. And I'm not sure on this one but can Haskell express universes?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#182780270" name="182780270"><div>2019-12-06 16:56:14</div></a></div><div class="text"><p>I don't think so, but thanks for mentioning it since I hadn't thought about it :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182811559" name="182811559"><div>2019-12-06 22:33:40</div></a></div><div class="text"><p>Theres <a href="http://hackage.haskell.org/package/universe" target="_blank" title="http://hackage.haskell.org/package/universe">http://hackage.haskell.org/package/universe</a>, though I haven't dug into it enough to know how it works</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

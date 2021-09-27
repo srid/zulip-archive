@@ -1,0 +1,114 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Is there a recursion scheme that builds up a new structure while folding?
+Basically I want something like (f a -&gt; (a, f b)) -&gt; Fix f -&gt; (a, Fix f)" name="description"><link href="https://funprog.srid.ca/haskell/recursion-schemes.html" rel="canonical"><meta property="og:title" content="Recursion Schemes - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-04T22:39:21Z"><meta property="og:article:published_time" content="2020-05-04T22:12:43Z"><title>Recursion Schemes - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Recursion Schemes - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Recursion Schemes</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Jan van Brügge</a><div class="metadata"><a href="#196246101" name="196246101"><div>2020-05-04 22:12:43</div></a></div><div class="text"><p>Is there a recursion scheme that builds up a new structure <strong>while</strong> folding?<br>
+<del>Basically I want something like <code>(f a -&gt; (a, f b)) -&gt; Fix f -&gt; (a, Fix f)</code></del></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Jan van Brügge</a><div class="metadata"><a href="#196246192" name="196246192"><div>2020-05-04 22:13:46</div></a></div><div class="text"><p>ie a bottom up traversal like cata, but returning a new tree using the info from the children</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Jan van Brügge</a><div class="metadata"><a href="#196247073" name="196247073"><div>2020-05-04 22:22:42</div></a></div><div class="text"><p>That signature should be  <code>(Fix f -&gt; f (a, Fix g) -&gt; Fix g) -&gt; Fix f -&gt; (a, Fix g)</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Jan van Brügge</a><div class="metadata"><a href="#196247351" name="196247351"><div>2020-05-04 22:25:06</div></a></div><div class="text"><p>And now having looked at it more I see that this is just <code>para</code> <span aria-label="face palm" class="emoji emoji-1f926" role="img" title="face palm">:face_palm:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Jan van Brügge</a><div class="metadata"><a href="#196248585" name="196248585"><div>2020-05-04 22:39:21</div></a></div><div class="text"><p>And now that I am working with it, I notice that I do not even need the old structure, so <code>cata</code> does the job too</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

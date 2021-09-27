@@ -1,0 +1,164 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Thanks @Sridhar Ratnakumar , @Jack Henahan , and @Ben Kolera for the help.
+My expression for building looks like this at the moment:
+let
+  p = import &lt;nixpkgs&gt; {};
+  t = p.lib.trivial;
+  hl = p.haskell.lib;
+
+  shell-pkgs = with p.haskellPackages;
+    [cabal-install
+     ghcid];
+  build-pkgs = [];
+
+ " name="description"><link href="https://funprog.srid.ca/nix/thanks-for-the-help.html" rel="canonical"><meta property="og:title" content="Thanks for the help - Nix"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Nix"><meta property="og:article:modified_time" content="2019-11-27T15:02:37Z"><meta property="og:article:published_time" content="2019-11-27T13:09:39Z"><title>Thanks for the help - Nix</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Thanks for the help - Nix</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/nix/" class="section">#Nix</a><i class="right angle icon divider"></i><div class="active section">Thanks for the help</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182016862" name="182016862"><div>2019-11-27 13:09:39</div></a></div><div class="text"><p>Thanks <span class="user-mention" data-user-id="251311">@Sridhar Ratnakumar</span> , <span class="user-mention" data-user-id="250761">@Jack Henahan</span> , and <span class="user-mention" data-user-id="251045">@Ben Kolera</span> for the help.<br>
+My expression for building looks like this at the moment:</p>
+<div class="codehilite"><pre><span></span>let
+  p = import &lt;nixpkgs&gt; {};
+  t = p.lib.trivial;
+  hl = p.haskell.lib;
+
+  shell-pkgs = with p.haskellPackages;
+    [cabal-install
+     ghcid];
+  build-pkgs = [];
+
+  extra-pkgs = if p.lib.inNixShell
+               then shell-pkgs
+               else build-pkgs;
+
+  addTools = (t.flip hl.addBuildTools) extra-pkgs;
+
+in
+  p.haskellPackages.developPackage {
+    root = ./.;
+
+    modifier = (t.flip t.pipe)
+      [addTools
+       hl.dontHaddock
+       hl.disableLibraryProfiling
+       hl.disableExecutableProfiling];
+  }
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182017005" name="182017005"><div>2019-11-27 13:10:57</div></a></div><div class="text"><p>Might have to steal bits of that, tbh</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#182024761" name="182024761"><div>2019-11-27 14:41:07</div></a></div><div class="text"><p>TIL of <code>addBuildTools</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#182026955" name="182026955"><div>2019-11-27 15:02:37</div></a></div><div class="text"><p>I like putting them in one place: </p>
+<div class="codehilite"><pre><span></span>  <span class="ss">modifier =</span>
+    <span class="k">let</span>
+      <span class="ss">addExtraDeps =</span>
+        <span class="p">(</span>t<span class="o">.</span>flip h<span class="o">.</span>addBuildTools<span class="p">)</span> <span class="p">(</span><span class="k">with</span> haskellPackages<span class="p">;</span>
+          <span class="p">[</span> cabal-install
+            ghcid
+          <span class="p">]);</span>
+    <span class="k">in</span> <span class="p">(</span>t<span class="o">.</span>flip t<span class="o">.</span>pipe<span class="p">)</span> <span class="p">[</span>
+      addExtraDeps
+      h<span class="o">.</span>dontHaddock
+    <span class="p">];</span>
+</pre></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

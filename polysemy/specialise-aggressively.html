@@ -1,0 +1,117 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="So I saw that there are instructions in the readme about using -flate-specialise -fspecialise-aggressively, which I tried out.
+But when the file that runs everything in IO is compiled, it takes about 13 cpu minutes and fills up the 32G ram without terminating.
+Is this only feasible for smaller progr" name="description"><link href="https://funprog.srid.ca/polysemy/specialise-aggressively.html" rel="canonical"><meta property="og:title" content="specialise-aggressively - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-08-16T12:22:36Z"><meta property="og:article:published_time" content="2020-08-14T19:59:15Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"><title>specialise-aggressively - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">specialise-aggressively - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">specialise-aggressively</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#206974806" name="206974806"><div>2020-08-14 19:59:15</div></a></div><div class="text"><p>So I saw that there are instructions in the readme about using <code>-flate-specialise -fspecialise-aggressively</code>, which I tried out.<br>
+But when the file that runs everything in <code>IO</code> is compiled, it takes about 13 cpu minutes and fills up the 32G ram without terminating.<br>
+Is this only feasible for smaller programs?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#206975099" name="206975099"><div>2020-08-14 20:00:20</div></a></div><div class="text"><p><del>interestingly, in ghci these options still have a quite noticable effect on the memory footprint, I think</del></p>
+<p>nope, just a fluke</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#206975529" name="206975529"><div>2020-08-14 20:02:23</div></a></div><div class="text"><p>woah, I thought only <code>-fexpose-all-unfoldings</code> is this bad</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#206975686" name="206975686"><div>2020-08-14 20:03:44</div></a></div><div class="text"><p>I'll try it on a smaller program</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#206975870" name="206975870"><div>2020-08-14 20:05:19</div></a></div><div class="text"><p>I've both on too and haven't noticed something that dramatic, but maybe I'm not that heavy on effect usage/code size in general</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#206976127" name="206976127"><div>2020-08-14 20:08:06</div></a></div><div class="text"><p>I'd say it's about 50 effects in 350 files. not much of a benchmark but you can roughly estimate</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#206976402" name="206976402"><div>2020-08-14 20:11:15</div></a></div><div class="text"><p>it looks like <code>-fexpose-all-unfoldings</code> is used despite not being activated by me, is that normal?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#206978439" name="206978439"><div>2020-08-14 20:32:17</div></a></div><div class="text"><p>looks like <code>reflex-platform</code> activates that</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#206985089" name="206985089"><div>2020-08-14 21:38:39</div></a></div><div class="text"><p><code>reflex-platform</code> has control over your build configuration?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#206985592" name="206985592"><div>2020-08-14 21:44:25</div></a></div><div class="text"><p>yeah, it's a bit intrusive <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span> using nixpkgs' <code>overrides</code> thing for haskell package sets allows you to interfer wherever you want</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#206985630" name="206985630"><div>2020-08-14 21:45:05</div></a></div><div class="text"><p>I'm currently splitting the project in two, isolating the frontend</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#206985745" name="206985745"><div>2020-08-14 21:46:26</div></a></div><div class="text"><p>though I'm not certain that that's the cause, but it's the only place I found the option</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#207038700" name="207038700"><div>2020-08-15 20:48:07</div></a></div><div class="text"><p>FTR, it's working fine without <code>-fexpose-all-unfoldings</code>, but the memory dynamic is the same</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#207056400" name="207056400"><div>2020-08-16 05:36:32</div></a></div><div class="text"><p>what do you mean? compilation terminates now?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#207069344" name="207069344"><div>2020-08-16 12:20:55</div></a></div><div class="text"><p>yeah</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#207069416" name="207069416"><div>2020-08-16 12:22:36</div></a></div><div class="text"><p>and by memory I mean runtime behaviour. I guess I should have mentioned that I'm trying (still) to plug memory leaks</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

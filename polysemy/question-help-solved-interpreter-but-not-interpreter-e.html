@@ -1,0 +1,235 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I&#39;m not sure how do I even call the thing I want to do. Nor do I know how to do it :D
+Okay, in the end I want to get interactive program with output like this:
+Tick
+&lt;spacebar press&gt;
+Tock
+&lt;spacebar press&gt;
+Tick
+...and so on ad infinitum till ^C do us part
+
+
+
+Condensed minimal example from actual code." name="description"><link href="https://funprog.srid.ca/polysemy/question-help-solved-interpreter-but-not-interpreter-e.html" rel="canonical"><meta property="og:title" content="[Question\Help] SOLVED: Interpreter but not interpreter e... - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-04-23T10:24:49Z"><meta property="og:article:published_time" content="2020-04-22T23:50:50Z"><title>[Question\Help] SOLVED: Interpreter but not interpreter e... - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">[Question\Help] SOLVED: Interpreter but not interpreter e... - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">[Question\Help] SOLVED: Interpreter but not interpreter e...</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Anrock623</a><div class="metadata"><a href="#195004935" name="195004935"><div>2020-04-22 23:50:50</div></a></div><div class="text"><p>I'm not sure how do I even call the thing I want to do. Nor do I know how to do it :D</p>
+<p>Okay, in the end I want to get interactive program with output like this:</p>
+<div class="codehilite"><pre><span></span>Tick
+&lt;spacebar press&gt;
+Tock
+&lt;spacebar press&gt;
+Tick
+...and so on ad infinitum till ^C do us part
+</pre></div>
+
+
+<p>Condensed minimal example from actual code. Written in browser, so may not compile, but gives general idea.</p>
+<div class="codehilite"><pre><span></span>data ClockEffect m a where
+  Change :: ThingEffect m ()
+
+makeSem &#39;&#39;ClockEffect
+
+data Clock = Tick | Tock
+
+reinterpretClockToStateWithTrace :: Member Trace r =&gt; Sem (ClockEffect &#39;: r) a -&gt; Sem r a
+reinterpretClockToStateWithTrace = reinterpret $ \case
+  Change -&gt; do current &lt;- get
+                              case current of
+                                   Tick -&gt; trace &quot;Tock&quot; &gt;&gt; put Tock
+                                   Tock -&gt; trace &quot;Tick&quot; &gt;&gt; put Tick
+
+driveClockFromKeyboard :: Member (Embed IO) r =&gt; _ -&gt; _ -- I have no idea if this should produce ClockEffect or handle it or what
+driveClockFromKeyboard = do forever $ void hGetChar &gt;&gt; change
+
+runClockIO :: IO ()
+runClockIO = runM . traceToIO . reinterpretClockToStateWithTrace . driveClockFromKeyboard -- or something like that?
+</pre></div>
+
+
+<p>Oh yeah, I'm using Polysemy-1.0.0.0 from stackage.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Anrock623</a><div class="metadata"><a href="#195006244" name="195006244"><div>2020-04-23 00:10:05</div></a></div><div class="text"><p>Just as usual after posting a question somewhere I solved it somehow on my own. Why I'm not so clever until I actually post something?</p>
+<p>Anyway, solution:</p>
+<div class="codehilite"><pre><span></span>keyboardClock :: Members [Embed IO, ClockEffect] r =&gt; Sem r a
+keyboardClock = do embed prepareIO
+                   forever $ waitForInput &gt;&gt; change
+
+test :: IO ()
+test = void
+     . runM
+     . traceToIO
+     . runState Low
+     . reinterpretClockToState
+     $ keyboardClock
+</pre></div>
+
+
+<p>Apparently I was right with type of keyboardClock initially, but mistaken in test it should've had <code>$</code> instead of <code>.</code> before last effect.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#195006548" name="195006548"><div>2020-04-23 00:15:37</div></a></div><div class="text"><p>Asking the question often clarifies your thoughts enough to help you see the answer yourself. My old boss wanted to get me a teddy bear to talk to, so I wouldn't have to tell him my problems only to solve them myself without any input from him.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#195006617" name="195006617"><div>2020-04-23 00:16:28</div></a></div><div class="text"><p><a href="https://en.wikipedia.org/wiki/Rubber_duck_debugging" title="https://en.wikipedia.org/wiki/Rubber_duck_debugging">https://en.wikipedia.org/wiki/Rubber_duck_debugging</a></p>
+<p>Articulating your problem activates additional neural pathways <span aria-label="smiley" class="emoji emoji-1f603" role="img" title="smiley">:smiley:</span></p>
+<div class="message_embed"><a class="message_embed_image" href="https://en.wikipedia.org/wiki/Rubber_duck_debugging" style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/d/d5/Rubber_duck_assisting_with_debugging.jpg)"></a><div class="data-container"><div class="message_embed_title"><a href="https://en.wikipedia.org/wiki/Rubber_duck_debugging" title="Rubber duck debugging - Wikipedia">Rubber duck debugging - Wikipedia</a></div><div class="message_embed_description">
+</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#195006618" name="195006618"><div>2020-04-23 00:16:31</div></a></div><div class="text"><p>So I guess your reinterpretClockToState has a type like <code>Sem (ClockEffect ': r) a -&gt; Sem (State Clock ': r) a</code>?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195006653" name="195006653"><div>2020-04-23 00:17:32</div></a></div><div class="text"><p>your example can be implemented like this: <br>
+you want is to execute <code>change</code> forever<br>
+you want "change" to mean "output Tick, input a char, output Tock, input a char"<br>
+where "output" means to <code>putStrLn</code> and "input" means to <code>getChar</code><br>
+translated into a program:</p>
+<div class="codehilite"><pre><span></span><span class="cm">{-# LANGUAGE</span>
+<span class="cm">   TemplateHaskell</span>
+<span class="cm"> , DataKinds</span>
+<span class="cm"> , FlexibleContexts</span>
+<span class="cm"> , GADTs</span>
+<span class="cm"> , LambdaCase</span>
+<span class="cm"> , PolyKinds</span>
+<span class="cm"> , RankNTypes</span>
+<span class="cm"> , ScopedTypeVariables</span>
+<span class="cm"> , TypeApplications</span>
+<span class="cm"> , TypeOperators</span>
+<span class="cm"> , TypeFamilies</span>
+<span class="cm"> , BlockArguments</span>
+<span class="cm"> #-}</span>
+
+<span class="kr">import</span> <span class="nn">Polysemy</span>
+<span class="kr">import</span> <span class="nn">Polysemy.Embed</span> <span class="p">(</span><span class="nf">embed</span><span class="p">)</span>
+<span class="kr">import</span> <span class="nn">Polysemy.Input</span> <span class="p">(</span><span class="kt">Input</span><span class="p">,</span> <span class="nf">input</span><span class="p">,</span> <span class="nf">runInputSem</span><span class="p">)</span>
+<span class="kr">import</span> <span class="nn">Polysemy.Output</span> <span class="p">(</span><span class="kt">Output</span><span class="p">,</span> <span class="nf">output</span><span class="p">,</span> <span class="nf">runOutputSem</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="nn">Control.Monad</span> <span class="p">(</span><span class="nf">forever</span><span class="p">)</span>
+
+<span class="kr">data</span> <span class="kt">ClockEffect</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">Change</span> <span class="ow">::</span> <span class="kt">ClockEffect</span> <span class="n">m</span> <span class="nb">()</span>
+
+<span class="nf">makeSem</span> <span class="kt">&#39;&#39;ClockEffect</span>
+
+<span class="nf">clockTickInputTockInput</span> <span class="ow">::</span> <span class="kt">Members</span> <span class="kt">&#39;[Input Char, Output String]</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">ClockEffect</span> <span class="sc">&#39;</span><span class="err">: r) a -&gt; Sem r a</span>
+<span class="nf">clockTickInputTockInput</span> <span class="ow">=</span> <span class="n">interpret</span> <span class="nf">\</span><span class="kr">case</span>
+  <span class="kt">Change</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+    <span class="n">output</span> <span class="s">&quot;Tick&quot;</span>
+    <span class="kr">_</span> <span class="ow">&lt;-</span> <span class="n">input</span> <span class="o">@</span><span class="kt">Char</span> <span class="c1">-- these should be unnecessary with the plugin</span>
+    <span class="n">output</span> <span class="s">&quot;Tock&quot;</span>
+    <span class="kr">_</span> <span class="ow">&lt;-</span> <span class="n">input</span> <span class="o">@</span><span class="kt">Char</span>
+    <span class="n">pure</span> <span class="nb">()</span>
+
+<span class="c1">-- it&#39;s important to leave the list of effects polymorphic:</span>
+<span class="c1">-- * we can reuse program in more places now</span>
+<span class="c1">-- * clockTickInputTockInput won&#39;t be able to work if we specify the effect list entirely, because it requires the list to contain Input and Output</span>
+<span class="c1">--   the instance resolution mechanism handles this, instantiating to the appropriate list of effects</span>
+<span class="nf">program</span> <span class="ow">::</span> <span class="kt">Member</span> <span class="kt">ClockEffect</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span>
+<span class="nf">program</span> <span class="ow">=</span> <span class="n">forever</span> <span class="n">change</span>
+
+<span class="c1">-- runOutputSem allows us to treat every output action as a monadic action with access to the output value</span>
+<span class="c1">-- runInputSem allows us to treat every input action as a monadic action, providin the input value</span>
+<span class="c1">-- embed allows us to &quot;embed&quot; monads in our effect stack - IO in this case</span>
+<span class="c1">-- and when we&#39;re left with only Embed IO in our list, we can dispatch it with runM</span>
+<span class="nf">main</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">main</span>
+  <span class="ow">=</span> <span class="n">runM</span>
+  <span class="o">$</span> <span class="n">runOutputSem</span> <span class="p">(</span><span class="n">embed</span> <span class="o">.</span> <span class="n">putStrLn</span><span class="p">)</span>
+  <span class="o">$</span> <span class="n">runInputSem</span> <span class="p">(</span><span class="n">embed</span> <span class="n">getChar</span><span class="p">)</span>
+  <span class="o">$</span> <span class="n">clockTickInputTockInput</span> <span class="n">program</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195006983" name="195006983"><div>2020-04-23 00:22:32</div></a></div><div class="text"><p>guess I was too slow :D</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Anrock623</a><div class="metadata"><a href="#195041879" name="195041879"><div>2020-04-23 10:24:49</div></a></div><div class="text"><p><span class="user-mention" data-user-id="282523">@Alex Chapman</span> yes, just a usual reinterpreter from effect to another.<br>
+<span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span> not slow, but "gave a additional pov". I didn't even thought about using Input/Output effects. That should be more clear, actually - I also want Clock to be actual clock with tunable frequency and maybe pure thing for tests. Using Input/Output gives flexibility to achieve that. So thank you</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

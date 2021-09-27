@@ -1,0 +1,141 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="(&amp;&amp;&amp;) :: (a -&gt; b) -&gt; (a -&gt; c) -&gt; a -&gt; (b, c)
+(&amp;&amp;&amp;) f  g x = (f x, g x)
+
+
+
+Is there some combinator like this, but for Getters?
+I want to be able to write this
+sth :: Getter a b -&gt; Getter a c -&gt; Getter a (b, c)
+
+data C = C {int :: Int, string :: String}
+
+data A = A {a :: C}
+
+x :: (Int, String)
+x = A " name="description"><link href="https://funprog.srid.ca/haskell/for-a-getter.html" rel="canonical"><meta property="og:title" content="(&amp;&amp;&amp;) for a Getter - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-12T06:09:03Z"><meta property="og:article:published_time" content="2020-05-11T15:24:01Z"><title>(&amp;&amp;&amp;) for a Getter - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">(&amp;&amp;&amp;) for a Getter - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">(&amp;&amp;&amp;) for a Getter</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#197161330" name="197161330"><div>2020-05-11 15:24:01</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="o">&amp;&amp;&amp;</span><span class="p">)</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+<span class="p">(</span><span class="o">&amp;&amp;&amp;</span><span class="p">)</span> <span class="n">f</span>  <span class="n">g</span> <span class="n">x</span> <span class="ow">=</span> <span class="p">(</span><span class="n">f</span> <span class="n">x</span><span class="p">,</span> <span class="n">g</span> <span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>Is there some combinator like this, but for <code>Getter</code>s?<br>
+I want to be able to write this</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">sth</span> <span class="ow">::</span> <span class="kt">Getter</span> <span class="n">a</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="kt">Getter</span> <span class="n">a</span> <span class="n">c</span> <span class="ow">-&gt;</span> <span class="kt">Getter</span> <span class="n">a</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+<span class="kr">data</span> <span class="kt">C</span> <span class="ow">=</span> <span class="kt">C</span> <span class="p">{</span><span class="n">int</span> <span class="ow">::</span> <span class="kt">Int</span><span class="p">,</span> <span class="n">string</span> <span class="ow">::</span> <span class="kt">String</span><span class="p">}</span>
+
+<span class="kr">data</span> <span class="kt">A</span> <span class="ow">=</span> <span class="kt">A</span> <span class="p">{</span><span class="n">a</span> <span class="ow">::</span> <span class="kt">C</span><span class="p">}</span>
+
+<span class="nf">x</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Int</span><span class="p">,</span> <span class="kt">String</span><span class="p">)</span>
+<span class="nf">x</span> <span class="ow">=</span> <span class="kt">A</span> <span class="p">(</span><span class="kt">C</span> <span class="mi">5</span> <span class="s">&quot;str&quot;</span><span class="p">)</span> <span class="o">^.</span> <span class="n">field</span> <span class="o">@</span><span class="s">&quot;a&quot;</span> <span class="o">.</span> <span class="n">sth</span> <span class="p">(</span><span class="n">field</span> <span class="o">@</span><span class="s">&quot;int&quot;</span><span class="p">)</span> <span class="p">(</span><span class="n">field</span> <span class="o">@</span><span class="s">&quot;string&quot;</span><span class="p">)</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#197179813" name="197179813"><div>2020-05-11 17:39:55</div></a></div><div class="text"><p>I doubt there is in the <em>lens</em> library because the implementation has to give up the VL representation.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#197183972" name="197183972"><div>2020-05-11 18:13:42</div></a></div><div class="text"><p>this can't be implemented using VL? is there some writeup regarding this somewhere, or is it just a natural consequence of how VL lenses work?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#197185220" name="197185220"><div>2020-05-11 18:24:42</div></a></div><div class="text"><p>It can be implemented, by moving to the plain function representation with <code>to</code> and <code>view</code>. But at that point, why insist on an optic representation when you're essentially doing function composition? You can try to add it but it will be difficult to argue this passes the Fairbairn threshold.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#197185318" name="197185318"><div>2020-05-11 18:25:45</div></a></div><div class="text"><p>Though there's <code>lensProduct</code> in case the two parameters happen to be lenses <a href="https://hackage.haskell.org/package/lens-4.19.2/docs/Control-Lens-Unsound.html">https://hackage.haskell.org/package/lens-4.19.2/docs/Control-Lens-Unsound.html</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#197185496" name="197185496"><div>2020-05-11 18:27:31</div></a></div><div class="text"><p>thanks!</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197218677" name="197218677"><div>2020-05-11 23:33:26</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span> I don't know about Getters, but there definitely is something like this for lenses</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197219645" name="197219645"><div>2020-05-11 23:47:01</div></a></div><div class="text"><p>well, maybe definitely is too strong a word, I think there's something like this for lenses, but while I've written and used it I haven't proved the result is a valid lens (although I suspect that it is)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4d7e5bf37281d41829f7b8a95d15292ff274c327?x=x&amp;version=2"></a><div class="content"><a class="author">Vladimir Ciobanu</a><div class="metadata"><a href="#197230635" name="197230635"><div>2020-05-12 03:24:32</div></a></div><div class="text"><p>I think the VH lens have an unsound version of this: <a href="https://hackage.haskell.org/package/lens-4.19.2/docs/Control-Lens-Unsound.html#v:lensProduct">https://hackage.haskell.org/package/lens-4.19.2/docs/Control-Lens-Unsound.html#v:lensProduct</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4d7e5bf37281d41829f7b8a95d15292ff274c327?x=x&amp;version=2"></a><div class="content"><a class="author">Vladimir Ciobanu</a><div class="metadata"><a href="#197230658" name="197230658"><div>2020-05-12 03:25:29</div></a></div><div class="text"><p>I think it's only unsound if <code>b</code> and <code>c</code> (in your example) are not disjoint, which you can't prove from the type definition. I think that's the only reason it's unsound.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#197236898" name="197236898"><div>2020-05-12 06:09:03</div></a></div><div class="text"><p>but for read-only it seems like it should be fine, because (intuitively) there's no problem with "what does it mean to modify non-disjoint lenses at the same time?"</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

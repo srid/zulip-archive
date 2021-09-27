@@ -1,0 +1,148 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Can anyone think of any type constructors which have a useful implementation of:
+class Fill (p :: k -&gt; k -&gt; *)
+  where
+  fillInTheBlank :: Either (p b c) (p a b) -&gt; p a c
+" name="description"><link href="https://funprog.srid.ca/haskell/summable-arrows.html" rel="canonical"><meta property="og:title" content="Summable arrows - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-14T20:32:19Z"><meta property="og:article:published_time" content="2020-05-13T13:59:38Z"><title>Summable arrows - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Summable arrows - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Summable arrows</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197416390" name="197416390"><div>2020-05-13 13:59:38</div></a></div><div class="text"><p>Can anyone think of any type constructors which have a useful implementation of:</p>
+<div class="codehilite"><pre><span></span><code>class Fill (p :: k -&gt; k -&gt; *)
+  where
+  fillInTheBlank :: Either (p b c) (p a b) -&gt; p a c
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197417802" name="197417802"><div>2020-05-13 14:09:54</div></a></div><div class="text"><p>The law for that class is:</p>
+<div class="codehilite"><pre><span></span><code>eassoc :: Either x (Either y z) -&gt; Either (Either x y) z
+eassoc = ...
+
+f, g :: Fill p =&gt; Either (p c d) (Either (p b c) (p a b)) -&gt; p a d
+f = fillInTheBlank . second fillInTheBlank
+g = fillInTheBlank . first fillInTheBlank . eassoc
+
+-- Law: f = g
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#197426168" name="197426168"><div>2020-05-13 15:08:15</div></a></div><div class="text"><p>i swear you are the modern ekmett</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#197426189" name="197426189"><div>2020-05-13 15:08:25</div></a></div><div class="text"><p>"here is some code i wrote. does anyone know what it might be good for?"</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#197426222" name="197426222"><div>2020-05-13 15:08:49</div></a></div><div class="text"><p>next time we hang out i'd love to see where these things come from :)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197427397" name="197427397"><div>2020-05-13 15:17:02</div></a></div><div class="text"><blockquote>
+<p>next time we hang out i'd love to see where these things come from</p>
+</blockquote>
+<p>which is when? :P</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197427417" name="197427417"><div>2020-05-13 15:17:13</div></a></div><div class="text"><p>we almost got around to it last time but then we started talking about rap songs</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#197427628" name="197427628"><div>2020-05-13 15:18:50</div></a></div><div class="text"><p>Is this dual to composition? It feels like sort of "pipeline extension" - like ability to extend some arrow doing something useful "further", without changing it's actual effect</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#197427749" name="197427749"><div>2020-05-13 15:19:51</div></a></div><div class="text"><p>And <code>id :: p a a</code> would be base from which you can build "non-effectful" arrows? <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#197427902" name="197427902"><div>2020-05-13 15:20:19</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225136">Asad Saeeduddin</span> <a href="#narrow/stream/201385-Haskell/topic/Summable.20arrows/near/197427417">said</a>:</p>
+<blockquote>
+<p>we almost got around to it last time but then we started talking about rap songs</p>
+</blockquote>
+<p>i blame the "sandy almost died" part for that</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#197427988" name="197427988"><div>2020-05-13 15:20:38</div></a></div><div class="text"><p>not sure when. ever been to victoria?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197428073" name="197428073"><div>2020-05-13 15:20:56</div></a></div><div class="text"><p>nope. is that where you're at now?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#197428086" name="197428086"><div>2020-05-13 15:21:01</div></a></div><div class="text"><p>yup</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#197428095" name="197428095"><div>2020-05-13 15:21:05</div></a></div><div class="text"><p>with a year long lease</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#197428110" name="197428110"><div>2020-05-13 15:21:10</div></a></div><div class="text"><p>so probably for some time</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197428114" name="197428114"><div>2020-05-13 15:21:12</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> it's a "coproduct enriched" category (normal categories are product enriched)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/2f4316c80f59f157d26cb515ed98026308998f44?x=x&amp;version=2"></a><div class="content"><a class="author">Nick Scheel</a><div class="metadata"><a href="#197502740" name="197502740"><div>2020-05-14 03:22:24</div></a></div><div class="text"><p>I’m tempted to say there’s not many things in Hask have a useful operation here. Tuple, Either, These, and (-&gt;) are all out.</p>
+<p>I mean, where does the information from <code>b</code> go? With normal composition we are able to use one <code>b</code> to plug into the other <code>b</code>, but when we’re only given one _or_ the other to work with, I’m not sure what to do with it, especially since we then need to somehow come up with a <code>p</code> that uses <code>a</code> or <code>c</code> when we don’t have one of those lying around.</p>
+<p>Wait.</p>
+<p>If we rephrase it, we have <code>fillL : p b c -&gt; p a c</code> and <code>fillR : p a b -&gt; p a c</code>, and this essentially says that both arguments are phantom, so nothing interesting satisfies it. q.e.d.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/2f4316c80f59f157d26cb515ed98026308998f44?x=x&amp;version=2"></a><div class="content"><a class="author">Nick Scheel</a><div class="metadata"><a href="#197502968" name="197502968"><div>2020-05-14 03:28:17</div></a></div><div class="text"><p>Wait, I guess there is at least one thing that satisfies it: <code>TupleMaybe a b = TupleMaybe (Maybe a) (Maybe b)</code>. I think it’s associative ...</p>
+<p>It still seems very weird to me.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/2f4316c80f59f157d26cb515ed98026308998f44?x=x&amp;version=2"></a><div class="content"><a class="author">Nick Scheel</a><div class="metadata"><a href="#197503130" name="197503130"><div>2020-05-14 03:32:19</div></a></div><div class="text"><p>Challenge: is there anything that does NOT admit a function <code>empty : forall a b. p a b</code>?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197613795" name="197613795"><div>2020-05-14 20:31:38</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251225">@Nicholas Scheel</span> I definitely don't think the operation is impossible to implement. If anything it's too easy to implement. E.g. the identity for it assumes the form:</p>
+<div class="codehilite"><pre><span></span><code>ez :: Void -&gt; p a a
+</code></pre></div>
+
+
+<p>which is trivial to implement, it's always just <code>absurd</code>.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#197613889" name="197613889"><div>2020-05-14 20:32:19</div></a></div><div class="text"><p>regarding the challenge, yes:</p>
+<div class="codehilite"><pre><span></span><code>{-# LANGUAGE EmptyDataDecls #-}
+data Void2 a b
+</code></pre></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

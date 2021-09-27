@@ -1,0 +1,124 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Chapter 3 of 7 Sketches of Compositionalily mentions FQL (Functional Query Language) as an alternative to traditional SQL schemas, queries, and migrations using categories, functors, natural transformations. Unfortunately, I couldn&#39;t find PDFs for most of the papers cited. Has anyone seen FQL implem" name="description"><link href="https://funprog.srid.ca/general/fql-functional-query-language.html" rel="canonical"><meta property="og:title" content="FQL: Functional Query Language - General"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="General"><meta property="og:article:modified_time" content="2021-03-05T22:33:53Z"><meta property="og:article:published_time" content="2021-02-27T01:01:43Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?x=x&amp;version=2"><title>FQL: Functional Query Language - General</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">FQL: Functional Query Language - General</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/general/" class="section">#General</a><i class="right angle icon divider"></i><div class="active section">FQL: Functional Query Language</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?x=x&amp;version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#228020109" name="228020109"><div>2021-02-27 01:01:43</div></a></div><div class="text"><p>Chapter 3 of <a href="https://arxiv.org/pdf/1803.05316.pdf">7 Sketches of Compositionalily</a> mentions FQL (Functional Query Language) as an alternative to traditional SQL schemas, queries, and migrations using categories, functors, natural transformations. Unfortunately, I couldn't find PDFs for most of the papers cited. Has anyone seen FQL implementations? How about FQL in the wild?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#228020204" name="228020204"><div>2021-02-27 01:02:31</div></a></div><div class="text"><p>isn't there a link to the FQL page in the book?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?x=x&amp;version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#228020300" name="228020300"><div>2021-02-27 01:03:50</div></a></div><div class="text"><p>I read it a while ago and don't remember seeing any. Also skimmed through earlier and didn't find anything.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?x=x&amp;version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#228020947" name="228020947"><div>2021-02-27 01:11:49</div></a></div><div class="text"><p>Skimmed through the chapter again and no links on sight.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?x=x&amp;version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#228021081" name="228021081"><div>2021-02-27 01:13:24</div></a></div><div class="text"><p>Here are the most recent citations on the topic of algebraic databases and functorial data migration:</p>
+<p><a href="https://arxiv.org/abs/1212.5303">https://arxiv.org/abs/1212.5303</a></p>
+<p><a href="https://arxiv.org/abs/1009.1166">https://arxiv.org/abs/1009.1166</a></p>
+<p><a href="https://arxiv.org/abs/1602.03501">https://arxiv.org/abs/1602.03501</a></p>
+<p><a href="https://arxiv.org/abs/1503.03571">https://arxiv.org/abs/1503.03571</a></p>
+<p><a href="https://arxiv.org/abs/1502.05947">https://arxiv.org/abs/1502.05947</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?x=x&amp;version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#228021091" name="228021091"><div>2021-02-27 01:13:42</div></a></div><div class="text"><p>I couldn't find free copies of the older papers cited online, unfortunately.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#228045430" name="228045430"><div>2021-02-27 09:10:02</div></a></div><div class="text"><p>So apparently it _was_ FQL and it's now CQL <br>
+<a href="https://www.categoricaldata.net/">https://www.categoricaldata.net/</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#228045487" name="228045487"><div>2021-02-27 09:10:42</div></a></div><div class="text"><p>And I believe this is the company related to the project<br>
+<a href="https://conexus.com/">https://conexus.com/</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#228283446" name="228283446"><div>2021-03-01 18:39:13</div></a></div><div class="text"><p>category theory would be intersting in the context of dbs actually</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#228285647" name="228285647"><div>2021-03-01 18:52:59</div></a></div><div class="text"><p>gonna look at this a bit more later</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Joe Kiniry</a><div class="metadata"><a href="#228870685" name="228870685"><div>2021-03-04 23:41:47</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251612">Fintan Halpenny</span> <a href="#narrow/stream/201383-General/topic/FQL.3A.20Functional.20Query.20Language/near/228045430">said</a>:</p>
+<blockquote>
+<p>So apparently it _was_ FQL and it's now CQL <br>
+<a href="https://www.categoricaldata.net/">https://www.categoricaldata.net/</a></p>
+</blockquote>
+<p>And David's book has been seen in the wild at Galois.  <a href="https://smile.amazon.com/Category-Theory-Sciences-MIT-Press/dp/0262028131">https://smile.amazon.com/Category-Theory-Sciences-MIT-Press/dp/0262028131</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#229035861" name="229035861"><div>2021-03-05 22:33:53</div></a></div><div class="text"><p>Can also recommend 7 Sketches of Compositionality <span aria-label="blush" class="emoji emoji-1f60a" role="img" title="blush">:blush:</span></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

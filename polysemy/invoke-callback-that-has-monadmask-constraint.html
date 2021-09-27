@@ -1,0 +1,301 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I have the following function - processStream.
+processStream :: Members &#39;[Embed IO,
+                          Output LogMessage,
+                          NonDet,
+                          Reader CommCentre,
+                          State StreamingState,
+                          LoginHandler,
+    " name="description"><link href="https://funprog.srid.ca/polysemy/invoke-callback-that-has-monadmask-constraint.html" rel="canonical"><meta property="og:title" content="Invoke callback that has MonadMask constraint - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-01-02T15:55:57Z"><meta property="og:article:published_time" content="2020-01-02T11:45:37Z"><title>Invoke callback that has MonadMask constraint - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Invoke callback that has MonadMask constraint - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Invoke callback that has MonadMask constraint</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Martins</a><div class="metadata"><a href="#184645378" name="184645378"><div>2020-01-02 11:45:37</div></a></div><div class="text"><p>I have the following function - <strong>processStream</strong>.</p>
+<div class="codehilite"><pre><span></span>processStream :: Members &#39;[Embed IO,
+                          Output LogMessage,
+                          NonDet,
+                          Reader CommCentre,
+                          State StreamingState,
+                          LoginHandler,
+                          Error String] r
+              =&gt; Context
+              -- ^ Tcp connection context
+              -&gt; Sem r ()
+</pre></div>
+
+
+<p>I need to call <strong>processStream</strong> from a callback below <em>((T.Context, S.SockAddr) -&gt; m r)</em>, but unfortunately it has <strong><a href="https://hackage.haskell.org/package/exceptions-0.10.4/docs/Control-Monad-Catch.html#t:MonadMask" target="_blank" title="https://hackage.haskell.org/package/exceptions-0.10.4/docs/Control-Monad-Catch.html#t:MonadMask">MonadMask</a></strong> constraint.<br>
+This is <strong><a href="https://hackage.haskell.org/package/network-simple-0.4.5/docs/Network-Simple-TCP.html#v:connect" target="_blank" title="https://hackage.haskell.org/package/network-simple-0.4.5/docs/Network-Simple-TCP.html#v:connect">connect</a></strong> from <em>Network.Simple.TCP.TLS</em> package:</p>
+<div class="codehilite"><pre><span></span>connect
+  :: (MonadIO m, E.MonadMask m)
+  =&gt; T.ClientParams
+  -&gt; S.HostName
+  -&gt; S.ServiceName
+  -&gt; ((T.Context, S.SockAddr) -&gt; m r)
+  -&gt; m r
+</pre></div>
+
+
+<p>Current problem:</p>
+<div class="codehilite"><pre><span></span>connectAndAuthenticate :: Members &#39;[Embed IO,
+                                   Output LogMessage,
+                                   NonDet,
+                                   Reader CommCentre,
+                                   State StreamingState,
+                                   LoginHandler,
+                                   Error String] r
+                       =&gt; String
+                       -&gt; Int
+                       -&gt; Sem r ()
+connectAndAuthenticate hostName port = do
+    logDebug $ mconcat [&quot;connectAndAuthenticate [&quot;
+                       , T.pack hostName
+                       , &quot;:&quot;
+                       , T.pack . show $ port
+                       , &quot;] - staring&quot;
+
+    params &lt;- liftIO $ newDefaultClientParams (hostName, B.empty)
+    -- The commented part below does not compile:
+{-
+     • Could not deduce (Control.Monad.Catch.MonadMask (Sem r))
+        arising from a use of ‘connect’
+      from the context: Members
+                          &#39;[Embed IO, Output LogMessage, NonDet, Reader CommCentre,
+                            State StreamingState, LoginHandler, Error String]
+                          r
+        bound by the type signature for:
+                   connectAndAuthenticate :: forall (r :: [(* -&gt; *) -&gt; * -&gt; *]).
+                                             Members
+                                               &#39;[Embed IO, Output LogMessage, NonDet,
+                                                 Reader CommCentre, State StreamingState,
+                                                 LoginHandler, Error String]
+                                               r =&gt;
+                                             String -&gt; Int -&gt; Sem r ()
+        at src/BfHaskell/StreamingAPI/StreamingProcessor.hs:(236,1)-(245,34)
+    • In the expression: connect params hostName (show port)
+      In a stmt of a &#39;do&#39; block:
+        connect params hostName (show port)
+          $ \ (ctx, _saddr) -&gt; do processStream ctx
+      In the expression:
+        do logDebug
+             $ mconcat [&quot;connectAndAuthenticate [&quot;, T.pack hostName, ....]
+           params &lt;- liftIO $ newDefaultClientParams (hostName, B.empty)
+           connect params hostName (show port) $ \ (ctx, _saddr) -&gt; do ...
+           logDebug &quot;connectAndAuthenticate - finished&quot;
+    |
+260 |     connect params hostName (show port) $ \(ctx, _saddr) -&gt; do
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-}
+
+    {-
+    connect params hostName (show port) $ \(ctx, _saddr) -&gt; do
+        processStream ctx
+    -}
+
+    logDebug &quot;connectAndAuthenticate - finished&quot;
+</pre></div>
+
+
+<p>What are possible solutions?<br>
+I had a look at <a href="https://hackage.haskell.org/package/polysemy-zoo" target="_blank" title="https://hackage.haskell.org/package/polysemy-zoo">poysemy-zoo</a> and it has <a href="https://hackage.haskell.org/package/polysemy-zoo-0.6.0.1/docs/Polysemy-ConstraintAbsorber.html" target="_blank" title="https://hackage.haskell.org/package/polysemy-zoo-0.6.0.1/docs/Polysemy-ConstraintAbsorber.html">Polysemy.ConstraintAbsorber</a>, but I could not figure out if it is possible to wrap <strong><a href="https://hackage.haskell.org/package/exceptions-0.10.4/docs/Control-Monad-Catch.html#t:MonadMask" target="_blank" title="https://hackage.haskell.org/package/exceptions-0.10.4/docs/Control-Monad-Catch.html#t:MonadMask">MonadMask</a></strong> using it?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#184647197" name="184647197"><div>2020-01-02 12:22:08</div></a></div><div class="text"><p><span class="user-mention" data-user-id="256297">@Martins</span> <span class="user-mention" data-user-id="254034">@Love Waern (King of the Homeless)</span>  may have more insight on this problem, but I'm worried that in general, arbitrary <code>Sem</code> can't have valid <code>MonadMask</code> instance<br>
+Quick and dirty solution would be wrapping your <code>Sem</code> argument in a <code>newtype</code> that implements <code>MonadMask</code> through <code>Member (Embed IO)</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Martins</a><div class="metadata"><a href="#184648330" name="184648330"><div>2020-01-02 12:44:45</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> <br>
+Thank you for insight! I am afraid you might be right, because MonadMask has <em>mask</em>, which deals with async exception masking, and it might not be compatible with Polysemy design.</p>
+<p>Do you think <span class="user-mention" data-user-id="254034">@Love Waern (King of the Homeless)</span> shall read this forum or I should contact him in a different way?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#184648415" name="184648415"><div>2020-01-02 12:46:08</div></a></div><div class="text"><p>I think he should get a notification anyway</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Martins</a><div class="metadata"><a href="#184648442" name="184648442"><div>2020-01-02 12:47:06</div></a></div><div class="text"><p>Thanks!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?x=x&amp;version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#184649231" name="184649231"><div>2020-01-02 13:01:36</div></a></div><div class="text"><p>I'm here. Funnily enough, what prevents <code>Sem</code> to have <code>MonadMask</code> is not <code>mask</code>,  but rather, <code>generalBracket</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?x=x&amp;version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#184649320" name="184649320"><div>2020-01-02 13:03:04</div></a></div><div class="text"><p><code>mask</code> is implementable through the following effect:</p>
+<div class="codehilite"><pre><span></span><span class="kr">import</span> <span class="k">qualified</span> <span class="nn">Control.Exception</span> <span class="k">as</span> <span class="n">X</span>
+
+<span class="kr">data</span> <span class="kt">Mask</span> <span class="n">s</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">Mask&#39;</span> <span class="ow">::</span> <span class="p">(</span><span class="n">s</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Mask</span> <span class="n">s</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="kt">Restore&#39;</span> <span class="ow">::</span> <span class="n">s</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Mask</span> <span class="n">s</span> <span class="n">m</span> <span class="n">a</span>
+
+<span class="nf">mask</span>
+  <span class="ow">::</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Mask</span> <span class="n">s</span><span class="p">)</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="p">((</span><span class="n">forall</span> <span class="n">x</span><span class="o">.</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">x</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span><span class="p">)</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">mask</span> <span class="n">main</span> <span class="ow">=</span> <span class="n">send</span> <span class="o">$</span> <span class="kt">Mask&#39;</span> <span class="o">$</span> <span class="nf">\</span><span class="n">s</span> <span class="ow">-&gt;</span> <span class="n">main</span> <span class="p">(</span><span class="nf">\</span><span class="n">m</span> <span class="ow">-&gt;</span> <span class="n">send</span> <span class="p">(</span><span class="kt">Restore&#39;</span> <span class="n">s</span> <span class="n">m</span><span class="p">))</span>
+
+<span class="kr">newtype</span> <span class="kt">Restoration</span> <span class="ow">=</span> <span class="kt">Restoration</span> <span class="p">(</span><span class="n">forall</span> <span class="n">x</span><span class="o">.</span> <span class="kt">IO</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">IO</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="nf">runMask</span>
+  <span class="ow">::</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Final</span> <span class="kt">IO</span><span class="p">)</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Mask</span> <span class="kt">Restoration</span> <span class="sc">&#39;</span><span class="err">: r) a</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">runMask</span> <span class="ow">=</span> <span class="n">interpretFinal</span> <span class="o">$</span> <span class="nf">\</span><span class="kr">case</span>
+  <span class="kt">Restore&#39;</span> <span class="p">(</span><span class="kt">Restoration</span> <span class="n">restore</span><span class="p">)</span> <span class="n">m</span> <span class="ow">-&gt;</span>  <span class="kr">do</span>
+    <span class="n">m&#39;</span> <span class="ow">&lt;-</span> <span class="n">runS</span> <span class="n">m</span>
+    <span class="n">pure</span> <span class="o">$</span> <span class="n">restore</span> <span class="n">m&#39;</span>
+  <span class="kt">Mask&#39;</span> <span class="n">main</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+    <span class="n">main&#39;</span> <span class="ow">&lt;-</span> <span class="n">bindS</span> <span class="n">main</span>
+    <span class="n">s</span> <span class="ow">&lt;-</span> <span class="n">getInitialStateS</span>
+    <span class="n">pure</span> <span class="o">$</span> <span class="kt">X</span><span class="o">.</span><span class="n">mask</span> <span class="o">$</span> <span class="nf">\</span><span class="n">restore</span> <span class="ow">-&gt;</span> <span class="n">main&#39;</span> <span class="p">(</span><span class="kt">Restoration</span> <span class="n">restore</span> <span class="o">&lt;$</span> <span class="n">s</span><span class="p">)</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Martins</a><div class="metadata"><a href="#184649696" name="184649696"><div>2020-01-02 13:10:05</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254034">@Love Waern (King of the Homeless)</span> Thank you!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?x=x&amp;version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#184649705" name="184649705"><div>2020-01-02 13:10:25</div></a></div><div class="text"><p>Let me take another look to see what can be done about <code>generalBracket</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?x=x&amp;version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#184655078" name="184655078"><div>2020-01-02 14:34:01</div></a></div><div class="text"><p>Ok, so, to address this, it's possible for us to do one of three things:</p>
+<ol>
+<li>Make<code>Mask</code> be based upon the <code>un</code>/<code>block</code> primitives, rather than the <code>MonadMask</code> primitives:</li>
+</ol>
+<div class="codehilite"><pre><span></span><span class="kr">data</span> <span class="kt">Mask</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">Unblock</span>              <span class="ow">::</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Mask</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="kt">Block</span>                <span class="ow">::</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Mask</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="kt">BlockUninterruptible</span> <span class="ow">::</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Mask</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="kt">GetMaskingState</span>      <span class="ow">::</span>        <span class="kt">Mask</span> <span class="n">m</span> <span class="kt">MaskingState</span>
+</pre></div>
+
+
+<p>Upsides:<br>
+- No type variable.<br>
+Downsides:<br>
+- Inflexible. Doesn't support </p>
+<div class="codehilite"><pre><span></span><span class="nf">maskToFinal</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Member</span> <span class="p">(</span><span class="kt">Final</span> <span class="n">m</span><span class="p">)</span> <span class="n">r</span><span class="p">,</span> <span class="kt">MonadMask</span> <span class="n">m</span><span class="p">)</span>  <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Mask</span> <span class="sc">&#39;</span><span class="err">: r) a -&gt; Sem r a</span>
+</pre></div>
+
+
+<ol start="2">
+<li>Make a constraint absorber that is based upon<code>Final IO</code> rather than a <code>Mask</code> effect:</li>
+</ol>
+<div class="codehilite"><pre><span></span><span class="nf">absorbMask</span>
+    <span class="ow">::</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Final</span> <span class="kt">IO</span><span class="p">)</span> <span class="n">r</span>
+    <span class="ow">=&gt;</span> <span class="p">(</span><span class="kt">MonadMask</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span><span class="p">)</span>
+    <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+</pre></div>
+
+
+<p>Upsides:<br>
+- Doesn't require a <code>Mask</code> effect</p>
+<p>Downsides:<br>
+- Restricted to IO, rather than arbitrary <code>MonadMask</code>.</p>
+<ol start="3">
+<li>Change internals of <code>Polysemy</code> to make interpreting <code>generalBracket</code> possible. This enables the following:</li>
+</ol>
+<div class="codehilite"><pre><span></span><span class="kr">data</span> <span class="kt">Mask</span> <span class="n">s</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">Mask&#39;</span> <span class="ow">::</span> <span class="p">(</span><span class="n">s</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Mask</span> <span class="n">s</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="kt">UninterruptibleMask&#39;</span> <span class="ow">::</span> <span class="p">(</span><span class="n">s</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Mask</span> <span class="n">s</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="kt">Restore&#39;</span> <span class="ow">::</span> <span class="n">s</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Mask</span> <span class="n">s</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="kt">GeneralBracket</span> <span class="ow">::</span>
+       <span class="n">m</span> <span class="n">a</span>
+    <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">ExitCase</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">c</span><span class="p">)</span>
+    <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span><span class="p">)</span>
+    <span class="ow">-&gt;</span> <span class="kt">Mask</span> <span class="n">s</span> <span class="n">m</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+<span class="kr">newtype</span> <span class="kt">Restoration</span> <span class="n">m</span> <span class="ow">=</span> <span class="kt">Restoration</span> <span class="p">(</span><span class="n">forall</span> <span class="n">x</span><span class="o">.</span> <span class="n">m</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="nf">maskToFinal</span>
+  <span class="ow">::</span> <span class="p">(</span><span class="kt">Member</span> <span class="p">(</span><span class="kt">Final</span> <span class="n">m</span><span class="p">)</span> <span class="n">r</span><span class="p">,</span> <span class="kt">MonadMask</span> <span class="n">m</span><span class="p">)</span>
+  <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Mask</span> <span class="p">(</span><span class="kt">Restoration</span> <span class="n">m</span><span class="p">)</span> <span class="sc">&#39;</span><span class="err">: r) a</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+</pre></div>
+
+
+<p>Upsides:<br>
+- A <code>Mask</code> effect that covers exactly the power of <code>MonadMask</code><br>
+- Support for a proper <code>maskToFinal</code> interpreter.</p>
+<p>Downsides:<br>
+- Change to internals is non-trivial.<br>
+- <code>maskToFinal</code> has some wonky semantics in the interplay with effectful state from other effects.</p>
+<p>My thoughts are that we implement 2. and add it to polysemy-zoo, but <em>also</em> look at implementing the change to the internals that enables 3., and then wait and see if we want to implement a <code>Mask</code> effect based upon it. I'll create issues about this in each respective repo.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Martins</a><div class="metadata"><a href="#184655183" name="184655183"><div>2020-01-02 14:35:56</div></a></div><div class="text"><p>Wow!  I am amazed! :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?x=x&amp;version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#184661026" name="184661026"><div>2020-01-02 15:55:57</div></a></div><div class="text"><p>Issues created:<br>
+<a href="https://github.com/polysemy-research/polysemy-zoo/issues/61" target="_blank" title="https://github.com/polysemy-research/polysemy-zoo/issues/61">https://github.com/polysemy-research/polysemy-zoo/issues/61</a><br>
+<a href="https://github.com/polysemy-research/polysemy/issues/304" target="_blank" title="https://github.com/polysemy-research/polysemy/issues/304">https://github.com/polysemy-research/polysemy/issues/304</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/polysemy-research/polysemy-zoo/issues/61" style="background-image: url(https://avatars1.githubusercontent.com/u/52079915?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/polysemy-research/polysemy-zoo/issues/61" target="_blank" title="MonadMask constraint absorber. · Issue #61 · polysemy-research/polysemy-zoo">MonadMask constraint absorber. · Issue #61 · polysemy-research/polysemy-zoo</a></div><div class="message_embed_description">A MonadMask constraint absorber with the following type signature: absorbMask :: Member (Final IO) r =&gt; (MonadMask (Sem r) =&gt; Sem r a) -&gt; Sem r a Should be possible by lifting uninterrupti...</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://github.com/polysemy-research/polysemy/issues/304" style="background-image: url(https://avatars1.githubusercontent.com/u/52079915?s=400&amp;v=4)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/polysemy-research/polysemy/issues/304" target="_blank" title="Restrict the existentially quantified monad in a `Weaving` to be `Sem r` · Issue #304 · polysemy-research/polysemy">Restrict the existentially quantified monad in a `Weaving` to be `Sem r` · Issue #304 · polysemy-research/polysemy</a></div><div class="message_embed_description">From the documentation for Weaving in Polysemy.Internal.Union: data Weaving e m a where Weaving :: Functor f =&gt; { weaveEffect :: e m a -- ^ The original effect GADT originally lifted via -- &amp;#39...</div></div></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

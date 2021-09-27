@@ -1,0 +1,299 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I am trying to wrap a call to withClientM from servant-client inside a
+Polysemy effect.
+withClientM :: ClientM a -&gt; ClientEnv -&gt; (Either ClientError a -&gt; IO b) -&gt; IO b
+
+
+
+I want my effect to look something like this:
+data ServantClient m a where
+  RunClient :: ClientM o -&gt; ServantClient m o
+
+runServ" name="description"><link href="https://funprog.srid.ca/polysemy/how-to-call-withclientm.html" rel="canonical"><meta property="og:title" content="how to call withClientM - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-05-06T15:37:46Z"><meta property="og:article:published_time" content="2020-04-14T03:44:15Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"><title>how to call withClientM - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">how to call withClientM - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">how to call withClientM</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#193847701" name="193847701"><div>2020-04-14 03:44:15</div></a></div><div class="text"><p>I am trying to wrap a call to <a href="https://hackage.haskell.org/package/
+servant-client-0.17/docs/src/Servant.Client.Internal.HttpClient.Streaming.html#withClientM" title="https://hackage.haskell.org/package/
+servant-client-0.17/docs/src/Servant.Client.Internal.HttpClient.Streaming.html#withClientM"><code>withClientM</code> from <code>servant-client</code></a> inside a<br>
+Polysemy effect.</p>
+<div class="codehilite"><pre><span></span><span class="nf">withClientM</span> <span class="ow">::</span> <span class="kt">ClientM</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">ClientEnv</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">ClientError</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">IO</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">IO</span> <span class="n">b</span>
+</pre></div>
+
+
+<p>I want my effect to look something like this:</p>
+<div class="codehilite"><pre><span></span><span class="kr">data</span> <span class="kt">ServantClient</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">RunClient</span> <span class="ow">::</span> <span class="kt">ClientM</span> <span class="n">o</span> <span class="ow">-&gt;</span> <span class="kt">ServantClient</span> <span class="n">m</span> <span class="n">o</span>
+
+<span class="nf">runServantClient</span>
+  <span class="ow">::</span> <span class="kt">Members</span>
+    <span class="kt">&#39;[ Embed IO</span>
+<span class="kt">     , Error ClientError</span>
+<span class="kt">     ]</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">BaseUrl</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">ServantClient</span> <span class="sc">&#39;</span><span class="err">: r) a -&gt; Sem r a</span>
+</pre></div>
+
+
+<p>Now I could do this with an implementation like this:</p>
+<div class="codehilite"><pre><span></span><span class="nf">runServantClient</span> <span class="n">server</span> <span class="n">m</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">manager</span> <span class="ow">&lt;-</span> <span class="n">embed</span> <span class="o">$</span> <span class="n">newManager</span> <span class="n">tlsManagerSettings</span>
+  <span class="kr">let</span> <span class="n">env</span> <span class="ow">=</span> <span class="n">mkClientEnv</span> <span class="n">manager</span> <span class="n">server</span>
+  <span class="n">interpret</span> <span class="p">(</span><span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">RunClient</span> <span class="n">client</span> <span class="ow">-&gt;</span>
+      <span class="n">fromEitherM</span> <span class="o">$</span> <span class="n">withClientM</span> <span class="n">client</span> <span class="n">env</span> <span class="n">pure</span>
+    <span class="p">)</span> <span class="n">m</span>
+</pre></div>
+
+
+<p>But this doesn't work for <em>streaming</em> client responses, which is what I need. I can't just return the response, and resume the rest of my program with it. The rest of my program needs to run <em>inside</em> <code>withClientM</code>, otherwise the stream closes before the program can consume it.</p>
+<p>I have tried the following, using <code>Polysemy.Cont</code> from <code>polysemy-zoo</code>:</p>
+<div class="codehilite"><pre><span></span><span class="nf">runServantClientStreaming</span>
+  <span class="ow">::</span> <span class="kt">Members</span>
+    <span class="kt">&#39;[ Cont ref</span>
+<span class="kt">     , Embed IO</span>
+<span class="kt">     , Error ClientError</span>
+<span class="kt">     ]</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">BaseUrl</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">forall</span> <span class="n">b</span><span class="o">.</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">o</span> <span class="ow">-&gt;</span> <span class="kt">IO</span> <span class="n">o</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">ServantClient</span> <span class="sc">&#39;</span><span class="err">: r) a -&gt; Sem r a</span>
+<span class="nf">runServantClientStreaming</span> <span class="n">server</span> <span class="n">runIt</span> <span class="n">m</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">manager</span> <span class="ow">&lt;-</span> <span class="n">embed</span> <span class="o">$</span> <span class="n">newManager</span> <span class="n">tlsManagerSettings</span>
+  <span class="kr">let</span> <span class="n">env</span> <span class="ow">=</span> <span class="n">mkClientEnv</span> <span class="n">manager</span> <span class="n">server</span>
+  <span class="n">interpret</span> <span class="p">(</span><span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">RunClient</span> <span class="n">client</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+      <span class="n">result</span> <span class="ow">&lt;-</span> <span class="n">callCC</span> <span class="p">(</span><span class="nf">\</span><span class="n">continue</span> <span class="ow">-&gt;</span>
+        <span class="n">embed</span> <span class="o">$</span> <span class="n">withClientM</span> <span class="n">client</span> <span class="n">env</span> <span class="p">(</span><span class="n">runIt</span> <span class="o">.</span> <span class="n">continue</span><span class="p">)</span>
+        <span class="p">)</span>
+      <span class="n">fromEither</span> <span class="n">result</span>
+    <span class="p">)</span> <span class="n">m</span>
+</pre></div>
+
+
+<p>But it's nasty, and I can't quite get it to typecheck. I'm just about out of ideas. Can anyone suggest how I might make this work?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#193853181" name="193853181"><div>2020-04-14 06:02:14</div></a></div><div class="text"><p>i'd call <code>withClientM</code> in <code>main</code> and yolo</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#193854076" name="193854076"><div>2020-04-14 06:20:00</div></a></div><div class="text"><p>isn't that effect "too specific", i.e. instead have an effect that gives you the data you actually need, and then when you want to run that effect you can use all the <code>ClientM a</code>s generated by servant?<br>
+the annoying bit here is you're effectively re-describing the API as an effect, but if  you work directly with <code>ClientM o</code> it seems to me like you're effectively restricting yourself to only running the effect with <code>servant-client</code> (no pure interpretation)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#193854160" name="193854160"><div>2020-04-14 06:21:56</div></a></div><div class="text"><p>I don't understand what <span class="user-mention" data-user-id="251120">@Sandy Maguire</span> means by "yolo calling it in main" - you still need to get the info to the "inside" of your effects world somehow (?)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#193854199" name="193854199"><div>2020-04-14 06:22:07</div></a></div><div class="text"><p>re the streaming stuff, did you take a look at <a href="http://hackage.haskell.org/package/polysemy-zoo-0.7.0.0/docs/Polysemy-Input-Streaming.html" title="http://hackage.haskell.org/package/polysemy-zoo-0.7.0.0/docs/Polysemy-Input-Streaming.html">http://hackage.haskell.org/package/polysemy-zoo-0.7.0.0/docs/Polysemy-Input-Streaming.html</a>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#193856362" name="193856362"><div>2020-04-14 06:59:20</div></a></div><div class="text"><p>Yes, it is a very specific effect. I do actually have the more general effect which produces the data I need, but my interpreter for <em>that</em> effect leaves this <code>ServantClient</code> effect behind. I think if I move my <code>withClientM</code> call into the general effect then I'll still be left with this problem though, because it still produces a stream as its output, which necessarily escapes the scope of <code>withClientM</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#193856568" name="193856568"><div>2020-04-14 07:02:14</div></a></div><div class="text"><p>re streaming, yes I saw <code>Polysemy.Input.Streaming</code>. I'm actually using <code>machines</code> for my streaming though, so I have another pair of interpreters for working with this:</p>
+<div class="codehilite"><pre><span></span><span class="nf">runInputFromSourceT</span>
+  <span class="ow">::</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Embed</span> <span class="n">m</span><span class="p">)</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">SourceT</span> <span class="n">m</span> <span class="n">o</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Input</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">o</span><span class="p">)</span> <span class="sc">&#39;</span><span class="err">: r) a</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">runInputFromSourceT</span> <span class="n">source</span> <span class="ow">=</span> <span class="n">fmap</span> <span class="n">snd</span> <span class="o">.</span> <span class="n">runState</span> <span class="n">source</span> <span class="o">.</span> <span class="n">reinterpret</span>
+  <span class="p">(</span><span class="nf">\</span><span class="kr">case</span>
+      <span class="kt">Input</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+        <span class="n">stream</span> <span class="ow">&lt;-</span> <span class="n">get</span>
+        <span class="n">step</span> <span class="ow">&lt;-</span> <span class="n">embed</span> <span class="o">$</span> <span class="n">runMachineT</span> <span class="n">stream</span>
+        <span class="kr">case</span> <span class="n">step</span> <span class="kr">of</span>
+          <span class="kt">Stop</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="kt">Nothing</span>
+          <span class="kt">Yield</span> <span class="n">o</span> <span class="n">rest</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+            <span class="n">put</span> <span class="n">rest</span>
+            <span class="n">pure</span> <span class="p">(</span><span class="kt">Just</span> <span class="n">o</span><span class="p">)</span>
+          <span class="kt">Await</span><span class="p">{}</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="kt">Nothing</span> <span class="c1">-- Shouldn&#39;t be possible in a SourceT?</span>
+  <span class="p">)</span>
+
+<span class="nf">inputToSourceT</span>
+  <span class="ow">::</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Input</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">o</span><span class="p">))</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">SourceT</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span> <span class="n">o</span>
+<span class="nf">inputToSourceT</span> <span class="ow">=</span> <span class="n">construct</span> <span class="p">(</span><span class="n">exhaust</span> <span class="n">input</span><span class="p">)</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#193969136" name="193969136"><div>2020-04-14 23:32:23</div></a></div><div class="text"><p><span class="user-mention" data-user-id="282523">@Alex Chapman</span> I implemented http response streaming, with http-client, by passing a consumer to the effect (your <code>ServantClient</code>). It's basically <code>Resource</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#193970658" name="193970658"><div>2020-04-14 23:57:20</div></a></div><div class="text"><p><span class="user-mention" data-user-id="260881">@Torsten Schmits</span> can you elaborate, or share any code? I've tried to use <code>Resource</code> for this, but couldn't work out how to get alloc/dealloc arguments for <code>bracket</code> out of <code>withClientM</code>. I've been starting to think that I need to write my own Polysemy version of ClientM to make this work, but I had been hoping that Polysemy would be powerful enough to wrap any API, regardless of its form.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#193971036" name="193971036"><div>2020-04-15 00:02:07</div></a></div><div class="text"><p><span class="user-mention" data-user-id="282523">@Alex Chapman</span> With http-client, it's pretty simple, since it has an API for this purpose (<code>Response</code> values contain an <code>IO ByteString</code> that produces the next chunk). I'd happily share some code but I doubt it will help with your issue.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#193971089" name="193971089"><div>2020-04-15 00:03:28</div></a></div><div class="text"><p>since Servant has hardcoded <code>ReaderT</code> for both server and client, it's quite impossible to integrate with Polysemy, I think. I encountered the same problem when trying to run a server in my effect stack.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#193971158" name="193971158"><div>2020-04-15 00:04:36</div></a></div><div class="text"><p><span class="user-mention" data-user-id="282523">@Alex Chapman</span> there's a function <code>performWithStreamingRequest</code>, that should do it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#193971349" name="193971349"><div>2020-04-15 00:07:56</div></a></div><div class="text"><p>my effect looks like this:</p>
+<div class="codehilite"><pre><span></span><span class="kr">data</span> <span class="kt">Http</span> <span class="n">c</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+    <span class="kt">Stream</span> <span class="ow">::</span> <span class="kt">Request</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Response</span> <span class="n">c</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">HttpError</span> <span class="n">a</span><span class="p">))</span> <span class="ow">-&gt;</span> <span class="kt">Http</span> <span class="n">c</span> <span class="n">m</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">HttpError</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="nf">interpretHttpNativeWith</span> <span class="ow">::</span>
+  <span class="kt">Members</span> <span class="p">[</span><span class="kt">Embed</span> <span class="kt">IO</span><span class="p">,</span> <span class="kt">Log</span><span class="p">,</span> <span class="kt">Resource</span><span class="p">]</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Manager</span> <span class="ow">-&gt;</span>
+  <span class="kt">InterpreterFor</span> <span class="p">(</span><span class="kt">Http</span> <span class="kt">BodyReader</span><span class="p">)</span> <span class="n">r</span>
+<span class="nf">interpretHttpNativeWith</span> <span class="n">manager</span> <span class="ow">=</span>
+  <span class="n">interpretH</span> <span class="o">$</span> <span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">Http</span><span class="o">.</span><span class="kt">Stream</span> <span class="n">request</span> <span class="n">handler</span> <span class="ow">-&gt;</span>
+      <span class="n">bracket</span> <span class="n">acquire</span> <span class="n">release</span> <span class="n">use</span>
+      <span class="kr">where</span>
+        <span class="n">acquire</span> <span class="ow">=</span>
+          <span class="n">embed</span> <span class="o">$</span> <span class="n">responseOpen</span> <span class="p">(</span><span class="n">nativeRequest</span> <span class="n">request</span><span class="p">)</span> <span class="n">manager</span>
+        <span class="n">release</span> <span class="n">response</span> <span class="ow">=</span>
+          <span class="n">embed</span> <span class="o">$</span> <span class="n">responseClose</span> <span class="n">response</span>
+        <span class="n">use</span> <span class="n">response</span> <span class="ow">=</span> <span class="kr">do</span>
+          <span class="n">raise</span> <span class="o">.</span> <span class="n">interpretHttpNativeWith</span> <span class="n">manager</span> <span class="o">=&lt;&lt;</span> <span class="n">runT</span> <span class="p">(</span><span class="n">handler</span> <span class="p">(</span><span class="n">convertResponse</span> <span class="n">response</span><span class="p">))</span>
+</pre></div>
+
+
+<p>so you'd have to run the servant client perform function where I run <code>handler</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#193971449" name="193971449"><div>2020-04-15 00:09:20</div></a></div><div class="text"><p>Ah, thanks a lot. I'll give that a try when I get a chance.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#193971451" name="193971451"><div>2020-04-15 00:09:22</div></a></div><div class="text"><p>although now I see that since the <code>perform...</code> function takes a handler producing <code>IO</code> you can't run a <code>Sem</code> in there. You'll have to dissect and rewrite that part</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#193971588" name="193971588"><div>2020-04-15 00:11:57</div></a></div><div class="text"><p>That's what I was afraid of :D</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#193971704" name="193971704"><div>2020-04-15 00:13:50</div></a></div><div class="text"><p>wonder if anyone has a suggestion for an http framework that goes well with polysemy</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#193971757" name="193971757"><div>2020-04-15 00:14:22</div></a></div><div class="text"><p>(server, that is. http-client is working out fine for me)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#193971807" name="193971807"><div>2020-04-15 00:15:52</div></a></div><div class="text"><p>and that <code>perform</code> function doesn't even run the client, you'd still need to call <code>runClientM</code>, so forget that</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#193972016" name="193972016"><div>2020-04-15 00:19:47</div></a></div><div class="text"><p>would be worth the try to just replace <code>IO</code> with <code>m</code> in all of servant and see what needs to be fixed <span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#193988488" name="193988488"><div>2020-04-15 06:18:33</div></a></div><div class="text"><p>I'm using polysemy "under" <code>servant-server</code>, i.e. <code>servant-server</code> still handles spawning threads and such, but my handlers run in a <code>Sem</code> by using <code>hoistServer</code> in the end, before trying to <code>serve</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194008228" name="194008228"><div>2020-04-15 10:03:54</div></a></div><div class="text"><p>yeah same. it's not optimal</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#194009616" name="194009616"><div>2020-04-15 10:18:33</div></a></div><div class="text"><p>what problems did you encounter with this approach?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#194009763" name="194009763"><div>2020-04-15 10:20:18</div></a></div><div class="text"><p>I don't feel the need to also have effects for the functionality <code>servant-server</code> is providing, because I don't think I need to test it? after all it's a library</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194012876" name="194012876"><div>2020-04-15 10:55:22</div></a></div><div class="text"><p>well mainly that I cannot share interpreters across requests</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#194014185" name="194014185"><div>2020-04-15 11:11:42</div></a></div><div class="text"><p>so some shared state?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194014252" name="194014252"><div>2020-04-15 11:12:08</div></a></div><div class="text"><p>for example, a kafka connection</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#194014318" name="194014318"><div>2020-04-15 11:13:44</div></a></div><div class="text"><p>I have a mysql connection pool that's shared, would it be something similar?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194014371" name="194014371"><div>2020-04-15 11:14:15</div></a></div><div class="text"><p>guess so!</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#194014584" name="194014584"><div>2020-04-15 11:17:38</div></a></div><div class="text"><p>I have some state-esque custom effect that I run with an interpreter that takes the connection pool and executes in IO (via <code>Embed</code>) - <code>runDb</code> let's say<br>
+I do <code>runDb</code>, discharge all my other effects, at which point I'm left with a combination of Either and IO, which is basically <code>Handler</code>, so I lift into it</p>
+<p>would the same thing not work with your kafka connection?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#194014669" name="194014669"><div>2020-04-15 11:18:18</div></a></div><div class="text"><p>and that's the only place where I have to pass in the connection</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#194014680" name="194014680"><div>2020-04-15 11:18:25</div></a></div><div class="text"><p>maybe I'm misunderstanding something :/</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194014731" name="194014731"><div>2020-04-15 11:19:13</div></a></div><div class="text"><p>you're passing the connection into the warp main function and feeding it into an interpreter?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#194015319" name="194015319"><div>2020-04-15 11:26:17</div></a></div><div class="text"><div class="codehilite"><pre><span></span><span class="nf">main</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="o">....</span>
+      <span class="kr">let</span> <span class="n">runServer</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">MonadIO</span> <span class="n">m</span><span class="p">,</span> <span class="kt">MonadUnliftIO</span> <span class="n">m</span><span class="p">,</span> <span class="kt">MonadLogger</span> <span class="n">m</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">m</span> <span class="nb">()</span>
+          <span class="n">runServer</span> <span class="ow">=</span> <span class="n">withMySQLPool</span> <span class="n">info</span> <span class="mi">100</span> <span class="nf">\</span><span class="n">backend</span> <span class="ow">-&gt;</span> <span class="n">liftIO</span> <span class="kr">do</span>
+            <span class="n">run</span> <span class="mi">3000</span> <span class="o">$</span> <span class="n">serverDb</span> <span class="n">backend</span>
+            <span class="n">putStrLn</span> <span class="s">&quot;server exited.&quot;</span>
+
+      <span class="n">runStdoutLoggingT</span> <span class="n">runServer</span>
+
+
+<span class="c1">-- the handler for my entire api</span>
+<span class="nf">handler</span> <span class="ow">::</span> <span class="kt">Members</span> <span class="o">&lt;</span><span class="n">all</span><span class="o">-</span><span class="n">my</span><span class="o">-</span><span class="n">direct</span><span class="o">-</span><span class="n">effects</span><span class="o">&gt;</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">ServerT</span> <span class="kt">API</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span>
+<span class="nf">handler</span> <span class="ow">=</span> <span class="o">...</span>
+
+<span class="nf">api</span> <span class="ow">::</span> <span class="kt">Proxy</span> <span class="kt">API</span>
+<span class="nf">api</span> <span class="ow">=</span> <span class="o">...</span>
+
+
+<span class="nf">serverDb</span> <span class="ow">::</span> <span class="kt">Pool</span> <span class="kt">SqlBackend</span> <span class="ow">-&gt;</span> <span class="kt">Application</span>
+<span class="nf">serverDb</span> <span class="n">backend</span> <span class="ow">=</span> <span class="n">serve</span> <span class="n">api</span> <span class="o">$</span> <span class="n">hoistServer</span> <span class="n">api</span> <span class="p">(</span><span class="n">runServerIO</span> <span class="n">backend</span><span class="p">)</span> <span class="n">handler</span>
+  <span class="kr">where</span>
+    <span class="n">runServerIO</span> <span class="ow">::</span> <span class="kt">Pool</span> <span class="kt">SqlBackend</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="o">&lt;</span><span class="n">all</span><span class="o">-</span><span class="n">my</span><span class="o">-</span><span class="n">effects</span><span class="o">&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Handler</span> <span class="n">a</span>
+    <span class="n">runServerIO</span> <span class="n">backend&#39;</span> <span class="ow">=</span> <span class="o">...</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#194015336" name="194015336"><div>2020-04-15 11:26:33</div></a></div><div class="text"><p><code>serverDb</code> is the bit I was referencing</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194015397" name="194015397"><div>2020-04-15 11:27:45</div></a></div><div class="text"><p>yeah so you have to handle the pool manually, that's what I meant with "not optimal"</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#194015457" name="194015457"><div>2020-04-15 11:28:22</div></a></div><div class="text"><p>well I only create it once and pass it in immediately, I guess it would be annoying if it weren't like that</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#194015463" name="194015463"><div>2020-04-15 11:28:27</div></a></div><div class="text"><p>thanks!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194015504" name="194015504"><div>2020-04-15 11:29:14</div></a></div><div class="text"><p><span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194015674" name="194015674"><div>2020-04-15 11:31:34</div></a></div><div class="text"><p>so how would the signature of an http server have to look in order to work well with polysemy?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194015689" name="194015689"><div>2020-04-15 11:31:56</div></a></div><div class="text"><p>would it be sufficient to parameterize the <code>IO</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194015824" name="194015824"><div>2020-04-15 11:33:15</div></a></div><div class="text"><p>could one use <code>Embed HandlerT</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194015861" name="194015861"><div>2020-04-15 11:33:53</div></a></div><div class="text"><p>or <code>MFunctor.hoist</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#194286751" name="194286751"><div>2020-04-16 11:01:33</div></a></div><div class="text"><p>So, for my <code>withClientM</code> problem, I have found a solution, albeit a slightly ugly one:</p>
+<div class="codehilite"><pre><span></span><span class="nf">runServantClientStreaming</span>
+  <span class="ow">::</span> <span class="kt">Members</span>
+    <span class="kt">&#39;[ Cont ref</span>
+<span class="kt">     , Embed IO</span>
+<span class="kt">     , Error ClientError</span>
+<span class="kt">     ]</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">BaseUrl</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">ServantClientStreaming</span> <span class="sc">&#39;</span><span class="err">: r) a -&gt; Sem r a</span>
+<span class="nf">runServantClientStreaming</span> <span class="n">server</span> <span class="n">m</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">manager</span> <span class="ow">&lt;-</span> <span class="n">embed</span> <span class="o">$</span> <span class="n">newManager</span> <span class="n">tlsManagerSettings</span>
+  <span class="kr">let</span> <span class="n">env</span> <span class="ow">=</span> <span class="n">mkClientEnv</span> <span class="n">manager</span> <span class="n">server</span>
+  <span class="n">interpret</span> <span class="p">(</span><span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">RunClientStreaming</span> <span class="n">client</span> <span class="ow">-&gt;</span>
+      <span class="n">subst</span> <span class="p">(</span><span class="nf">\</span><span class="n">continue</span> <span class="ow">-&gt;</span>
+        <span class="n">withLowerToIO</span> <span class="o">$</span> <span class="nf">\</span><span class="n">unliftIO</span> <span class="kr">_</span> <span class="ow">-&gt;</span>
+          <span class="n">withClientM</span> <span class="n">client</span> <span class="n">env</span> <span class="p">(</span><span class="n">unliftIO</span> <span class="o">.</span> <span class="n">jump</span> <span class="n">continue</span><span class="p">)</span>
+        <span class="p">)</span> <span class="n">fromEither</span>
+    <span class="p">)</span> <span class="n">m</span>
+</pre></div>
+
+
+<p>It uses <code>subst</code> from <code>Cont</code> to pack all of the future computations up, and then <code>withLowerToIO</code> (which runs in a new thread!) to run the client, and the rest of the future computations, in IO. And by some miracle it works! I haven't tested it with <em>two</em> long-running servant client sessions though...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194286790" name="194286790"><div>2020-04-16 11:02:01</div></a></div><div class="text"><p>wow!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194286841" name="194286841"><div>2020-04-16 11:02:14</div></a></div><div class="text"><p>I will have to try that for the server</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194286874" name="194286874"><div>2020-04-16 11:02:45</div></a></div><div class="text"><p>I was wondering whether "lower to IO" is a concept that applies here, though I haven't understood it yet</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#194287123" name="194287123"><div>2020-04-16 11:05:25</div></a></div><div class="text"><p>Yeah, I was stuck with an <code>Either ClientError a -&gt; Sem r a</code>, but I needed an <code>Either ClientError a -&gt; IO a</code>, so <code>withLowerToIO</code> was the solution. It's very similar to UnliftIO (<a href="https://hackage.haskell.org/package/unliftio" title="https://hackage.haskell.org/package/unliftio">https://hackage.haskell.org/package/unliftio</a>).</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194287160" name="194287160"><div>2020-04-16 11:05:49</div></a></div><div class="text"><p>yeah that was my reference as well</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194287169" name="194287169"><div>2020-04-16 11:05:56</div></a></div><div class="text"><p>incredible!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#194291171" name="194291171"><div>2020-04-16 11:48:43</div></a></div><div class="text"><p>I can't figure out how to use this and <code>errorToIOFinal</code> though. Because using <code>runContM</code> seems to exclude the use of <code>Final IO</code>, and <code>contToFinal</code> comes with a scary warning that I don't understand.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#194291323" name="194291323"><div>2020-04-16 11:50:24</div></a></div><div class="text"><p>Oh, and there's no instance for <code>MonadCont IO</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#194291614" name="194291614"><div>2020-04-16 11:52:55</div></a></div><div class="text"><p>and <code>errorToFinal</code> forces use of <code>Final IO</code>, so I can't use <code>Final (ContT IO)</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194291770" name="194291770"><div>2020-04-16 11:54:26</div></a></div><div class="text"><p>can't you just <code>Embed IO</code>, then <code>embedToFinal</code>, then <code>errorToIOFinal</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#194292088" name="194292088"><div>2020-04-16 11:57:09</div></a></div><div class="text"><p>I think not, because <code>runContM</code> produces a fixed effect list: <code> Sem '[Embed m] a</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194292119" name="194292119"><div>2020-04-16 11:57:36</div></a></div><div class="text"><p>indeed</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194292144" name="194292144"><div>2020-04-16 11:57:53</div></a></div><div class="text"><p>so maybe first <code>runError</code>, then <code>fromEither</code> after?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194292208" name="194292208"><div>2020-04-16 11:58:10</div></a></div><div class="text"><p>this probably breaks something though</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#194292359" name="194292359"><div>2020-04-16 11:59:47</div></a></div><div class="text"><p>Yeah, <code>runError</code> works, dealing with the <code>Either</code> and finishing with <code>&amp; runContM &amp; runM</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#194292442" name="194292442"><div>2020-04-16 12:00:06</div></a></div><div class="text"><p><span aria-label="thumbs up" class="emoji emoji-1f44d" role="img" title="thumbs up">:thumbs_up:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196652779" name="196652779"><div>2020-05-06 15:37:46</div></a></div><div class="text"><p>I can't believe it but this <em>just fucking works™</em>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">type</span> <span class="kt">Route</span> <span class="ow">=</span>
+  <span class="kt">Get</span> <span class="kt">&#39;[JSON]</span> <span class="kt">NoContent</span>
+
+<span class="nf">server</span> <span class="ow">::</span>
+  <span class="kt">Members</span> <span class="p">[</span><span class="kt">Embed</span> <span class="kt">IO</span><span class="p">,</span> <span class="kt">State</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]]</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">ServerT</span> <span class="kt">Route</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span>
+<span class="nf">server</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="kt">NoContent</span> <span class="o">&lt;$</span> <span class="p">(</span><span class="n">put</span> <span class="o">=&lt;&lt;</span> <span class="n">change</span> <span class="o">=&lt;&lt;</span> <span class="n">get</span><span class="p">)</span>
+  <span class="kr">where</span>
+    <span class="n">change</span> <span class="n">is</span> <span class="ow">=</span>
+      <span class="p">(</span><span class="mi">1</span> <span class="kt">:</span> <span class="n">is</span><span class="p">)</span> <span class="o">&lt;$</span> <span class="n">embed</span> <span class="p">(</span><span class="n">print</span> <span class="n">is</span><span class="p">)</span>
+
+<span class="nf">run</span> <span class="ow">::</span>
+  <span class="kt">Members</span> <span class="p">[</span><span class="kt">Embed</span> <span class="kt">IO</span><span class="p">,</span> <span class="kt">State</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]]</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">ServerT</span> <span class="kt">Route</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span>
+<span class="nf">run</span> <span class="n">srv</span> <span class="ow">=</span>
+  <span class="n">withLowerToIO</span> <span class="o">$</span> <span class="nf">\</span><span class="n">unliftIO</span> <span class="kr">_</span> <span class="ow">-&gt;</span>
+    <span class="kt">Warp</span><span class="o">.</span><span class="n">run</span> <span class="mi">10000</span> <span class="p">(</span><span class="n">logStdout</span> <span class="p">(</span><span class="n">serve</span> <span class="p">(</span><span class="kt">Proxy</span> <span class="o">@</span><span class="kt">Route</span><span class="p">)</span> <span class="p">(</span><span class="n">hoistServer</span> <span class="p">(</span><span class="kt">Proxy</span> <span class="o">@</span><span class="kt">Route</span><span class="p">)</span> <span class="p">(</span><span class="kt">Handler</span> <span class="o">.</span> <span class="n">lift</span> <span class="o">.</span> <span class="n">unliftIO</span><span class="p">)</span> <span class="n">srv</span><span class="p">)))</span>
+
+<span class="nf">main</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">main</span> <span class="ow">=</span>
+    <span class="n">liftIO</span> <span class="o">$</span>
+    <span class="n">runFinal</span> <span class="o">$</span>
+    <span class="n">embedToFinal</span> <span class="o">$</span>
+    <span class="n">evalState</span> <span class="kt">[]</span> <span class="o">$</span>
+    <span class="n">run</span> <span class="n">server</span>
+</code></pre></div>
+
+
+<p>Polysemy is so great</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,128 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I have an issue with Aeson,  
+/mnt/c/Users/vljno/Source/Repos/pursssscript2/app/Main.hs:21:88: error:
+    Not in scope: ‘Aeson.encodeToLazyText’
+    Module ‘Data.Aeson’ does not export ‘encodeToLazyText’.
+   |
+21 |   _ &lt;- writeFile &quot;/mnt/c/Users/vljno/Source/Repos/pursssscript2/app/res.json&quot; $ show " name="description"><link href="https://funprog.srid.ca/haskell/aeson.html" rel="canonical"><meta property="og:title" content="Aeson - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-03-03T21:23:50Z"><meta property="og:article:published_time" content="2021-03-03T20:58:50Z"><title>Aeson - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Aeson - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Aeson</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#228666944" name="228666944"><div>2021-03-03 20:58:50</div></a></div><div class="text"><p>I have an issue with Aeson,  </p>
+<div class="codehilite"><pre><span></span><code>/mnt/c/Users/vljno/Source/Repos/pursssscript2/app/Main.hs:21:88: error:
+    Not in scope: ‘Aeson.encodeToLazyText’
+    Module ‘Data.Aeson’ does not export ‘encodeToLazyText’.
+   |
+21 |   _ &lt;- writeFile &quot;/mnt/c/Users/vljno/Source/Repos/pursssscript2/app/res.json&quot; $ show $ Aeson.encodeToLazyText  $ ToExportCtor parsedData
+   |
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#228667305" name="228667305"><div>2021-03-03 21:00:42</div></a></div><div class="text"><p>I see that Aeson.encode exports a bytestring, and writeFile takes a String</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/e0842574f3a3c70d15e978f2b543e74119562ed2?x=x&amp;version=2"></a><div class="content"><a class="author">Will</a><div class="metadata"><a href="#228667446" name="228667446"><div>2021-03-03 21:01:36</div></a></div><div class="text"><p>looks like it's in <code>Data.Aeson.Text</code> <a href="https://hackage.haskell.org/package/aeson-1.5.6.0/docs/Data-Aeson-Text.html#v:encodeToLazyText">https://hackage.haskell.org/package/aeson-1.5.6.0/docs/Data-Aeson-Text.html#v:encodeToLazyText</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#228667498" name="228667498"><div>2021-03-03 21:01:54</div></a></div><div class="text"><p>but I imported it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228667633" name="228667633"><div>2021-03-03 21:02:32</div></a></div><div class="text"><p>Is it imported qualified as <code>Aeson</code>? Because you're calling it that way</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228667976" name="228667976"><div>2021-03-03 21:04:35</div></a></div><div class="text"><p>BTW, I would probably use <a href="https://hackage.haskell.org/package/bytestring-0.11.1.0/docs/Data-ByteString-Lazy.html#v:writeFile">bytestring's <code>writeFile</code></a> instead of going through 2 string types</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#228668812" name="228668812"><div>2021-03-03 21:09:57</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Aeson/near/228667633">said</a>:</p>
+<blockquote>
+<p>Is it imported qualified as <code>Aeson</code>? Because you're calling it that way</p>
+</blockquote>
+<p>ho yes right I used the wrong qualified import</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#228670424" name="228670424"><div>2021-03-03 21:20:05</div></a></div><div class="text"><p>When I export something I have <code>\"</code> instead of just <code>"</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228670941" name="228670941"><div>2021-03-03 21:23:50</div></a></div><div class="text"><p>You are using <code>show</code> on string datatype - <code>show</code> is meant for printing values as written in source,  not for serialization - it's actually completely redundant here as long as you pick correct <code>writeFile</code></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,135 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="why does
+try {
+    // stuff
+} catch {
+    // stuff
+}
+
+
+
+throw a parsing error when in foreign modules?
+you need to use catch (...)" name="description"><link href="https://funprog.srid.ca/purescript/try-catch.html" rel="canonical"><meta property="og:title" content="try catch - PureScript"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="PureScript"><meta property="og:article:modified_time" content="2020-09-29T23:45:43Z"><meta property="og:article:published_time" content="2020-09-06T00:58:24Z"><title>try catch - PureScript</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">try catch - PureScript</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/purescript/" class="section">#PureScript</a><i class="right angle icon divider"></i><div class="active section">try catch</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#209202633" name="209202633"><div>2020-09-06 00:58:24</div></a></div><div class="text"><p>why does</p>
+<div class="codehilite"><pre><span></span><code><span class="k">try</span> <span class="p">{</span>
+    <span class="c1">// stuff</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+    <span class="c1">// stuff</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>throw a parsing error when in foreign modules?<br>
+you need to use <code>catch (...)</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">miles</a><div class="metadata"><a href="#209208574" name="209208574"><div>2020-09-06 04:26:12</div></a></div><div class="text"><p>Is that ES6 syntax? I believe it only supports ES5 syntax. <a href="https://github.com/purescript/purescript/issues/3272">https://github.com/purescript/purescript/issues/3272</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/purescript/purescript/issues/3272" style="background-image: url(https://avatars3.githubusercontent.com/u/6556677?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/purescript/purescript/issues/3272" title=" Unable to parse foreign module when using rest and spread syntax · Issue #3272 · purescript/purescript"> Unable to parse foreign module when using rest and spread syntax · Issue #3272 · purescript/purescript</a></div><div class="message_embed_description">I&#39;m trying to have a JavaScript event listener be called with an unknown number of arguments and then call a curried function using those arguments one by one. This is the foreign module code: ...</div></div></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#209208594" name="209208594"><div>2020-09-06 04:27:22</div></a></div><div class="text"><p>oh, didn't know arrow functions were ES5</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">miles</a><div class="metadata"><a href="#209208754" name="209208754"><div>2020-09-06 04:32:02</div></a></div><div class="text"><p>Yeah. It's a bummer that for public libs, ES6 syntax is still discouraged in order to support the 6% of people who haven't updated their browsers. <a href="https://dev.caniuse.com/arrow-functions">https://dev.caniuse.com/arrow-functions</a><br>
+The arrow syntax is so much nicer for FFI and maps much better to PS code. Maybe we'll be able to make the jump with the ES Modules conversion.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#209208778" name="209208778"><div>2020-09-06 04:32:33</div></a></div><div class="text"><p>wait no, arrow functions <strong>are</strong> ES6 <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span> but the compiler doesn't complain</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">miles</a><div class="metadata"><a href="#209208826" name="209208826"><div>2020-09-06 04:34:03</div></a></div><div class="text"><p>Oh, right. There are some bits of ES6 that are allowed. Kinda unclear what the limits are though. For example, I believe there's some weirdness with using arrows to return <code>()</code> that should otherwise be allowed.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Thomas Honeyman</a><div class="metadata"><a href="#211698994" name="211698994"><div>2020-09-29 23:45:43</div></a></div><div class="text"><p>The compiler will accept some ES6 (essentially, whatever is supported by the version of the Haskell package <code>language-javascript</code> that the compiler depends on), but out of convention PS libs don't use ES6 in order to ensure that they can be used without a bundling step. That doesn't prevent you from using things like arrow functions in your code, though!</p>
+<p>I don't know why <code>language-javascript</code> fails to parse <code>try { ... } catch { ... }</code> and instead requires <code>try { ... } catch (e) { ... }</code> -- probably just convenience -- but that's the reason the compiler requires it.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

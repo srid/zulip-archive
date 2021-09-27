@@ -1,0 +1,120 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I am trying to consume the pages from a pagination in a lazy way so I only retrieve the page when the data is required. Currently, I am stuck using IORef to hold the state of the pages instead of some state monad. One of my problems is that I would like to be able to stream pages or individual items" name="description"><link href="https://funprog.srid.ca/haskell/pagination.html" rel="canonical"><meta property="og:title" content="pagination - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-10-01T13:41:20Z"><meta property="og:article:published_time" content="2020-09-29T18:30:07Z"><title>pagination - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">pagination - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">pagination</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#211663962" name="211663962"><div>2020-09-29 18:30:07</div></a></div><div class="text"><p>I am trying to consume the pages from a pagination in a lazy way so I only retrieve the page when the data is required. Currently, I am stuck using IORef to hold the state of the pages instead of some state monad. One of my problems is that I would like to be able to stream pages or individual items. This causes a clashing of the state if using StateT. polysemy seems like a potential solution but maybe there is a simpler solution <a href="/user_uploads/13896/PIOUAajs5KF4lrh8M_Y8vzMJ/Pagination.hs">Pagination.hs</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Hjulle</a><div class="metadata"><a href="#211665273" name="211665273"><div>2020-09-29 18:39:18</div></a></div><div class="text"><p>It sounds like a job for Pipes/conduit/streaming<br>
+That way, the information about the state is local to the producer and you don't need any <code>IORef</code>. But I guess it depends a bit on the structure of the rest of the code.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#211665632" name="211665632"><div>2020-09-29 18:41:56</div></a></div><div class="text"><p><span class="user-mention" data-user-id="312020">@Hjulle</span> Thanks, I didn't even think of using pipes</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Hjulle</a><div class="metadata"><a href="#211666124" name="211666124"><div>2020-09-29 18:45:16</div></a></div><div class="text"><p><span class="user-mention" data-user-id="268686">@HateUsernames007</span>  Np :)<br>
+Looking at the code, I think more or less all of the IORef boilerplate will disappear with pipes :)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#211680776" name="211680776"><div>2020-09-29 20:37:15</div></a></div><div class="text"><p><span class="user-mention" data-user-id="312020">@Hjulle</span> actually looking at the options conduit is probably better since I only need one way and not 2</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">HateUsernames007</a><div class="metadata"><a href="#211680799" name="211680799"><div>2020-09-29 20:37:32</div></a></div><div class="text"><p>Thanks for the suggestions. Very helpful</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211681094" name="211681094"><div>2020-09-29 20:40:03</div></a></div><div class="text"><p>just gonna leave this for completeness: <a href="https://hackage.haskell.org/package/streaming-0.2.3.0">https://hackage.haskell.org/package/streaming-0.2.3.0</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211682297" name="211682297"><div>2020-09-29 20:50:11</div></a></div><div class="text"><p>there's also <a href="https://github.com/composewell/streamly">https://github.com/composewell/streamly</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/composewell/streamly" style="background-image: url(https://avatars2.githubusercontent.com/u/23616816?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/composewell/streamly" title="composewell/streamly">composewell/streamly</a></div><div class="message_embed_description">Beautiful Streaming, Concurrent and Reactive Composition (Haskell) - composewell/streamly</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211683361" name="211683361"><div>2020-09-29 21:00:03</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/pagination/near/211682297">said</a>:</p>
+<blockquote>
+<p>there's also <a href="https://github.com/composewell/streamly">https://github.com/composewell/streamly</a></p>
+</blockquote>
+<p>oohh, those concurrency features look delicious!!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#211772551" name="211772551"><div>2020-09-30 14:58:59</div></a></div><div class="text"><p>Check the signature of unfoldM</p>
+<p>Fits quite nicely to pagination</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#211772726" name="211772726"><div>2020-09-30 15:00:04</div></a></div><div class="text"><p><a href="https://hackage.haskell.org/package/conduit-1.3.2.1/docs/Data-Conduit-List.html#v:unfoldM">https://hackage.haskell.org/package/conduit-1.3.2.1/docs/Data-Conduit-List.html#v:unfoldM</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Hjulle</a><div class="metadata"><a href="#211911324" name="211911324"><div>2020-10-01 13:41:20</div></a></div><div class="text"><p>Pipes works well for both one-way and two-way. There might be other reasons to prefer one over the other though. Streamly looks really nice, especially for concurrency and general speed.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

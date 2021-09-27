@@ -1,0 +1,134 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I&#39;m having trouble when updating neuron with the latest master. I&#39;m not sure but I would say it&#39;s the same problem as https://github.com/srid/neuron/issues/174
+Pulling master and running nix-env -if . takes forever, I think it&#39;s compiling the entire haskell platform (GHCi, GHC, Cabal, etc...)
+I&#39;m bu" name="description"><link href="https://funprog.srid.ca/neuron/issue-when-updating-neuron.html" rel="canonical"><meta property="og:title" content="issue when updating neuron - Neuron"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Neuron"><meta property="og:article:modified_time" content="2020-05-15T00:47:46Z"><meta property="og:article:published_time" content="2020-05-14T09:27:27Z"><title>issue when updating neuron - Neuron</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">issue when updating neuron - Neuron</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/neuron/" class="section">#Neuron</a><i class="right angle icon divider"></i><div class="active section">issue when updating neuron</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197528670" name="197528670"><div>2020-05-14 09:27:27</div></a></div><div class="text"><p>I'm having trouble when updating neuron with the latest master. I'm not sure but I would say it's the same problem as <a href="https://github.com/srid/neuron/issues/174">https://github.com/srid/neuron/issues/174</a><br>
+Pulling master and running <code>nix-env -if .</code> takes forever, I think it's compiling the entire haskell platform (GHCi, GHC, Cabal, etc...)<br>
+I'm building from the default.nix (not shell.nix as in the issue) and the <code>srid</code> cachix was updated so I don't know why it's rebuilding everything</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/issues/174" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/issues/174" title="Derivations for `shell.nix` not present on your cachix · Issue #174 · srid/neuron">Derivations for `shell.nix` not present on your cachix · Issue #174 · srid/neuron</a></div><div class="message_embed_description">Using your cachix instance, I can build the neuron package without having to rebuild ghc and many other things, and that&#39;s great! However, if I want to hack on neuron using shell.nix, then I en...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197544860" name="197544860"><div>2020-05-14 12:27:22</div></a></div><div class="text"><p>Did it download anything from cachix? Did you try running <code>cachix use srid</code> once more?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197545143" name="197545143"><div>2020-05-14 12:30:22</div></a></div><div class="text"><p>yeah i tried, didn't seem to change anything<br>
+I don't know if something was actually downloaded from cachix though, and i have no way to check because the build is like 6 hours in so the information is <br>
+gone by now</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197554532" name="197554532"><div>2020-05-14 13:36:10</div></a></div><div class="text"><p>wow, 6 hours? Did it complete in the end? What's your cpu/memory?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197554625" name="197554625"><div>2020-05-14 13:36:54</div></a></div><div class="text"><p>I'll test this from a fresh Ubuntu VM later. Oh, and let me know your nix version as well. <code>nix-env --version</code>. as well as <code>cat /etc/*release</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197554730" name="197554730"><div>2020-05-14 13:37:49</div></a></div><div class="text"><p>Wait, are you on mac? <span class="user-mention" data-user-id="276419">@felko</span> Maybe that was it. The new CI I have runs only on Linux.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197554809" name="197554809"><div>2020-05-14 13:38:09</div></a></div><div class="text"><p>Yes i'm on mac</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197554856" name="197554856"><div>2020-05-14 13:38:30</div></a></div><div class="text"><p>I use <a href="https://hercules-ci.com/">https://hercules-ci.com/</a> now; and I can provision my dusty old 2014 macbook to act as mac CI agent.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197554975" name="197554975"><div>2020-05-14 13:39:33</div></a></div><div class="text"><p><a href="https://github.com/srid/neuron/issues/180">https://github.com/srid/neuron/issues/180</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/issues/180" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/issues/180" title="Cache does not work on macOS · Issue #180 · srid/neuron">Cache does not work on macOS · Issue #180 · srid/neuron</a></div><div class="message_embed_description">I should set up a Mac CI agent for Hercules for this to work.</div></div></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197554988" name="197554988"><div>2020-05-14 13:39:42</div></a></div><div class="text"><p>its still building lol</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197555083" name="197555083"><div>2020-05-14 13:40:11</div></a></div><div class="text"><p>it finished building GHC and the entire haskell platform from source</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197555093" name="197555093"><div>2020-05-14 13:40:18</div></a></div><div class="text"><p>its building the libraries now</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197555221" name="197555221"><div>2020-05-14 13:41:09</div></a></div><div class="text"><p>i think its close to compiling neuron finally</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197555254" name="197555254"><div>2020-05-14 13:41:25</div></a></div><div class="text"><p>fwiw, reflex-platform's cache could shave the bulk of that time (including GHC). i didn't document it, because the neuron cache should include all of that.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197555447" name="197555447"><div>2020-05-14 13:42:30</div></a></div><div class="text"><p>If you are just getting started on building the libraries, it might be another 2 hours :-P</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197555487" name="197555487"><div>2020-05-14 13:42:51</div></a></div><div class="text"><p>/me started building on his macOS, so that when it completes he can do a manual push to cachix</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197555845" name="197555845"><div>2020-05-14 13:44:18</div></a></div><div class="text"><p>i'm going to let the build finish anyway, it's quite impressive to see nix compile all of this from almost nothing</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197555882" name="197555882"><div>2020-05-14 13:44:29</div></a></div><div class="text"><p>its satisfying to watch</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197555992" name="197555992"><div>2020-05-14 13:45:15</div></a></div><div class="text"><p>:-)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197556000" name="197556000"><div>2020-05-14 13:45:18</div></a></div><div class="text"><p>but yeah documenting the installation with reflex cache might be a good idea</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197556038" name="197556038"><div>2020-05-14 13:45:33</div></a></div><div class="text"><p>if neuron cache is fixed, we won't need reflex cache.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197556071" name="197556071"><div>2020-05-14 13:45:52</div></a></div><div class="text"><p>and ... now i'm worried about Windows users. i think they are fucked haha. Don't know how you can setup cache for WSL</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197556171" name="197556171"><div>2020-05-14 13:46:23</div></a></div><div class="text"><p>Oh wait, WSL uses ubuntu. So it should work</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197556189" name="197556189"><div>2020-05-14 13:46:30</div></a></div><div class="text"><p>neuron is finally building!</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197556245" name="197556245"><div>2020-05-14 13:47:05</div></a></div><div class="text"><p>it just started downloading from <a href="http://srid.cachix.org">srid.cachix.org</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197556260" name="197556260"><div>2020-05-14 13:47:15</div></a></div><div class="text"><p>what's it downloading</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197556317" name="197556317"><div>2020-05-14 13:47:46</div></a></div><div class="text"><p>no idea</p>
+<div class="codehilite"><pre><span></span><code>installing &#39;neuron-0.5.0.0&#39;
+copying path &#39;/nix/store/s2087q37b1fg7ff66gkzifq0sy9xpryk-6d2174b2bdc5aff9064795555e23ff318cb00ff6.tar.gz&#39; from &#39;https://srid.cachix.org&#39;...
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197557105" name="197557105"><div>2020-05-14 13:53:59</div></a></div><div class="text"><p>can I do nix-collect-garbage afterwards?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197557169" name="197557169"><div>2020-05-14 13:54:12</div></a></div><div class="text"><p>to remove the old neuron builds</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197557404" name="197557404"><div>2020-05-14 13:55:29</div></a></div><div class="text"><p>if you want some free space, then yea - <code>nix-collect-garbage --delete-older-than</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197557569" name="197557569"><div>2020-05-14 13:56:32</div></a></div><div class="text"><p>i was looking into caching the executable itself, so your nix install completes in like 10 seconds. but couldn't get it to work. see <a href="https://github.com/srid/neuron/blob/master/project.nix#L78-L90">https://github.com/srid/neuron/blob/master/project.nix#L78-L90</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/blob/master/project.nix#L78-L90" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/blob/master/project.nix#L78-L90" title="srid/neuron">srid/neuron</a></div><div class="message_embed_description">Haskell meets Zettelkasten, for your plain-text delight. - srid/neuron</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197557598" name="197557598"><div>2020-05-14 13:56:48</div></a></div><div class="text"><p>(and you don't need the haskell dependencies, even to keep in the nix store)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197583059" name="197583059"><div>2020-05-14 16:41:26</div></a></div><div class="text"><p>Fucking hell, macOS stinks</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197592188" name="197592188"><div>2020-05-14 17:47:52</div></a></div><div class="text"><p>you know, its still building, when i said "neuron is finally building" actually it had to install all (transitive) dependencies first</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197592833" name="197592833"><div>2020-05-14 17:52:42</div></a></div><div class="text"><p>i see that some libraries are built multiple times</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197592860" name="197592860"><div>2020-05-14 17:52:57</div></a></div><div class="text"><p>i've seen pandoc and reflex multiple times during the build</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197592918" name="197592918"><div>2020-05-14 17:53:21</div></a></div><div class="text"><p>not sure why</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197596835" name="197596835"><div>2020-05-14 18:20:59</div></a></div><div class="text"><p>ok, about 12h of build for this:</p>
+<div class="codehilite"><pre><span></span><code>building &#39;/nix/store/5qlmnbqhmjmp4ws5za018plvzfvm98zq-user-environment.drv&#39;...
+error: packages &#39;/nix/store/zdp0wqp6v6jc0i0rswar043hzn41avz5-neuron-0.5.0.0/lib/links/libHSansi-terminal-0.9.1-KAtSkkD7GHFKoP9eT8kWXE-ghc8.6.5.dylib&#39; and &#39;/nix/store/wbyqvj2f2ab1zv50z2ckrc52hm9l5rb6-ormolu-0.0.3.1/lib/links/libHSansi-terminal-0.9.1-KAtSkkD7GHFKoP9eT8kWXE-ghc8.6.5.dylib&#39; have the same priority 5; use &#39;nix-env --set-flag priority NUMBER INSTALLED_PKGNAME&#39; to change the priority of one of the conflicting packages (0 being the highest priority)
+builder for &#39;/nix/store/5qlmnbqhmjmp4ws5za018plvzfvm98zq-user-environment.drv&#39; failed with exit code 1
+error: build of &#39;/nix/store/5qlmnbqhmjmp4ws5za018plvzfvm98zq-user-environment.drv&#39; failed
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197597172" name="197597172"><div>2020-05-14 18:23:31</div></a></div><div class="text"><p>i don't know if that's what i should do but <code>nix-env --set-flag priority 0 neuron</code> worked</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197597180" name="197597180"><div>2020-05-14 18:23:35</div></a></div><div class="text"><p>finally!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#197597309" name="197597309"><div>2020-05-14 18:24:16</div></a></div><div class="text"><p>Wow, sorry for being out of loop, but why it takes so long to build?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197605154" name="197605154"><div>2020-05-14 19:21:03</div></a></div><div class="text"><p>no idea, i think the cachix didn't include the new dependencies and for some reason I had to build GHC and the entire haskell platform from source (i think that's what happened)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#197605319" name="197605319"><div>2020-05-14 19:22:23</div></a></div><div class="text"><p>also my machine is a 2017 macbook air on which i was running other resource consuming things parallel to the build</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ba07ddebb9027f5738f4483d5475620347dd3b02?x=x&amp;version=2"></a><div class="content"><a class="author">Nadrieril</a><div class="metadata"><a href="#197607989" name="197607989"><div>2020-05-14 19:45:48</div></a></div><div class="text"><p>I think it used to use things that were in the default nixos cache, but moving to reflex made it depend on a more recent GHC</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197636568" name="197636568"><div>2020-05-15 00:42:21</div></a></div><div class="text"><p>Because I migrated from Github Actions to Hercules. Actions has a 6h limit I think. And it is slow. With hercules I run CI on my own machine, which is Linux. So we have only Linux cache. I'm currently setting up a mac builder for hercules.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197636828" name="197636828"><div>2020-05-15 00:46:32</div></a></div><div class="text"><p>For now, if anyone is looking to build neuron on mac - setup reflex-platform cache using these instructions <a href="https://github.com/obsidiansystems/obelisk#installing-obelisk">https://github.com/obsidiansystems/obelisk#installing-obelisk</a> ... it'll cut down build time from 12 hrs to 4hs (or around that ratio).</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/obsidiansystems/obelisk#installing-obelisk" style="background-image: url(https://repository-images.githubusercontent.com/134497903/52ee3600-57bd-11ea-803a-0d11e9bbc115)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/obsidiansystems/obelisk#installing-obelisk" title="obsidiansystems/obelisk">obsidiansystems/obelisk</a></div><div class="message_embed_description">Obelisk provides an easy way to develop and deploy your Reflex project for web and mobile - obsidiansystems/obelisk</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197636884" name="197636884"><div>2020-05-15 00:47:46</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="276419">felko</span> <a href="#narrow/stream/231929-Neuron/topic/issue.20when.20updating.20neuron/near/197597172">said</a>:</p>
+<blockquote>
+<p>i don't know if that's what i should do but <code>nix-env --set-flag priority 0 neuron</code> worked</p>
+</blockquote>
+<p>I remember doing that once. I have no idea what's causing it. But somehow it seems to me that making an executable-only derivation may fix it.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,154 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi guys! I want to write an Enum instance for tuples and I want to have a faster version if the second component of the tuple is an Int how do I do that? I searched the specialize pragma, but didn&#39;t understand how to use it" name="description"><link href="https://funprog.srid.ca/haskell/specialize-pragmas.html" rel="canonical"><meta property="og:title" content="Specialize pragmas - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2019-12-07T09:35:12Z"><meta property="og:article:published_time" content="2019-12-06T22:04:06Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?x=x&amp;version=2"><title>Specialize pragmas - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Specialize pragmas - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Specialize pragmas</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?x=x&amp;version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#182809580" name="182809580"><div>2019-12-06 22:04:06</div></a></div><div class="text"><p>Hi guys! I want to write an <code>Enum</code> instance for tuples and I want to have a faster version if the second component of the tuple is an <code>Int</code> how do I do that? I searched the specialize pragma, but didn't understand how to use it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?x=x&amp;version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#182809610" name="182809610"><div>2019-12-06 22:04:44</div></a></div><div class="text"><p>and how does it work</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?x=x&amp;version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#182809887" name="182809887"><div>2019-12-06 22:08:56</div></a></div><div class="text"><div class="codehilite"><pre><span></span><span class="kr">instance</span>
+  <span class="p">(</span> <span class="kt">Enum</span> <span class="n">a</span><span class="p">,</span>
+    <span class="kt">Enum</span> <span class="n">b</span><span class="p">,</span>
+    <span class="kt">Bounded</span> <span class="n">b</span>
+  <span class="p">)</span> <span class="ow">=&gt;</span>
+  <span class="kt">Enum</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+  <span class="kr">where</span>
+  <span class="n">toEnum</span> <span class="n">i</span> <span class="ow">=</span> <span class="kr">let</span> <span class="p">(</span><span class="n">listB</span> <span class="ow">::</span> <span class="p">[</span><span class="n">b</span><span class="p">])</span> <span class="ow">=</span> <span class="p">[</span><span class="n">minBound</span><span class="o">..</span><span class="n">maxBound</span><span class="p">]</span>
+                 <span class="n">lengthB</span> <span class="ow">=</span> <span class="n">length</span> <span class="n">listB</span>
+                 <span class="n">fstI</span> <span class="ow">=</span> <span class="n">div</span> <span class="n">i</span> <span class="n">lengthB</span>
+                 <span class="n">sndI</span> <span class="ow">=</span> <span class="n">mod</span> <span class="n">i</span> <span class="n">lengthB</span>
+              <span class="kr">in</span> <span class="p">(</span><span class="n">toEnum</span> <span class="n">fstI</span><span class="p">,</span> <span class="n">toEnum</span> <span class="n">sndI</span><span class="p">)</span>
+
+<span class="nf">toEnumInt</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Enum</span> <span class="n">a</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kt">Int</span><span class="p">)</span>
+<span class="nf">toEnumInt</span> <span class="n">i</span> <span class="ow">=</span> <span class="kr">let</span> <span class="n">lengthInt</span> <span class="ow">=</span> <span class="n">maxBound</span> <span class="o">-</span> <span class="n">minBound</span>
+                  <span class="n">fstI</span> <span class="ow">=</span> <span class="n">div</span> <span class="n">i</span> <span class="n">lengthInt</span>
+                  <span class="n">sndI</span> <span class="ow">=</span> <span class="n">mod</span> <span class="n">i</span> <span class="n">lengthInt</span>
+               <span class="kr">in</span> <span class="p">(</span><span class="n">toEnum</span> <span class="n">fstI</span><span class="p">,</span> <span class="n">toEnum</span> <span class="n">sndI</span><span class="p">)</span>
+</pre></div>
+
+
+<p>I have this and I want to use <code>toEnumInt</code> in the specialized version</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?x=x&amp;version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#182810284" name="182810284"><div>2019-12-06 22:14:39</div></a></div><div class="text"><p>Is it specialized or rewrite rule pragma that I want?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?x=x&amp;version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#182810284" name="182810284"><div>2019-12-06 22:14:39</div></a></div><div class="text"><p>Is it specialized or rewrite rule pragma that I want?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182811291" name="182811291"><div>2019-12-06 22:29:42</div></a></div><div class="text"><p>I think if you want to write the function yourself, you want a rewrite rule</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182811375" name="182811375"><div>2019-12-06 22:30:33</div></a></div><div class="text"><p>The specialize pragma just generates a specialized version of the function along with a rewrite rule to use the generated specialized version</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?x=x&amp;version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#182811879" name="182811879"><div>2019-12-06 22:38:33</div></a></div><div class="text"><p>I am trying with rewrite rule but I get this error</p>
+<div class="codehilite"><pre><span></span><span class="p">[</span><span class="n">ghcmod</span><span class="p">]</span> <span class="p">[</span><span class="kt">E</span><span class="p">]</span> <span class="err">•</span> <span class="kt">Could</span> <span class="n">not</span> <span class="n">deduce</span> <span class="p">(</span><span class="kt">Enum</span> <span class="n">a</span><span class="p">)</span> <span class="n">arising</span> <span class="n">from</span> <span class="n">a</span> <span class="n">use</span> <span class="kr">of</span> <span class="err">‘</span><span class="n">toEnumInt</span><span class="err">’</span>
+  <span class="n">from</span> <span class="n">the</span> <span class="n">context</span><span class="kt">:</span> <span class="kt">Enum</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kt">Int</span><span class="p">)</span>
+    <span class="n">bound</span> <span class="n">by</span> <span class="n">the</span> <span class="kt">RULE</span> <span class="s">&quot;toEnum/Int&quot;</span>
+    <span class="n">at</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ghc</span><span class="o">-</span><span class="n">mod21790</span><span class="o">/</span><span class="kt">Internal21789</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="n">hs</span><span class="kt">:</span><span class="mi">26</span><span class="kt">:</span><span class="mi">11</span><span class="o">-</span><span class="mi">41</span>
+  <span class="kt">Possible</span> <span class="n">fix</span><span class="kt">:</span> <span class="n">add</span> <span class="p">(</span><span class="kt">Enum</span> <span class="n">a</span><span class="p">)</span> <span class="n">to</span> <span class="n">the</span> <span class="n">context</span> <span class="kr">of</span> <span class="n">the</span> <span class="kt">RULE</span> <span class="s">&quot;toEnum/Int&quot;</span>
+<span class="err">•</span> <span class="kt">In</span> <span class="n">the</span> <span class="n">expression</span><span class="kt">:</span> <span class="n">toEnumInt</span>
+  <span class="kt">When</span> <span class="n">checking</span> <span class="n">the</span> <span class="n">transformation</span> <span class="n">rule</span> <span class="s">&quot;toEnum/Int&quot;</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182813063" name="182813063"><div>2019-12-06 22:55:43</div></a></div><div class="text"><p>What's your rule look like?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182813154" name="182813154"><div>2019-12-06 22:56:36</div></a></div><div class="text"><p>Oh, actually, you probably just have to stick an <code>Enum a</code> on it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?x=x&amp;version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#182819188" name="182819188"><div>2019-12-07 00:38:57</div></a></div><div class="text"><p>How?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182819503" name="182819503"><div>2019-12-07 00:45:13</div></a></div><div class="text"><p><span class="user-mention" data-user-id="250742">@Bolt</span> Example: <a href="https://stackoverflow.com/a/25326480" target="_blank" title="https://stackoverflow.com/a/25326480">https://stackoverflow.com/a/25326480</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://stackoverflow.com/a/25326480" style="background-image: url(https://cdn.sstatic.net/Sites/stackoverflow/img/apple-touch-icon@2.png?v=73d79a89bded)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://stackoverflow.com/a/25326480" target="_blank" title="GHC rewrite rules with class constraints">GHC rewrite rules with class constraints</a></div><div class="message_embed_description">I've added the following rewrite rule to conduit without issue:
+
+{-# RULES "ConduitM: lift x &gt;&gt;= f" forall m f.
+    lift m &gt;&gt;= f = ConduitM (PipeM (liftM (unConduitM . f) m))
+  #-}
+I'm </div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182819616" name="182819616"><div>2019-12-07 00:47:45</div></a></div><div class="text"><p>Oh, although it may not actually fire because Core is silly. Maybe you need <code>ifcxt</code> like in <a href="https://stackoverflow.com/a/25326480" target="_blank" title="https://stackoverflow.com/a/25326480">https://stackoverflow.com/a/25326480</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://stackoverflow.com/a/25326480" style="background-image: url(https://cdn.sstatic.net/Sites/stackoverflow/img/apple-touch-icon@2.png?v=73d79a89bded)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://stackoverflow.com/a/25326480" target="_blank" title="GHC rewrite rules with class constraints">GHC rewrite rules with class constraints</a></div><div class="message_embed_description">I've added the following rewrite rule to conduit without issue:
+
+{-# RULES "ConduitM: lift x &gt;&gt;= f" forall m f.
+    lift m &gt;&gt;= f = ConduitM (PipeM (liftM (unConduitM . f) m))
+  #-}
+I'm </div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/ff257a6548bf89508a0a7fb6bc2833ea7aa7bf20?x=x&amp;version=3"></a><div class="content"><a class="author">Jack Henahan</a><div class="metadata"><a href="#182819863" name="182819863"><div>2019-12-07 00:52:25</div></a></div><div class="text"><p>I guess try the first way and use <code>-ddump-rule-firings</code> to see if it actually works, then go down the other route if not</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#182827263" name="182827263"><div>2019-12-07 04:19:33</div></a></div><div class="text"><p><span class="user-mention" data-user-id="250742">@Bolt</span> giving errors is not very helpful without the code that caused the error in the first place. food for thought in the future when asking questions</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#182827352" name="182827352"><div>2019-12-07 04:20:57</div></a></div><div class="text"><p>this thing is not a <code>SPECIALIZE</code> --- that just tells GHC to optimize a definition with a specific type signature</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#182827420" name="182827420"><div>2019-12-07 04:22:47</div></a></div><div class="text"><p>i would further describe this as "don't put in the effort"</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#182827421" name="182827421"><div>2019-12-07 04:22:53</div></a></div><div class="text"><p>rewrite rules are tricky to get right and often lead to pain</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#182827431" name="182827431"><div>2019-12-07 04:23:15</div></a></div><div class="text"><p>instead what you really want to do is give an <code>OVERLAPPING</code> instance of <code>Enum a =&gt; Enum (a, Int)</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#182827452" name="182827452"><div>2019-12-07 04:23:56</div></a></div><div class="text"><p>GHC can definitely internally create rules of the form you're asking about, but i'm not sure the language exposed to source haskell is powerful enough to bind dictionaries</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#182827500" name="182827500"><div>2019-12-07 04:24:57</div></a></div><div class="text"><p><a href="http://reasonablypolymorphic.com/blog/specialization/#rewrite-rules" target="_blank" title="http://reasonablypolymorphic.com/blog/specialization/#rewrite-rules">http://reasonablypolymorphic.com/blog/specialization/#rewrite-rules</a> i wrote a thing on grokking rewrite rules if you're interested</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?x=x&amp;version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#182837333" name="182837333"><div>2019-12-07 09:35:12</div></a></div><div class="text"><p>I will keep that in mind!</p>
+<p>Nice <span class="user-mention" data-user-id="251120">@Sandy Maguire</span> ! Your suggestion worked! Haskell can have weird things, thanks for the help!</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,149 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Does anyone else use &quot;let in do&quot; (pun intended) instead of let .. in? :
+a :: Foo -- Foo is random type, it doesn&#39;t need to be Monad
+a = do
+  let b = bar
+  let c = baz
+  f b c
+" name="description"><link href="https://funprog.srid.ca/haskell/let-in-do.html" rel="canonical"><meta property="og:title" content="let in do - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-03-01T21:17:14Z"><meta property="og:article:published_time" content="2021-03-01T15:26:07Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"><title>let in do - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">let in do - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">let in do</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228249153" name="228249153"><div>2021-03-01 15:26:07</div></a></div><div class="text"><p>Does anyone else use "let in do" (pun intended) instead of let .. in? :</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">a</span> <span class="ow">::</span> <span class="kt">Foo</span> <span class="c1">-- Foo is random type, it doesn't need to be Monad</span>
+<span class="nf">a</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="kr">let</span> <span class="n">b</span> <span class="ow">=</span> <span class="n">bar</span>
+  <span class="kr">let</span> <span class="n">c</span> <span class="ow">=</span> <span class="n">baz</span>
+  <span class="n">f</span> <span class="n">b</span> <span class="n">c</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#228249338" name="228249338"><div>2021-03-01 15:27:09</div></a></div><div class="text"><p>I never use <code>let ... in</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#228249403" name="228249403"><div>2021-03-01 15:27:33</div></a></div><div class="text"><p>unless unavoidable</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228249520" name="228249520"><div>2021-03-01 15:28:05</div></a></div><div class="text"><p><code>where</code> is nice, but when it doesn't work/fit, I just go with <code>do</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#228249655" name="228249655"><div>2021-03-01 15:29:00</div></a></div><div class="text"><p>oh you mean using <code>do</code> without any binders</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#228249665" name="228249665"><div>2021-03-01 15:29:04</div></a></div><div class="text"><p>clever</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/e0842574f3a3c70d15e978f2b543e74119562ed2?x=x&amp;version=2"></a><div class="content"><a class="author">Will</a><div class="metadata"><a href="#228249694" name="228249694"><div>2021-03-01 15:29:14</div></a></div><div class="text"><p>I had no idea this existed...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228249810" name="228249810"><div>2021-03-01 15:30:00</div></a></div><div class="text"><p>Language designers probably didn't either at first - I remember reading that they actually dropped type requirement at some point</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228249932" name="228249932"><div>2021-03-01 15:30:26</div></a></div><div class="text"><p>I mean, I wouldn't even bother implementing <code>let .. in</code> if I were to design new language with <code>do</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228249957" name="228249957"><div>2021-03-01 15:30:34</div></a></div><div class="text"><p>seeing as how it's syntactic sugar it doesn't make sense to have the requirement in the first place <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228250007" name="228250007"><div>2021-03-01 15:30:54</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/let.20in.20do/near/228249932">said</a>:</p>
+<blockquote>
+<p>I mean, I wouldn't even bother implementing <code>let .. in</code> if I were to design new language with <code>do</code></p>
+</blockquote>
+<p>well, that trick is ugly if you're writing things that are not multiple lines</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228250038" name="228250038"><div>2021-03-01 15:31:06</div></a></div><div class="text"><p><code>let x = y in z</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228250081" name="228250081"><div>2021-03-01 15:31:26</div></a></div><div class="text"><p><code>f a = g b where b = h a</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228250116" name="228250116"><div>2021-03-01 15:31:40</div></a></div><div class="text"><p>orthogonal, the above is an expression</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228250158" name="228250158"><div>2021-03-01 15:32:01</div></a></div><div class="text"><p>in general I agree that you don't see too many "same line" let-ins though</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228250269" name="228250269"><div>2021-03-01 15:32:24</div></a></div><div class="text"><p>I don't mind let-in, as long as the "in part" isn't indented</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228250312" name="228250312"><div>2021-03-01 15:32:44</div></a></div><div class="text"><p>Yeah,  my experience is that I'm usually indented anyway when trying to write binding without <code>where</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228250368" name="228250368"><div>2021-03-01 15:33:05</div></a></div><div class="text"><p>well, nothing is forcing it in theory</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228250399" name="228250399"><div>2021-03-01 15:33:10</div></a></div><div class="text"><p>only the hs society</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228250414" name="228250414"><div>2021-03-01 15:33:16</div></a></div><div class="text"><p>and all formatters, afaik</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228250449" name="228250449"><div>2021-03-01 15:33:35</div></a></div><div class="text"><p>I mean, technically you can even <code>do let a = b; c</code> <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228250637" name="228250637"><div>2021-03-01 15:34:28</div></a></div><div class="text"><p>Formatters are the worst - they never <em>understand</em> what I'm trying to achieve <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span> /s</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228250890" name="228250890"><div>2021-03-01 15:36:04</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/let.20in.20do/near/228250449">said</a>:</p>
+<blockquote>
+<p>I mean, technically you can even <code>do let a = b; c</code> <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p>
+</blockquote>
+<p>this is a bit brittle though, I think? or in general many <code>do</code>s on the same line are</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228250952" name="228250952"><div>2021-03-01 15:36:22</div></a></div><div class="text"><p>I run into issues sometimes when I'm abusing <code>do</code> as a <code>($)</code> replacement</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#228251065" name="228251065"><div>2021-03-01 15:37:09</div></a></div><div class="text"><p>really? I never had any problems with <code>do</code> as <code>$</code> replacement</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#228251515" name="228251515"><div>2021-03-01 15:40:04</div></a></div><div class="text"><p>I'll try to remember to share next time it happens</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228254164" name="228254164"><div>2021-03-01 15:55:49</div></a></div><div class="text"><p><code>$</code> let's you start at the same line and indent later at the cost of not being able to apply any other argument afterwards<br>
+<code>do</code> let's you unindent enough to get access to next argument, at the cost of always having to indent at the beginning if you want to use multiple lines</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228254335" name="228254335"><div>2021-03-01 15:56:43</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span> I guess that may be the problem you're running into</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#228254599" name="228254599"><div>2021-03-01 15:58:14</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/let.20in.20do/near/228254164">said</a>:</p>
+<blockquote>
+<p><code>$</code> lets you start at the same line</p>
+</blockquote>
+<p>same line?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228254694" name="228254694"><div>2021-03-01 15:58:53</div></a></div><div class="text"><div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">f</span> <span class="o">$</span> <span class="n">g</span> <span class="n">a</span>
+  <span class="n">b</span> <span class="n">c</span> <span class="o">...</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#228254781" name="228254781"><div>2021-03-01 15:59:28</div></a></div><div class="text"><p>You can't do</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">f</span> <span class="kr">do</span> <span class="n">g</span> <span class="n">a</span>
+  <span class="n">b</span> <span class="n">c</span>
+</code></pre></div>
+<p>though - instead you have to write</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">f</span> <span class="kr">do</span>
+  <span class="n">g</span> <span class="n">a</span> <span class="n">b</span> <span class="n">c</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#228254917" name="228254917"><div>2021-03-01 16:00:09</div></a></div><div class="text"><p>you can also do</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">f</span> <span class="o">$</span> <span class="n">g</span> <span class="n">a</span>
+<span class="nf">b</span> <span class="n">c</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#228283069" name="228283069"><div>2021-03-01 18:36:31</div></a></div><div class="text"><p>I never use <code>do ... let ...</code> unless I'm naturally in a <code>do</code>. And I use <code>let ... in</code> or <code>where</code> depending on which is bigger, my <code>let</code>/<code>where</code> declarations or the main body of my function. I try to always put the bigger thing last.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#228307613" name="228307613"><div>2021-03-01 21:17:14</div></a></div><div class="text"><p>I avoid it, in the interest of simplicity and readability. <code>do</code> suggests monadic context; using it in a pure context is abusing it. I generally use <code>where</code> wherever possible (<code>let</code> is useful in cases where you want access to the closure)</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

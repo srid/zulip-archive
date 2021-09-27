@@ -1,0 +1,158 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Can exists be used to implement a Showable type like what is done here? I don&#39;t see how to get the Show constraint." name="description"><link href="https://funprog.srid.ca/purescript/showable-type.html" rel="canonical"><meta property="og:title" content="Showable type - PureScript"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="PureScript"><meta property="og:article:modified_time" content="2021-06-02T17:59:21Z"><meta property="og:article:published_time" content="2021-05-17T21:52:02Z"><title>Showable type - PureScript</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Showable type - PureScript</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/purescript/" class="section">#PureScript</a><i class="right angle icon divider"></i><div class="active section">Showable type</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#239165600" name="239165600"><div>2021-05-17 21:52:02</div></a></div><div class="text"><p>Can <a href="https://pursuit.purescript.org/packages/purescript-exists/5.0.0">exists</a> be used to implement a <code>Showable</code> type like what is done <a href="https://thimoteus.github.io/posts/2018-09-21-existential-types.html">here</a>? I don't see how to get the <code>Show</code> constraint.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#239169156" name="239169156"><div>2021-05-17 22:26:47</div></a></div><div class="text"><p>Nope. <code>purescript-exists</code> uses a direct <code>unsafeCoerce</code>-based representation of the existential, instead of the Church encoding which uses a lambda. The Church encoding could let you pass extra data in the closure of the lambda, but the coercion-based encoding can only represent unconstrained existentials.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#239169218" name="239169218"><div>2021-05-17 22:27:48</div></a></div><div class="text"><p>so does <code>exists</code> have any advantage over the church encoding method?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#239169224" name="239169224"><div>2021-05-17 22:27:59</div></a></div><div class="text"><p>Performance, probably?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#239169325" name="239169325"><div>2021-05-17 22:29:01</div></a></div><div class="text"><p><a href="https://github.com/purescript/purescript-exists/issues/5">https://github.com/purescript/purescript-exists/issues/5</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/purescript/purescript-exists/issues/5" style="background-image: url(https://opengraph.githubassets.com/b9a1dd9b0574bd20ca240363a6ba2527322af35fd08345abd68624c8772fe850/purescript/purescript-exists/issues/5)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/purescript/purescript-exists/issues/5" title="Is there a reason to prefer the foreign/coerced representation to Church encoding? · Issue #5 · purescript/purescript-exists">Is there a reason to prefer the foreign/coerced representation to Church encoding? · Issue #5 · purescript/purescript-exists</a></div><div class="message_embed_description">I guess it save the allocation of one lambda? Just wondered if there were any other reasons to prefer the current version. For reference, I&#39;m talking about this as the alternative: newtype Fxis...</div></div></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#239169607" name="239169607"><div>2021-05-17 22:31:32</div></a></div><div class="text"><p>huh, one less lambda allocation doesn't seem worth it to me to give up that much power, but <span aria-label="shrug" class="emoji emoji-1f937" role="img" title="shrug">:shrug:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#239169865" name="239169865"><div>2021-05-17 22:33:58</div></a></div><div class="text"><p>Well, switching encodings isn't necessarily enough to get you what you want either.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#239170019" name="239170019"><div>2021-05-17 22:35:47</div></a></div><div class="text"><p>I don't think the type system lets you express an <code>Exists</code> that is generic over constrained and unconstrained types.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#239170095" name="239170095"><div>2021-05-17 22:36:16</div></a></div><div class="text"><p>Are you saying you need to implement an ad hoc one whenever you need it?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#239170209" name="239170209"><div>2021-05-17 22:37:41</div></a></div><div class="text"><p>I think so, until PureScript gets constraint kinds or something.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#239170427" name="239170427"><div>2021-05-17 22:39:51</div></a></div><div class="text"><p>hm, I kinda assumed that bit in the article that was like</p>
+<blockquote>
+<p>(Question: can we write this using the type Exists from above?)</p>
+</blockquote>
+<p>was included as sort of an exercise to the reader, which made me guess that it was possible somehow, but perhaps it was a legitimate question</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#239170492" name="239170492"><div>2021-05-17 22:40:11</div></a></div><div class="text"><p>and the answer is "no"</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#239170628" name="239170628"><div>2021-05-17 22:42:03</div></a></div><div class="text"><p>Or it's both: an exercise for the reader to which the answer is ‘no’. <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#239170753" name="239170753"><div>2021-05-17 22:42:54</div></a></div><div class="text"><p>What you need to generalize <code>Showable</code> is something like:</p>
+<div class="codehilite" data-code-language="purescript"><pre><span></span><code>newtype ConstrainedExists c = ConstrainedExists (∀ r. (∀ a. c a =&gt; a -&gt; r) -&gt; r)
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#239170770" name="239170770"><div>2021-05-17 22:43:15</div></a></div><div class="text"><p>But that <code>c a =&gt;</code> isn't legal.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#239171026" name="239171026"><div>2021-05-17 22:45:48</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="408296">rhendric</span> <a href="#narrow/stream/214955-PureScript/topic/Showable.20type/near/239170628">said</a>:</p>
+<blockquote>
+<p>Or it's both: an exercise for the reader to which the answer is ‘no’. <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p>
+</blockquote>
+<p>good point! <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mike Solomon</a><div class="metadata"><a href="#239382808" name="239382808"><div>2021-05-19 08:05:57</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="408296">rhendric</span> <a href="#narrow/stream/214955-PureScript/topic/Showable.20type/near/239170753">said</a>:</p>
+<blockquote>
+<p>What you need to generalize <code>Showable</code> is something like:</p>
+<p><div class="codehilite" data-code-language="purescript"><pre><span></span><code>newtype ConstrainedExists c = ConstrainedExists (∀ r. (∀ a. c a =&gt; a -&gt; r) -&gt; r)
+</code></pre></div><br>
+</p>
+</blockquote>
+<p>A bit late to the party. It depends what you want to achieve. If it is passing a dictionary around a la SYTC:</p>
+<div class="codehilite" data-code-language="purescript"><pre><span></span><code>-- hydrate dictionary with whatever...
+newtype ConstrainedExists c = ConstrainedExists (∀ r. (∀ a. { show :: a -&gt; String, eq :: a -&gt; a -&gt; Boolean } -&gt; a -&gt; r) -&gt; r)
+</code></pre></div>
+<p>This strategy can already go quite far - it's possible to handle fixed points, induction, etc.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#239453563" name="239453563"><div>2021-05-19 16:15:43</div></a></div><div class="text"><p>True, but I'm not sure that's quite in the spirit of the referenced blog post. Explicitly repacking your typeclass dictionary in that way is a decent workaround for not having constraint kinds, but it doesn't offer the ergonomics of passing something that is <code>Show</code> in and getting something that is <code>Show</code> out, at least not without some <code>Show</code>-specific boilerplate comparable to just writing <code>Showable</code>.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#239457294" name="239457294"><div>2021-05-19 16:40:15</div></a></div><div class="text"><div class="codehilite" data-code-language="purescript"><pre><span></span><code>-- hydrate dictionary with whatever...
+newtype ConstrainedExists c = ConstrainedExists (∀ r. (∀ a. { show :: a -&gt; String, eq :: a -&gt; a -&gt; Boolean } -&gt; a -&gt; r) -&gt; r)
+</code></pre></div>
+<p>I'm confused about what is going on here. <code>c</code> doesn't appear on the right side at all. At first I thought</p>
+<div class="codehilite"><pre><span></span><code>newtype ConstrainedExists c = ConstrainedExists (∀ r. (∀ a. c -&gt; a -&gt; r) -&gt; r)
+</code></pre></div>
+<p>is what was meant, that way you could set up your constraints by setting <code>c</code>, but given that <code>c</code> relies on  <code>a</code>, which is inside a higher rank type, I would think you still couldn't give it arbitrary constraints in this way. Is there something I'm missing?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Matei Adriel</a><div class="metadata"><a href="#241118541" name="241118541"><div>2021-06-02 08:20:56</div></a></div><div class="text"><p>What about</p>
+<div class="codehilite"><pre><span></span><code>newtype ConstrainedExists c = ConstrainedExists (∀ r. (∀ a. c a -&gt; r) -&gt; r)
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Matei Adriel</a><div class="metadata"><a href="#241122417" name="241122417"><div>2021-06-02 09:03:21</div></a></div><div class="text"><p>You could then pass it something like </p>
+<div class="codehilite" data-code-language="purescript"><pre><span></span><code>type ShowConstraint a = Show a =&gt; a
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Matei Adriel</a><div class="metadata"><a href="#241122504" name="241122504"><div>2021-06-02 09:04:04</div></a></div><div class="text"><p>(Idk if that works, cant try it rn)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Matei Adriel</a><div class="metadata"><a href="#241133144" name="241133144"><div>2021-06-02 10:57:07</div></a></div><div class="text"><p><a href="/user_uploads/13896/CIHOWbdpa8Yw2lWrL23upv6q/unknown-33.png">unknown-33.png</a></p>
+<div class="message_inline_image"><a href="/user_uploads/13896/CIHOWbdpa8Yw2lWrL23upv6q/unknown-33.png" title="unknown-33.png"><img src="/user_uploads/13896/CIHOWbdpa8Yw2lWrL23upv6q/unknown-33.png"></a></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Matei Adriel</a><div class="metadata"><a href="#241133150" name="241133150"><div>2021-06-02 10:57:13</div></a></div><div class="text"><p>Welp</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#241149692" name="241149692"><div>2021-06-02 13:38:39</div></a></div><div class="text"><p>It helps to mentally replace <code>=&gt;</code> with <code>-&gt;</code> (which is what it is at runtime) - <code>Show a -&gt; a</code> is a function from <code>Show</code> instance to a value, but you probably want equivalent of <code>Show a /\ a</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#241171070" name="241171070"><div>2021-06-02 16:05:53</div></a></div><div class="text"><p>Also, you can't partially apply type synonyms, so <code>ConstrainedExists ShowConstraint</code> wouldn't be valid anyway.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#241171431" name="241171431"><div>2021-06-02 16:08:24</div></a></div><div class="text"><p>This, however, works:</p>
+<div class="codehilite" data-code-language="purs"><pre><span></span><code>newtype ConstrainedExists c = ConstrainedExists (∀ r. (∀ a. c a r) -&gt; r)
+
+newtype ShowConstraint a r = ShowConstraint (Show a =&gt; a -&gt; r)
+
+newtype Hidden = Hidden Int
+
+x :: ConstrainedExists ShowConstraint
+x = ConstrainedExists (\(ShowConstraint f) -&gt; f 72)
+
+-- error: No type class instance was found for Data.Show.Show Hidden
+--y :: ConstrainedExists ShowConstraint
+--y = ConstrainedExists (\(ShowConstraint f) -&gt; f (Hidden 72))
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#241171504" name="241171504"><div>2021-06-02 16:09:10</div></a></div><div class="text"><p>But it doesn't save you from having to make that <code>Show</code>-specific <code>newtype</code>.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#241295169" name="241295169"><div>2021-06-02 17:57:33</div></a></div><div class="text"><p>why does the above approach work but not <span class="user-mention" data-user-id="408305">@Matei Adriel</span>'s <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Matei Adriel</a><div class="metadata"><a href="#241295234" name="241295234"><div>2021-06-02 17:58:00</div></a></div><div class="text"><p><span class="user-mention" data-user-id="408296">@rhendric</span> I used a type synnonim for the Exists type as well</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#241295335" name="241295335"><div>2021-06-02 17:58:35</div></a></div><div class="text"><p>oh, maybe that's why?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Matei Adriel</a><div class="metadata"><a href="#241295448" name="241295448"><div>2021-06-02 17:59:21</div></a></div><div class="text"><p>Im not sure, imma experiment w it a lite bit more</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

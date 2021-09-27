@@ -1,0 +1,178 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="If F :: C -&gt; D is a monoidal functor, then for any monoid object X : C, ... in C, F X : D, ... is a monoid object in D" name="description"><link href="https://funprog.srid.ca/category-theory/monoidal-categories.html" rel="canonical"><meta property="og:title" content="Monoidal categories - Category Theory"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Category Theory"><meta property="og:article:modified_time" content="2021-02-28T18:05:26Z"><meta property="og:article:published_time" content="2019-11-29T20:48:43Z"><title>Monoidal categories - Category Theory</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Monoidal categories - Category Theory</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/category-theory/" class="section">#Category Theory</a><i class="right angle icon divider"></i><div class="active section">Monoidal categories</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182203404" name="182203404"><div>2019-11-29 20:48:43</div></a></div><div class="text"><p>If <code>F :: C -&gt; D</code> is a monoidal functor, then for any monoid object <code>X : C, ...</code> in <code>C</code>, <code>F X : D, ...</code> is a monoid object in <code>D</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182203411" name="182203411"><div>2019-11-29 20:48:57</div></a></div><div class="text"><p>can we go further and change that "If" to an "Iff"?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/e0842574f3a3c70d15e978f2b543e74119562ed2?x=x&amp;version=2"></a><div class="content"><a class="author">Will</a><div class="metadata"><a href="#182203736" name="182203736"><div>2019-11-29 20:56:34</div></a></div><div class="text"><p>what do you mean by a "monoid object?"</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182203765" name="182203765"><div>2019-11-29 20:57:54</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251024">@Christoph Horst</span> I haven't heard of a monoidal equivalence before. is that something different from a lax monoidal functor?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182203818" name="182203818"><div>2019-11-29 20:58:39</div></a></div><div class="text"><p><span class="user-mention" data-user-id="250747">@Will</span> A "monoid object" is basically a way of generalizing the concept of a monoid. The normal monoids we're used to are monoid objects in the monoidal category of sets and functions.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182203828" name="182203828"><div>2019-11-29 20:59:02</div></a></div><div class="text"><p><a href="https://en.wikipedia.org/wiki/Monoid_(category_theory)" target="_blank" title="https://en.wikipedia.org/wiki/Monoid_(category_theory)">https://en.wikipedia.org/wiki/Monoid_(category_theory)</a> if you're interested</p>
+<div class="message_embed"><a class="message_embed_image" href="https://en.wikipedia.org/wiki/Monoid_(category_theory)" style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Monoid_unit_svg.svg/1200px-Monoid_unit_svg.svg.png)" target="_blank"></a><div class="data-container"><div class="message_embed_title"><a href="https://en.wikipedia.org/wiki/Monoid_(category_theory)" target="_blank" title="Monoid (category theory) - Wikipedia">Monoid (category theory) - Wikipedia</a></div><div class="message_embed_description">In category theory, a branch of mathematics, a monoid (or monoid object) (M, μ, η) in a monoidal category (C, ⊗, I) is an object M together with two morphisms
+</div></div></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Christoph Horst</a><div class="metadata"><a href="#182203913" name="182203913"><div>2019-11-29 21:00:16</div></a></div><div class="text"><p>I misread the question<br>
+but a monoidal equivalence should be something like the monoidal version of an equivalence of categories ... a pair of monoidal functors going back and forth s.t. the composite is naturally isomorphic to the identity, plus some conditions that hopefully become clear when one tries to draw the diagrams ...<br>
+pretty sure something like this exists. but it doesn't answer your question</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182203937" name="182203937"><div>2019-11-29 21:01:16</div></a></div><div class="text"><p>Hmm. Well we can strengthen lax monoidal to strong monoidal or strict monoidal, I'm not sure if that works out to be the same thing as what you're suggesting</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Christoph Horst</a><div class="metadata"><a href="#182204093" name="182204093"><div>2019-11-29 21:04:03</div></a></div><div class="text"><p>this paper contains a definition for a monoidal equivalence: <a href="http://scientificadvances.co.in/admin/img_data/457/images/[1]%20JANTAA%200114017%20Nguyen%20Tien%20Quang%20[41-59].pdf" target="_blank" title="http://scientificadvances.co.in/admin/img_data/457/images/[1]%20JANTAA%200114017%20Nguyen%20Tien%20Quang%20[41-59].pdf">http://scientificadvances.co.in/admin/img_data/457/images/[1]%20JANTAA%200114017%20Nguyen%20Tien%20Quang%20[41-59].pdf</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Christoph Horst</a><div class="metadata"><a href="#182204488" name="182204488"><div>2019-11-29 21:09:33</div></a></div><div class="text"><p>I also found the definition in my favourite CT textbook<br>
+seems to be standard :-)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182204560" name="182204560"><div>2019-11-29 21:10:15</div></a></div><div class="text"><p>can we state this in terms of adjunctions?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182204568" name="182204568"><div>2019-11-29 21:10:25</div></a></div><div class="text"><p>like, they're adjoint two ways almost it seems</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Ohad Kammar</a><div class="metadata"><a href="#182204782" name="182204782"><div>2019-11-29 21:15:26</div></a></div><div class="text"><p>No</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Ohad Kammar</a><div class="metadata"><a href="#182204852" name="182204852"><div>2019-11-29 21:16:47</div></a></div><div class="text"><p>(if FX has a monoid structure doesn't imply X does.)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182204866" name="182204866"><div>2019-11-29 21:17:14</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251443">@Ohad Kammar</span> That's not exactly the claim</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182204872" name="182204872"><div>2019-11-29 21:17:32</div></a></div><div class="text"><p>let me state it a different way</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182204920" name="182204920"><div>2019-11-29 21:18:23</div></a></div><div class="text"><p>If, for every monoid object <code>X</code> in <code>C</code>, <code>F X</code> is also a monoid object (with the data of the monoid given by the appropriate applications of <code>F</code> and its laxity to the data of <code>X</code>), is <code>F</code> a monoidal functor?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182204953" name="182204953"><div>2019-11-29 21:19:39</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251024">@Christoph Horst</span> I was thinking about it a bit more and it does seem remarkably close to having two adjunctions out of the given functors that are "related" in a certain way, so that the counits and units come together to form isomorphisms</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Ohad Kammar</a><div class="metadata"><a href="#182281350" name="182281350"><div>2019-12-01 11:28:50</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225136">@Asad Saeeduddin</span>  I don't understand what the claim is, as I don't see what monoid structure on <code>X</code> you are trying to show is a monoid.<br>
+You need two morphisms:</p>
+<div class="codehilite"><pre><span></span>e : I --&gt; X
+p : X (*) X -&gt; X
+</pre></div>
+
+
+<p>In general, without knowing something about <code>X</code> or the categories I am working with, I don't have these two morphisms.<br>
+Even if I have such morphisms on <code>F X</code>:</p>
+<div class="codehilite"><pre><span></span>e&#39; : I&#39; --&gt; FX
+p&#39;  : FX (*&#39;) FX --&gt; FX
+</pre></div>
+
+
+<p>that doesn't mean I can find an appropriate <code>e</code> and <code>p</code> for <code>X</code>.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#182282898" name="182282898"><div>2019-12-01 12:17:43</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251443">@Ohad Kammar</span></p>
+<blockquote>
+<p>as I don't see what monoid structure on X you are trying to show is a monoid.</p>
+</blockquote>
+<p>I'm not trying to show that <code>X</code> is a monoid. We already know it is the case that:</p>
+<p>- <em>if</em> <code>F : C -&gt; D</code>, <code>ϕ</code>, <code>ψ</code> is a monoidal functor<br>
+- <em>then</em> for every monoid object <code>X : C</code> in <code>C</code>, <code>F X : D</code> is a monoid object (with the data of the monoid object <code>F X</code> derived from the data of the monoid object <code>X</code> using <code>F</code>, <code>ϕ</code> and <code>ψ</code>)</p>
+<p>The question is simply whether we can change that <em>if</em> to an <em>iff</em> and the statement is still true. The additional burden of proof is to switch the <em>if</em> and <em>then</em> in those bullet points and see if the resulting proposition is true.</p>
+<blockquote>
+<p>In general, without knowing something about X or the categories I am working with</p>
+</blockquote>
+<p>You know that:</p>
+<p>- (C, ⨁, I, ...) and (D, ⨂, J, ...) are monoidal categories<br>
+- F is a functor from C to D<br>
+- ϕ is a natural transformation <code>(F _ ⨂ F _) -&gt; F (_ ⨁ _)</code><br>
+- ψ is a morphism <code>J -&gt; F I</code><br>
+- for every monoid object  (X,   +_C : X   ⨁ X   -&gt; X  , 0_C : I -&gt; X  ) in C,<br>
+  there is a monoid object (F X, +_D : F X ⨂ F X -&gt; F X, 0_D : J -&gt; F X) in D<br>
+- the data of the monoid object <code>F X</code> is derived from the data of the monoid object <code>X</code>. i.e.<br>
+  - +_D = F +_C ∘ ϕ<br>
+  - 0_D = F 0_C ∘ ψ</p>
+<p>This is what you get from assuming the second "then" bullet point in the list above. If all of this is true, is <code>F</code>, <code>ϕ</code>, <code>ψ</code> a lax monoidal functor?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Ohad Kammar</a><div class="metadata"><a href="#182286754" name="182286754"><div>2019-12-01 14:22:30</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225136">@Asad Saeeduddin</span><br>
+This has some chance of being true.</p>
+<p>If you're stuck, you might as well try the following. I don't know if<br>
+it works out --- haven't checked it.</p>
+<p>Step 1:</p>
+<p>Assuming <code>(C, ⨁, I, ...)</code> is also monoidal <em>bi-closed</em>, I think that<br>
+for each <code>C</code>-object <code>A</code>, we have a monoid structures on <code>A^A</code> (for<br>
+each choice of adjoint <code>-^A</code>). By our assumption, each <code>F(A^A)</code> is<br>
+then a monoid. Moreover, we have a morphism <code>F(A^A) ⨂ FA -&gt; FA</code> for<br>
+one of these <code>^A</code>, and <code>FA ⨂ F(A^A)</code> for the other, which let us think<br>
+of <code>F(A^A)</code> as a subobject of "<code>FA ^ FA</code>" (whether or not this<br>
+exponential actually exists in <code>D</code>).</p>
+<p>Now try to see whether by chasing appropriate <code>I</code>-elements of <code>A^A</code><br>
+and <code>((A ⨁ B) ⨁ C)^((A ⨁ B) ⨁ C)</code> you can deduce that <code>F</code> is in fact<br>
+monoidal.</p>
+<p>Step 2, <strong>if</strong> step 1 works out:</p>
+<p>We can move from <code>C</code> to a monoidal bi-closed category <code>[C^op, Set]</code><br>
+using Yoneda and the Day tensor product, and similarly to<br>
+<code>[D^op, Set]</code>.</p>
+<p>Perhaps you can then deduce that if <code>F</code> maps monoids to monoids, then<br>
+it extends to a similar functor <code>[C^op, Set] -&gt; [D^op, Set]</code> that maps<br>
+monoids to monoids, and so by Step 1 is a monoidal functor.</p>
+<p>If that's the case, perhaps you can deduce the original <code>F</code> is monoidal.</p>
+<p>Step 3, <strong>if</strong> step 2 works out:</p>
+<p>If step 2 works out, this means there should be an elementary proof for<br>
+the converse. Find it. :P.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Ohad Kammar</a><div class="metadata"><a href="#182430380" name="182430380"><div>2019-12-03 09:46:18</div></a></div><div class="text"><p>Well, since the identity function is a catamorphism, and you can always use it to derive a solution, maybe it's just not a descriptive concept</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Ohad Kammar</a><div class="metadata"><a href="#182430432" name="182430432"><div>2019-12-03 09:46:56</div></a></div><div class="text"><p>Put differently, when does a problem has no catamorphic solution?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#228146320" name="228146320"><div>2021-02-28 18:05:26</div></a></div><div class="text"><p>Hi,<br>
+I have a question about monoidal categories. The axioms for a monoid are 1) composition, 2) existence of a left/right unit, and 3) associativity. For a monoidal category the tensor product define composition, there is a unit and laws for this unit, but I'm not sure I understand the associator. I mean there is an associator but there is also a daunting pentagram axiom diagram. Is there an explanation of this pentagram, I mean why do we need it to define a monoidal category and not to define a monoid ? Would not having it makes a monoidal category not equivalent to a monoid for the category of set ?</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

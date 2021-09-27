@@ -1,0 +1,117 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="How can I work with polykinded categories without newtypes constantly kicking my ass?" name="description"><link href="https://funprog.srid.ca/haskell/newtypes-are-hell.html" rel="canonical"><meta property="og:title" content="Newtypes are hell - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-04-19T11:42:39Z"><meta property="og:article:published_time" content="2020-04-18T15:09:26Z"><title>Newtypes are hell - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Newtypes are hell - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Newtypes are hell</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194549084" name="194549084"><div>2020-04-18 15:09:26</div></a></div><div class="text"><p>How can I work with polykinded categories without newtypes constantly kicking my ass?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194549145" name="194549145"><div>2020-04-18 15:10:12</div></a></div><div class="text"><p>e.g. suppose I have some arrow <code>P :: K -&gt; K -&gt; *</code> for some kind <code>K</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194549205" name="194549205"><div>2020-04-18 15:11:28</div></a></div><div class="text"><p>now because you can't do normal functional programming with type constructors and typeclasses, you have to make newtypes for things like this:</p>
+<div class="codehilite"><pre><span></span>newtype Flip t a b = Flip { runFlip :: t b a }
+</pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194549274" name="194549274"><div>2020-04-18 15:12:26</div></a></div><div class="text"><p>ok fine, i'll use newtypes for that. the problem is the isomorphism introduced by the newtype is tied to the category <code>-&gt;</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194549283" name="194549283"><div>2020-04-18 15:12:49</div></a></div><div class="text"><p>i.e. the isomorphism is <code>t b a -&gt; Flip t a b</code> and <code>Flip t a b -&gt; t b a</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194549380" name="194549380"><div>2020-04-18 15:14:28</div></a></div><div class="text"><p>but what I need is an isomorphism of the form:</p>
+<div class="codehilite"><pre><span></span>t b a `P` Flip t a b
+Flip t a b `P` t b a
+</pre></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194549434" name="194549434"><div>2020-04-18 15:15:24</div></a></div><div class="text"><p>the only way to implement this that I can see is to take some unreasonable constraint like <code>Profunctor P</code>, which of course forces <code>P :: * -&gt; * -&gt; *</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194549703" name="194549703"><div>2020-04-18 15:21:02</div></a></div><div class="text"><p>The newtype idiom just doesn't work beyond very simple use cases. Having type level combinators inextricably tied to term level isomorphisms is a pattern that scales extremely poorly</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#194550153" name="194550153"><div>2020-04-18 15:30:21</div></a></div><div class="text"><p>Would <code>first-class-families</code> help?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194550272" name="194550272"><div>2020-04-18 15:33:28</div></a></div><div class="text"><p>first-class-families helps to an extent but it makes for a very strange API if you surface that to your users</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?x=x&amp;version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#194566186" name="194566186"><div>2020-04-18 22:11:56</div></a></div><div class="text"><p>Agda &lt;3</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#194569469" name="194569469"><div>2020-04-18 23:43:56</div></a></div><div class="text"><p>what would a solution look like here, asad?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#194569515" name="194569515"><div>2020-04-18 23:44:35</div></a></div><div class="text"><p>do you need full dep types? or type lambdas? or what would give you enough to solve the problem nicely?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#194569583" name="194569583"><div>2020-04-18 23:46:20</div></a></div><div class="text"><p>im working on a list of things that are technically or politically infeasible in haskell/ghc today</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#194593246" name="194593246"><div>2020-04-19 11:37:53</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251120">@Sandy Maguire</span> Would you be interested in a call to just go over what I'm trying to model? I think one of the problems here is I don't know what the solution is, only what the problem is. If we had full dependent types, yes, that would solve the problem, but maybe there's something weaker as well that would solve it nicely.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#194593452" name="194593452"><div>2020-04-19 11:42:39</div></a></div><div class="text"><p>I would join you if you don't mind <span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

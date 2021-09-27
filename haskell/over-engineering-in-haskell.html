@@ -1,0 +1,148 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="
+Over-engineering.
+Don&#39;t try to encode too much at the type level, the type system has its limits.
+With experience, you will discover these limits. 
+
+https://twitter.com/int_index/status/1255146184450007042
+@serokell #SerokellChat A5:
+
+Over-engineering.
+
+Don&#39;t try to encode too much at the type leve" name="description"><link href="https://funprog.srid.ca/haskell/over-engineering-in-haskell.html" rel="canonical"><meta property="og:title" content="Over-engineering in Haskell - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-05T20:02:17Z"><meta property="og:article:published_time" content="2020-05-01T20:57:52Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"><title>Over-engineering in Haskell - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Over-engineering in Haskell - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Over-engineering in Haskell</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196009187" name="196009187"><div>2020-05-01 20:57:52</div></a></div><div class="text"><blockquote>
+<p>Over-engineering.</p>
+<p>Don't try to encode too much at the type level, the type system has its limits.</p>
+<p>With experience, you will discover these limits. </p>
+</blockquote>
+<p><a href="https://twitter.com/int_index/status/1255146184450007042" title="https://twitter.com/int_index/status/1255146184450007042">https://twitter.com/int_index/status/1255146184450007042</a></p>
+<div class="inline-preview-twitter"><div class="twitter-tweet"><a href="https://twitter.com/int_index/status/1255146184450007042"><img class="twitter-avatar" src="https://pbs.twimg.com/profile_images/1088012209609953287/d2wrWERn_normal.jpg"></a><p><a href="https://twitter.com/serokell" title="https://twitter.com/serokell">@serokell</a> #SerokellChat A5:
+
+Over-engineering.
+
+Don't try to encode too much at the type level, the type system has its limits.
+
+With experience, you will discover these limits.</p><span>- Vladislav Zavialov (@int_index)</span></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196009316" name="196009316"><div>2020-05-01 20:58:50</div></a></div><div class="text"><p>"Why don't I make a zettel for it?"</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Hazem</a><div class="metadata"><a href="#196023902" name="196023902"><div>2020-05-02 00:24:18</div></a></div><div class="text"><p>Relevant post  (I think)<br>
+<a href="https://williamyaoh.com/posts/2020-04-19-permissive-vs-restrictive.html" title="https://williamyaoh.com/posts/2020-04-19-permissive-vs-restrictive.html">https://williamyaoh.com/posts/2020-04-19-permissive-vs-restrictive.html</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Cyril Valyavin</a><div class="metadata"><a href="#196060733" name="196060733"><div>2020-05-02 17:03:43</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="268567">Hazem</span> <a href="#narrow/stream/201385-Haskell/topic/Over-engineering.20in.20Haskell/near/196023902" title="#narrow/stream/201385-Haskell/topic/Over-engineering.20in.20Haskell/near/196023902">said</a>:</p>
+<blockquote>
+<p>Relevant post  (I think)<br>
+<a href="https://williamyaoh.com/posts/2020-04-19-permissive-vs-restrictive.html" title="https://williamyaoh.com/posts/2020-04-19-permissive-vs-restrictive.html">https://williamyaoh.com/posts/2020-04-19-permissive-vs-restrictive.html</a></p>
+</blockquote>
+<p>Not really, this post is about learning Haskell by practice, not about actually using it</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Cyril Valyavin</a><div class="metadata"><a href="#196060856" name="196060856"><div>2020-05-02 17:06:09</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span> <a href="#narrow/stream/201385-Haskell/topic/Over-engineering.20in.20Haskell/near/196009316" title="#narrow/stream/201385-Haskell/topic/Over-engineering.20in.20Haskell/near/196009316">said</a>:</p>
+<blockquote>
+<p>"Why don't I make a zettel for it?"</p>
+</blockquote>
+<p>I would love to see a collection of examples or some broad guidelines, like what leads to failure. People typically share positive experiences, so it's a rarity</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#196172746" name="196172746"><div>2020-05-04 12:22:03</div></a></div><div class="text"><p>What it means by encode too much at the type level?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#196174777" name="196174777"><div>2020-05-04 12:42:23</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251394">@Rizary</span> some things may be to cumbersome to encode in Haskell's type system - e.g. unless you're fine with defunctionalization techniques, doing non-trivial type-level stuff may be hard, similarly many ideas require some sort of dependent types emulation - and that requires <strong>a lot</strong> of TH/boilerplate</p>
+<p>It's not that those encodings would be bad idea in principle, but they don't pay for themselves when it comes to added complexity they introduce in current Haskell<br>
+It's not even that they should be fully avoided - Galois has some experience with using them: <a href="http://davidchristiansen.dk/pubs/dependent-haskell-experience-report.pdf" title="http://davidchristiansen.dk/pubs/dependent-haskell-experience-report.pdf">http://davidchristiansen.dk/pubs/dependent-haskell-experience-report.pdf</a></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#196181691" name="196181691"><div>2020-05-04 13:47:02</div></a></div><div class="text"><p>The tldr; on the paper: if you value correctness and refactoring going to full dependent Haskell is a net win in a large, complex project where tiny details like bounded bit-wise operations can have big consequences if you get them wrong. The project they're talking about, Crucible, is used in validating secure code.</p>
+<p>The difficulties are the usual suspects: it requires a certain amount of expertise to contribute at a high-level to the codebase. Tool support is good but the interactive tools struggle with dependent Haskell. They encountered GHC bugs (80k SLOC of bleeding-edge dependent Haskell is not the baseline most features are tested against), the type system is limited in the expressivity of proofs it can verify.</p>
+<p>They were using older versions of GHC at the time and they didn't use a dependently typed language because their code was performance sensitive and Haskell has decent profilers.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#196210177" name="196210177"><div>2020-05-04 17:02:49</div></a></div><div class="text"><p>I feel like "smart constructors" are a really nice technique to get a lot of benefits like this without needing to make things so much more complicated</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#196234684" name="196234684"><div>2020-05-04 20:17:08</div></a></div><div class="text"><p>They do but then the burden is still on the library author to uphold the invariants. And I don't trust myself <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#196235056" name="196235056"><div>2020-05-04 20:20:48</div></a></div><div class="text"><p>Yeah, that is hard. It is weird doing normally-partial stuff (like dividing by an arbitrary num) but not worrying about a bottom because you've validated that its OK (like if you implemented division and a NonZero smart constructor)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?x=x&amp;version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#196258167" name="196258167"><div>2020-05-05 01:00:49</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> i see.. Thank you, I'll read that paper</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#196359616" name="196359616"><div>2020-05-05 20:02:17</div></a></div><div class="text"><p><a href="http://okmij.org/ftp/Haskell/dependent-types.html" title="http://okmij.org/ftp/Haskell/dependent-types.html">http://okmij.org/ftp/Haskell/dependent-types.html</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

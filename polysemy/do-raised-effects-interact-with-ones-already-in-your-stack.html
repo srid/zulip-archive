@@ -1,0 +1,155 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="If I use raise to introduce an A into my effects stack, will how I dispatch that A affect any other As already present in the stack? (inspiration for this question or maybe I&#39;m just not understanding what&#39;s going on there)
+Polysemy and Persistent: transactions at business level · Issue #361 · polyse" name="description"><link href="https://funprog.srid.ca/polysemy/do-raised-effects-interact-with-ones-already-in-your-stack.html" rel="canonical"><meta property="og:title" content="Do raised effects interact with ones already in your stack? - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-10-06T17:41:34Z"><meta property="og:article:published_time" content="2020-09-26T19:09:09Z"><title>Do raised effects interact with ones already in your stack? - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Do raised effects interact with ones already in your stack? - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Do raised effects interact with ones already in your stack?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211374823" name="211374823"><div>2020-09-26 19:09:09</div></a></div><div class="text"><p>If I use <code>raise</code> to introduce an <code>A</code> into my effects stack, will how I dispatch <strong>that</strong> <code>A</code> affect <strong>any other</strong> <code>A</code>s already present in the stack? (<a href="https://github.com/polysemy-research/polysemy/issues/361#issuecomment-659347704">inspiration for this question</a> or maybe I'm just not understanding what's going on there)</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/polysemy-research/polysemy/issues/361#issuecomment-659347704" style="background-image: url(https://avatars1.githubusercontent.com/u/52079915?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/polysemy-research/polysemy/issues/361#issuecomment-659347704" title="Polysemy and Persistent: transactions at business level · Issue #361 · polysemy-research/polysemy">Polysemy and Persistent: transactions at business level · Issue #361 · polysemy-research/polysemy</a></div><div class="message_embed_description">Hi, I&#39;ve been pulling my hair for the last couple of days on this issue, but I can&#39;t manage to find a solution, I would appreciate if anyone can help me! Goal Use together Polysemy and Pers...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211384899" name="211384899"><div>2020-09-26 22:13:47</div></a></div><div class="text"><p>I think that <code>raise</code> is just there to line up the types, because of the possibility to switch interpreters mid-interpretation</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211385026" name="211385026"><div>2020-09-26 22:16:56</div></a></div><div class="text"><p>but how is the started transaction passed in from there supposed to get used for the interpretation for the leftover <code>Database</code> effect?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211385251" name="211385251"><div>2020-09-26 22:22:57</div></a></div><div class="text"><p>so you're talking about the <code>raiseUnder2</code>, not the <code>raise</code>, right</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211385272" name="211385272"><div>2020-09-26 22:23:37</div></a></div><div class="text"><p>my guess would be that the other <code>Database</code> will be consumed by another interpreter that is basically not doing anything</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211385327" name="211385327"><div>2020-09-26 22:24:41</div></a></div><div class="text"><p>to me it seems the opposite - this one does nothing, and the other one that is not seen here does the work</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211385333" name="211385333"><div>2020-09-26 22:24:55</div></a></div><div class="text"><p>but the op did say transactions are working..</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211385343" name="211385343"><div>2020-09-26 22:25:23</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/216942-Polysemy/topic/Do.20raised.20effects.20interact.20with.20ones.20already.20in.20your.20stack.3F/near/211385333">said</a>:</p>
+<blockquote>
+<p>but the op did say transactions are working..</p>
+</blockquote>
+<p>I wanted to write the same thing to the letter <span aria-label="joy" class="emoji emoji-1f602" role="img" title="joy">:joy:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211385385" name="211385385"><div>2020-09-26 22:26:06</div></a></div><div class="text"><p>so that's where my original question came from - there must be something about effect interactions/semantics that I'm missing</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211385452" name="211385452"><div>2020-09-26 22:28:51</div></a></div><div class="text"><p>it looks like op is <em>guessing</em> that <code>Database</code> is in the stack of the higher order thunk in <code>Transaction</code>. so if it is, does it get executed in <code>bracket</code>? is that the question we're having?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211399763" name="211399763"><div>2020-09-27 05:29:41</div></a></div><div class="text"><p>even if you guess right, raise <em>introduces</em> new effects, no?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211400559" name="211400559"><div>2020-09-27 05:58:51</div></a></div><div class="text"><p>imagine if you introduced a new <code>State</code> and then the interpretation of that state messed with the "other" <code>State</code> you have further down your list off effects <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211936404" name="211936404"><div>2020-10-01 16:25:23</div></a></div><div class="text"><p>if you want a more in-depth experience of this problem, I recommend this clash of the titans between Love and Lexi: <a href="https://github.com/hasura/eff/issues/12">https://github.com/hasura/eff/issues/12</a><br>
+<span aria-label="joy" class="emoji emoji-1f602" role="img" title="joy">:joy:</span></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/hasura/eff/issues/12" style="background-image: url(https://avatars3.githubusercontent.com/u/13966722?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/hasura/eff/issues/12" title="Incorrect semantics for higher-order effects · Issue #12 · hasura/eff">Incorrect semantics for higher-order effects · Issue #12 · hasura/eff</a></div><div class="message_embed_description">First-order effect systems like freer-simple can make use of interpreters/effect interception to have pseudo higher-order actions, like handleError and catchError. Unfortunately, such actions have ...</div></div></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211937216" name="211937216"><div>2020-10-01 16:31:14</div></a></div><div class="text"><p>I'm following that, but I think that the instance of my question is not directly related to what they're discussing (I think!*)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211937346" name="211937346"><div>2020-10-01 16:32:07</div></a></div><div class="text"><p>I honestly can't follow most of what Alexis is saying, even though she describes it in great detail<br>
+probably lacking a few key abstractions</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211937391" name="211937391"><div>2020-10-01 16:32:36</div></a></div><div class="text"><p>it's probably buried in there somewhere!</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211937535" name="211937535"><div>2020-10-01 16:33:39</div></a></div><div class="text"><p>I think this (my original question) would just be "unsound" in some sense of the word, if it did work like this</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211937645" name="211937645"><div>2020-10-01 16:34:16</div></a></div><div class="text"><p>you would never be able to rely on introducing a new effect and interpreting it, for fear of it already existing, at which you might as well use mtl</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211937976" name="211937976"><div>2020-10-01 16:37:07</div></a></div><div class="text"><p>yeah, I think it helps to imagine that the stack is only reified very late and everything before that is just negotiation. If you want to disambiguate, you can use tags or newtypes.<br>
+but there was one statement by Love in that thread that described how to prevent an effect from being "shared" like you were concerned about, I think that triggered me to post it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211938318" name="211938318"><div>2020-10-01 16:40:16</div></a></div><div class="text"><blockquote>
+<p>The solution is to install a local Error effect</p>
+</blockquote>
+<p>that was it</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211939238" name="211939238"><div>2020-10-01 16:48:05</div></a></div><div class="text"><p>The list is indeed reified only when you actually try to run a program, but nothing is stopping me from introducing two identical effects e.g. via <code>raiseUnder2</code>, as far as I recall/can tell</p>
+<p>I won't have any ambiguity issues either, if I run them immediately, and furthermore there could easily be another "copy" of the same effects further down the line <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211939269" name="211939269"><div>2020-10-01 16:48:17</div></a></div><div class="text"><p>(which should be the case for the <code>Transaction</code> thing)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211939444" name="211939444"><div>2020-10-01 16:49:35</div></a></div><div class="text"><p>yeah, they are talking about the same concern</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#211939551" name="211939551"><div>2020-10-01 16:50:07</div></a></div><div class="text"><p>or at least it's mentioned</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?x=x&amp;version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#212460788" name="212460788"><div>2020-10-06 17:41:34</div></a></div><div class="text"><p>Effect introduction exists <em>precisely so</em> interpreters can avoid interacting with ones application-code may use!<br>
+The way sending effects works is that any <code>Member e r</code> constraint always targets the top-most occurrence of <code>e</code> in <code>r</code>; and this is <code>r</code> <em>at the time of sending</em>. No effects introduced to <code>r</code> after-the-fact will <em>ever</em> be targeted.</p>
+<p>For example, say you have:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">data</span> <span class="kt">TellInt</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">TellInt</span> <span class="ow">::</span> <span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="kt">TellInt</span> <span class="n">m</span> <span class="nb">()</span>
+
+<span class="nf">makeSem</span> <span class="kt">''TellInt</span>
+
+<span class="nf">runTellInt</span> <span class="ow">::</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">TellInt</span> <span class="kt">':</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Int</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="nf">runTellInt</span> <span class="ow">=</span>
+    <span class="n">runState</span> <span class="o">@</span><span class="kt">Int</span> <span class="mi">0</span>
+  <span class="o">.</span> <span class="n">interpret</span> <span class="p">(</span><span class="nf">\</span><span class="kr">case</span>
+      <span class="kt">TellInt</span> <span class="n">i</span> <span class="ow">-&gt;</span> <span class="n">modify'</span> <span class="o">@</span><span class="kt">Int</span> <span class="p">(</span><span class="o">+</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">)</span>
+  <span class="o">.</span> <span class="n">raiseUnder</span>
+<span class="c1">-- Note that "interpret h . raiseUnder" is equivalent to "reinterpret h"</span>
+
+<span class="nf">main</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Int</span><span class="p">,</span> <span class="p">(</span><span class="kt">Int</span><span class="p">,</span> <span class="nb">()</span><span class="p">)</span>
+<span class="nf">main</span> <span class="ow">=</span> <span class="n">run</span> <span class="o">$</span> <span class="n">runState</span> <span class="o">@</span><span class="kt">Int</span> <span class="mi">0</span> <span class="o">$</span> <span class="n">runTellInt</span> <span class="o">$</span> <span class="n">modify'</span> <span class="o">@</span><span class="kt">Int</span> <span class="p">(</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">tellInt</span> <span class="mi">7</span>
+</code></pre></div>
+
+<p>This returns <code>(3, (7, ())</code>, like you'd want.<br>
+To explain why this works, the initial effect stack (in which you execute the <code>modify' @Int (+3)</code> and <code>tellInt 7</code>) is<br>
+<code>'[TellInt, State Int]</code>. To make this more clear, I'll attach labels to these: call the first effect <code>a</code>, and second effect <code>b</code>:<br>
+<code>'[a ~ TellInt, b ~ State Int]</code>. Now, <code>Member</code> targets the top-most effect of the stack; this means that <code>modify' @Int (+3)</code> will target <code>b</code>, and <code>tellInt 7</code> will target <code>a</code>.</p>
+<p>Now, we run <code>runTellInt</code>. This interprets <code>TellInt</code> by introducing a <code>State Int</code> effect of its own under <code>TellInt</code>. Call this newly introduced effect <code>c</code>: the effect stack becomes <code>'[a ~ TellInt, c ~ State Int, b ~ State Int]</code>. This <em>has not changed</em> what effects that have targeted by previous uses of <code>send</code>; only  what effects that will be targeted by future effects of <code>send</code>. The <code>put @Int 3</code> executed earlier still belongs to <code>b</code>.</p>
+<p>The <code>interpret</code> inside of <code>runTellInt</code> does some <code>modify'</code>s of its own; but these will target <code>c</code> instead of the previously-existing <code>b</code>, since now <code>c</code> is the topmost <code>State Int</code>. Furthermore, the <code>runState</code> executed in <code>runTellInt</code> interprets specifically <code>c</code>; <code>b</code> is left untouched.</p>
+<p>Once <code>runTellInt</code> is done, the effect stack will be <code>'[b ~ State Int]</code>. Since <code>runTellInt</code> immediately consumed the <code>State Int</code> effect it introduced, the fact another instance of <code>State Int</code> other than <code>b</code> was ever present in the effect stack is completely invisible. Any <code>State</code> actions from here on out will target <code>b</code> again.</p>
+<p>The final <code>runState</code> does interpret <code>b</code>. Because of that, it will interpret the <code>modify' @Int (+3)</code> done in the very beginning, and thus the final state will be <code>3</code>.</p>
+<p>TL;DR: No. Introducing a new effect only affects what <code>send</code>s are done from that point on, and only until the introduced effect is consumed. If an interpreter immediately consumes the effect it introduces (like  <code>runTellInt</code>), this makes the fact that an effect was introduced <strong>completely</strong> invisible to the outside world.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

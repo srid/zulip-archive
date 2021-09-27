@@ -1,0 +1,144 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Should liftT be exposed &quot;officially&quot;? I found it useful here:
+data Authorise user m a where
+  Authorise :: user -&gt; m a -&gt; m a -&gt; Authorise user m a
+
+makeSem &#39;&#39;Authorise
+
+runAuthoriseSem
+  :: (user -&gt; Sem r Bool) -&gt; Sem (Authorise user &#39;: r) a -&gt; Sem r a
+runAuthoriseSem auth = interpretH \case
+  Auth" name="description"><link href="https://funprog.srid.ca/polysemy/expose-liftt.html" rel="canonical"><meta property="og:title" content="Expose liftT - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-01-12T11:02:48Z"><meta property="og:article:published_time" content="2020-01-10T20:47:53Z"><title>Expose liftT - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Expose liftT - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Expose liftT</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#185349839" name="185349839"><div>2020-01-10 20:47:53</div></a></div><div class="text"><p>Should <a href="https://hackage.haskell.org/package/polysemy-1.2.3.0/docs/Polysemy-Internal-Tactics.html#v:liftT" target="_blank" title="https://hackage.haskell.org/package/polysemy-1.2.3.0/docs/Polysemy-Internal-Tactics.html#v:liftT">liftT</a> be exposed "officially"? I found it useful here:</p>
+<div class="codehilite"><pre><span></span><span class="kr">data</span> <span class="kt">Authorise</span> <span class="n">user</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">Authorise</span> <span class="ow">::</span> <span class="n">user</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Authorise</span> <span class="n">user</span> <span class="n">m</span> <span class="n">a</span>
+
+<span class="nf">makeSem</span> <span class="kt">&#39;&#39;Authorise</span>
+
+<span class="nf">runAuthoriseSem</span>
+  <span class="ow">::</span> <span class="p">(</span><span class="n">user</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="kt">Bool</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Authorise</span> <span class="n">user</span> <span class="sc">&#39;</span><span class="err">: r) a -&gt; Sem r a</span>
+<span class="nf">runAuthoriseSem</span> <span class="n">auth</span> <span class="ow">=</span> <span class="n">interpretH</span> <span class="nf">\</span><span class="kr">case</span>
+  <span class="kt">Authorise</span> <span class="n">user</span> <span class="n">f</span> <span class="n">err</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+    <span class="n">b</span> <span class="ow">&lt;-</span> <span class="n">liftT</span> <span class="o">$</span> <span class="n">auth</span> <span class="n">user</span>
+    <span class="n">g</span> <span class="ow">&lt;-</span> <span class="n">bindT</span> <span class="nf">\</span><span class="n">b&#39;</span> <span class="ow">-&gt;</span>
+      <span class="kr">if</span> <span class="n">b&#39;</span>
+      <span class="kr">then</span> <span class="n">f</span>
+      <span class="kr">else</span> <span class="n">err</span>
+
+    <span class="n">raise</span> <span class="o">$</span> <span class="n">runAuthoriseSem</span> <span class="n">auth</span> <span class="o">$</span> <span class="n">g</span> <span class="n">b</span>
+</pre></div>
+
+
+<p>Although to be honest I'm not sure if I'm doing something wrong (the <code>Tactics</code> stuff is hard to follow), but <code>liftT</code> (or equivalently reimplementing it) was the way I found to "inject" a <code>Sem r</code> from the outside into a context inside an <code>interpretH</code></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#185350041" name="185350041"><div>2020-01-10 20:50:05</div></a></div><div class="text"><p>Also the docs on it seem weird to me (I'm definitely missing something here):<br>
+<code>Internal function to create first-order interpreter combinators out of higher-order ones.</code><br>
+Which one is the "first-order interpreter", and which one is the "higher-order one"?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#185401366" name="185401366"><div>2020-01-11 19:04:24</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span>  First-order one is defined in terms of <code>interpret</code>, higher-order in terms of <code>interpretH</code><br>
+I guess <code>liftT</code> is fine here - maybe <span class="user-mention" data-user-id="254034">@Love Waern (King of the Homeless)</span>  can point out something interesting</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?x=x&amp;version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#185427590" name="185427590"><div>2020-01-12 10:00:28</div></a></div><div class="text"><p>Use <code>raise</code> instead.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?x=x&amp;version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#185427656" name="185427656"><div>2020-01-12 10:02:12</div></a></div><div class="text"><p><code>WithTactics e f m r = Tactics f m (e ': r) ': r</code>, so you can use <code>raise</code> to transform <code>Sem r a</code> to <code>Sem (WithTactics e f m r) a</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#185427672" name="185427672"><div>2020-01-12 10:03:35</div></a></div><div class="text"><p>Oh - we should at least put it into docs, because that's easy to miss <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?x=x&amp;version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#185427725" name="185427725"><div>2020-01-12 10:04:43</div></a></div><div class="text"><p>True!</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#185429581" name="185429581"><div>2020-01-12 11:02:48</div></a></div><div class="text"><p>What does the <code>pureT</code> in <code>liftT</code> do? I originally went with <code>liftT</code> instead of <code>raise</code>, because I assumed there was some reason to be doing the <code>pureT</code>?</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

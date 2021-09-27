@@ -1,0 +1,131 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I was able to make PS compile using GHCJS using custom wrapper - given
+main = do
+  (ws, out) &lt;- compileTextToJS &quot;module Main where\nmain = let f x = f x in f 1&quot;
+  printErrors ws
+  either printErrors T.putStrLn out
+
+
+as entry-point of GHCJS app, I get:
+purjs.png
+" name="description"><link href="https://funprog.srid.ca/purescript/purjs.html" rel="canonical"><meta property="og:title" content="PurJS - PureScript"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="PureScript"><meta property="og:article:modified_time" content="2020-10-10T22:48:48Z"><meta property="og:article:published_time" content="2020-10-10T19:04:50Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"><title>PurJS - PureScript</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">PurJS - PureScript</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/purescript/" class="section">#PureScript</a><i class="right angle icon divider"></i><div class="active section">PurJS</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#212930144" name="212930144"><div>2020-10-10 19:04:50</div></a></div><div class="text"><p>I was able to make PS compile using GHCJS using custom wrapper - given</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">main</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span> <span class="ow">&lt;-</span> <span class="n">compileTextToJS</span> <span class="s">"module Main where</span><span class="se">\n</span><span class="s">main = let f x = f x in f 1"</span>
+  <span class="n">printErrors</span> <span class="n">ws</span>
+  <span class="n">either</span> <span class="n">printErrors</span> <span class="kt">T</span><span class="o">.</span><span class="n">putStrLn</span> <span class="n">out</span>
+</code></pre></div>
+
+<p>as entry-point of GHCJS app, I get:<br>
+<a href="/user_uploads/13896/vR1rBiBQUllzjZjWxWSqYEV_/purjs.png">purjs.png</a></p>
+<div class="message_inline_image"><a href="/user_uploads/13896/vR1rBiBQUllzjZjWxWSqYEV_/purjs.png" title="purjs.png"><img src="/user_uploads/13896/vR1rBiBQUllzjZjWxWSqYEV_/purjs.png"></a></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#212930150" name="212930150"><div>2020-10-10 19:05:04</div></a></div><div class="text"><p>All in browser!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#212930171" name="212930171"><div>2020-10-10 19:05:51</div></a></div><div class="text"><p>Now I need to figure out multi-module compilation (and thus access to <code>Prelude</code> and stuff) and some UI other that output in console <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#212930564" name="212930564"><div>2020-10-10 19:14:06</div></a></div><div class="text"><p>quick, register <code>psfiddle.net</code> (cf. <a href="https://jsfiddle.net/">https://jsfiddle.net/</a>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#212930656" name="212930656"><div>2020-10-10 19:16:07</div></a></div><div class="text"><p>It already is registered by someone, it just doesn't work <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span>  - <a href="https://psfiddle.net/">https://psfiddle.net/</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?x=x&amp;version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#212932179" name="212932179"><div>2020-10-10 19:57:43</div></a></div><div class="text"><p>Putting current state here: <a href="https://github.com/thematten/purjs">https://github.com/thematten/purjs</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/thematten/purjs" style="background-image: url(https://avatars0.githubusercontent.com/u/21198836?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/thematten/purjs" title="TheMatten/purjs">TheMatten/purjs</a></div><div class="message_embed_description">[WIP] wrapper for running purescript compiler in browser - TheMatten/purjs</div></div></div></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#212938315" name="212938315"><div>2020-10-10 22:48:48</div></a></div><div class="text"><p>Oh my god I finally understand what you're doing. I was thinking you were compiling purescript code to js using GHCJS instead of purs and I didn't understand why <span aria-label="laughing" class="emoji emoji-1f606" role="img" title="laughing">:laughing:</span></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,191 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Tell me why this isn&#39;t a good idea. I&#39;m thinking that dhall might be really suitable as a templating language ala mustache, but with types:
+let Person =
+  { name : Text
+  , age : Natural
+  }
+let Message =
+  { recipient : Person
+  , sender : Person
+  , content : Text
+  }
+
+let Text/concatMapSep = http" name="description"><link href="https://funprog.srid.ca/dhall/dhall-as-a-template-engine.html" rel="canonical"><meta property="og:title" content="Dhall as a template engine - Dhall"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Dhall"><meta property="og:article:modified_time" content="2020-09-10T14:54:20Z"><meta property="og:article:published_time" content="2020-09-10T13:42:25Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"><title>Dhall as a template engine - Dhall</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Dhall as a template engine - Dhall</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/dhall/" class="section">#Dhall</a><i class="right angle icon divider"></i><div class="active section">Dhall as a template engine</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#209641796" name="209641796"><div>2020-09-10 13:42:25</div></a></div><div class="text"><p>Tell me why this isn't a good idea. I'm thinking that dhall might be really suitable as a templating language ala mustache, but with types:</p>
+<div class="codehilite"><pre><span></span><code>let Person =
+  { name : Text
+  , age : Natural
+  }
+let Message =
+  { recipient : Person
+  , sender : Person
+  , content : Text
+  }
+
+let Text/concatMapSep = https://prelude.dhall-lang.org/Text/concatMapSep sha256:c272aca80a607bc5963d1fcb38819e7e0d3e72ac4d02b1183b1afb6a91340840
+
+let renderMessage : Message -&gt; Text =
+  \(message : Message) -&gt;
+  &#39;&#39;
+  Message from ${message.sender.name}
+  Sent to ${message.recipient.name}
+
+  ${message.content}
+  &#39;&#39;
+
+let fun : List Message -&gt; Text =
+  Text/concatMapSep &quot;----------------------&quot; Message renderMessage
+in
+
+fun
+</code></pre></div>
+
+
+<div class="codehilite"><pre><span></span><code><span class="cm">{-# LANGUAGE DerivingVia #-}</span>
+<span class="cm">{-# LANGUAGE DataKinds #-}</span>
+<span class="cm">{-# LANGUAGE DeriveGeneric #-}</span>
+<span class="cm">{-# LANGUAGE TypeOperators #-}</span>
+<span class="kr">module</span> <span class="nn">Main</span> <span class="kr">where</span>
+
+<span class="kr">import</span> <span class="nn">Dhall.Deriving</span>
+<span class="kr">import</span> <span class="nn">GHC.Generics</span> <span class="p">(</span><span class="kt">Generic</span><span class="p">)</span>
+<span class="kr">import</span> <span class="nn">Dhall</span> <span class="p">(</span><span class="kt">FromDhall</span><span class="p">(</span><span class="o">..</span><span class="p">),</span> <span class="kt">ToDhall</span><span class="p">(</span><span class="o">..</span><span class="p">),</span> <span class="nf">inputFile</span><span class="p">,</span> <span class="nf">auto</span><span class="p">)</span>
+
+<span class="kr">import</span> <span class="nn">Data.Text</span> <span class="p">(</span><span class="kt">Text</span><span class="p">)</span>
+<span class="kr">import</span> <span class="k">qualified</span> <span class="nn">Data.Text.IO</span> <span class="k">as</span> <span class="n">T</span>
+
+<span class="kr">import</span> <span class="nn">Numeric.Natural</span>
+
+<span class="kr">data</span> <span class="kt">Person</span>
+  <span class="ow">=</span> <span class="kt">Person</span> <span class="p">{</span> <span class="n">personName</span> <span class="ow">::</span> <span class="o">!</span><span class="kt">Text</span>
+           <span class="p">,</span> <span class="n">personAge</span> <span class="ow">::</span> <span class="o">!</span><span class="kt">Natural</span>
+           <span class="p">}</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Show</span><span class="p">,</span> <span class="kt">Generic</span><span class="p">)</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">FromDhall</span><span class="p">,</span> <span class="kt">ToDhall</span><span class="p">)</span>
+    <span class="n">via</span> <span class="kt">Codec</span> <span class="p">(</span><span class="kt">Field</span> <span class="p">(</span><span class="kt">CamelCase</span> <span class="o">&lt;&lt;&lt;</span> <span class="kt">DropPrefix</span> <span class="s">&quot;person&quot;</span><span class="p">))</span> <span class="kt">Person</span>
+
+<span class="kr">data</span> <span class="kt">Message</span>
+  <span class="ow">=</span> <span class="kt">Message</span> <span class="p">{</span> <span class="n">messageRecipient</span> <span class="ow">::</span> <span class="o">!</span><span class="kt">Person</span>
+            <span class="p">,</span> <span class="n">messageSender</span> <span class="ow">::</span> <span class="o">!</span><span class="kt">Person</span>
+            <span class="p">,</span> <span class="n">messageContent</span> <span class="ow">::</span> <span class="o">!</span><span class="kt">Text</span>
+            <span class="p">}</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Show</span><span class="p">,</span> <span class="kt">Generic</span><span class="p">)</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">FromDhall</span><span class="p">,</span> <span class="kt">ToDhall</span><span class="p">)</span>
+    <span class="n">via</span> <span class="kt">Codec</span> <span class="p">(</span><span class="kt">Field</span> <span class="p">(</span><span class="kt">CamelCase</span> <span class="o">&lt;&lt;&lt;</span> <span class="kt">DropPrefix</span> <span class="s">&quot;message&quot;</span><span class="p">))</span> <span class="kt">Message</span>
+
+<span class="nf">main</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">main</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">renderMessage</span> <span class="ow">&lt;-</span> <span class="n">inputFile</span> <span class="n">auto</span> <span class="s">&quot;template.dhall&quot;</span>
+  <span class="kr">let</span> <span class="n">recipient</span> <span class="ow">=</span> <span class="kt">Person</span> <span class="s">&quot;foo&quot;</span> <span class="mi">3</span>
+      <span class="n">sender</span> <span class="ow">=</span> <span class="kt">Person</span> <span class="s">&quot;bar&quot;</span> <span class="mi">3</span>
+  <span class="kt">T</span><span class="o">.</span><span class="n">putStrLn</span> <span class="o">.</span> <span class="n">renderMessage</span> <span class="o">$</span> <span class="p">[</span><span class="kt">Message</span> <span class="n">recipient</span> <span class="n">sender</span> <span class="s">&quot;content of the message&quot;</span><span class="p">]</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#209642414" name="209642414"><div>2020-09-10 13:43:20</div></a></div><div class="text"><p>This is using the <code>a -&gt; b</code> instance of <code>FromDhall</code> to "compile" the templates, so you end up having a normal <code>[Message] -&gt; Text</code> as your template function in haskell, so there is no round tripping to dhall.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/24b62e7b62bbbc0f4f0617b5ccd66e6f8fe784f6?x=x&amp;version=2"></a><div class="content"><a class="author">tristanC</a><div class="metadata"><a href="#209648292" name="209648292"><div>2020-09-10 14:11:17</div></a></div><div class="text"><p>I think that's a great idea, as long as you can define the input using dhall types. I have been doing such things using the cli, e:g: <code>dhall text &lt;&lt;&lt; "./template.dhall $(yaml-to-dhall input.yaml)"</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?x=x&amp;version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#209657903" name="209657903"><div>2020-09-10 14:54:20</div></a></div><div class="text"><p>One of the downsides I can think of is the lack of date types and their formatters. You end up normalizing the records to text and whatever else primitives</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

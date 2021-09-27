@@ -1,0 +1,140 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I&#39;ve noticed a lot of projects write their LANGUAGE pragmas:
+{-# LANGUAGE Like #-}
+{-# LANGUAGE This #-}
+
+
+
+instead of
+{-# LANGUAGE
+    Like
+  , This
+#-}
+
+
+
+Is there a particular reason for doing it the former way, or am I reading too much into it?" name="description"><link href="https://funprog.srid.ca/haskell/language-pragmas.html" rel="canonical"><meta property="og:title" content="LANGUAGE pragmas - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-26T03:52:01Z"><meta property="og:article:published_time" content="2020-05-26T00:02:38Z"><title>LANGUAGE pragmas - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">LANGUAGE pragmas - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">LANGUAGE pragmas</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#198709961" name="198709961"><div>2020-05-26 00:02:38</div></a></div><div class="text"><p>I've noticed a lot of projects write their LANGUAGE pragmas:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">{-# LANGUAGE Like #-}</span>
+<span class="cm">{-# LANGUAGE This #-}</span>
+</code></pre></div>
+
+
+<p>instead of</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">{-# LANGUAGE</span>
+<span class="cm">    Like</span>
+<span class="cm">  , This</span>
+<span class="cm">#-}</span>
+</code></pre></div>
+
+
+<p>Is there a particular reason for doing it the former way, or am I reading too much into it?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/b10e5343a097452b2b3f411febc67e282658af76?x=x&amp;version=2"></a><div class="content"><a class="author">Matt Peddie</a><div class="metadata"><a href="#198710786" name="198710786"><div>2020-05-26 00:23:48</div></a></div><div class="text"><p>I think it can make the diffs a bit tidier, as each line can be inserted or removed without modifying any others</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?x=x&amp;version=4"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#198710875" name="198710875"><div>2020-05-26 00:26:01</div></a></div><div class="text"><p>I can't speak to language pragmas since I just throw everything into <code>default-extensions</code>, but as a user of line-based editing paradigms I would say that uniformity is helpful <span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span> though I would be surprised that this was popular, since most haskell code I see looks like people go out of their ways to make it as inefficient to manipulate as possible <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#198712934" name="198712934"><div>2020-05-26 01:18:08</div></a></div><div class="text"><p>stylish-haskell defaults to the first style (vertical), and doesn't support the second at all. Its other two styles have multiple extensions per line. That's enough to stop me from switching right now, even though I like the suggested style.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#198713620" name="198713620"><div>2020-05-26 01:38:42</div></a></div><div class="text"><p>Haha, stylish haskell is a huge offender for creating stupid merge conflicts and unnecessary changes. Unless you turn off all of the things that do any kind of vertical alignment. and just use it to order things. I used to love it, till I started getting PRs and merging lots of stylish haskell formatted code, lol.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?x=x&amp;version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#198713965" name="198713965"><div>2020-05-26 01:49:44</div></a></div><div class="text"><p>Yeah, I think the worst is vertical alignment of imports, which I have turned off.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#198714749" name="198714749"><div>2020-05-26 02:11:53</div></a></div><div class="text"><p>And alignment of records.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#198718273" name="198718273"><div>2020-05-26 03:51:28</div></a></div><div class="text"><p>multiple pragmas is better for stupid tooling as well</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#198718275" name="198718275"><div>2020-05-26 03:51:39</div></a></div><div class="text"><p>i have a vim command that inserts a pragma as the top line of a file</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#198718279" name="198718279"><div>2020-05-26 03:52:01</div></a></div><div class="text"><p>having to parse a pragma to find where is a good place to add one iff it already exists --- no bueno</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

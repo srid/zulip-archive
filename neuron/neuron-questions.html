@@ -1,0 +1,121 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I just arrived here and I have 2 questions:
+
+can neuron be provided as a downloadable binary? the nix part may frighten tons of uninitiated people
+how can we customize the site generated?
+" name="description"><link href="https://funprog.srid.ca/neuron/neuron-questions.html" rel="canonical"><meta property="og:title" content="Neuron questions - Neuron"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Neuron"><meta property="og:article:modified_time" content="2020-11-14T19:56:31Z"><meta property="og:article:published_time" content="2020-09-04T15:16:20Z"><title>Neuron questions - Neuron</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Neuron questions - Neuron</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/neuron/" class="section">#Neuron</a><i class="right angle icon divider"></i><div class="active section">Neuron questions</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209106125" name="209106125"><div>2020-09-04 15:16:20</div></a></div><div class="text"><p>I just arrived here and I have 2 questions:</p>
+<ol>
+<li>can neuron be provided as a downloadable binary? the <code>nix</code> part may frighten tons of uninitiated people</li>
+<li>how can we customize the site generated?</li>
+</ol></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209106155" name="209106155"><div>2020-09-04 15:16:36</div></a></div><div class="text"><p>(also, thank you very much for these tools, they are awesome)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">fiatjaf</a><div class="metadata"><a href="#209111134" name="209111134"><div>2020-09-04 15:58:18</div></a></div><div class="text"><p>oh, apparently there is a <a class="stream" data-stream-id="231929" href="/#narrow/stream/231929-Neuron">#Neuron</a> stream.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209129639" name="209129639"><div>2020-09-04 19:00:33</div></a></div><div class="text"><p><span class="user-mention" data-user-id="337908">@fiatjaf</span> There is a docker image, as well as a 'fake static binary' (~10s cold boot) for Linux - but otherwise you will need Nix.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#209129688" name="209129688"><div>2020-09-04 19:01:09</div></a></div><div class="text"><p>As for site customization, that's in roadmap: <a href="https://github.com/srid/neuron/issues/253">https://github.com/srid/neuron/issues/253</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/issues/253" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/issues/253" title="Full themes support · Issue #253 · srid/neuron">Full themes support · Issue #253 · srid/neuron</a></div><div class="message_embed_description">What we have right now is the ability to override color schemes. It would be nice to also be able to override HTML layout and CSS styles. Since neuron uses reflex-dom for HTML and clay for CSS, a t...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/1000/9fd9de59f964f6e3af477006ddd0116211347010?x=x&amp;version=2"></a><div class="content"><a class="author">Notification Bot</a><div class="metadata"><a href="#209129718" name="209129718"><div>2020-09-04 19:01:29</div></a></div><div class="text"><p>This topic was moved here from <a class="stream-topic" data-stream-id="201383" href="/#narrow/stream/201383-General/topic/Neuron.20questions">#General &gt; Neuron questions</a> by <span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#216395460" name="216395460"><div>2020-11-11 20:33:27</div></a></div><div class="text"><p>So I didn't RTFM and I didn't select "Include all branches". Is that a big deal? Can I manually fix that somehow?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#216402429" name="216402429"><div>2020-11-11 21:42:51</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251612">@Fintan Halpenny</span> Probably not a big deal. If your GH pages doesn't update, go to settings and switch the <code>gh-pages</code> branch to something else, and then back to gh-pages.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#216402448" name="216402448"><div>2020-11-11 21:43:10</div></a></div><div class="text"><p>This bug has been unreliable; and I'm not sure if we still need these workarounds.</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#216405305" name="216405305"><div>2020-11-11 22:16:27</div></a></div><div class="text"><p>Sweet, I'll let check it out once I have some notes up :)</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#216405316" name="216405316"><div>2020-11-11 22:16:37</div></a></div><div class="text"><p>Excited to try this tool out finally!</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Kampouse</a><div class="metadata"><a href="#216733822" name="216733822"><div>2020-11-14 15:09:54</div></a></div><div class="text"><p>I was looking at stuff like that yesterday seems to be a nice implementation! Good job</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#216734091" name="216734091"><div>2020-11-14 15:18:29</div></a></div><div class="text"><p>This is pretty cool <span class="user-mention" data-user-id="251311">@Sridhar Ratnakumar</span>! I've started my brain child :) <a href="https://www.cerveau.app/-/FintanH/brain-child/master/index">https://www.cerveau.app/-/FintanH/brain-child/master/index</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?x=x&amp;version=2"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#216745174" name="216745174"><div>2020-11-14 19:23:29</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251612">@Fintan Halpenny</span> Nice. Did you manage to resolve the GH pages issues? <a href="https://fintanh.github.io/brain-child">https://fintanh.github.io/brain-child</a> is still non-existant for me ...</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#216746771" name="216746771"><div>2020-11-14 19:52:42</div></a></div><div class="text"><p>I didn't try <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#216746802" name="216746802"><div>2020-11-14 19:53:27</div></a></div><div class="text"><p>I already have GH pages set to something already, will that be an issue due you know?</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#216747010" name="216747010"><div>2020-11-14 19:56:17</div></a></div><div class="text"><p>As far as I can tell it's one repo per user</p></div></div></div><div class="comment"><a class="avatar"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#216747020" name="216747020"><div>2020-11-14 19:56:31</div></a></div><div class="text"><p>So I have <a href="https://fintanh.github.io/">https://fintanh.github.io/</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
