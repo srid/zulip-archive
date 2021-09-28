@@ -198,10 +198,7 @@ renderPage server cfg route val = html_ [lang_ "en"] $ do
         div_ [class_ "ui comments messages"] $ do
           forM_ (_topicMessages topic) $ \msg -> do
             div_ [class_ "comment"] $ do
-              a_ [class_ "avatar"] $ do
-                case _messageAvatarUrl msg of
-                  Nothing -> mempty
-                  Just avatarUrl -> img_ [src_ $ URI.render avatarUrl]
+              a_ [class_ "avatar"] $ renderAvatar msg
               div_ [class_ "content"] $ do
                 a_ [class_ "author"] $ toHtml $ _messageSenderFullName msg
                 div_ [class_ "metadata"] $ do
@@ -214,6 +211,11 @@ renderPage server cfg route val = html_ [lang_ "en"] $ do
                   toHtmlRaw (_messageContent msg)
     renderTimestamp t =
       toHtml $ formatTime defaultTimeLocale "%F %X" $ posixSecondsToUTCTime t
+    renderAvatar :: Message -> Html ()
+    renderAvatar msg = do
+      let mbUri = _messageAvatarUrl msg <|> _messageGravatarUrl msg
+      maybe mempty (\uri -> img_ [src_ $ URI.render uri]) mbUri
+
 
 routeTitle :: Text -> Route a -> Text
 routeTitle realmName = \case
