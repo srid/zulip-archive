@@ -21,6 +21,7 @@ import qualified Config
 import Control.Concurrent (threadDelay)
 import Control.Concurrent.Async (race_)
 import Data.Some
+import Data.Digest.Pure.MD5 (md5)
 import qualified Data.Text as T
 import Data.Time
 import Data.Time.Clock.POSIX
@@ -200,7 +201,12 @@ renderPage server cfg route val = html_ [lang_ "en"] $ do
             div_ [class_ "comment"] $ do
               a_ [class_ "avatar"] $ do
                 case _messageAvatarUrl msg of
-                  Nothing -> mempty
+                  Nothing ->
+                    case _messageSenderEmail msg of
+                        Nothing ->
+                            mempty
+                        Just email ->
+                            img_ [src_ $ "https://www.gravatar.com/avatar/" <> T.pack (show $ md5 $ encodeUtf8 email)]
                   Just avatarUrl -> img_ [src_ $ URI.render avatarUrl]
               div_ [class_ "content"] $ do
                 a_ [class_ "author"] $ toHtml $ _messageSenderFullName msg

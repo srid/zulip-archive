@@ -43,4 +43,5 @@ executable zulip-archive
         dhall,
         tagsoup,
         dependent-sum,
-        modern-uri
+        modern-uri,
+        pureMD5

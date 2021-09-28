@@ -66,6 +66,7 @@ data Message = Message
     _messageContent :: Text,
     _messageContentType :: Text,
     _messageAvatarUrl :: Maybe URI, -- API doesn't always set this.
+    _messageSenderEmail :: Maybe Text, -- Not in API; only used internally
     _messageSenderFullName :: Text,
     _messageSenderId :: Int,
     _messageStreamId :: Maybe Int,
@@ -91,7 +92,8 @@ data Users = Users
 data User = User
   { _userAvatarUrl :: Maybe Text,
     _userUserId :: Int,
-    _userFullName :: Text
+    _userFullName :: Text,
+    _userEmail :: Text
   }
   deriving (Eq, Show)
 
@@ -107,11 +109,13 @@ data ServerSettings = ServerSettings
 mkArchive :: [Stream] -> [User] -> [Message] -> [Stream]
 mkArchive streams users msgsWithoutAvatar = flip fmap streams $ \stream ->
   -- TODO: Verify that stream names are unique.
-  let avatarMap = Map.fromList $ flip mapMaybe users $ \u -> (_userUserId u,) <$> _userAvatarUrl u
+  let avatarEmailMap = Map.fromList $ flip map users $ \u -> (_userUserId u, (_userAvatarUrl u, _userEmail u))
       msgs = flip fmap msgsWithoutAvatar $ \msg ->
         msg
           { _messageAvatarUrl =
-              _messageAvatarUrl msg <|> (lookup (_messageSenderId msg) avatarMap >>= mkURI)
+              _messageAvatarUrl msg <|> (join (fst <$> lookup (_messageSenderId msg) avatarEmailMap) >>= mkURI)
+          , _messageSenderEmail =
+              snd <$> lookup (_messageSenderId msg) avatarEmailMap
           }
       streamMsgs = flip filter msgs $ \msg -> _messageStreamId msg == Just (_streamStreamId stream)
       topicMsgMap = Map.fromListWith (<>) $
