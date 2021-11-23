@@ -1,5 +1,5 @@
 <html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I recently talked with people about effect systems and transformers. I wanted to demonstrate the &quot;quadratic instances problem&quot; of mtl, and then accidentally discovered a really simple solution to it (so I believe).
-Transformers compose all right, but it&#39;s a nuisance to address the effects in a longe" name="description"><link href="https://funprog.srid.ca/haskell/really-simple-first-order-effect-system-with-transformers.html" rel="canonical"><meta property="og:title" content="Really simple first order effect system with transformers - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-11-20T17:52:51Z"><meta property="og:article:published_time" content="2021-11-19T12:47:56Z"><title>Really simple first order effect system with transformers - Haskell</title><style type="text/css">
+Transformers compose all right, but it&#39;s a nuisance to address the effects in a longe" name="description"><link href="https://funprog.srid.ca/haskell/really-simple-first-order-effect-system-with-transformers.html" rel="canonical"><meta property="og:title" content="Really simple first order effect system with transformers - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-11-22T17:04:33Z"><meta property="og:article:published_time" content="2021-11-19T12:47:56Z"><title>Really simple first order effect system with transformers - Haskell</title><style type="text/css">
 div#thesite
 {
   font-family   : "Open Sans", sans-serif;
@@ -137,4 +137,34 @@ div#thesite .messages .message_inline_image img
 </code></pre></div>
 <p>It's not possible to lift higher-order effects like <a href="https://hackage.haskell.org/package/mtl-2.2.2/docs/Control-Monad-Writer-Class.html#v:listen"><code>listen :: m a -&gt; m (a, w)</code></a> or <code>MonadPlus</code> though, without specifying at least part of the transformer stack. But this I expect and accept.</p>
 <p>I'm wondering whether this approach is already known and implemented somewhere.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/46b2686f666f17a9185b71b7a62dc3a6"></a><div class="content"><a class="author">Henri Tuhola</a><div class="metadata"><a href="#262195670" name="262195670"><div>2021-11-20 17:52:51</div></a></div><div class="text"><p>It's an interesting solution to the problem of stacking transformers.<br>
-Btw. What do you do if there's two ReaderT in your mtl stack?</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
+Btw. What do you do if there's two ReaderT in your mtl stack?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/2f672773f0be7b81a909829602875e3d"></a><div class="content"><a class="author">Manuel Bärenz</a><div class="metadata"><a href="#262347562" name="262347562"><div>2021-11-22 17:01:37</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="455362">Henri Tuhola</span> <a href="#narrow/stream/201385-Haskell/topic/Really.20simple.20first.20order.20effect.20system.20with.20transformers/near/262195670">said</a>:</p>
+<blockquote>
+<p>Btw. What do you do if there's two ReaderT in your mtl stack?</p>
+</blockquote>
+<p>Great question. Turns out I missed an important detail. You will get overlapping instances for <code>Has (ReaderT r)</code>. Already now you will get overlapping instances when you write this simple program:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">prog'</span> <span class="ow">::</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">ReaderT</span> <span class="n">r</span> <span class="n">m</span> <span class="n">r</span>
+<span class="nf">prog'</span> <span class="ow">=</span> <span class="n">askH'</span>
+</code></pre></div>
+<p>It will say:</p>
+<div class="codehilite"><pre><span></span><code>Overlapping instances for Has (ReaderT r) (ReaderT r m)
+    arising from a use of ‘askH&#39;’
+  Matching instances:
+    instance (MFunctor t, Monad m) =&gt; Has t (t m)
+    instance (Functor m, MonadTrans t1, Has t m) =&gt; Has t (t1 m)
+</code></pre></div>
+<p>The solution, I think, is to mark the second instance overlappable:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">instance</span> <span class="cm">{-# Overlappable #-}</span> <span class="p">(</span><span class="kt">Functor</span> <span class="n">m</span><span class="p">,</span> <span class="kt">MonadTrans</span> <span class="n">t1</span><span class="p">,</span> <span class="kt">Has</span> <span class="n">t</span> <span class="n">m</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Has</span> <span class="n">t</span> <span class="p">(</span><span class="n">t1</span> <span class="n">m</span><span class="p">)</span> <span class="kr">where</span>
+  <span class="n">liftH</span> <span class="ow">=</span> <span class="n">lift</span> <span class="o">.</span> <span class="n">liftH</span>
+</code></pre></div>
+<p>This means that we'll favour the outermost transformer in case we have several:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">twoReaders</span> <span class="ow">::</span> <span class="kt">ReaderT</span> <span class="kt">String</span> <span class="p">(</span><span class="kt">ReaderT</span> <span class="kt">String</span> <span class="kt">IO</span><span class="p">)</span> <span class="nb">()</span>
+<span class="nf">twoReaders</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">env</span> <span class="ow">&lt;-</span> <span class="n">askH'</span>
+  <span class="n">liftIO</span> <span class="o">$</span> <span class="n">putStrLn</span> <span class="n">env</span>
+
+<span class="nf">main</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">main</span> <span class="ow">=</span> <span class="n">twoReaders</span> <span class="p">`</span><span class="n">runReaderT</span><span class="p">`</span> <span class="s">"outer"</span> <span class="p">`</span><span class="n">runReaderT</span><span class="p">`</span> <span class="s">"inner"</span>
+</code></pre></div>
+<p>Running this gives the string <code>outer</code>.</p>
+<div class="codehilite"><pre><span></span><code>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/2f672773f0be7b81a909829602875e3d"></a><div class="content"><a class="author">Manuel Bärenz</a><div class="metadata"><a href="#262347974" name="262347974"><div>2021-11-22 17:04:33</div></a></div><div class="text"><p>(The reason I didn't realise this is because overlapping instances are only detected when you try to instantiate them, not when you're declaring them.)</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
