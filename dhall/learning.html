@@ -4,7 +4,7 @@
           processors:
             - bloblang: |
                 let commands = [
-   " name="description"><link href="https://funprog.srid.ca/dhall/learning.html" rel="canonical"><meta property="og:title" content="learning - Dhall"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Dhall"><meta property="og:article:modified_time" content="2022-03-03T05:20:17Z"><meta property="og:article:published_time" content="2022-03-03T04:47:19Z"><title>learning - Dhall</title><style type="text/css">
+   " name="description"><link href="https://funprog.srid.ca/dhall/learning.html" rel="canonical"><meta property="og:title" content="learning - Dhall"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Dhall"><meta property="og:article:modified_time" content="2022-03-03T22:04:08Z"><meta property="og:article:published_time" content="2022-03-03T04:47:19Z"><title>learning - Dhall</title><style type="text/css">
 div#thesite
 {
   font-family   : "Open Sans", sans-serif;
@@ -216,4 +216,5 @@ in [ processorWithArgs &quot;commands&quot;  &#39;&#39;
       ]
       root = &quot;My commands are: &quot; + $commands.join(&quot;, &quot;)
 </code></pre></div>
-<p>So now I just need to understand how not to return those escaped quotes on the first line.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
+<p>So now I just need to understand how not to return those escaped quotes on the first line.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#274047173" name="274047173"><div>2022-03-03 22:04:08</div></a></div><div class="text"><p>I guess it sanitizes your output on purpose to make it safe<br>
+May it be that the resulting YAML will still work though?</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
