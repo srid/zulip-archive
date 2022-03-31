@@ -1,0 +1,113 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I&#39;m building a class-based DOM/HTML library and I would like to have a test suite for it. Any recommendations what packages to use for something like that? I&#39;m thinking I might need JSDOM since afaik testing is run in node, but that&#39;s about as far as I&#39;ve got." name="description"><link href="https://funprog.srid.ca/purescript/testing-effectual-code.html" rel="canonical"><meta property="og:title" content="testing effectual code - PureScript"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="PureScript"><meta property="og:article:modified_time" content="2020-09-06T04:51:56Z"><meta property="og:article:published_time" content="2020-09-06T04:36:12Z"><title>testing effectual code - PureScript</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">testing effectual code - PureScript</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/purescript/" class="section">#PureScript</a><i class="right angle icon divider"></i><div class="active section">testing effectual code</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3cea5dd94abba9982d34d28eef71efc0"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#209208902" name="209208902"><div>2020-09-06 04:36:12</div></a></div><div class="text"><p>I'm building a class-based DOM/HTML library and I would like to have a test suite for it. Any recommendations what packages to use for something like that? I'm thinking I might need JSDOM since afaik testing is run in node, but that's about as far as I've got.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/08875d7ecbbb2da797ee234095b10794"></a><div class="content"><a class="author">miles</a><div class="metadata"><a href="#209209257" name="209209257"><div>2020-09-06 04:48:46</div></a></div><div class="text"><p>None that I know of, but if you figure something out, please add it to this thread: <a href="https://discourse.purescript.org/t/testing-recommendations/1192">https://discourse.purescript.org/t/testing-recommendations/1192</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://discourse.purescript.org/t/testing-recommendations/1192" style="background-image: url(https://discourse.purescript.org/uploads/default/original/1X/784499c2962bd993cedea19ae39e35f36aa9be06.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://discourse.purescript.org/t/testing-recommendations/1192" title="Testing recommendations">Testing recommendations</a></div><div class="message_embed_description">The recommended tooling topic is excellent and particularly valuable for newcomers but I couldn’t find anything similar for testing in PureScript. I’ve pulled together some links to libraries and examples below and hope that together with some comments we might stumble our way toward some newcomer-friendly testing recommendations for PureScript.  Libraries QuickCheck is a port of Haskell’s QuickCheck and offers property-based testing that works by generating random data with which to test your p...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3cea5dd94abba9982d34d28eef71efc0"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#209209324" name="209209324"><div>2020-09-06 04:51:56</div></a></div><div class="text"><p>will do, thanks for that.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,126 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="So just trying master" name="description"><link href="https://funprog.srid.ca/rib/master-branch-broken-on-macos.html" rel="canonical"><meta property="og:title" content="master branch broken on macOS - Rib"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Rib"><meta property="og:article:modified_time" content="2019-12-31T17:04:18Z"><meta property="og:article:published_time" content="2019-12-31T04:48:21Z"><title>master branch broken on macOS - Rib</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">master branch broken on macOS - Rib</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/rib/" class="section">#Rib</a><i class="right angle icon divider"></i><div class="active section">master branch broken on macOS</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#184524777" name="184524777"><div>2019-12-31 04:48:21</div></a></div><div class="text"><p>So just trying master</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#184524781" name="184524781"><div>2019-12-31 04:48:37</div></a></div><div class="text"><p>running into issues with the new sample repo</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#184524784" name="184524784"><div>2019-12-31 04:48:56</div></a></div><div class="text"><div class="codehilite"><pre><span></span>±  |master ✓| → nix-shell --run &#39;ghcid -T main&#39;
+error: Package ‘fsatrace-0.0.1-324’ in /nix/store/450yg99l600fawyb11f0k86zvjxi7mdn-sour
+ce/pkgs/development/tools/misc/fsatrace/default.nix:29 is not supported on ‘x86_64-darw
+in’, refusing to evaluate.
+
+a) For `nixos-rebuild` you can set
+  { nixpkgs.config.allowUnsupportedSystem = true; }
+in configuration.nix to override this.
+
+b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+  { allowUnsupportedSystem = true; }
+to ~/.config/nixpkgs/config.nix.
+
+(use &#39;--show-trace&#39; to show detailed location information)
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#184524954" name="184524954"><div>2019-12-31 04:55:21</div></a></div><div class="text"><p>i see the fix mentioned in the output but would rather not do something as drastic as enable that systemwide</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#184547396" name="184547396"><div>2019-12-31 14:48:18</div></a></div><div class="text"><p>Ah, thanks for reporting it. Will entirely remove fsatrace from default.nix.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#184547445" name="184547445"><div>2019-12-31 14:49:35</div></a></div><div class="text"><p>Done.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#184551903" name="184551903"><div>2019-12-31 16:23:39</div></a></div><div class="text"><p><span class="user-mention" data-user-id="252949">@Joel McCracken</span> I have now added macOS to the CI matrix of rib. And I've also added CI to rib-sample. So in future you shouldn't expect breakages like this. Also, check the new README of rib-sample: it contains cache instructions which you might be interested in it if your nix builds takes too much time.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#184551912" name="184551912"><div>2019-12-31 16:23:57</div></a></div><div class="text"><p>(The CI pushes new binaries to the cache; which your dev machine can directly use instead of having to build from scratch)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#184553924" name="184553924"><div>2019-12-31 17:03:56</div></a></div><div class="text"><p>thanks!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#184553977" name="184553977"><div>2019-12-31 17:04:18</div></a></div><div class="text"><p>i will check it out =D</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

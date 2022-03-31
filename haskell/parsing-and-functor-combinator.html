@@ -1,0 +1,190 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi, I&#39;m trying to implement a parser in purescript. Currently I have this :
+module Main where
+
+import Prelude
+import Data.Maybe
+import Data.Tuple
+import Data.String
+
+import Effect (Effect)
+import Effect.Console (log)
+
+
+
+newtype Parser a = Parser (String -&gt; Maybe (Tuple a String))
+
+runParser :: foral" name="description"><link href="https://funprog.srid.ca/haskell/parsing-and-functor-combinator.html" rel="canonical"><meta property="og:title" content="Parsing and functor combinator - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-04-01T05:18:46Z"><meta property="og:article:published_time" content="2021-03-30T19:33:23Z"><title>Parsing and functor combinator - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Parsing and functor combinator - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Parsing and functor combinator</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#232484160" name="232484160"><div>2021-03-30 19:33:23</div></a></div><div class="text"><p>Hi, I'm trying to implement a parser in purescript. Currently I have this :</p>
+<div class="codehilite"><pre><span></span><code>module Main where
+
+import Prelude
+import Data.Maybe
+import Data.Tuple
+import Data.String
+
+import Effect (Effect)
+import Effect.Console (log)
+
+
+
+newtype Parser a = Parser (String -&gt; Maybe (Tuple a String))
+
+runParser :: forall a. Parser a -&gt; String -&gt; (Maybe (Tuple a String))
+runParser (Parser f) = f
+
+instance parserFunctor :: Functor Parser where
+  map g parser =
+    let
+      underTuple (Tuple x y) = Tuple (g x) y
+    in
+      Parser (\x -&gt; underTuple &lt;$&gt; (runParser parser x))
+
+instance parserApplicative :: Apply Parser where
+  apply atob a = Parser applied
+    where
+      applied content = do
+        Tuple f rest &lt;- runParser atob content
+        Tuple result rest&#39; &lt;- runParser a rest
+        pure $ Tuple (f result) rest&#39;
+
+instance parserMonad :: Bind Parser where
+  bind ma atomb = Parser bound
+    where
+      bound str = do
+        Tuple x rest &lt;- runParser ma str
+        runParser (atomb x) rest
+
+charParser :: Parser CodePoint
+charParser = Parser (\str -&gt; trafficateUncons &lt;$&gt; (uncons str))
+  where
+    trafficateUncons :: { head::CodePoint, tail::String} -&gt; Tuple CodePoint String
+    trafficateUncons { head, tail} = Tuple head tail
+
+specificCharParser :: Char -&gt; Parser Unit
+specificCharParser cp = Parser specificCharChecker
+  where
+    specificCharChecker :: String -&gt; (Maybe (Tuple Unit String))
+    specificCharChecker str = do
+      Tuple head tail &lt;- runParser charParser str
+      if head == (codePointFromChar cp)
+        then pure $ Tuple unit tail
+        else Nothing
+
+
+
+main :: Effect Unit
+main = do
+  log $ show $ runParser (specificCharParser &#39;b&#39;) &quot;a &quot;
+</code></pre></div>
+<p>I'd like to implement a "string parser" that parse a specific string. Basically it's converting a String/List of Char to a succession of applicative. Is there a functor tool to do that ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#232484290" name="232484290"><div>2021-03-30 19:34:12</div></a></div><div class="text"><p>eg <code>f "abcde"</code> would be converted to <code>f &lt;*&gt; 'a' &lt;*&gt; 'b' ... &lt;*&gt; e</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#232489271" name="232489271"><div>2021-03-30 20:08:44</div></a></div><div class="text"><p>what you're describing is "just traverse"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#232489281" name="232489281"><div>2021-03-30 20:08:49</div></a></div><div class="text"><p>I haven't read your entire post though</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#232489372" name="232489372"><div>2021-03-30 20:09:26</div></a></div><div class="text"><p>assuming <code>char :: Char -&gt; Parser a</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#232489410" name="232489410"><div>2021-03-30 20:09:43</div></a></div><div class="text"><p>then <code>traverse char :: [Char] -&gt; Parser [a]</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#232489536" name="232489536"><div>2021-03-30 20:10:19</div></a></div><div class="text"><p>ah sorry</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#232489668" name="232489668"><div>2021-03-30 20:11:09</div></a></div><div class="text"><p>I'm not sure what you mean by "succession of applicative", but it seems to me like <code>traverse</code> is what you need</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#232490985" name="232490985"><div>2021-03-30 20:19:12</div></a></div><div class="text"><p>but I need to add an instance of traverse ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#232491011" name="232491011"><div>2021-03-30 20:19:24</div></a></div><div class="text"><p>It can't be derived automatically from other instance ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#232492028" name="232492028"><div>2021-03-30 20:25:45</div></a></div><div class="text"><p>ho I see sorry</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#232625611" name="232625611"><div>2021-03-31 16:50:33</div></a></div><div class="text"><p>I don't quite understand what you are trying to do, but it seems like you are trying to write parser combinators. If that is correct, I recommend checking <a href="http://dev.stephendiehl.com/fun/002_parsers.html">this</a> out. It helped me a lot when starting out, also led me to write <a href="https://gist.github.com/pedrominicz/22ee04385cfcc1e056a6687c8fecd061">my own</a> toy parser combinators.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://gist.github.com/pedrominicz/22ee04385cfcc1e056a6687c8fecd061" style="background-image: url(https://github.githubassets.com/images/modules/gists/gist-og-image.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://gist.github.com/pedrominicz/22ee04385cfcc1e056a6687c8fecd061" title="Mini Parser Combinator.">Mini Parser Combinator.</a></div><div class="message_embed_description">Mini Parser Combinator. GitHub Gist: instantly share code, notes, and snippets.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3cea5dd94abba9982d34d28eef71efc0"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#232705781" name="232705781"><div>2021-04-01 05:18:46</div></a></div><div class="text"><p>fwiw there's a <a class="stream" data-stream-id="214955" href="/#narrow/stream/214955-PureScript">#PureScript</a> stream</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

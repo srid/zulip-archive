@@ -1,0 +1,138 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Another question regarding settting up a nice Haskell environment in Emacs.
+Since intero was abandoned I&#39;ve been using HLS and lsp-haskell (via Spacemacs). It&#39;s working really well, but there&#39;s one slightly strange behaviour I&#39;ve obeserved regarding syntax checking with flycheck.
+The lsp checker doe" name="description"><link href="https://funprog.srid.ca/haskell/emacs-haskell-flycheck-and-hls-lsp.html" rel="canonical"><meta property="og:title" content="Emacs/haskell flycheck and HLS/lsp - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-03-05T21:00:05Z"><meta property="og:article:published_time" content="2021-03-04T07:33:09Z"><title>Emacs/haskell flycheck and HLS/lsp - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Emacs/haskell flycheck and HLS/lsp - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Emacs/haskell flycheck and HLS/lsp</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#228728860" name="228728860"><div>2021-03-04 07:33:09</div></a></div><div class="text"><p>Another question regarding settting up a nice Haskell environment in Emacs.</p>
+<p>Since <code>intero</code> was abandoned I've been using HLS and lsp-haskell (via Spacemacs). It's working really well, but there's one slightly strange behaviour I've obeserved regarding syntax checking with <a href="https://www.flycheck.org/en/latest/index.html">flycheck</a>.</p>
+<p>The <code>lsp</code> checker doesn't warn on a few things that I like to have warnings on, e.g. imports of unused modules, so I have configured a chain like this:</p>
+<div class="codehilite"><pre><span></span><code>(add-hook &#39;haskell-mode-hook
+          (lambda ()
+            (lsp)
+            (flycheck-add-next-checker &#39;lsp &#39;(warning . haskell-ghc))))
+</code></pre></div>
+<p>That almost works like I want, in order to get errors from all checkers in the first file I open I have to either</p>
+<ul>
+<li>apply a hint, or</li>
+<li>force a save of the file, or</li>
+<li>I evaluate <code>(flycheck-start-current-syntax-check 'lsp)</code>, or</li>
+<li>open a second file and then jump back to the first again</li>
+</ul>
+<p>I tried adding <code>(flycheck-start-current-syntax-check 'lsp)</code> to the hook (after setting the next checker), but that made no difference.</p>
+<p>I must be doing something wrong!<br>
+There's clearly some timing issue, but what can I do to fix it?<br>
+Am I even putting the chain setup on a good <code>hook</code>?</p>
+<div class="message_embed"><a class="message_embed_image" href="https://www.flycheck.org/en/latest/index.html" style="background-image: url(https://www.flycheck.org/_images/flycheck-annotated.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://www.flycheck.org/en/latest/index.html" title="Flycheck — Syntax checking for GNU Emacs — Flycheck 32-cvs documentation">Flycheck — Syntax checking for GNU Emacs — Flycheck 32-cvs documentation</a></div><div class="message_embed_description">Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs,
+intended as replacement for the older Flymake extension which is part of GNU
+Emacs.  For a detailed comparison to Flymake see Flycheck versus Flymake.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#228789709" name="228789709"><div>2021-03-04 15:16:48</div></a></div><div class="text"><p>I use <a href="https://github.com/joaotavora/eglot">eglot</a> instead of the <code>lsp</code> package because I find it to be a bit more sane.  With HLS it works out of the box for warnings, errors, and hints.  The only downside is that it uses <code>flymake</code> instead of <code>flycheck</code>.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/joaotavora/eglot" style="background-image: url(https://avatars.githubusercontent.com/u/387011?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/joaotavora/eglot" title="joaotavora/eglot">joaotavora/eglot</a></div><div class="message_embed_description">A client for Language Server Protocol servers. Contribute to joaotavora/eglot development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/2769c37f18b3ff7bbc404d34db71f6e0"></a><div class="content"><a class="author">Peter J. Jones</a><div class="metadata"><a href="#228796865" name="228796865"><div>2021-03-04 15:53:43</div></a></div><div class="text"><p>This is my Emacs + Haskell setup: <a href="https://github.com/pjones/emacsrc/blob/trunk/modes/haskell-mode-conf.el">https://github.com/pjones/emacsrc/blob/trunk/modes/haskell-mode-conf.el</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/pjones/emacsrc/blob/trunk/modes/haskell-mode-conf.el" style="background-image: url(https://avatars.githubusercontent.com/u/3737?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/pjones/emacsrc/blob/trunk/modes/haskell-mode-conf.el" title="pjones/emacsrc">pjones/emacsrc</a></div><div class="message_embed_description">My Emacs configuration files. Contribute to pjones/emacsrc development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#228825707" name="228825707"><div>2021-03-04 18:31:47</div></a></div><div class="text"><p>I guess my search continues...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#229023859" name="229023859"><div>2021-03-05 21:00:05</div></a></div><div class="text"><p>After quite a bit of trial and error I managed to find something that works: <a href="https://magnus.therning.org/posts/2021-03-05-000-flycheck-and-hls.html">https://magnus.therning.org/posts/2021-03-05-000-flycheck-and-hls.html</a></p>
+<p>Suggestions and improvements are always welcome, of course!</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

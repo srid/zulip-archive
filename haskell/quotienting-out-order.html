@@ -1,0 +1,122 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="@Nicholas Scheel I saw you post about this in the Slack. Would you mind fleshing out what this means?" name="description"><link href="https://funprog.srid.ca/haskell/quotienting-out-order.html" rel="canonical"><meta property="og:title" content="&quot;Quotienting&quot; out order - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-03-29T21:39:04Z"><meta property="og:article:published_time" content="2020-03-27T16:01:25Z"><title>&quot;Quotienting&quot; out order - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">&quot;Quotienting&quot; out order - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">&quot;Quotienting&quot; out order</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#192039192" name="192039192"><div>2020-03-27 16:01:25</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251225">@Nicholas Scheel</span> I saw you post about this in the Slack. Would you mind fleshing out what this means?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/2f4316c80f59f157d26cb515ed98026308998f44?version=2"></a><div class="content"><a class="author">Nick Scheel</a><div class="metadata"><a href="#192195430" name="192195430"><div>2020-03-29 21:39:04</div></a></div><div class="text"><p>Hey <span class="user-mention" data-user-id="225136">@Asad Saeeduddin</span>, thanks for the ping!</p>
+<p>To use the example we were talking about on Slack with @sellout, the free magma can be represented as <code>Free OPair</code> (ordered pair) and the free commutative magma would be <code>Free UPair</code> (unordered pair).</p>
+<p><code>OPair a</code> is simple to define as the product of <code>a</code> with itself. It obviously lets you observe order: you can project out each component separately.</p>
+<p><code>UPair a</code> is harder to define, but seems reasonable that we could start with <code>OPair a</code> and modify it a little bit to “remove” the order.</p>
+<p>If we have a total order on <code>a</code>, we might just require that the first element is less than or equal to the second element; this means that we’re never going to see <code>UPair</code> elements where the first is greater than the second.</p>
+<p>That uses a subtype; the other option is to use a quotient to remove the order. To express <code>UPair a</code> as a quotient of <code>OPair a</code>, we take an equivalence relation that identifies two pairs when one is the swapped version of the other. This means that <code>{x, y} = {y, x}</code> (as unordered pairs).</p>
+<p>These approaches are dual. The first approach (subtype) places constraints on the constructor of the unordered pair: you need a total order on the elements, and you need to pick which one is less than (or equal) to the other. The second approach (quotient) places constraints on the eliminator: every eliminator needs to respect the equivalence relation, so even though it gets to “see” the underlying ordered pair, the result cannot depend on what order it was actually in. Basically this says that only commutative functions can be used on <code>UPair</code>s, which is where the relation to commutative magmas comes in.</p>
+<p>Mathematically, quotients are very useful and generally cleaner to work with, since you don’t need to know a total order on the elements, you don’t even have to pick representatives of the equivalence classes, and so you can preserve parametricity and abstraction and stuff. But it’s generally easier for programmers to deal with subtypes, since they can be simulated with smart constructors and, computationally speaking, you’ll be able to create a total order on your elements.</p>
+<p>(BTW I think you can show that total orders on <code>a</code> are in bijection with functions <code>UPair a -&gt; OPair a</code>, so these things are really equivalent ... more precisely, you can use a total order to make a map from the quotient to the subtype by always placing the smaller element first, and conversely you can ask if the function swaps its elements and build a total order out of that.)</p>
+<p>These ideas generalize to lists, of course, but the underlying concepts are a little harder to write down formally: you need to describe monotonic lists and permutations of lists. The idea is that you can either define a multiset as a list with elements in a certain order (subtype), or as lists identified under any permutation (quotient). The first one is again much nicer to work with computationally, you just need to sort the list after each operation, and some operations can be written such that they already preserve well-sortedness.</p>
+<p>I’ll post some code later.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,170 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I&#39;ve been moving between pure stack, stack --nix, stack inside of a nix shell, and cabal in a nix shell. 
+I&#39;m curious what others see the advantages of any of the nix variants above are over just using stack." name="description"><link href="https://funprog.srid.ca/nix/advantages-of-nix-over-stack.html" rel="canonical"><meta property="og:title" content="Advantages of Nix over stack - Nix"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Nix"><meta property="og:article:modified_time" content="2020-09-25T03:13:06Z"><meta property="og:article:published_time" content="2020-09-24T18:00:28Z"><title>Advantages of Nix over stack - Nix</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Advantages of Nix over stack - Nix</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/nix/" class="section">#Nix</a><i class="right angle icon divider"></i><div class="active section">Advantages of Nix over stack</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211168074" name="211168074"><div>2020-09-24 18:00:28</div></a></div><div class="text"><p>I've been moving between pure stack, stack --nix, stack inside of a nix shell, and cabal in a nix shell. </p>
+<p>I'm curious what others see the advantages of any of the nix variants above are over just using stack.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211168263" name="211168263"><div>2020-09-24 18:01:52</div></a></div><div class="text"><p>One recent real world example:</p>
+<p>Different versions of tinfo6 we're used with ghc based on stack.yaml settings changing that caused spurious rebuilds in our dev docker containers</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211168335" name="211168335"><div>2020-09-24 18:02:11</div></a></div><div class="text"><p>when I'm developing, I only use <code>ghcid</code>. then to ensure the health of the whole project, I do a <code>nix-build</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211168450" name="211168450"><div>2020-09-24 18:03:05</div></a></div><div class="text"><p>what tasks do you perform and how do they differ for your several variants?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211168725" name="211168725"><div>2020-09-24 18:04:57</div></a></div><div class="text"><p>At work we have a more complicated piece that rebuild binaries, copies into an exposed volume, and restarts docker containers</p>
+<p>I'm thinking about moving that into nix build but I'm not sure how tests with external services are usually handled in nix expressions</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211171196" name="211171196"><div>2020-09-24 18:27:10</div></a></div><div class="text"><p>stack handles docker?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211172025" name="211172025"><div>2020-09-24 18:34:24</div></a></div><div class="text"><p>I think it does in some way (that isnt actually useful) but i interpret cody's comments somewhat differently</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211172266" name="211172266"><div>2020-09-24 18:36:16</div></a></div><div class="text"><p>with stack the way to deal with docker is somewhat straightforward; make an image with stack and buidl dependencies all installed, build the project, make another image with runtime deps installed, copy the binary from original to runtime, deploy runtime image</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211172548" name="211172548"><div>2020-09-24 18:38:21</div></a></div><div class="text"><p>but that all feels so much more confusing/unclear in a nix world; do i really need to build an image with nix and ALL of that installed? haskell images are already giant (like 10 gb is not uncommon), is it sensible to add nix on top of that? then what do i copy over to the runtime image? ok the executable, but what about the runtime deps? do i have to copy all of them? I guess they have to match the directory structure of the build environment too?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211172574" name="211172574"><div>2020-09-24 18:38:47</div></a></div><div class="text"><p>with nix there are also pretty useful tools available:</p>
+<div class="codehilite" data-code-language="Nix"><pre><span></span><code>pkgs<span class="o">.</span>dockerTools<span class="o">.</span>buildImage <span class="p">{</span> <span class="ss">name =</span> <span class="s2">"foo"</span><span class="p">;</span> <span class="ss">exe =</span> myoFooExeDerivation<span class="p">;</span> <span class="p">};</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211172580" name="211172580"><div>2020-09-24 18:38:49</div></a></div><div class="text"><p>and then do i have to actually install the nix tooling to get things to work right when I run my application?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211172590" name="211172590"><div>2020-09-24 18:38:59</div></a></div><div class="text"><p>ahh cool</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211172630" name="211172630"><div>2020-09-24 18:39:24</div></a></div><div class="text"><p>(fwiw I have done zero research on it, this is just where my brain went when reading cody's comment)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211172815" name="211172815"><div>2020-09-24 18:40:41</div></a></div><div class="text"><p>it is definitely helpful to use <code>justStaticExecutables</code> to cut down on size, and then you'll run into problems with native libs.<br>
+I've got a very well working setup with <code>static-haskell-nix</code> though, reducing image size from about 1G to 20M</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211172885" name="211172885"><div>2020-09-24 18:41:26</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="252949">Joel McCracken</span> <a href="#narrow/stream/214966-Nix/topic/Advantages.20of.20Nix.20over.20stack/near/211172580">said</a>:</p>
+<blockquote>
+<p>and then do i have to actually install the nix tooling to get things to work right when I run my application?</p>
+</blockquote>
+<p>well you always need to install <em>something</em> if you run your app with your build tool</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211172975" name="211172975"><div>2020-09-24 18:42:03</div></a></div><div class="text"><p>right well what i mean is do i need to run it inside nix-shell because of various environment variable setup stuff</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211173045" name="211173045"><div>2020-09-24 18:42:52</div></a></div><div class="text"><p>I'd say that exactly this is the intended purpose of nix <span aria-label="smile" class="emoji emoji-1f642" role="img" title="smile">:smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211173134" name="211173134"><div>2020-09-24 18:43:42</div></a></div><div class="text"><p>so the answer is that i can't just copy the binary over to the bare image, i need to set up nix tooling on the runtime image</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211173292" name="211173292"><div>2020-09-24 18:44:48</div></a></div><div class="text"><p>not quite sure I understand the scenario. in my example, nix builds the image that contains nothing except for the static app binary</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211173332" name="211173332"><div>2020-09-24 18:45:04</div></a></div><div class="text"><p>so how do you run that binary?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211173351" name="211173351"><div>2020-09-24 18:45:12</div></a></div><div class="text"><p>aren't we talking about docker?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211173420" name="211173420"><div>2020-09-24 18:45:49</div></a></div><div class="text"><p>there's just a native binary, that you put into <code>ENTRYPOINT</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211173495" name="211173495"><div>2020-09-24 18:46:05</div></a></div><div class="text"><p>haha sorry. so there is a command in a docker image; its either specified in the dockerfile (using CMD IIRC) or you can change it with the run command</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211173507" name="211173507"><div>2020-09-24 18:46:13</div></a></div><div class="text"><p>no deps, glibc and everything linked in</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211173544" name="211173544"><div>2020-09-24 18:46:31</div></a></div><div class="text"><p>ok so you don't HAVE to do <code>nix-shell --foo '/path/to/asdoifjaisdof9899/static-binary'</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211173575" name="211173575"><div>2020-09-24 18:46:50</div></a></div><div class="text"><p>you'd just go to <code>/prod/static-binary</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211173603" name="211173603"><div>2020-09-24 18:47:01</div></a></div><div class="text"><p>no, in my case I just use a naked alpine with a blackbox ELF executable</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211173619" name="211173619"><div>2020-09-24 18:47:08</div></a></div><div class="text"><p>cool</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/45175015b9eb3dd3f6c740b3fe920fed"></a><div class="content"><a class="author">Joel McCracken</a><div class="metadata"><a href="#211173630" name="211173630"><div>2020-09-24 18:47:14</div></a></div><div class="text"><p>that's great to know, thanks</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211173655" name="211173655"><div>2020-09-24 18:47:26</div></a></div><div class="text"><p>let me know if you want more information!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211200309" name="211200309"><div>2020-09-24 23:02:28</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/214966-Nix/topic/Advantages.20of.20Nix.20over.20stack/near/211171196">said</a>:</p>
+<blockquote>
+<p>stack handles docker?</p>
+</blockquote>
+<p>At work we use stack inside of a docker container. Then we have a script we run that loops rebuilding our main app and a few external services with stack build --fast , copies them to the correct location, and restarts the docker containers.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#211200563" name="211200563"><div>2020-09-24 23:05:33</div></a></div><div class="text"><p>You can do interesting part with Nix, e.g <a href="https://twitter.com/zimbatm/status/1309059217849024513">https://twitter.com/zimbatm/status/1309059217849024513</a></p>
+<div class="inline-preview-twitter"><div class="twitter-tweet"><a href="https://twitter.com/zimbatm/status/1309059217849024513"><img class="twitter-avatar" src="https://pbs.twimg.com/profile_images/1097248571202637826/zqQomaN9_normal.png"></a><p>It's now down to 59s thanks to the latest updates on the <a href="https://twitter.com/cachix_org">@cachix_org</a> installer :-) <a href="https://t.co/jUSX8aWEM9">https://twitter.com/zimbatm/status/1298978045974388736</a> <a href="https://t.co/Vy8TcYOgsS">https://twitter.com/zimbatm/status/1309059217849024513/photo/1</a></p><span>- $ zimbatm 🔨 (@zimbatm)</span><div class="twitter-image"><a href="https://t.co/Vy8TcYOgsS"><img src="https://pbs.twimg.com/media/Eiq2TJhXkAEwFpM.png:thumb"></a></div></div></div><p>I haven't found better solution for development in Haskell (I'm using VSCode) besides ghcid. Maybe I'll try HLS in the next future. I'm not sure if I want to use stack or cabal in my development flow with haskell.nix</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211201011" name="211201011"><div>2020-09-24 23:10:50</div></a></div><div class="text"><p>So imagine this scenario and compare stack vs nix:</p>
+<p>Application foo</p>
+<p>Service bar</p>
+<p>DB baz</p>
+<p>With stack you can use stack in a docker container and docker containers for the other service and DB too. This works alright, but breakages tend to happen when upgrading, or at least way more rebuilding than you might like.</p>
+<p>With nix you can do:</p>
+<ol>
+<li>avoid docker containers entirely and use stack. Use nix to bootstrap packages in GHC_PATH and make sure stack follows this</li>
+<li>build each of the docker containers with nix (maybe even using Arion?)</li>
+</ol>
+<p>Option 2 seems nice, but it's much slower than the docker equivalent because nix-build is slower than <code>stack build --fast</code>. I'm betting that (but hope I'm wrong about) <code>stack build --copy-bins &amp;&amp; PUT /request/to/restart-docker</code> is faster than <code>nix-build</code> with option 2 and restarting the freshly built docker containers.</p>
+<p>I think most people use option 1, but use Cabal instead of stack. Cabal didn't seem to ever ignore GHC_PATH, but with option 1 if you call a stack command before an environment is rebuilt with lorri, stack will take it upon itself to install the packages in your .stack-work directory.</p>
+<p>Hopefully all of this makes sense.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211201152" name="211201152"><div>2020-09-24 23:12:57</div></a></div><div class="text"><p>ALL of that said, this is kind of besides the point I wanted this thread to serve <span aria-label="laughing" class="emoji emoji-1f606" role="img" title="laughing">:laughing:</span> </p>
+<p>Not that I mind, since other questions I have are also being answered <span aria-label="smile" class="emoji emoji-1f642" role="img" title="smile">:smile:</span> </p>
+<p>I actually created this because <span class="user-mention" data-user-id="251311">@Sridhar Ratnakumar</span> said in the thread about "what would you change about Haskell" that stack should replace nix. This made me wonder what real world advantages people have had using nix over stack. The kind of advantages that you could use to convince a die-hard stack lover that nix is worth it for instance <span aria-label="wink" class="emoji emoji-1f609" role="img" title="wink">:wink:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211201375" name="211201375"><div>2020-09-24 23:15:28</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251394">Rizary</span> <a href="#narrow/stream/214966-Nix/topic/Advantages.20of.20Nix.20over.20stack/near/211200563">said</a>:</p>
+<blockquote>
+<p>You can do interesting part with Nix, e.g <a href="https://twitter.com/zimbatm/status/1309059217849024513">https://twitter.com/zimbatm/status/1309059217849024513</a></p>
+<p>I haven't found better solution for development in Haskell (I'm using VSCode) besides ghcid. Maybe I'll try HLS in the next future. I'm not sure if I want to use stack or cabal in my development flow with haskell.nix</p>
+</blockquote>
+<p>So this is one big advantage of nix over stack I keep in mind as well:</p>
+<ul>
+<li>developers locally can build something during the course of regular development and that build gets pushed to cache</li>
+<li>CI runs nix-build-uncached and no build needs done since we can go by the guarantee of the developer having built it locally</li>
+<li>CI times shrink from 5m-7m down to 1m-2m</li>
+</ul></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#211201756" name="211201756"><div>2020-09-24 23:20:17</div></a></div><div class="text"><p>Nice to know that. I never use stack, so this is interesting. For me, I usually use plain <code>haskellPackages</code>, then doing nix-shell and use cabal instead of stack.</p>
+<p>Recently, I use more of nix flakes, and the development speed is really fast (I'm using rust and go in my day to day work). I want to start some haskell project next month, so I wonder how I can have good setup for haskell in nix.</p>
+<p>what IDE do you use? I'm using VSCode, so I wonder this <a href="https://github.com/xtruder/debian-nix-devcontainer">https://github.com/xtruder/debian-nix-devcontainer</a>? will saved my time. The idea is hooking up that, with stack available in my container, and spin up the project with VSCode and docker inside of it. It is still raw idea, but from your saying, I think I want to try stack at least for once.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/xtruder/debian-nix-devcontainer" style="background-image: url(https://avatars2.githubusercontent.com/u/25673078?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/xtruder/debian-nix-devcontainer" title="xtruder/debian-nix-devcontainer">xtruder/debian-nix-devcontainer</a></div><div class="message_embed_description">VSCode devcontainer that uses debian as base system and nix for management of development environment - xtruder/debian-nix-devcontainer</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211202836" name="211202836"><div>2020-09-24 23:36:33</div></a></div><div class="text"><p><span class="user-mention" data-user-id="325194">@codygman</span> could you clarify why you're running the app you're hacking on in a docker?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211203278" name="211203278"><div>2020-09-24 23:42:57</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/214966-Nix/topic/Advantages.20of.20Nix.20over.20stack/near/211202836">said</a>:</p>
+<blockquote>
+<p><span class="user-mention silent" data-user-id="325194">codygman</span> could you clarify why you're running the app you're hacking on in a docker?</p>
+</blockquote>
+<p>I don't think it strictly has to be and that's just how things are currently.</p>
+<p>I've considered just running the haskell application and haskell service locally. However there is also in the real world example (not the one I gave) another quite large javascript application with many functions including populating one of our databases.</p>
+<p>Further I've considered replacing our bash script that restarts all of those services to have be a haskell function and then using ghcid to do this like <code>ghcid --test=restartApplicationAndService</code> or something.</p>
+<p>I'm not sure the best way forward though.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211203395" name="211203395"><div>2020-09-24 23:44:09</div></a></div><div class="text"><p>so your app and service are part of the same compilation unit and you restart them both after building?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211203519" name="211203519"><div>2020-09-24 23:45:59</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/214966-Nix/topic/Advantages.20of.20Nix.20over.20stack/near/211203395">said</a>:</p>
+<blockquote>
+<p>so your app and service are part of the same compilation unit and you restart them both after building?</p>
+</blockquote>
+<p>Yes, exactly.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211203574" name="211203574"><div>2020-09-24 23:46:30</div></a></div><div class="text"><p>sounds rather cumbersome!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211203603" name="211203603"><div>2020-09-24 23:47:19</div></a></div><div class="text"><p>have you thought about running two <code>ghcid</code>s at the same time?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211204148" name="211204148"><div>2020-09-24 23:55:31</div></a></div><div class="text"><p>Hm, I haven't looked at that... no. I think the services change infrequently enough for it not to be a concern though.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211204257" name="211204257"><div>2020-09-24 23:56:55</div></a></div><div class="text"><p>oh, multiple services? like, you're running the entire company infrastructure on your dev machine? <span aria-label="upside down" class="emoji emoji-1f643" role="img" title="upside down">:upside_down:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211204450" name="211204450"><div>2020-09-24 23:59:55</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/214966-Nix/topic/Advantages.20of.20Nix.20over.20stack/near/211204257">said</a>:</p>
+<blockquote>
+<p>oh, multiple services? like, you're running the entire company infrastructure on your dev machine? <span aria-label="upside down" class="emoji emoji-1f643" role="img" title="upside down">:upside_down:</span></p>
+</blockquote>
+<p>Yep, that's correct entire infra over about 4-5 docker containers <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211204541" name="211204541"><div>2020-09-25 00:00:31</div></a></div><div class="text"><p><span aria-label="laughing" class="emoji emoji-1f606" role="img" title="laughing">:laughing:</span> sounds serious</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#211204840" name="211204840"><div>2020-09-25 00:05:08</div></a></div><div class="text"><p>I'm not sure what the alternative would be to have a reasonable change compile cycle. Not sure if you are implying there might be a better alternative.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#211204951" name="211204951"><div>2020-09-25 00:06:50</div></a></div><div class="text"><p>well obviously I don't know your requirements but for building features I would strongly prefer smaller environments with in-memory variants of service dependencies</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#211214102" name="211214102"><div>2020-09-25 03:13:06</div></a></div><div class="text"><p>neuron uses nix+cabal, with ghcide as well as HLS (run <code>nix-shell --run 'code .'</code> for a ready dev environment). there is docker.nix that builds docker image by copying over nix-build's binary (weights ~150mb). no need for stack or docker, really.  use nixos for multi service deploy.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

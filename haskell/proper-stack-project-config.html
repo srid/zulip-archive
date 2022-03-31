@@ -1,0 +1,135 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi,
+I have a project which is built with stack and I like to improve the stack config. It&#39;s been a while I created it and I wasn&#39;t proficient in Haskell back then and tried to get something that just work. However I&#39;d like to improve it now.
+
+The first thing is that I usually modify the .cabalfile i" name="description"><link href="https://funprog.srid.ca/haskell/proper-stack-project-config.html" rel="canonical"><meta property="og:title" content="Proper stack project config ? - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-10-12T20:25:33Z"><meta property="og:article:published_time" content="2021-10-10T11:45:49Z"><title>Proper stack project config ? - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Proper stack project config ? - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Proper stack project config ?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#256948863" name="256948863"><div>2021-10-10 11:45:49</div></a></div><div class="text"><p>Hi,<br>
+I have a project which is built with stack and I like to improve the stack config. It's been a while I created it and I wasn't proficient in Haskell back then and tried to get something that just work. However I'd like to improve it now.</p>
+<ul>
+<li>The first thing is that I usually modify the <code>.cabal</code>file in my project, and now I have a <code>C:\Users\vljno\OneDrive\Bureau\TDP7\RenduProcessor\UTILS.cabal was modified manually. Ignoring C:\Users\vljno\OneDrive\Bureau\TDP7\RenduProcessor\package.yaml in favor of the cabal file.</code> message (and indeed the <code>.yaml</code>file is ignored. Is there a way to "regenerate" the <code>.cabal</code>file from the package so that I can edit the <code>package.yaml</code>file instead ?</li>
+<li>Is there a way to automatically run haddock when I do stack build/stack run ?</li>
+<li>I'm using vscode and haskell LSP. In another project I saw that the LSP was able to detect if a function was not used because for instance, it's not exported and not used in the module being defined. In my current project this is not the case, no function are greyed out. Is there an option to enable this ?</li>
+</ul></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#256957583" name="256957583"><div>2021-10-10 14:03:45</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="295094">Vincent L</span> <a href="#narrow/stream/201385-Haskell/topic/Proper.20stack.20project.20config.20.3F/near/256948863">said</a>:</p>
+<blockquote>
+<p>Hi,<br>
+I have a project which is built with stack and I like to improve the stack config. It's been a while I created it and I wasn't proficient in Haskell back then and tried to get something that just work. However I'd like to improve it now.</p>
+<ul>
+<li>The first thing is that I usually modify the <code>.cabal</code>file in my project, and now I have a <code>C:\Users\vljno\OneDrive\Bureau\TDP7\RenduProcessor\UTILS.cabal was modified manually. Ignoring C:\Users\vljno\OneDrive\Bureau\TDP7\RenduProcessor\package.yaml in favor of the cabal file.</code> message (and indeed the <code>.yaml</code>file is ignored. Is there a way to "regenerate" the <code>.cabal</code>file from the package so that I can edit the <code>package.yaml</code>file instead ?</li>
+<li>Is there a way to automatically run haddock when I do stack build/stack run ?</li>
+<li>I'm using vscode and haskell LSP. In another project I saw that the LSP was able to detect if a function was not used because for instance, it's not exported and not used in the module being defined. In my current project this is not the case, no function are greyed out. Is there an option to enable this ?</li>
+</ul>
+</blockquote>
+<ul>
+<li>You can make it regenerate by removing current <code>.cabal</code> file</li>
+<li>Try <code>--haddock</code>flag</li>
+<li>Not sure about that one - maybe you can try running <code>haskell-language-server</code> in terminal and check whether it reports any errors/warnings</li>
+</ul></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#256984765" name="256984765"><div>2021-10-10 21:09:23</div></a></div><div class="text"><p>What's the syntax to add the --haddock flag to package.yaml ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#256985159" name="256985159"><div>2021-10-10 21:15:22</div></a></div><div class="text"><p>Removing Cabal and using stack yaml file is cleaning my project config, not bad</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#257039248" name="257039248"><div>2021-10-11 09:51:04</div></a></div><div class="text"><p>the <code>stack.yaml</code> file and the <code>.cabal</code> file <strong>do not</strong> do the same thing - the <code>stack.yaml</code> file is used to (roughly) specify which packages (and which versions of those packages) <strong>are available</strong>, and the <code>*.cabal/package.yaml</code> file is used to specify which dependencies your build system should use and other things related to the actual build of the project</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#257116256" name="257116256"><div>2021-10-11 21:02:00</div></a></div><div class="text"><p>yes but when I do <code>stack build</code>, it regenerates a UTILS.cabal file using the content from package.yaml</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#257180955" name="257180955"><div>2021-10-12 10:30:25</div></a></div><div class="text"><p>yeah, because it's needed</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#257180971" name="257180971"><div>2021-10-12 10:30:36</div></a></div><div class="text"><p>it's also expect that you will commit it and update it as your package.yaml changes, but not touch it directly</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#257266626" name="257266626"><div>2021-10-12 20:25:33</div></a></div><div class="text"><p>Yes, that was my initial mistake. Now I'm not modifying the cabal file directly.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

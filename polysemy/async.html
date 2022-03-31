@@ -1,0 +1,120 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Does polysemy&#39;s async from the Polysemy.Async package have the same gotchas as its equivalent in the async package itself?
+The async package recommends to use withAsync to avoid thread leaks. Would this be a problem with polysemy&#39;s async function?" name="description"><link href="https://funprog.srid.ca/polysemy/async.html" rel="canonical"><meta property="og:title" content="Async - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2022-03-09T21:30:51Z"><meta property="og:article:published_time" content="2022-03-09T02:24:01Z"><title>Async - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Async - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Async</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/13a1d3dfd5218c0afc784698aa463a4a"></a><div class="content"><a class="author">Edward Yang</a><div class="metadata"><a href="#274636018" name="274636018"><div>2022-03-09 02:24:01</div></a></div><div class="text"><p>Does polysemy's <code>async</code> from the <code>Polysemy.Async</code> package have the same gotchas as its equivalent in the <code>async</code> package itself?<br>
+The <code>async</code> package recommends to use <code>withAsync</code> to avoid thread leaks. Would this be a problem with polysemy's <code>async</code> function?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#274638838" name="274638838"><div>2022-03-09 03:14:49</div></a></div><div class="text"><p>yeah, it just wraps the base <code>async</code>. there are some similar combinators here: <a href="https://hackage.haskell.org/package/polysemy-conc-0.6.0.1/docs/Polysemy-Conc-Async.html">https://hackage.haskell.org/package/polysemy-conc-0.6.0.1/docs/Polysemy-Conc-Async.html</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/13a1d3dfd5218c0afc784698aa463a4a"></a><div class="content"><a class="author">Edward Yang</a><div class="metadata"><a href="#274755094" name="274755094"><div>2022-03-09 21:30:51</div></a></div><div class="text"><p>What's the main issues using <code>withLowerToIO</code>? I understand most of the polysemy team doesn't like this, and is removed in the v2 draft (as explained by googleson).<br>
+I don't doubt the team's decision on this, I simply want to understand what problems came with using the forklift effect.</p>
+<p>I'm working on a backend server where I'm dealing with thread leaks after introducing <code>withAsync</code> to it.<br>
+Since I'm not sure what else to do, I tried using <code>withLowerToIO</code> and <code>withAsync</code> from the <code>async</code> package itself.<br>
+This cancels the threads properly now, but is there any obvious gotchas? This is my reason for asking about the issues that come with using <code>withLowerToIO</code>.<br>
+I'm using this as a band-aid solution for now until a proper fix comes out. Looking forward to your thoughts!</p>
+<p>Edit: Nevermind looks like I'm already seeing another issue pop-up. Still interested in why <code>withLowerToIO</code> is bad, other than it using an extra thread</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
