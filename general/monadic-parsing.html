@@ -1,0 +1,131 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Does anyone one know good article introducing monadic parsing preferably in context of Scala?" name="description"><link href="https://funprog.srid.ca/general/monadic-parsing.html" rel="canonical"><meta property="og:title" content="Monadic Parsing - General"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="General"><meta property="og:article:modified_time" content="2020-11-01T01:18:36Z"><meta property="og:article:published_time" content="2020-10-13T05:38:22Z"><title>Monadic Parsing - General</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Monadic Parsing - General</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/general/" class="section">#General</a><i class="right angle icon divider"></i><div class="active section">Monadic Parsing</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1d7c6e9c319547f9b5dc71bb486bbcb8"></a><div class="content"><a class="author">Dmitri Priimak</a><div class="metadata"><a href="#213113897" name="213113897"><div>2020-10-13 05:38:22</div></a></div><div class="text"><p>Does anyone one know good article introducing monadic parsing preferably in context of Scala?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#213344372" name="213344372"><div>2020-10-14 20:11:16</div></a></div><div class="text"><p>My introduction was Stephen Diehl's <a href="http://dev.stephendiehl.com/fun/002_parsers.html">Write you a Haskell</a>. He introduces monadic parsers by <em>implementing</em> one. I believe that is the best way to go about it, whatever language you might do it in.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#213344517" name="213344517"><div>2020-10-14 20:12:42</div></a></div><div class="text"><p>Even though it is Haskell, the "NanoParsec" is pretty simple, so I believe it is a good starting point.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#213344566" name="213344566"><div>2020-10-14 20:13:30</div></a></div><div class="text"><p>After that, maybe reading the source code for an existing monadic parser library (at least I enjoy learning by reading code, your mileage may vary).</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/bc65fa8fbc156543a6b2211e4c670528"></a><div class="content"><a class="author">csaurus</a><div class="metadata"><a href="#213361447" name="213361447"><div>2020-10-14 23:06:48</div></a></div><div class="text"><p>This paper does a decent walkthrough as well, but you would also need to translate from the Haskell <a href="http://www.cs.nott.ac.uk/~pszgmh/pearl.pdf">http://www.cs.nott.ac.uk/~pszgmh/pearl.pdf</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213362142" name="213362142"><div>2020-10-14 23:16:44</div></a></div><div class="text"><p>That “decent walkthrough” was the paper that launched monadic parsing 22 years ago!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213362556" name="213362556"><div>2020-10-14 23:19:56</div></a></div><div class="text"><p>Actually if you look up the wikipedia, parser combinators have been around in different guises since 1989. <em>Monadic</em> parser combinators is what is innovatively at the heart of the “decent walkthrough.”</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/bc65fa8fbc156543a6b2211e4c670528"></a><div class="content"><a class="author">csaurus</a><div class="metadata"><a href="#213498395" name="213498395"><div>2020-10-15 22:59:49</div></a></div><div class="text"><p>I suppose I did understate it a bit, and I wasn't trying to downplay the achievements of Hutton/Meijer. I think it is a really good introduction which doesn't assume much on the part of the reader.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213501131" name="213501131"><div>2020-10-15 23:35:52</div></a></div><div class="text"><p>Indeed. I desire that the haskell community, far from comprising mere programmers of said language, refer to a group of people which upholds the values—felicitous communication being at the core—that gave birth to the language.</p>
+<p>Haskell was designed by a committee of divergently opinionated, nervy individuals that possessed the vanishing skills of disagreeing without being disagreeable and so converged on a result.</p>
+<p>As for today?</p>
+<p>A group spirals into a dissipation of wasted life force every second.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#213501444" name="213501444"><div>2020-10-15 23:40:51</div></a></div><div class="text"><p>that's pretty pessimistic</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213503821" name="213503821"><div>2020-10-16 00:14:32</div></a></div><div class="text"><p>I’m not saying every single group fails. I’m saying that I see more groups per capita per unit time failing today than in the past.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213503886" name="213503886"><div>2020-10-16 00:15:26</div></a></div><div class="text"><p>Groups form and then they break up, not unlike divorce rates going up.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#213633354" name="213633354"><div>2020-10-17 03:38:38</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="353174">csaurus</span> <a href="#narrow/stream/201383-General/topic/Monadic.20Parsing/near/213498395">said</a>:</p>
+<blockquote>
+<p>I suppose I did understate it a bit, and I wasn't trying to downplay the achievements of Hutton/Meijer. I think it is a really good introduction which doesn't assume much on the part of the reader.</p>
+</blockquote>
+<p>I didn't think that you were downplaying the authors achievements. It felt more like describing the gospels as a "decent walkthrough" of christianity. I was tickled silly.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1d7c6e9c319547f9b5dc71bb486bbcb8"></a><div class="content"><a class="author">Dmitri Priimak</a><div class="metadata"><a href="#213660452" name="213660452"><div>2020-10-17 16:56:25</div></a></div><div class="text"><p>Thanks a lot. It would really be nice though to have something more recent (not there is anything special about it more recent) with accent on Scala.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#213960607" name="213960607"><div>2020-10-20 18:28:11</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="346527">Kim-Ee Yeoh</span> <a href="#narrow/stream/201383-General/topic/Monadic.20Parsing/near/213501131">said</a>:</p>
+<blockquote>
+<p>[...] nervy individuals that possessed the vanishing skills of disagreeing without being disagreeable and so converged on a result.</p>
+</blockquote>
+<p>That is a pretty good ideal for a community!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#215172236" name="215172236"><div>2020-10-31 03:42:38</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="346868">Pedro Minicz</span> <a href="#narrow/stream/201383-General/topic/Monadic.20Parsing/near/213960607">said</a>:</p>
+<blockquote>
+<p><span class="user-mention silent" data-user-id="346527">Kim-Ee Yeoh</span> <a href="#narrow/stream/201383-General/topic/Monadic.20Parsing/near/213501131">said</a>:</p>
+<blockquote>
+<p>[...] nervy individuals that possessed the vanishing skills of disagreeing without being disagreeable and so converged on a result.</p>
+</blockquote>
+<p>That is a pretty good ideal for a community!</p>
+</blockquote>
+<p>I could go on about the skills needed to turn the community from an idea to reality.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#215220292" name="215220292"><div>2020-11-01 01:18:36</div></a></div><div class="text"><p><span class="user-mention" data-user-id="346527">@Kim-Ee Yeoh</span> I would love to read it. Maybe make another thread?</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

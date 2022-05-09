@@ -1,0 +1,113 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Doing some advertising for my new library: in-other-words! During my time as a developer of polysemy, I&#39;ve been left unsatisfied with the core mechanism that both polysemy and other higher-order effect systems like fused-effects rely upon: weave. in-other-words is the culmination of my attempts to f" name="description"><link href="https://funprog.srid.ca/polysemy/in-other-words.html" rel="canonical"><meta property="og:title" content="in-other-words - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-10-10T14:18:08Z"><meta property="og:article:published_time" content="2020-10-10T13:38:02Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"><title>in-other-words - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">in-other-words - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">in-other-words</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#212916618" name="212916618"><div>2020-10-10 13:38:02</div></a></div><div class="text"><p>Doing some advertising for my new library: <a href="https://github.com/KingoftheHomeless/in-other-words"><code>in-other-words</code></a>! During my time as a developer of <code>polysemy</code>, I've been left unsatisfied with the core mechanism that both <code>polysemy</code> and other higher-order effect systems like <code>fused-effects</code> rely upon: <a href="http://www.cs.ox.ac.uk/people/nicolas.wu/papers/Scope.pdf"><code>weave</code></a>. <code>in-other-words</code> is the culmination of my attempts to find a new approach to effect systems that fixes the problems with <code>weave</code>.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/KingoftheHomeless/in-other-words" style="background-image: url(https://avatars0.githubusercontent.com/u/25914237?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/KingoftheHomeless/in-other-words" title="KingoftheHomeless/in-other-words">KingoftheHomeless/in-other-words</a></div><div class="message_embed_description">A higher-order effect system where the sky's the limit - KingoftheHomeless/in-other-words</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#212916737" name="212916737"><div>2020-10-10 13:40:41</div></a></div><div class="text"><p>About how this relates to <code>polysemy</code>'s future: although I consider the approach <code>in-other-words</code> takes (which I've dubbed "Reformulation into Primitives") better than the one <code>polysemy</code> takes, it's unlikely we'll be moving <code>polysemy</code> to that approach. It would cause a lot of breakage and introduce new complexity. Besides, the implementation of Reformulation into Primitives used in <code>in-other-words</code> doesn't lend itself to free monads that well; it can be adapted, but it won't be as clean as the way <code>in-other-words</code> does it.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#212918193" name="212918193"><div>2020-10-10 14:18:08</div></a></div><div class="text"><p>Awesome! Looks really good! Nice job!</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

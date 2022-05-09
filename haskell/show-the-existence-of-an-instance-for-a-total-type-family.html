@@ -1,0 +1,139 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I have a type class C and a total closed type family F :: Bool -&gt; Type.
+I have instances of C for both F &#39;False and F &#39;True
+(how) Can I show ghc that there is an always an instance for C (F b)?" name="description"><link href="https://funprog.srid.ca/haskell/show-the-existence-of-an-instance-for-a-total-type-family.html" rel="canonical"><meta property="og:title" content="Show the existence of an instance for a total type family - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-02T10:06:36Z"><meta property="og:article:published_time" content="2020-05-01T16:17:28Z"><title>Show the existence of an instance for a total type family - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Show the existence of an instance for a total type family - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Show the existence of an instance for a total type family</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195977619" name="195977619"><div>2020-05-01 16:17:28</div></a></div><div class="text"><p>I have a type class <code>C</code> and a total closed type family <code>F :: Bool -&gt; Type</code>.<br>
+I have instances of <code>C</code> for both <code>F 'False</code> and <code>F 'True</code></p>
+<p>(how) Can I show ghc that there is an always an instance for <code>C (F b)</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#195977901" name="195977901"><div>2020-05-01 16:20:06</div></a></div><div class="text"><p>You can't in general because there is different code for <code>False</code> and  <code>True</code>, whereas an instance for <code>C (F b)</code> would have to be the same code for both.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195981367" name="195981367"><div>2020-05-01 16:50:26</div></a></div><div class="text"><p>Ah, thanks, that's obvious in hindsight.</p>
+<p>But I realised my question was "wrong" - I actually have:<br>
+<code>F</code> - type family, closed and total over <code>Bool</code><br>
+<code>G</code> - type family, associated with a type class - don't have "control" over this one<br>
+I know that <code>G (F 'False)</code> is the same as <code>G (F 'True)</code><br>
+Can I show that <code>C (G (F b))</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#195984370" name="195984370"><div>2020-05-01 17:15:10</div></a></div><div class="text"><p>I don't think so, unless <code>G</code> somehow makes a singleton on <code>b</code> available. If it truly is the same code, why would the case split be necessary in the first place?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#196003391" name="196003391"><div>2020-05-01 20:02:39</div></a></div><div class="text"><p><code>F 'False</code> /= <code>F 'True</code>, and I do use this (a lot of types are the same except for small bits, and I use type families like <code>F</code> to make the small bits different)<br>
+but <code>G (F 'False)</code> == <code>G (F 'True)</code>, and <code>G</code> isn't a constant for all types in general (and I can't touch it, it's in a library)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#196008360" name="196008360"><div>2020-05-01 20:50:18</div></a></div><div class="text"><p>There's this idea about coproducts for instances in <a href="https://github.com/rampion/constraint-unions" title="https://github.com/rampion/constraint-unions">https://github.com/rampion/constraint-unions</a>, although it didn't work out for my use case when I tried it. It might work for yours though</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/rampion/constraint-unions" style="background-image: url(https://avatars0.githubusercontent.com/u/23003?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/rampion/constraint-unions" title="rampion/constraint-unions">rampion/constraint-unions</a></div><div class="message_embed_description">A syntax for unions of constraints in Haskell. Contribute to rampion/constraint-unions development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#196011050" name="196011050"><div>2020-05-01 21:15:53</div></a></div><div class="text"><p>there is a dumb trick to doing this</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#196011758" name="196011758"><div>2020-05-01 21:23:22</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">SBool</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">STrue</span> <span class="ow">::</span> <span class="kt">SBool</span> <span class="kt">&#39;True</span>
+  <span class="kt">SFalse</span> <span class="ow">::</span> <span class="kt">SBool</span> <span class="kt">&#39;False</span>
+
+<span class="kr">data</span> <span class="kt">Dict</span> <span class="n">c</span> <span class="kr">where</span>
+  <span class="kt">Dict</span> <span class="ow">::</span> <span class="n">c</span> <span class="ow">=&gt;</span> <span class="kt">Dict</span> <span class="n">c</span>
+
+<span class="nf">sfoo</span> <span class="ow">::</span> <span class="kt">SBool</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Dict</span> <span class="p">(</span><span class="kt">C</span> <span class="n">a</span><span class="p">)</span>
+<span class="nf">sfoo</span> <span class="kt">STrue</span> <span class="ow">=</span> <span class="kt">Dict</span>
+<span class="nf">sfoo</span> <span class="kt">SFalse</span> <span class="ow">=</span> <span class="kt">Dict</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#196011765" name="196011765"><div>2020-05-01 21:23:33</div></a></div><div class="text"><p>sfoo is the proof that <code>C</code> is closed for booleans</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#196041674" name="196041674"><div>2020-05-02 08:58:53</div></a></div><div class="text"><p>thanks - using the <code>Dict</code> trick to be able to pattern match on the singleton did the job</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#196044408" name="196044408"><div>2020-05-02 10:06:36</div></a></div><div class="text"><p>I guess this also works:</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">withSBool</span> <span class="ow">::</span> <span class="kt">SBool</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">C</span> <span class="p">(</span><span class="kt">F</span> <span class="n">b</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">r</span>
+<span class="nf">withSBool</span> <span class="n">sing</span> <span class="n">k</span> <span class="ow">=</span>
+  <span class="kr">case</span> <span class="n">sing</span> <span class="kr">of</span>
+    <span class="kt">STrue</span> <span class="ow">-&gt;</span> <span class="n">k</span>
+    <span class="kt">SFalse</span> <span class="ow">-&gt;</span> <span class="n">k</span>
+</code></pre></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

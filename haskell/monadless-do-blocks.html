@@ -1,0 +1,186 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Ok so
+f :: String
+f = do
+  &quot;lol&quot;
+
+this is fine, and looks pretty normal to me" name="description"><link href="https://funprog.srid.ca/haskell/monadless-do-blocks.html" rel="canonical"><meta property="og:title" content="Monadless do-blocks - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-03-16T21:34:40Z"><meta property="og:article:published_time" content="2021-03-16T09:48:02Z"><title>Monadless do-blocks - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Monadless do-blocks - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Monadless do-blocks</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230484461" name="230484461"><div>2021-03-16 09:48:02</div></a></div><div class="text"><p>Ok so</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">f</span> <span class="ow">::</span> <span class="kt">String</span>
+<span class="nf">f</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="s">"lol"</span>
+</code></pre></div>
+<p>this is fine, and looks pretty normal to me</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230484564" name="230484564"><div>2021-03-16 09:48:46</div></a></div><div class="text"><p>but also...</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">f</span> <span class="ow">::</span> <span class="kt">String</span>
+<span class="nf">f</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="kr">_</span> <span class="ow">&lt;-</span> <span class="n">pure</span> <span class="s">"heha"</span>
+  <span class="s">"lol"</span>
+</code></pre></div>
+<p>this works</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230484602" name="230484602"><div>2021-03-16 09:48:58</div></a></div><div class="text"><p>what does the <code>pure "haha"</code> + the bind desugar to??</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230484617" name="230484617"><div>2021-03-16 09:49:06</div></a></div><div class="text"><p>I can tell for sure that it's not ignored, because..</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230484647" name="230484647"><div>2021-03-16 09:49:31</div></a></div><div class="text"><div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="cm">{-# LANGUAGE ConstraintKinds #-}</span>
+<span class="cm">{-# LANGUAGE DataKinds #-}</span>
+<span class="cm">{-# LANGUAGE GADTs #-}</span>
+<span class="cm">{-# LANGUAGE TypeFamilies #-}</span>
+
+<span class="kr">type</span> <span class="kr">family</span> <span class="kt">B</span> <span class="p">(</span><span class="n">b</span> <span class="ow">::</span> <span class="kt">Bool</span><span class="p">)</span>
+
+<span class="kr">type</span> <span class="kr">instance</span> <span class="kt">B</span> <span class="kt">True</span> <span class="ow">=</span> <span class="nb">()</span>
+
+<span class="kr">type</span> <span class="kr">instance</span> <span class="kt">B</span> <span class="kt">False</span> <span class="ow">=</span> <span class="nb">()</span>
+
+<span class="kr">data</span> <span class="kt">Dict</span> <span class="n">c</span> <span class="kr">where</span>
+  <span class="kt">Dict</span> <span class="ow">::</span> <span class="n">c</span> <span class="ow">=&gt;</span> <span class="kt">Dict</span> <span class="n">c</span>
+
+<span class="kr">data</span> <span class="kt">SBool</span> <span class="p">(</span><span class="n">b</span> <span class="ow">::</span> <span class="kt">Bool</span><span class="p">)</span> <span class="kr">where</span>
+  <span class="kt">STrue</span> <span class="ow">::</span> <span class="kt">SBool</span> <span class="kt">True</span>
+  <span class="kt">SFalse</span> <span class="ow">::</span> <span class="kt">SBool</span> <span class="kt">False</span>
+
+<span class="nf">bla</span> <span class="ow">::</span> <span class="kt">SBool</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="kt">Dict</span> <span class="p">(</span><span class="kt">Show</span> <span class="p">(</span><span class="kt">B</span> <span class="n">b</span><span class="p">))</span>
+<span class="nf">bla</span> <span class="kt">STrue</span> <span class="ow">=</span> <span class="kt">Dict</span>
+<span class="nf">bla</span> <span class="kt">SFalse</span> <span class="ow">=</span> <span class="kt">Dict</span>
+
+<span class="nf">f</span> <span class="ow">::</span> <span class="kt">SBool</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="kt">B</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="kt">String</span>
+<span class="nf">f</span> <span class="n">sb</span> <span class="n">bb</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="kt">Dict</span> <span class="ow">&lt;-</span> <span class="n">pure</span> <span class="o">$</span> <span class="n">bla</span> <span class="n">sb</span>
+  <span class="n">show</span> <span class="n">bb</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230484653" name="230484653"><div>2021-03-16 09:49:34</div></a></div><div class="text"><p>this works!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230484671" name="230484671"><div>2021-03-16 09:49:43</div></a></div><div class="text"><p>so I guess it <em>has</em> to be some case statement??</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230484743" name="230484743"><div>2021-03-16 09:50:06</div></a></div><div class="text"><p>in any case, very weird that they decided to do that.. I think?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230484759" name="230484759"><div>2021-03-16 09:50:19</div></a></div><div class="text"><p>but it might just be useful for my use case now <span aria-label="smiling imp" class="emoji emoji-1f608" role="img" title="smiling imp">:smiling_imp:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230484880" name="230484880"><div>2021-03-16 09:51:31</div></a></div><div class="text"><p>or are these the evil machinations of some weird <code>Monad</code> instance? (like <code>(r-&gt;)</code>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485030" name="230485030"><div>2021-03-16 09:52:36</div></a></div><div class="text"><p>omg... it's <code>[]</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485036" name="230485036"><div>2021-03-16 09:52:43</div></a></div><div class="text"><p><span aria-label="face palm" class="emoji emoji-1f926" role="img" title="face palm">:face_palm:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#230485130" name="230485130"><div>2021-03-16 09:53:43</div></a></div><div class="text"><p><span aria-label="joy" class="emoji emoji-1f602" role="img" title="joy">:joy:</span> - I was confused too, so I plugged it into <code>-ddump-ds</code> and of course, <code>GHC.Base.$fMonad[]</code> appeared <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485137" name="230485137"><div>2021-03-16 09:53:49</div></a></div><div class="text"><p>argh!!!!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485139" name="230485139"><div>2021-03-16 09:53:50</div></a></div><div class="text"><p>stupid string</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#230485214" name="230485214"><div>2021-03-16 09:54:12</div></a></div><div class="text"><p>Easy to forget for sure <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485248" name="230485248"><div>2021-03-16 09:54:28</div></a></div><div class="text"><p>bye bye easy introduction of Dicts <span aria-label="sob" class="emoji emoji-1f62d" role="img" title="sob">:sob:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485332" name="230485332"><div>2021-03-16 09:55:14</div></a></div><div class="text"><p>is there some "cleaner" way to introduce constraints, than to do <code>with*</code> style functions, that increase indentation levels (depending on your formatting style)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485413" name="230485413"><div>2021-03-16 09:56:00</div></a></div><div class="text"><p>or in general is there some cleaner way to handle producing constraints for instances for type families? :(</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485534" name="230485534"><div>2021-03-16 09:56:48</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/Monadless.20do-blocks/near/230485130">said</a>:</p>
+<blockquote>
+<p><span aria-label="joy" class="emoji emoji-1f602" role="img" title="joy">:joy:</span> - I was confused too, so I plugged it into <code>-ddump-ds</code> and of course, <code>GHC.Base.$fMonad[]</code> appeared <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p>
+</blockquote>
+<p>btw if you're running hls, you can ask for the type of <code>pure</code> above and it will also show you the concrete type being used at that point, not only the generic type it has</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485553" name="230485553"><div>2021-03-16 09:56:59</div></a></div><div class="text"><p>extremely useful!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#230485617" name="230485617"><div>2021-03-16 09:57:37</div></a></div><div class="text"><p>Just do</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">module</span> <span class="nn">Do.Identity</span> <span class="kr">where</span>
+  <span class="p">(</span><span class="o">&gt;&gt;=</span><span class="p">)</span> <span class="ow">=</span> <span class="p">(</span><span class="o">&amp;</span><span class="p">)</span>
+  <span class="p">(</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="ow">=</span> <span class="n">const</span>
+  <span class="n">pure</span> <span class="ow">=</span> <span class="n">id</span>
+</code></pre></div>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="cm">{-# language QualifiedDo #-}</span>
+<span class="kr">import</span> <span class="nn">Do.Identity</span> <span class="n">qualified</span> <span class="n">as</span> <span class="kt">I</span>
+
+<span class="nf">f</span> <span class="n">sb</span> <span class="n">bb</span> <span class="ow">=</span> <span class="kt">I</span><span class="o">.</span><span class="kr">do</span>
+  <span class="kt">Dict</span> <span class="ow">&lt;-</span> <span class="n">bla</span> <span class="n">sb</span>
+  <span class="n">show</span> <span class="n">bb</span>
+</code></pre></div>
+<p><span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485650" name="230485650"><div>2021-03-16 09:57:58</div></a></div><div class="text"><p>yes, that was my next step</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485703" name="230485703"><div>2021-03-16 09:58:08</div></a></div><div class="text"><p>but I'm not on a ghc supporting it yet</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485765" name="230485765"><div>2021-03-16 09:58:51</div></a></div><div class="text"><p>lovely how many good things come out of just <code>QualifiedDo</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#230485805" name="230485805"><div>2021-03-16 09:59:20</div></a></div><div class="text"><p>It's how all sugar should work IMHO <span aria-label="smile" class="emoji emoji-1f642" role="img" title="smile">:smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230485816" name="230485816"><div>2021-03-16 09:59:27</div></a></div><div class="text"><p>yup, exactly</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230487066" name="230487066"><div>2021-03-16 10:09:02</div></a></div><div class="text"><p>at this point I'm just sticking all of them in a single <code>type Shows ty = &lt;list all the Shows I need&gt;</code> and having a <code>hasShow :: Sing ty -&gt; (Shows ty =&gt; r) -&gt; r</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230487093" name="230487093"><div>2021-03-16 10:09:14</div></a></div><div class="text"><p>but this doesn't scale well when not all your datatypes are in one place</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230487132" name="230487132"><div>2021-03-16 10:09:34</div></a></div><div class="text"><p>I guess the ""solution"" to this is to create a unifying module for all of them which only has <code>Shows</code> and <code>hasShow</code> in it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230487152" name="230487152"><div>2021-03-16 10:09:46</div></a></div><div class="text"><p>I wonder how much this makes ghc slower</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230487344" name="230487344"><div>2021-03-16 10:11:09</div></a></div><div class="text"><p>it also doesn't scale well if you have more <code>ty</code>s</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#230521110" name="230521110"><div>2021-03-16 14:28:00</div></a></div><div class="text"><p>Quick question: I’ve been reading through this thread, and there’s a couple of references to <code>GHC.Base.$fMonad[]</code> as an explanation for how this works. As someone who is unfamiliar with the internals of GHC, what does <code>GHC.Base.$fMonad[]</code> do and why is it relevant here?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230522372" name="230522372"><div>2021-03-16 14:34:42</div></a></div><div class="text"><p>I  <em>think</em> that's the internal name for the dict for the Monad instance for <code>[]</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230522395" name="230522395"><div>2021-03-16 14:34:48</div></a></div><div class="text"><p>do you know how type classes are handled in core?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#230523902" name="230523902"><div>2021-03-16 14:43:39</div></a></div><div class="text"><p><span class="user-mention" data-user-id="269918">@bradrn</span> </p>
+<p>GHC translates classes into what are basically record types - so</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">class</span> <span class="kt">Applicative</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="kr">where</span>
+  <span class="n">return</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="p">(</span><span class="o">&gt;&gt;=</span><span class="p">)</span>  <span class="ow">::</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span>
+  <span class="p">(</span><span class="o">&gt;&gt;</span><span class="p">)</span>   <span class="ow">::</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span>
+</code></pre></div>
+<p>translates into something equivalent to</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">data</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=</span> <span class="kt">Monad</span><span class="p">{</span>
+    <span class="n">applicative</span> <span class="ow">::</span> <span class="kt">Applicative</span> <span class="n">m</span>
+  <span class="p">,</span> <span class="n">return</span>      <span class="ow">::</span> <span class="n">forall</span> <span class="n">a</span><span class="o">.</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="p">,</span> <span class="o">...</span>
+  <span class="p">}</span>
+</code></pre></div>
+<p>Instances are then represented simply as values of this datatype - or functions, if they take some constraints<br>
+Finally, <code>$fMonad[]</code> is simply some generated name given to one such instance (<code>Monad []</code>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#230524252" name="230524252"><div>2021-03-16 14:45:20</div></a></div><div class="text"><p>It isn't really about typeclass desugaring in this case - I just dumped desugared internal representation of Haskell, because I wanted to see what <code>do</code> turns into <span aria-label="smile" class="emoji emoji-1f642" role="img" title="smile">:smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#230524276" name="230524276"><div>2021-03-16 14:45:26</div></a></div><div class="text"><p>I think it has almost the same role as a vtable</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#230524464" name="230524464"><div>2021-03-16 14:46:12</div></a></div><div class="text"><p>Yeah - compared to OOP languages, Haskell basically decouples vtables into separate entities (constraints), instead of packing them together with defined datatype</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#230594950" name="230594950"><div>2021-03-16 21:34:40</div></a></div><div class="text"><p>Ah, of course! So that <code>do</code> block just ends up using the <code>Monad []</code> instance. Thanks <span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span> <span class="user-mention" data-user-id="225127">@TheMatten</span>!</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

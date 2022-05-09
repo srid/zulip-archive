@@ -1,0 +1,134 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I guess I&#39;ll just leave this here :sweat_smile: :
+infix 0 ?
+(?) :: ((?_ :: a) =&gt; b) -&gt; a -&gt; b
+x ? a = let ?_ = a in x
+
+ghci&gt; (?_, ?_, ?_) ? &quot;y&quot;
+(&quot;y&quot;,&quot;y&quot;,&quot;y&quot;)
+" name="description"><link href="https://funprog.srid.ca/haskell/function.html" rel="canonical"><meta property="og:title" content="Function ?_ - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-04-22T03:09:58Z"><meta property="og:article:published_time" content="2021-04-20T08:29:29Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"><title>Function ?_ - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Function ?_ - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Function ?_</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#235306998" name="235306998"><div>2021-04-20 08:29:29</div></a></div><div class="text"><p>I guess I'll just leave this here <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span> :</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">infix</span> <span class="mi">0</span> <span class="o">?</span>
+<span class="p">(</span><span class="o">?</span><span class="p">)</span> <span class="ow">::</span> <span class="p">((</span><span class="o">?</span><span class="kr">_</span> <span class="ow">::</span> <span class="n">a</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span>
+<span class="nf">x</span> <span class="o">?</span> <span class="n">a</span> <span class="ow">=</span> <span class="kr">let</span> <span class="o">?</span><span class="kr">_</span> <span class="ow">=</span> <span class="n">a</span> <span class="kr">in</span> <span class="n">x</span>
+</code></pre></div>
+<div class="codehilite"><pre><span></span><code>ghci&gt; (?_, ?_, ?_) ? &quot;y&quot;
+(&quot;y&quot;,&quot;y&quot;,&quot;y&quot;)
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#235314127" name="235314127"><div>2021-04-20 09:29:06</div></a></div><div class="text"><p>wat?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#235316246" name="235316246"><div>2021-04-20 09:46:37</div></a></div><div class="text"><p>Basically, <code>ImplicitParams</code> seem to support <code>_</code> as parameter name, so we can write function that uses it in a way that looks nearly like Scala's anonymous functions <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#235316522" name="235316522"><div>2021-04-20 09:49:31</div></a></div><div class="text"><p>One could write nice predicates with this:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">filter</span> <span class="p">(</span><span class="o">?</span><span class="kr">_</span> <span class="o">&gt;</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="n">isLower</span> <span class="p">(</span><span class="n">chr</span> <span class="o">?</span><span class="kr">_</span><span class="p">)</span> <span class="o">?</span><span class="p">)</span> <span class="n">xs</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#235316878" name="235316878"><div>2021-04-20 09:52:35</div></a></div><div class="text"><p>Or provide concise interface for some SQL library in combination with <code>OverloadedRecordDot</code>:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">select</span> <span class="p">(</span><span class="o">?</span><span class="kr">_</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="o">?</span><span class="kr">_</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">$</span> <span class="n">from</span> <span class="o">@</span><span class="kt">Users</span> <span class="o">&amp;</span> <span class="n">where_</span> <span class="p">(</span><span class="o">?</span><span class="kr">_</span><span class="o">.</span><span class="n">email</span> <span class="o">.==.</span> <span class="n">val</span> <span class="s">"example@example.com"</span><span class="p">)</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#235316916" name="235316916"><div>2021-04-20 09:52:59</div></a></div><div class="text"><p>Or maybe we could just forget about it and never use it again <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#235317283" name="235317283"><div>2021-04-20 09:56:28</div></a></div><div class="text"><p>insane</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#235317435" name="235317435"><div>2021-04-20 09:58:07</div></a></div><div class="text"><p>Has Type Inference Gone Too Far?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#235613427" name="235613427"><div>2021-04-22 03:05:40</div></a></div><div class="text"><p>Oh damn, this topic broke zulip-archive, <a href="https://github.com/srid/zulip-archive/runs/2406184027?check_suite_focus=true">https://github.com/srid/zulip-archive/runs/2406184027?check_suite_focus=true</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/zulip-archive/runs/2406184027?check_suite_focus=true" style="background-image: url(https://github.githubassets.com/images/modules/open_graph/github-octocat.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/zulip-archive/runs/2406184027?check_suite_focus=true" title="Build software better, together">Build software better, together</a></div><div class="message_embed_description">GitHub is where people build software. More than 56 million people use GitHub to discover, fork, and contribute to over 100 million projects.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#235613496" name="235613496"><div>2021-04-22 03:06:19</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code>* Raised the exception:
+Cannot build slug for &quot;?_&quot;
+</code></pre></div>
+<p>Hard to create a reproducible URL slug here ...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#235613532" name="235613532"><div>2021-04-22 03:07:31</div></a></div><div class="text"><p>/me renamed the topic to see if that helps, for now.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#235613693" name="235613693"><div>2021-04-22 03:09:58</div></a></div><div class="text"><p>I guess one solution is to just fallback to hash of the topic name.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

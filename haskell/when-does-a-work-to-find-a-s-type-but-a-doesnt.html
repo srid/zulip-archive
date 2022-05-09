@@ -1,0 +1,139 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="i remember being in a situation where i had to find a&#39;s type via _ a because a :: _ did not work. but now i do not understand how this could ever be necessary and start to doubt my memory. it drives me crazy." name="description"><link href="https://funprog.srid.ca/haskell/when-does-a-work-to-find-a-s-type-but-a-doesnt.html" rel="canonical"><meta property="og:title" content="when does `_ a` work to find `a`s type but `a :: _` doesn&#39;t? - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2022-03-19T19:40:38Z"><meta property="og:article:published_time" content="2022-03-17T20:51:57Z"><title>when does `_ a` work to find `a`s type but `a :: _` doesn&#39;t? - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">when does `_ a` work to find `a`s type but `a :: _` doesn&#39;t? - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">when does `_ a` work to find `a`s type but `a :: _` doesn&#39;t?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#275724671" name="275724671"><div>2022-03-17 20:51:57</div></a></div><div class="text"><p>i remember being in a situation where i had to find <code>a</code>'s type via <code>_ a</code> because <code>a :: _</code> did not work. but now i do not understand how this could ever be necessary and start to doubt my memory. it drives me crazy.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#275728090" name="275728090"><div>2022-03-17 21:14:50</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="318624">rednaZ</span> <a href="#narrow/stream/201385-Haskell/topic/when.20does.20.60_.20a.60.20work.20to.20find.20.60a.60s.20type.20but.20.60a.20.3A.3A.20_.60.20doesn't.3F/near/275724671">said</a>:</p>
+<blockquote>
+<p>i remember being in a situation where i had to find <code>a</code>'s type via <code>_ a</code> because <code>a :: _</code> did not work. but now i do not understand how this could ever be necessary and start to doubt my memory. it drives me crazy.</p>
+</blockquote>
+<p><code>_</code> is a typed hole, which should provide you with inferred type and suggestions for possible values - it should work in all circumstances where <code>a</code>'s type can be inferred by itself<br>
+<code>:: _</code> annotation on the other hand is actually something that can be accepted by the compiler in some forms given the right extension - the fact that it tells you about possible type is more of a side effect I guess</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#275737381" name="275737381"><div>2022-03-17 22:37:19</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="318624">rednaZ</span> <a href="#narrow/stream/201385-Haskell/topic/when.20does.20.60_.20a.60.20work.20to.20find.20.60a.60s.20type.20but.20.60a.20.3A.3A.20_.60.20doesn't.3F/near/275724671">said</a>:</p>
+<blockquote>
+<p>i remember being in a situation where i had to find <code>a</code>'s type via <code>_ a</code> because <code>a :: _</code> did not work. but now i do not understand how this could ever be necessary and start to doubt my memory. it drives me crazy.</p>
+</blockquote>
+<p>where <code>a</code> is any expression.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#275737987" name="275737987"><div>2022-03-17 22:43:49</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/when.20does.20.60_.20a.60.20work.20to.20find.20.60a.60s.20type.20but.20.60a.20.3A.3A.20_.60.20doesn't.3F/near/275728090">said</a>:</p>
+<blockquote>
+<p><code>_</code> is a typed hole, which should provide you with inferred type and suggestions for possible values - it should work in all circumstances where <code>a</code>'s type can be inferred by itself<br>
+<code>:: _</code> annotation on the other hand is actually something that can be accepted by the compiler in some forms given the right extension - the fact that it tells you about possible type is more of a side effect I guess</p>
+</blockquote>
+<p>you are not answering my question or do i misunderstand you?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#275776839" name="275776839"><div>2022-03-18 09:19:19</div></a></div><div class="text"><p>What I think Matt is saying is that if you have e.g. "use inferred types" enabled, writing <code>a :: _</code> might successfully infer a type and not give you an error saying what it is.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#275918498" name="275918498"><div>2022-03-19 16:46:34</div></a></div><div class="text"><p>ah, thanks. i did not understand that.</p>
+<p>but it is not the answer i was looking for. even with <code>PartialTypeSignatures</code> it will still generate a warning.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#275925925" name="275925925"><div>2022-03-19 19:40:38</div></a></div><div class="text"><p>Ah, yes, thanks <span class="user-mention" data-user-id="254032">@Georgi Lyubenov // googleson78</span></p>
+<p><span class="user-mention silent" data-user-id="318624">rednaZ</span> <a href="#narrow/stream/201385-Haskell/topic/when.20does.20.60_.20a.60.20work.20to.20find.20.60a.60s.20type.20but.20.60a.20.3A.3A.20_.60.20doesn't.3F/near/275737987">said</a>:</p>
+<blockquote>
+<p><span class="user-mention silent" data-user-id="225127">TheMatten</span> <a href="#narrow/stream/201385-Haskell/topic/when.20does.20.60_.20a.60.20work.20to.20find.20.60a.60s.20type.20but.20.60a.20.3A.3A.20_.60.20doesn't.3F/near/275728090">said</a>:</p>
+<blockquote>
+<p><code>_</code> is a typed hole, which should provide you with inferred type and suggestions for possible values - it should work in all circumstances where <code>a</code>'s type can be inferred by itself<br>
+<code>:: _</code> annotation on the other hand is actually something that can be accepted by the compiler in some forms given the right extension - the fact that it tells you about possible type is more of a side effect I guess</p>
+</blockquote>
+<p>you are not answering my question or do i misunderstand you?</p>
+</blockquote>
+<p>I was trying to say that <code>a :: _</code> may not be a "supported" feature in general<br>
+Not sure about concrete cases where it may not work - maybe you were accidentally using it without parens? E.g.,<br>
+<code>a $ b :: c</code> gets parsed as <code>(a $ b :: c)</code> instead of <code>a $ (b :: c)</code>, which may not be what you want</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

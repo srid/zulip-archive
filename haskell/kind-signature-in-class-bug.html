@@ -1,0 +1,168 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="{-# language
+  PolyKinds,
+  DataKinds,
+  AllowAmbiguousTypes,
+  TypeApplications
+#-}
+
+class Test a where
+  test :: Bool
+instance Test False where
+  test = False
+value :: Bool
+value = test @False
+
+works but
+{-# language
+  PolyKinds,
+  DataKinds,
+  AllowAmbiguousTypes,
+  TypeApplications
+#-}
+
+class Te" name="description"><link href="https://funprog.srid.ca/haskell/kind-signature-in-class-bug.html" rel="canonical"><meta property="og:title" content="kind signature in `class` bug? - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-05-01T20:45:52Z"><meta property="og:article:published_time" content="2021-05-01T20:36:36Z"><title>kind signature in `class` bug? - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">kind signature in `class` bug? - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">kind signature in `class` bug?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#236996759" name="236996759"><div>2021-05-01 20:36:36</div></a></div><div class="text"><div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="cm">{-# language</span>
+<span class="cm">  PolyKinds,</span>
+<span class="cm">  DataKinds,</span>
+<span class="cm">  AllowAmbiguousTypes,</span>
+<span class="cm">  TypeApplications</span>
+<span class="cm">#-}</span>
+
+<span class="kr">class</span> <span class="kt">Test</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="n">test</span> <span class="ow">::</span> <span class="kt">Bool</span>
+<span class="kr">instance</span> <span class="kt">Test</span> <span class="kt">False</span> <span class="kr">where</span>
+  <span class="n">test</span> <span class="ow">=</span> <span class="kt">False</span>
+<span class="nf">value</span> <span class="ow">::</span> <span class="kt">Bool</span>
+<span class="nf">value</span> <span class="ow">=</span> <span class="n">test</span> <span class="o">@</span><span class="kt">False</span>
+</code></pre></div>
+<p>works but</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="cm">{-# language</span>
+<span class="cm">  PolyKinds,</span>
+<span class="cm">  DataKinds,</span>
+<span class="cm">  AllowAmbiguousTypes,</span>
+<span class="cm">  TypeApplications</span>
+<span class="cm">#-}</span>
+
+<span class="kr">class</span> <span class="kt">Test</span> <span class="p">(</span><span class="n">a</span> <span class="ow">::</span> <span class="n">k</span><span class="p">)</span> <span class="kr">where</span> <span class="c1">-- changed</span>
+  <span class="n">test</span> <span class="ow">::</span> <span class="kt">Bool</span>
+<span class="kr">instance</span> <span class="kt">Test</span> <span class="kt">False</span> <span class="kr">where</span>
+  <span class="n">test</span> <span class="ow">=</span> <span class="kt">False</span>
+<span class="nf">value</span> <span class="ow">::</span> <span class="kt">Bool</span>
+<span class="nf">value</span> <span class="ow">=</span> <span class="n">test</span> <span class="o">@</span><span class="kt">False</span>
+</code></pre></div>
+<p>yields</p>
+<div class="codehilite"><pre><span></span><code>• Expected a type, but ‘False’ has kind ‘Bool’
+• In the type ‘False’
+  In the expression: test @False
+</code></pre></div>
+<p>. Is this crazy or am I going crazy?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#236996857" name="236996857"><div>2021-05-01 20:38:05</div></a></div><div class="text"><p>the <code>k</code> is the first type parameter</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#236996873" name="236996873"><div>2021-05-01 20:38:16</div></a></div><div class="text"><p>do <code>test @_ @False</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#236997046" name="236997046"><div>2021-05-01 20:41:38</div></a></div><div class="text"><p>How can I thank you?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#236997059" name="236997059"><div>2021-05-01 20:42:02</div></a></div><div class="text"><p>your happiness is thanks enough!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#236997296" name="236997296"><div>2021-05-01 20:45:52</div></a></div><div class="text"><p>I am happy indeed.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

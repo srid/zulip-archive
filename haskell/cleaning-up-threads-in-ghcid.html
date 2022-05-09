@@ -1,0 +1,117 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="https://chrismwendt.github.io/blog/2020/05/31/cleaning-up-threads-in-haskell.html" name="description"><link href="https://funprog.srid.ca/haskell/cleaning-up-threads-in-ghcid.html" rel="canonical"><meta property="og:title" content="Cleaning up threads in ghcid - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-06-05T10:32:45Z"><meta property="og:article:published_time" content="2020-05-31T10:07:31Z"><title>Cleaning up threads in ghcid - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Cleaning up threads in ghcid - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Cleaning up threads in ghcid</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/7c6c8647784cae80af5f575103af4c7e"></a><div class="content"><a class="author">Chris Wendt</a><div class="metadata"><a href="#199299768" name="199299768"><div>2020-05-31 10:07:31</div></a></div><div class="text"><p><a href="https://chrismwendt.github.io/blog/2020/05/31/cleaning-up-threads-in-haskell.html">https://chrismwendt.github.io/blog/2020/05/31/cleaning-up-threads-in-haskell.html</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/2c3c795b7e14eeb6a5a5660a9c84593b"></a><div class="content"><a class="author">Julian KG</a><div class="metadata"><a href="#199724346" name="199724346"><div>2020-06-04 09:44:12</div></a></div><div class="text"><p>This is actually a great example of a usage of unsafePerformIO that goes against conventional wisdom, but is really hard to make a practical argument against. I mean what documentation are you loosing by dropping the IO monad considering you can't get a top level pure IORef without using an unsafePerformIO? Who would of thought, mutable global variables in Haskell...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#199858412" name="199858412"><div>2020-06-05 10:30:04</div></a></div><div class="text"><p>GHC did this for a while, and it ended up biting them</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#199858443" name="199858443"><div>2020-06-05 10:30:19</div></a></div><div class="text"><p>iirc</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#199858613" name="199858613"><div>2020-06-05 10:32:05</div></a></div><div class="text"><p><a href="http://aosabook.org/en/ghc.html">aosabook.org/en/ghc.html</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#199858645" name="199858645"><div>2020-06-05 10:32:45</div></a></div><div class="text"><blockquote>
+<p>GHC's behaviour is governed to a large extent by command-line flags. These command-line flags are by definition constant over a given run of GHC, so in early versions of GHC we made the values of these flags available as top-level constants. For example, there was a top-level value opt_GlasgowExts of type Bool, that governed whether certain language extensions should be enabled or not. Top-level constants are highly convenient, because their values don't have to be explicitly passed as arguments to all the code that needs access to them.<br>
+   Of course these options are not really constants, because they change from run to run, and the definition of opt_GlasgowExts involves calling unsafePerformIO because it hides a side effect. Nevertheless, this trick is normally considered "safe enough" because the value is constant within any given run; it doesn't invalidate compiler optimisations, for example.<br>
+   However, GHC was later extended from a single-module compiler to a multi-module compiler. At this point the trick of using top-level constants for flags broke, because the flags may have different values when compiling different modules. So we had to refactor large amounts of code to pass around the flags explicitly.<br>
+   Perhaps you might argue that treating the flags as state in the first place, as would be natural in an imperative language, would have sidestepped the problem. To some extent this is true, although purely functional code has a number of other benefits, not least of which is that representing the flags by an immutable data structure means that the resulting code is already thread-safe and will run in parallel without modification.</p>
+</blockquote></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

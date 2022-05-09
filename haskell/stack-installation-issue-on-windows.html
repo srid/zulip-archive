@@ -1,0 +1,118 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi, I just filled a bug for the stack installer : https://github.com/commercialhaskell/stack/issues/5626 
+I was wondering, how is the installer built ? I see a build-stack-installer.hsfile which uses a nsis package to generate a nsis installer, but does it happen on a windows machine or a linux mach" name="description"><link href="https://funprog.srid.ca/haskell/stack-installation-issue-on-windows.html" rel="canonical"><meta property="og:title" content="Stack installation issue on Windows - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2022-02-08T20:43:58Z"><meta property="og:article:published_time" content="2021-10-08T21:27:35Z"><title>Stack installation issue on Windows - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Stack installation issue on Windows - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Stack installation issue on Windows</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#256808467" name="256808467"><div>2021-10-08 21:27:35</div></a></div><div class="text"><p>Hi, I just filled a bug for the stack installer : <a href="https://github.com/commercialhaskell/stack/issues/5626">https://github.com/commercialhaskell/stack/issues/5626</a> <br>
+I was wondering, how is the installer built ? I see a <code>build-stack-installer.hs</code>file which uses a nsis package to generate a nsis installer, but does it happen on a windows machine or a linux machine ? These days the recommended way of making windows installer is by making msi file for instance with WiX toolset, which is an xml based format. But this means that the installer can only be built on a Windows machine. So that's why I'm asking the question, are installer put on the release page generated on a Windows machine or VM ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#268144238" name="268144238"><div>2022-01-15 20:05:48</div></a></div><div class="text"><p>By the way how can I build stack on windows ? I'm trying to launch <code>stack .\etc\scripts\release.hs build</code> but it fails</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#268144401" name="268144401"><div>2022-01-15 20:08:13</div></a></div><div class="text"><p>here is the log :<br>
+<a href="/user_uploads/13896/BGOWshWC2hTvivmjBK1MLb7-/build.log">build.log</a> <br>
+I don't understand what ghc is trying to do at the beginning, addLibrarySearchPath fails but it doesn't tell what is the path</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#268155381" name="268155381"><div>2022-01-16 00:29:29</div></a></div><div class="text"><p>I found out what's happening, nevermind !</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#268180278" name="268180278"><div>2022-01-16 11:55:06</div></a></div><div class="text"><p>Would it be worth sharing what you did to solve the issue?<br>
+Maybe it could help the next person running into the same situation...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#271187158" name="271187158"><div>2022-02-08 20:36:13</div></a></div><div class="text"><p>I had to install nsis on my machine so that the executable is discoverd</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#271188119" name="271188119"><div>2022-02-08 20:43:58</div></a></div><div class="text"><p>There is however another issue, the first time you install stack on Windows 11, <code>sh</code>is complaining about a base address not being the same as some reference. It suffers from the same problem as the installer, and if I disable ASRL it works.<br>
+I can get stack executable installed via setup but the <code>sh</code> issue is more annoying to me, and I don't know how to fix it. I suspect it's some binary package which is trailing behing. Do you know where these binaries are compiled and uploaded and who I can send a bug report to ?</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

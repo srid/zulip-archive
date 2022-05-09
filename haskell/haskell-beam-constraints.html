@@ -1,0 +1,121 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="tfw when constraints are longer than the function body image.png
+" name="description"><link href="https://funprog.srid.ca/haskell/haskell-beam-constraints.html" rel="canonical"><meta property="og:title" content="Haskell beam constraints - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-31T08:02:52Z"><meta property="og:article:published_time" content="2020-05-25T19:04:16Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"><title>Haskell beam constraints - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Haskell beam constraints - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Haskell beam constraints</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#198694922" name="198694922"><div>2020-05-25 19:04:16</div></a></div><div class="text"><p>tfw when constraints are longer than the function body <a href="/user_uploads/13896/xw2Go2onaiKIL8XOd-qkuqMc/image.png">image.png</a></p>
+<div class="message_inline_image"><a href="/user_uploads/13896/xw2Go2onaiKIL8XOd-qkuqMc/image.png" title="image.png"><img src="/user_uploads/13896/xw2Go2onaiKIL8XOd-qkuqMc/image.png"></a></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#198718413" name="198718413"><div>2020-05-26 03:55:53</div></a></div><div class="text"><p>this is the dream</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#198718452" name="198718452"><div>2020-05-26 03:56:04</div></a></div><div class="text"><p>each of those constraints is writing code for you :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#198887079" name="198887079"><div>2020-05-27 13:03:57</div></a></div><div class="text"><p>I'm not a friend of beam, but tbh, those constraints tell me more about what the function does than the implementation</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#199204652" name="199204652"><div>2020-05-29 20:01:19</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251082">@Mats Rauhala</span> why do you not like Beam? what do you prefer?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#199206034" name="199206034"><div>2020-05-29 20:11:57</div></a></div><div class="text"><p>I would just go with postgres simple.</p>
+<ul>
+<li>The added complexity of beam is non trivial. I would argue that the benefit doesn't outweigh the cost</li>
+<li>so far I haven't used even the first orm, relational algebra, DSL, edsl etc that wouldn't have at some point leaked the abstraction, or support some necessary part of sql, or generated horrible sql etc</li>
+</ul></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#199206299" name="199206299"><div>2020-05-29 20:14:19</div></a></div><div class="text"><p>Instead, I endorse writing a simple function with a clean type and writing some tests for it.</p>
+<p>addPerson :: WithDB r m =&gt; Person -&gt; m ()</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#199206390" name="199206390"><div>2020-05-29 20:15:32</div></a></div><div class="text"><p>Of course, when your purpose is to learn something new or have fun, go with what you want</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#199207054" name="199207054"><div>2020-05-29 20:20:12</div></a></div><div class="text"><p>ok, I have only used Hasql so far, I guess that comes with a similar cost</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#199207765" name="199207765"><div>2020-05-29 20:26:25</div></a></div><div class="text"><p>Yeah, hasql is nicer than PG simple in my eyes. Not abusing typeclasses for encoding / decoding stuff makes it pretty excellent and painless to deal with. <span aria-label="heart" class="emoji emoji-2764" role="img" title="heart">:heart:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#199208190" name="199208190"><div>2020-05-29 20:30:36</div></a></div><div class="text"><p>yes, that's a positive aspect I also noticed when perusing the Beam docs.<br>
+I've been playing around with deriving <code>Row</code> and <code>Params</code> for my types, which works pretty fine, but it's a bit tedious that I can't (afaict) simply run those codecs for testing</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#199208790" name="199208790"><div>2020-05-29 20:36:22</div></a></div><div class="text"><p>my experience with codecs has often been that it's undesirable when the data type has to incorporate stuff for derivation in its fields, like the <code>Columnar</code> in Beam</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#199208916" name="199208916"><div>2020-05-29 20:37:40</div></a></div><div class="text"><p>though I still use <code>generics-sop</code>, so that's kind of similar, only more general</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=5"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#199209458" name="199209458"><div>2020-05-29 20:42:11</div></a></div><div class="text"><p>though looking at my code now I realize that the most significant parts of the derivations deal with the constructions of statements, the codecs are rather trivial</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#199296205" name="199296205"><div>2020-05-31 08:02:52</div></a></div><div class="text"><p>You know, hasql is not something I've ever really tried. IIRC you still write raw sql queries on it, but define the encoders/decoders with functors / contravariant functors instead of typeclasses. So I would liken it with postgresql-simple. The full power of SQL with the type safety of haskell where it matters the most.</p>
+<p>Personally I haven't had any pain with having type classes as encoders (like psql, aeson, quickcheck), but I've seen plenty of people having pain with it</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

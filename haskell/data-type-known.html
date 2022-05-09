@@ -1,0 +1,113 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi, I&#39;m trying to understand a codebase that relies on type family to do some type level check. I&#39;m a beginner in Haskel but I have some background with dependent types. There is a package called &quot;Data.Type.Known&quot; in the codebase. Is it correct to assume that it&#39;s used for dependent types ? I don&#39;t " name="description"><link href="https://funprog.srid.ca/haskell/data-type-known.html" rel="canonical"><meta property="og:title" content="Data.Type.Known - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-11-13T20:51:44Z"><meta property="og:article:published_time" content="2020-11-13T20:12:58Z"><title>Data.Type.Known - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Data.Type.Known - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Data.Type.Known</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#216666847" name="216666847"><div>2020-11-13 20:12:58</div></a></div><div class="text"><p>Hi, I'm trying to understand a codebase that relies on type family to do some type level check. I'm a beginner in Haskel but I have some background with dependent types. There is a package called "Data.Type.Known" in the codebase. Is it correct to assume that it's used for dependent types ? I don't find the doc for it, I only find things about KnowNat on Google (which seems to inject nat values to types)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#216670980" name="216670980"><div>2020-11-13 20:49:34</div></a></div><div class="text"><p>I'm not finding <code>Data.Type.Known</code> - could you link to it?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#216671165" name="216671165"><div>2020-11-13 20:51:01</div></a></div><div class="text"><p>err nvm it was in the source code apparently</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#216671207" name="216671207"><div>2020-11-13 20:51:29</div></a></div><div class="text"><p><a href="https://gitlab.com/sheaf/fir/-/blob/master/src/Data/Type/Known.hs">https://gitlab.com/sheaf/fir/-/blob/master/src/Data/Type/Known.hs</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://gitlab.com/sheaf/fir/-/blob/master/src/Data/Type/Known.hs" style="background-image: url(https://assets.gitlab-static.net/uploads/-/system/project/avatar/9868500/logo.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://gitlab.com/sheaf/fir/-/blob/master/src/Data/Type/Known.hs" title="src/Data/Type/Known.hs · master · sheaf / FIR">src/Data/Type/Known.hs · master · sheaf / FIR</a></div><div class="message_embed_description">An EDSL that compiles to SPIR-V for graphics programming on the GPU in Haskell.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#216671243" name="216671243"><div>2020-11-13 20:51:44</div></a></div><div class="text"><p>actually my question is a bit different now, will rephrase it in another topic</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

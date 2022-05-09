@@ -1,0 +1,266 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi, they suggested on IRC that I&#39;d ask here. I&#39;m trying to make a port of Heist to use Polysemy. Just as an exercise at this point. Heist is an HTML template library which works in two stages and the monad transformer it uses has two type parameters, one for the initialization stage and a second one" name="description"><link href="https://funprog.srid.ca/polysemy/porting-heist-to-polysemy-just-as-an-exercise.html" rel="canonical"><meta property="og:title" content="Porting Heist to Polysemy (just as an exercise) - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2022-02-16T18:49:11Z"><meta property="og:article:published_time" content="2020-05-08T17:45:03Z"><title>Porting Heist to Polysemy (just as an exercise) - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Porting Heist to Polysemy (just as an exercise) - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Porting Heist to Polysemy (just as an exercise)</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196927423" name="196927423"><div>2020-05-08 17:45:03</div></a></div><div class="text"><p>Hi, they suggested on IRC that I'd ask here. I'm trying to make a port of <a href="https://hackage.haskell.org/package/heist" title="https://hackage.haskell.org/package/heist">Heist</a> to use Polysemy. Just as an exercise at this point. Heist is an HTML template library which works in two stages and the monad transformer it uses has two type parameters, one for the initialization stage and a second one for the run time type. I'm trying to replicate that by making a <code>data Heist s r a</code> which gets interpreted with Polysemy twice, first for <code>r</code> and then for <code>s</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">{-# LANGUAGE TemplateHaskell, OverloadedStrings, BlockArguments #-}</span>
+<span class="c1">-- Polysemy has a long list of default GHC extensions, I&#39;m omitting them from this</span>
+
+<span class="kr">import</span> <span class="nn">Data.ByteString</span> <span class="p">(</span><span class="kt">ByteString</span><span class="p">)</span>
+<span class="kr">import</span> <span class="nn">Data.Map.Strict</span> <span class="p">(</span><span class="kt">Map</span><span class="p">)</span>
+<span class="kr">import</span> <span class="nn">Polysemy</span>
+<span class="kr">import</span> <span class="nn">Polysemy.State</span>
+<span class="c1">-- Replace Node with just a String if you&#39;d like to build my code and avoid downloading it</span>
+<span class="kr">import</span> <span class="nn">Xeno.DOM</span>
+
+<span class="c1">-- Heist&#39;s initialization stage works by making a list of runtime actions and pure bytestring chunks</span>
+<span class="kr">data</span> <span class="kt">Chunk</span> <span class="n">s</span> <span class="ow">=</span> <span class="kt">Pure</span> <span class="kt">ByteString</span>
+             <span class="o">|</span> <span class="kt">RuntimeString</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">s</span> <span class="kt">ByteString</span><span class="p">)</span>
+
+<span class="c1">-- Heist replaces tags in XML/HTML documents with chunks. That&#39;s what &quot;splices&quot; is about.</span>
+<span class="c1">-- &quot;s&quot; is the runtime type that I&#39;ve pretty much left up in the air as of yet. &quot;r&quot; is the initialization stage type.</span>
+<span class="kr">data</span> <span class="kt">HeistState</span> <span class="n">s</span> <span class="n">r</span> <span class="ow">=</span> <span class="kt">HeistState</span>
+  <span class="p">{</span> <span class="n">paramNode</span> <span class="ow">::</span> <span class="kt">Node</span>
+  <span class="p">,</span> <span class="n">splices</span> <span class="ow">::</span> <span class="kt">Map</span> <span class="kt">ByteString</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span> <span class="p">[</span><span class="kt">Chunk</span> <span class="n">s</span><span class="p">])</span>
+  <span class="p">}</span>
+
+<span class="c1">-- Just a few operations defined at this point</span>
+<span class="kr">data</span> <span class="p">(</span><span class="kt">Heist</span> <span class="n">s</span><span class="p">)</span> <span class="n">r</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">WithLocalSplices</span> <span class="ow">::</span> <span class="kt">Map</span> <span class="kt">ByteString</span> <span class="p">(</span><span class="n">r</span> <span class="p">[</span><span class="kt">Chunk</span> <span class="n">s</span><span class="p">])</span> <span class="ow">-&gt;</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Heist</span> <span class="n">s</span><span class="p">)</span> <span class="n">r</span> <span class="n">a</span>
+  <span class="kt">GetParamNode</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Heist</span> <span class="n">s</span><span class="p">)</span> <span class="n">r</span> <span class="kt">Node</span>
+  <span class="kt">RunNode</span> <span class="ow">::</span> <span class="kt">Node</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Heist</span> <span class="n">s</span><span class="p">)</span> <span class="n">r</span> <span class="p">[</span><span class="kt">Chunk</span> <span class="n">s</span><span class="p">]</span>
+
+<span class="nf">makeSem</span> <span class="kt">&#39;&#39;Heist</span>
+</code></pre></div>
+
+
+<p>I'm having difficulty writing a runHeist function. What I have so far is this:</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">runHeist</span>
+  <span class="ow">::</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">State</span> <span class="p">(</span><span class="kt">HeistState</span> <span class="n">s</span> <span class="n">r</span><span class="p">))</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">((</span><span class="kt">Heist</span> <span class="n">s</span><span class="p">)</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">runHeist</span> <span class="ow">=</span> <span class="n">interpretH</span> <span class="nf">\</span><span class="kr">case</span>
+  <span class="kt">WithLocalSplices</span> <span class="n">ss</span> <span class="n">f</span> <span class="ow">-&gt;</span> <span class="n">runT</span> <span class="o">$</span> <span class="n">modify</span> <span class="n">id</span>
+  <span class="kt">GetParamNode</span> <span class="ow">-&gt;</span> <span class="n">undefined</span>
+  <span class="kt">RunNode</span> <span class="n">n</span> <span class="ow">-&gt;</span> <span class="n">undefined</span>
+</code></pre></div>
+
+
+<p>If I use <code>undefined</code> for  the<code>WithLocalSplices</code> case then it compiles. But I'm having trouble with making the types fit if I do anything <code>State</code> related. I've just started with Polysemy so it's quite possible that I'm confused about its use.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#196927536" name="196927536"><div>2020-05-08 17:45:58</div></a></div><div class="text"><p>hi</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#196927774" name="196927774"><div>2020-05-08 17:47:38</div></a></div><div class="text"><p>so,<br>
+in polysemy, all effects have two additional type arguments usually called <code>m</code> and <code>a</code></p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">Effect</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+<span class="o">...</span>
+</code></pre></div>
+
+
+<p>the <code>m</code> bit is what will eventually be <code>Sem &lt;your-effects&gt;</code><br>
+and the <code>a</code> is what value the effect "produces" in each constructor you give (as is traditionally with monads, I guess)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#196927908" name="196927908"><div>2020-05-08 17:48:43</div></a></div><div class="text"><p>is the <code>r</code> thing in <code>heist</code> also "the effect stack that HeistT will eventually be run in"?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#196928148" name="196928148"><div>2020-05-08 17:50:51</div></a></div><div class="text"><p>woah, you have a mapping from strings to actions</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#196929466" name="196929466"><div>2020-05-08 18:00:55</div></a></div><div class="text"><p>at the very least you will need to pass an initial state and Node values to <code>runHeist</code>, so that you have something to do in <code>GetParamNode</code> and <code>RunNode</code> (like with the actual <code>runHeistT</code>)<br>
+additionally I'm guessing you'll need to look at <code>Tactics</code>/<code>Strategy</code> stuff, if you want to embed other effects in your <code>Heist</code> constructors</p>
+<p>another idea that pops to mind:<br>
+<code>HeistT</code> seems to be similar a reader over some state, you could also attempt to use the <code>polysemy</code>-provided versions of those as a "middle-man", instead of directly interpreting your effect <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span> ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196929673" name="196929673"><div>2020-05-08 18:02:19</div></a></div><div class="text"><p>Basically my idea is to run Polysemy to get a [Chunk s] and then run Polysemy on that, again.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196930538" name="196930538"><div>2020-05-08 18:09:06</div></a></div><div class="text"><p>Is the type of my <code>runHeist</code> ok? Another version I used was</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">Sem</span> <span class="p">((</span><span class="kt">Heist</span> <span class="n">s</span><span class="p">)</span> <span class="kt">&#39;:</span> <span class="p">(</span><span class="kt">State</span> <span class="p">(</span><span class="kt">HeistState</span> <span class="n">s</span> <span class="n">r</span><span class="p">)</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">))</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">State</span> <span class="p">(</span><span class="kt">HeistState</span> <span class="n">s</span> <span class="n">r</span><span class="p">)</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span>
+</code></pre></div>
+
+
+<p>Or is that just the same thing?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#196930797" name="196930797"><div>2020-05-08 18:11:30</div></a></div><div class="text"><p>I think if the first one works this one will as well, and vice versa</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196931646" name="196931646"><div>2020-05-08 18:18:22</div></a></div><div class="text"><p>Can you give me some idea how to think about this?</p>
+<div class="codehilite"><pre><span></span><code>      Expected type: Sem
+                       (WithTactics (Heist s) f m (State (HeistState s r) : r)) (f x)
+        Actual type: Sem
+                       (WithTactics (Heist s) f (Sem r0) (State (HeistState s r) : r))
+                       (Sem (Heist s : State (HeistState s r) : r) (f ()))
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196931963" name="196931963"><div>2020-05-08 18:21:29</div></a></div><div class="text"><p>I suppose I'll try to write this with an explicit state parameter. <code>runHeist :: HeistState s r -&gt; ...</code> and so on.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/1114fd8de67671f83d3a3ef7594b1950"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#196933262" name="196933262"><div>2020-05-08 18:33:01</div></a></div><div class="text"><p>can't help much here :/ , I've not had to bang my head against this one enough to figure it out.<br>
+I can point you to documentation - <a href="https://hackage.haskell.org/package/polysemy-1.3.0.0/docs/Polysemy-Internal-Strategy.html" title="https://hackage.haskell.org/package/polysemy-1.3.0.0/docs/Polysemy-Internal-Strategy.html">https://hackage.haskell.org/package/polysemy-1.3.0.0/docs/Polysemy-Internal-Strategy.html</a><br>
+and this blog post is also related - <a href="https://reasonablypolymorphic.com/blog/tactics/" title="https://reasonablypolymorphic.com/blog/tactics/">https://reasonablypolymorphic.com/blog/tactics/</a></p>
+<p>perhaps <span class="user-mention" data-user-id="254034">@Love Waern (King of the Homeless)</span> could help</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196933425" name="196933425"><div>2020-05-08 18:34:21</div></a></div><div class="text"><p>I suppose I did start by jumping to the deep end.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196936648" name="196936648"><div>2020-05-08 19:01:04</div></a></div><div class="text"><p><span class="user-mention" data-user-id="300342">@Kari Pahula</span> Can you show me the interpreter you're trying to write?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196936738" name="196936738"><div>2020-05-08 19:01:54</div></a></div><div class="text"><p>Or is</p>
+<div class="codehilite"><pre><span></span><code>runHeist
+  :: Member (State (HeistState s r)) r
+  =&gt; Sem ((Heist s) &#39;: r) a
+  -&gt; Sem r a
+runHeist = interpretH \case
+  WithLocalSplices ss f -&gt; runT $ modify id
+  GetParamNode -&gt; undefined
+  RunNode n -&gt; undefined
+</code></pre></div>
+
+
+<p>The up-to-date definition?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196937139" name="196937139"><div>2020-05-08 19:05:00</div></a></div><div class="text"><p>That's all I have for now. Or I do have some (non-compiling) code which calls Map.union on the splices field and such but I don't think it'll add anything if I can't even get <code>runT $ modify id</code> compile.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196937424" name="196937424"><div>2020-05-08 19:07:22</div></a></div><div class="text"><p>Can you describe what<code>WithLocalSplices</code> should do?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196937493" name="196937493"><div>2020-05-08 19:07:58</div></a></div><div class="text"><p>As in, if you call <code>withLocalSplices</code>, how should it act?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196937654" name="196937654"><div>2020-05-08 19:09:25</div></a></div><div class="text"><p>Run Map.union on the initial splices and the first parameter, update the state with that, call the second parameter, restore splices to what they were and return the result of the action performed.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196937929" name="196937929"><div>2020-05-08 19:11:55</div></a></div><div class="text"><p>Sounds like <code>Reader (HeistState s r) </code> is a better fit as underlying effect rather than <code>State (HeistState s r)</code>. I'll try to work something out with that.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196938147" name="196938147"><div>2020-05-08 19:13:40</div></a></div><div class="text"><p>The full version would make state alterations in <code>f</code>as well which would be preserved. Like log errors encountered during the initialization.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196938297" name="196938297"><div>2020-05-08 19:15:04</div></a></div><div class="text"><p>Alright.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196939271" name="196939271"><div>2020-05-08 19:23:24</div></a></div><div class="text"><p>Oh, hmm. Is it ok if the type of the computations suspended in the splices are tied to the <code>Heist</code> effect? Like this:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">Heist</span> <span class="n">s</span> <span class="n">r</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">WithLocalSplices</span> <span class="ow">::</span> <span class="kt">Map</span> <span class="kt">ByteString</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span> <span class="p">[</span><span class="kt">Chunk</span> <span class="n">s</span><span class="p">])</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Heist</span> <span class="n">s</span> <span class="n">r</span><span class="p">)</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="kt">GetParamNode</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Heist</span> <span class="n">s</span> <span class="n">r</span><span class="p">)</span> <span class="n">m</span> <span class="kt">Node</span>
+  <span class="kt">RunNode</span> <span class="ow">::</span> <span class="kt">Node</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Heist</span> <span class="n">s</span> <span class="n">r</span><span class="p">)</span> <span class="n">m</span> <span class="p">[</span><span class="kt">Chunk</span> <span class="n">s</span><span class="p">]</span>
+</code></pre></div>
+
+
+<p>Note the extra type variable and change to <code>WithLocalSplices</code>. Because if this is not ok... you've just run into one of the shortcomings of the Effect Handlers In Scope basis that Polysemy is built upon.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196939568" name="196939568"><div>2020-05-08 19:26:08</div></a></div><div class="text"><p>That looks quite alright. I didn't think of trying that.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196939637" name="196939637"><div>2020-05-08 19:26:55</div></a></div><div class="text"><p>Actually, when I think about it, there's another way to go about it that keeps your original definition. But your effect is special enough that you've fallen straight into the weirdest part of polysemy.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196940003" name="196940003"><div>2020-05-08 19:30:00</div></a></div><div class="text"><p>Oh wait, no, that would require importing <code>Polysemy.Internal</code> and <code>Polysemy.Internal.Union</code>. <code>interpretH</code> isn't powerful enough. Nevermind, then. I'll go with the modified definition.</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">runHeist</span>
+  <span class="ow">::</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">State</span> <span class="p">(</span><span class="kt">HeistState</span> <span class="n">s</span> <span class="n">r</span><span class="p">))</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">((</span><span class="kt">Heist</span> <span class="n">s</span> <span class="n">r</span><span class="p">)</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">runHeist</span> <span class="ow">=</span> <span class="n">interpretH</span> <span class="nf">\</span><span class="kr">case</span>
+  <span class="kt">WithLocalSplices</span> <span class="n">ss</span> <span class="n">m</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+    <span class="n">node</span> <span class="ow">&lt;-</span> <span class="n">gets</span> <span class="n">paramNode</span>
+    <span class="n">oldSplices</span> <span class="ow">&lt;-</span> <span class="n">gets</span> <span class="n">splices</span>
+    <span class="n">put</span> <span class="o">$!</span> <span class="kt">HeistState</span> <span class="n">node</span> <span class="p">(</span><span class="n">union</span> <span class="n">ss</span> <span class="n">oldSplices</span><span class="p">)</span>
+    <span class="n">m&#39;</span> <span class="ow">&lt;-</span> <span class="n">runT</span> <span class="n">m</span>
+    <span class="n">fa</span> <span class="ow">&lt;-</span> <span class="n">raise</span> <span class="o">$</span> <span class="n">runHeist</span> <span class="n">m&#39;</span>
+    <span class="n">put</span> <span class="o">$!</span> <span class="kt">HeistState</span> <span class="n">node</span> <span class="n">oldSplices</span>
+    <span class="n">return</span> <span class="n">fa</span>
+  <span class="kt">GetParamNode</span> <span class="ow">-&gt;</span> <span class="n">gets</span> <span class="n">paramNode</span> <span class="o">&gt;&gt;=</span> <span class="n">pureT</span>
+  <span class="kt">RunNode</span> <span class="n">n</span> <span class="ow">-&gt;</span> <span class="n">undefined</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196940478" name="196940478"><div>2020-05-08 19:34:01</div></a></div><div class="text"><p>How should <code>RunNode</code> work?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196940695" name="196940695"><div>2020-05-08 19:35:43</div></a></div><div class="text"><p>The node is used to index into the splices, right? How do you get the <code>ByteString</code>key out of the node?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196941132" name="196941132"><div>2020-05-08 19:39:23</div></a></div><div class="text"><p>If the parameter is a node that's found in the splices map, return that [Chunk s]. Otherwise, generate start and end tags as <code>Pure ByteString</code> chunks and call runNode on the child nodes. I've so far mirrored the basic functions from <a href="https://hackage.haskell.org/package/heist-1.1.0.1/docs/Heist-Compiled.html" title="https://hackage.haskell.org/package/heist-1.1.0.1/docs/Heist-Compiled.html">https://hackage.haskell.org/package/heist-1.1.0.1/docs/Heist-Compiled.html</a></p>
+<p>But I think I can continue from here on my own. This has been educational and it's gratifying to hear that I wasn't completely off base. Thank you.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196941267" name="196941267"><div>2020-05-08 19:40:21</div></a></div><div class="text"><p>there's one final part that might trip you up; running the <code>Sem</code> actions suspended in the splices map.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196941318" name="196941318"><div>2020-05-08 19:41:00</div></a></div><div class="text"><p>Assuming <code>Node</code> is replaced by <code>ByteString</code> in <code>RunNode</code>, here's how it would look:</p>
+<div class="codehilite"><pre><span></span><code>  <span class="kt">RunNode</span> <span class="n">n</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+    <span class="n">msplices</span> <span class="ow">&lt;-</span> <span class="n">gets</span> <span class="p">(</span><span class="n">lookup</span> <span class="n">n</span> <span class="o">.</span> <span class="n">splices</span><span class="p">)</span>
+    <span class="kr">case</span> <span class="n">msplices</span> <span class="kr">of</span>
+      <span class="kt">Just</span> <span class="n">sem</span> <span class="ow">-&gt;</span> <span class="n">raise</span> <span class="n">sem</span>
+      <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="kt">[]</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196941411" name="196941411"><div>2020-05-08 19:42:00</div></a></div><div class="text"><p>grr, hold on</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196941600" name="196941600"><div>2020-05-08 19:44:01</div></a></div><div class="text"><p>There</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196941838" name="196941838"><div>2020-05-08 19:45:57</div></a></div><div class="text"><p>Inside of <code>interpretH</code>, the monad in use is <code>Sem (WeirdEffectUsedByInterpretH ': r)</code>, and not <code>Sem r</code> directly. So to run the <code>Sem r</code> actions stored in the splices, you need to <code>raise</code> them to convert them to <code>Sem (WeirdEffectUsedByInterpretH ': r)</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196942030" name="196942030"><div>2020-05-08 19:47:51</div></a></div><div class="text"><p>Awesome. I need to call it a day now but I can assume that I'll have more questions later. Now that I started with this I can't quit before I have <code>polysemy-heist</code> on Hackage.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196942269" name="196942269"><div>2020-05-08 19:49:40</div></a></div><div class="text"><p>Last clarifications: <code>runT</code> is only ever used to convert the higher-order parameters to actions, which is why <code>runT $ modify id</code> didn't work. It also <em>returns</em> a <code>Sem (e ': r)</code> action, which is why you need to recursively use <code>runHeist</code> <em>and</em> run the result to actually run the higher-order parameter provided to <code>WithLocalSplices</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196942291" name="196942291"><div>2020-05-08 19:49:51</div></a></div><div class="text"><p>I admit, <code>InterpretH</code> and<code>Tactical</code> isn't the most intuitive thing in the world.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196942409" name="196942409"><div>2020-05-08 19:50:41</div></a></div><div class="text"><p>It looked like something I'd need. At least superficially.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196942515" name="196942515"><div>2020-05-08 19:51:44</div></a></div><div class="text"><p>Well, you were right!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196942539" name="196942539"><div>2020-05-08 19:51:55</div></a></div><div class="text"><p>Good luck, and happy hacking!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196942937" name="196942937"><div>2020-05-08 19:55:01</div></a></div><div class="text"><p>Another edit to the interpreter I gave above: I forgot you also need to use <code>raise</code> following a <code>runT</code>. <br>
+If that implementation doesn't work for whatever reason, then come back and I'll look more at it.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#196943467" name="196943467"><div>2020-05-08 19:59:16</div></a></div><div class="text"><p>Eventually, I'll have time to work on polysemy v2.0. A guide to Tactics will be part of it, so the weird stuff about interpretH gets properly explained.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196973058" name="196973058"><div>2020-05-09 04:28:14</div></a></div><div class="text"><p>I ended up using</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">pureT</span> <span class="o">=&lt;&lt;</span> <span class="n">maybe</span> <span class="p">(</span><span class="n">pure</span> <span class="kt">[]</span><span class="p">)</span> <span class="n">raise</span> <span class="n">msplices</span>
+</code></pre></div>
+
+
+<p>for the <code>RunNode</code> case. <code>(pure =&lt;&lt;)</code> is, of course, just <code>id</code>, so I found it puzzling. I'll build an intuition to this yet.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#196973179" name="196973179"><div>2020-05-09 04:32:32</div></a></div><div class="text"><p>Right, it was also in the <code>GetParamNode</code> case. Curious.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#272026296" name="272026296"><div>2022-02-15 19:33:41</div></a></div><div class="text"><p>I came back to try out this thing again. Unfortunately I have lost the code I had back them and now I'm trying to retrace my steps. I'm quite sure I had something that compiled back then but I'm getting "Could not deduce (Member (State (HeistState s0 r0)) r) from Member (State (HeistState s r)) r" now and I'm not sure what to do about it.</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">import</span><span class="w"> </span><span class="nn">Data.Map</span><span class="w"></span>
+<span class="kr">import</span><span class="w"> </span><span class="nn">Polysemy</span><span class="w"></span>
+<span class="kr">import</span><span class="w"> </span><span class="nn">Polysemy.State</span><span class="w"></span>
+<span class="kr">import</span><span class="w"> </span><span class="nn">Text.XmlHtml</span><span class="w"></span>
+
+<span class="kr">data</span><span class="w"> </span><span class="kt">Chunk</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="kt">Pure</span><span class="w"> </span><span class="kt">String</span><span class="w"></span>
+<span class="w">             </span><span class="o">|</span><span class="w"> </span><span class="kt">RuntimeString</span><span class="w"> </span><span class="p">(</span><span class="kt">Sem</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span><span class="w"></span>
+
+<span class="kr">data</span><span class="w"> </span><span class="kt">HeistState</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="kt">HeistState</span><span class="w"></span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">paramNode</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Node</span><span class="w"></span>
+<span class="w">  </span><span class="p">,</span><span class="w"> </span><span class="n">splices</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Map</span><span class="w"> </span><span class="kt">String</span><span class="w"> </span><span class="p">(</span><span class="kt">Sem</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="p">[</span><span class="kt">Chunk</span><span class="w"> </span><span class="n">s</span><span class="p">])</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="kr">data</span><span class="w"> </span><span class="kt">Heist</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="kr">where</span><span class="w"></span>
+<span class="w">  </span><span class="kt">WithLocalSplices</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Map</span><span class="w"> </span><span class="kt">String</span><span class="w"> </span><span class="p">(</span><span class="kt">Sem</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="p">[</span><span class="kt">Chunk</span><span class="w"> </span><span class="n">s</span><span class="p">])</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="kt">Heist</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span><span class="w"></span>
+
+<span class="nf">runHeist</span><span class="w"></span>
+<span class="w">  </span><span class="ow">::</span><span class="w"> </span><span class="kt">Member</span><span class="w"> </span><span class="p">(</span><span class="kt">State</span><span class="w"> </span><span class="p">(</span><span class="kt">HeistState</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="n">r</span><span class="p">))</span><span class="w"> </span><span class="n">r</span><span class="w"></span>
+<span class="w">  </span><span class="ow">=&gt;</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="p">((</span><span class="kt">Heist</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="kt">':</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">a</span><span class="w"></span>
+<span class="w">  </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="n">a</span><span class="w"></span>
+<span class="nf">runHeist</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">interpretH</span><span class="w"> </span><span class="nf">\</span><span class="kr">case</span><span class="w"></span>
+<span class="w">  </span><span class="kt">WithLocalSplices</span><span class="w"> </span><span class="n">ss</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kr">do</span><span class="w"></span>
+<span class="w">    </span><span class="n">node</span><span class="w"> </span><span class="ow">&lt;-</span><span class="w"> </span><span class="n">gets</span><span class="w"> </span><span class="n">paramNode</span><span class="w"></span>
+<span class="w">    </span><span class="n">oldSplices</span><span class="w"> </span><span class="ow">&lt;-</span><span class="w"> </span><span class="n">gets</span><span class="w"> </span><span class="n">splices</span><span class="w"></span>
+<span class="w">    </span><span class="n">put</span><span class="w"> </span><span class="o">$!</span><span class="w"> </span><span class="kt">HeistState</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="p">(</span><span class="n">union</span><span class="w"> </span><span class="n">ss</span><span class="w"> </span><span class="n">oldSplices</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">m'</span><span class="w"> </span><span class="ow">&lt;-</span><span class="w"> </span><span class="n">runT</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
+<span class="w">    </span><span class="n">fa</span><span class="w"> </span><span class="ow">&lt;-</span><span class="w"> </span><span class="n">raise</span><span class="w"> </span><span class="o">$</span><span class="w"> </span><span class="n">runHeist</span><span class="w"> </span><span class="n">m'</span><span class="w"></span>
+<span class="w">    </span><span class="n">put</span><span class="w"> </span><span class="o">$!</span><span class="w"> </span><span class="kt">HeistState</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">oldSplices</span><span class="w"></span>
+<span class="w">    </span><span class="n">return</span><span class="w"> </span><span class="n">fa</span><span class="w"></span>
+</code></pre></div>
+<p>Anyone have any advice how to make this work? My idea (following along with what Heist library does) is run <code>runHeist</code>on program initialization and get something that I would <code>run</code> again to get HTML output to generate responses for requests.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#272026698" name="272026698"><div>2022-02-15 19:36:12</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="300342">Kari Pahula</span> <a href="#narrow/stream/216942-Polysemy/topic/Porting.20Heist.20to.20Polysemy.20.28just.20as.20an.20exercise.29/near/272026296">said</a>:</p>
+<blockquote>
+<p>I came back to try out this thing again. Unfortunately I have lost the code I had back them and now I'm trying to retrace my steps. I'm quite sure I had something that compiled back then but I'm getting "Could not deduce (Member (State (HeistState s0 r0)) r) from Member (State (HeistState s r)) r" now and I'm not sure what to do about it.</p>
+<p>Anyone have any advice how to make this work? My idea (following along with what Heist library does) is run <code>runHeist</code>on program initialization and get something that I would <code>run</code> again to get HTML output to generate responses for requests.</p>
+</blockquote>
+<p>Do you have polysemy plugin running?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#272123969" name="272123969"><div>2022-02-16 14:38:27</div></a></div><div class="text"><p>What do you use Heist for, <span class="user-mention" data-user-id="300342">@Kari Pahula</span> ? Heist is an underrated library, that is also sadly not being maintained anymore.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f0ba65bb176b0ba5259e1ee93f2b01dd"></a><div class="content"><a class="author">Kari Pahula</a><div class="metadata"><a href="#272160509" name="272160509"><div>2022-02-16 18:49:11</div></a></div><div class="text"><p><a href="https://gitlab.com/piperka/piperka">https://gitlab.com/piperka/piperka</a> uses it. Though I don't expect rewriting it for Polysemy.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
