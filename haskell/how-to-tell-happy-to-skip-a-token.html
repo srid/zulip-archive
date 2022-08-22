@@ -9,7 +9,7 @@ data Token
   | Empty
   ...
 
-" name="description"><link href="https://funprog.srid.ca/haskell/how-to-tell-happy-to-skip-a-token.html" rel="canonical"><meta property="og:title" content="How to tell Happy to skip a token - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2022-08-21T00:39:05Z"><meta property="og:article:published_time" content="2022-08-21T00:39:05Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"><title>How to tell Happy to skip a token - Haskell</title><style type="text/css">
+" name="description"><link href="https://funprog.srid.ca/haskell/how-to-tell-happy-to-skip-a-token.html" rel="canonical"><meta property="og:title" content="How to tell Happy to skip a token - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2022-08-22T13:28:20Z"><meta property="og:article:published_time" content="2022-08-21T00:39:05Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"><title>How to tell Happy to skip a token - Haskell</title><style type="text/css">
 div#thesite
 {
   font-family   : "Open Sans", sans-serif;
@@ -140,4 +140,30 @@ div#thesite .messages .message_inline_image img
   ')'           { RParen }
   &lt;ignore&gt;      { Empty }
   ...
-</code></pre></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#294675797" name="294675797"><div>2022-08-22 13:28:20</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="346868">Pedro Minicz</span> <a href="#narrow/stream/201385-Haskell/topic/How.20to.20tell.20Happy.20to.20skip.20a.20token/near/294494832">said</a>:</p>
+<blockquote>
+<p>Can I tell Happy to always ignore a certain special token? I would like for it to always ignore the <code>Empty</code> token and I'd rather not filter the tokens before sending them to Happy, if I can help it.</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">data</span><span class="w"> </span><span class="kt">Token</span><span class="w"></span>
+<span class="w">  </span><span class="ow">=</span><span class="w"> </span><span class="kt">String</span><span class="w"> </span><span class="kt">String</span><span class="w"></span>
+<span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="kt">Colon</span><span class="w"></span>
+<span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="kt">ColonEqual</span><span class="w"></span>
+<span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="kt">Comma</span><span class="w"></span>
+<span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="kt">LParen</span><span class="w"></span>
+<span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="kt">RParen</span><span class="w"></span>
+<span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="kt">Empty</span><span class="w"></span>
+<span class="w">  </span><span class="o">...</span><span class="w"></span>
+</code></pre></div>
+<p><div class="codehilite" data-code-language="txt"><pre><span></span><code>%token
+  string        { String $$ }
+  ':'           { Colon }
+  ':='          { ColonEqual }
+  ','           { Comma }
+  '('           { LParen }
+  ')'           { RParen }
+  &lt;ignore&gt;      { Empty }
+  ...
+</code></pre></div><br>
+</p>
+</blockquote>
+<p>I think the simplest solution will be to just ignore it in your implementation of binding between lexer and parser<br>
+I mean, this is normally lexer's work, e.g. in case of comments</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
