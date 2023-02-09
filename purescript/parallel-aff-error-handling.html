@@ -1,0 +1,126 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="is there a straightforward way to set up an Aff (Either x a) such that if I&#39;m doing them in parallel via parSequence, I&#39;ll either get a Right (t a) or a Left x with all the non-completed affs canceled?" name="description"><link href="https://funprog.srid.ca/purescript/parallel-aff-error-handling.html" rel="canonical"><meta property="og:title" content="parallel Aff error handling - PureScript"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="PureScript"><meta property="og:article:modified_time" content="2020-10-02T06:08:32Z"><meta property="og:article:published_time" content="2020-10-02T01:24:22Z"><title>parallel Aff error handling - PureScript</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">parallel Aff error handling - PureScript</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/purescript/" class="section">#PureScript</a><i class="right angle icon divider"></i><div class="active section">parallel Aff error handling</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3cea5dd94abba9982d34d28eef71efc0"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#211995337" name="211995337"><div>2020-10-02 01:24:22</div></a></div><div class="text"><p>is there a straightforward way to set up an <code>Aff (Either x a)</code> such that if I'm doing them in parallel via <code>parSequence</code>, I'll either get a <code>Right (t a)</code> or a <code>Left x</code> with all the non-completed affs canceled?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/08875d7ecbbb2da797ee234095b10794"></a><div class="content"><a class="author">miles</a><div class="metadata"><a href="#212004445" name="212004445"><div>2020-10-02 04:47:19</div></a></div><div class="text"><p>That's an interesting question. I can't think of a nice solution.<br>
+Usually, I'd just wrap everything in a timeout as described <a href="https://github.com/purescript-contrib/purescript-aff#parallel-execution">here</a>, but that may not accomplish what you want.<br>
+Does your use case involve something that may fail quickly, along with other stuff that takes a while to succeed? For that situation, I'd split things up into two parallel sections, with the quickly-failing stuff scheduled first. Unfortunately, that's not the most elegant solution.<br>
+If you can wait for the other affs to finish after the first failure (and don't need the active cancellation) then it's straightforward to write something that returns <code>Right (t a)</code> / <code>Left x</code>.<br>
+I think active cancellation will require a <code>forkAff</code> / <code>joinFiber</code> / <code>killFiber</code> strategy, but you might be able to write a generic solution and then contribute it to the library.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/purescript-contrib/purescript-aff#parallel-execution" style="background-image: url(https://avatars2.githubusercontent.com/u/7391813?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/purescript-contrib/purescript-aff#parallel-execution" title="purescript-contrib/purescript-aff">purescript-contrib/purescript-aff</a></div><div class="message_embed_description">An asynchronous effect monad for PureScript. Contribute to purescript-contrib/purescript-aff development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3cea5dd94abba9982d34d28eef71efc0"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#212006890" name="212006890"><div>2020-10-02 05:41:30</div></a></div><div class="text"><p>hmm. I'm making a front-end framework heavily inspired by elm, and I like how elm tasks work (as long as they're extended to be parallelizable), and I keep flip flopping on whether or not I should use aff or use my own async code, but whichever I choose, I want something where I can go</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">parSequence</span>
+  <span class="p">[</span> <span class="n">task1</span>
+  <span class="p">,</span> <span class="n">task2</span>
+  <span class="p">,</span> <span class="n">task3</span>
+  <span class="p">]</span>
+</code></pre></div>
+
+<p>and get an array of results or just a singular error (with all pending tasks canceled). I think I've accomplished this with my own code (although I'm not to happy with how it looks at the moment and still working on it) and I haven't quite got it to work trying to wrap <code>Aff (Either x a)</code>. Elm's <code>Task</code>, in case you're not aware, is basically an either built into some async capability, representing success or failure - it looks like <code>Task x a</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/08875d7ecbbb2da797ee234095b10794"></a><div class="content"><a class="author">miles</a><div class="metadata"><a href="#212007151" name="212007151"><div>2020-10-02 05:47:13</div></a></div><div class="text"><p><code>Aff</code> also has built-in error handling, but you need to wrap everything in an <code>attempt</code>  or  <code>try</code>. <a href="https://pursuit.purescript.org/packages/purescript-aff/5.1.2/docs/Effect.Aff#v:attempt">https://pursuit.purescript.org/packages/purescript-aff/5.1.2/docs/Effect.Aff#v:attempt</a><br>
+And then you'll also need <code>throwError</code> within the tasks. But I agree that this is not as straightforward as what Elm offers.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3cea5dd94abba9982d34d28eef71efc0"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#212008289" name="212008289"><div>2020-10-02 06:08:32</div></a></div><div class="text"><p>but that limits you to a single <code>Error</code> type, meant for JS exceptions. I would like to have the error type be anything.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

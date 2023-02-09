@@ -1,0 +1,130 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="How do I make stack run interpret instead of compiling? Or alternatively, how do I make stack runghc app/Main.hs respect package.yaml?" name="description"><link href="https://funprog.srid.ca/haskell/stack-run-without-compilation.html" rel="canonical"><meta property="og:title" content="`stack run` without compilation - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-10-24T12:09:56Z"><meta property="og:article:published_time" content="2021-10-21T23:23:05Z"><title>`stack run` without compilation - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">`stack run` without compilation - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">`stack run` without compilation</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#258633093" name="258633093"><div>2021-10-21 23:23:05</div></a></div><div class="text"><p>How do I make <code>stack run</code> interpret instead of compiling? Or alternatively, how do I make <code>stack runghc app/Main.hs</code> respect <code>package.yaml</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#258663857" name="258663857"><div>2021-10-22 05:12:03</div></a></div><div class="text"><p>Does <code>stack runghc</code> not already respect <code>package.yaml</code>? I thought any Stack command would do so if run within a Stack project directory.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#258669972" name="258669972"><div>2021-10-22 06:42:35</div></a></div><div class="text"><p>what do you mean by "interpret instead of compiling"?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#258686342" name="258686342"><div>2021-10-22 09:34:17</div></a></div><div class="text"><p><code>stack runghc</code> is probably something liike <code>stack exec -- runghc</code> so I'd assume it ignores project config</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#258768155" name="258768155"><div>2021-10-22 20:15:44</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/.60stack.20run.60.20without.20compilation/near/258669972">said</a>:</p>
+<blockquote>
+<p>what do you mean by "interpret instead of compiling"?</p>
+</blockquote>
+<p>I mean what <code>ghci</code> does as opposed to what <code>ghc</code> does.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e79a25a0f3288a6207f461ceece2422d"></a><div class="content"><a class="author">rednaZ</a><div class="metadata"><a href="#258768609" name="258768609"><div>2021-10-22 20:19:32</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="269918">bradrn</span> <a href="#narrow/stream/201385-Haskell/topic/.60stack.20run.60.20without.20compilation/near/258663857">said</a>:</p>
+<blockquote>
+<p>Does <code>stack runghc</code> not already respect <code>package.yaml</code>? I thought any Stack command would do so if run within a Stack project directory.</p>
+</blockquote>
+<p><code>default-extensions</code> are definitely not considered. I do not know if dependencies are because I do not even get that far in the compilation process thanks to <code>default-extensions</code> not being considered.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#258855593" name="258855593"><div>2021-10-24 03:05:38</div></a></div><div class="text"><p>I’m not sure how this follows… e.g. <code>stack exec -- ghci</code>certainly respects project config insofar as it lets me use non-<code>base</code> dependencies.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#258868386" name="258868386"><div>2021-10-24 09:09:51</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="318624">rednaZ</span> <a href="#narrow/stream/201385-Haskell/topic/.60stack.20run.60.20without.20compilation/near/258768155">said</a>:</p>
+<blockquote>
+<p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/.60stack.20run.60.20without.20compilation/near/258669972">said</a>:</p>
+<blockquote>
+<p>what do you mean by "interpret instead of compiling"?</p>
+</blockquote>
+<p>I mean what <code>ghci</code> does as opposed to what <code>ghc</code> does.</p>
+</blockquote>
+<p>Which part of what ghci does do you need? Afaiu (although I could be completely wrong, since I haven't read any direct topic on the subject), ghci still compiles code, but in a more specific way, and then gives you interactive access to that code (hence why you can't run anything from a module that doesn't compile, even if the particular thing you want to run is fine).</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#258868610" name="258868610"><div>2021-10-24 09:14:58</div></a></div><div class="text"><blockquote>
+<p>When you load a Haskell source module into GHCi, it is normally converted to byte-code and run using the interpreter.</p>
+</blockquote></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#258868697" name="258868697"><div>2021-10-24 09:16:35</div></a></div><div class="text"><p>but what does byte-code mean? <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#258868728" name="258868728"><div>2021-10-24 09:17:40</div></a></div><div class="text"><p>I haven't heard of a VM for hs</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#258868775" name="258868775"><div>2021-10-24 09:18:18</div></a></div><div class="text"><p>unless it's something very specialised and the VM is the interpreter</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#258868880" name="258868880"><div>2021-10-24 09:21:47</div></a></div><div class="text"><p><a href="https://gitlab.haskell.org/ghc/ghc/-/blob/master/rts/Interpreter.c">https://gitlab.haskell.org/ghc/ghc/-/blob/master/rts/Interpreter.c</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#258868977" name="258868977"><div>2021-10-24 09:23:53</div></a></div><div class="text"><p>well, I guess I was wrong</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#258869044" name="258869044"><div>2021-10-24 09:25:16</div></a></div><div class="text"><p>but then why can't we load individual functions? <span aria-label="triumph" class="emoji emoji-1f624" role="img" title="triumph">:triumph:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#258869123" name="258869123"><div>2021-10-24 09:27:21</div></a></div><div class="text"><p>in any case, if you want to run with a <code>ghci</code> style, while also reading your project config, maybe writing something like a <code>.ghci</code> file with just <code>main</code> in it and then running <code>stack ghci</code> might work?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#258875736" name="258875736"><div>2021-10-24 12:09:56</div></a></div><div class="text"><p>Isn’t this pretty much exactly what <code>stack runghc</code> does?</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

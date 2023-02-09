@@ -1,0 +1,161 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hi, I found a small exercice: counting all the tuple (x1, x2, x3, x4) whose sum is equal to 18. For that I used list comprehension:
+allCombination n = [(x1, x2, x3, x4)|
+  x1 &lt;- lst,
+  x2 &lt;- lst,
+  x3 &lt;- lst,
+  x4 &lt;- lst,
+  x1 + x2 + x3 + x4 == n]
+  where lst = [0..n]
+
+main = putStrLn $ show $ lengt" name="description"><link href="https://funprog.srid.ca/haskell/list-monad.html" rel="canonical"><meta property="og:title" content="List monad - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-06-15T18:20:35Z"><meta property="og:article:published_time" content="2021-06-10T20:57:00Z"><title>List monad - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">List monad - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">List monad</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#242269801" name="242269801"><div>2021-06-10 20:57:00</div></a></div><div class="text"><p>Hi, I found a small exercice: counting all the tuple (x1, x2, x3, x4) whose sum is equal to 18. For that I used list comprehension:</p>
+<div class="codehilite"><pre><span></span><code>allCombination n = [(x1, x2, x3, x4)|
+  x1 &lt;- lst,
+  x2 &lt;- lst,
+  x3 &lt;- lst,
+  x4 &lt;- lst,
+  x1 + x2 + x3 + x4 == n]
+  where lst = [0..n]
+
+main = putStrLn $ show $ length (allCombination 18)
+</code></pre></div>
+<p>Is it possible to be more generic ? Like here I have a tuple of 4 element but would it be possible to have an arbitrary number of element ? For instance via a monad.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#242270589" name="242270589"><div>2021-06-10 21:02:56</div></a></div><div class="text"><p>Something like </p>
+<div class="codehilite"><pre><span></span><code>import Control.Monad
+
+allCombination eltcnt n =  do
+  newlst &lt;- traverse undefined [0..eltcnt]
+  guard $  (sum newlst) == n
+  where lst = [0..n]
+
+
+main = putStrLn $ show $ length (allCombination 4 18)
+</code></pre></div>
+<p>Issue is, I'm not sure traverse will work as I expect it to do</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#242270785" name="242270785"><div>2021-06-10 21:04:10</div></a></div><div class="text"><p>if I replace <code>undefined</code> by <code>\_-&gt; lst</code> it doesn't work unfortunatly</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#242271078" name="242271078"><div>2021-06-10 21:06:04</div></a></div><div class="text"><p>hmm actually it does weird</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#242271123" name="242271123"><div>2021-06-10 21:06:31</div></a></div><div class="text"><p>nvm I got my interval wrong</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/92f91c343073bddca7a40210decdc637"></a><div class="content"><a class="author">Bernd Losert</a><div class="metadata"><a href="#242350367" name="242350367"><div>2021-06-11 14:11:06</div></a></div><div class="text"><p>If you use <a href="https://hackage.haskell.org/package/combinatorial-0.1.0.1/docs/Combinatorics.html#v:variateRep">this guy</a>, you could do it like this:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">allCombination</span> <span class="n">eltcnt</span> <span class="n">n</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">candidate</span> <span class="ow">&lt;-</span> <span class="n">variateRep</span> <span class="n">eltcnt</span> <span class="p">[</span><span class="mi">0</span><span class="o">..</span><span class="n">n</span><span class="p">]</span>
+  <span class="n">guard</span> <span class="p">(</span><span class="n">sum</span> <span class="n">candidate</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/92f91c343073bddca7a40210decdc637"></a><div class="content"><a class="author">Bernd Losert</a><div class="metadata"><a href="#242350670" name="242350670"><div>2021-06-11 14:13:31</div></a></div><div class="text"><p>Or more simply:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">allCombination</span> <span class="n">eltcnt</span> <span class="n">n</span> <span class="ow">=</span> <span class="n">filter</span> <span class="p">(</span><span class="nf">\</span> <span class="n">candidate</span> <span class="ow">-&gt;</span> <span class="n">sum</span> <span class="n">candidate</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span> <span class="p">(</span><span class="n">variateRep</span> <span class="n">eltcnt</span> <span class="p">[</span><span class="mi">0</span><span class="o">..</span><span class="n">n</span><span class="p">])</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3e8752071cc8fb107dae91f90121f4e3"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#242387763" name="242387763"><div>2021-06-11 18:49:59</div></a></div><div class="text"><p>More generally, <code>replicateM</code> does the same thing and lives in the <code>base</code> library. (Not sure what the advantage of <code>variateRep</code> would be. Better handling if <code>eltcnt</code> is negative, maybe? Performance?)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#242428288" name="242428288"><div>2021-06-12 05:14:01</div></a></div><div class="text"><p>Yes, I’d do:</p>
+<div class="codehilite"><pre><span></span><code>allCombination n = fmap tuplize $ filter ((==18) . sum) $ replicateM 4 [0..n]
+  where tuplize [a,b,c,d] = (a,b,c,d)
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/e844be7cf589bf69bd17fc26cc4b4e95"></a><div class="content"><a class="author">Vincent L</a><div class="metadata"><a href="#242450483" name="242450483"><div>2021-06-12 13:21:12</div></a></div><div class="text"><p>nice functions !</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/d797538504a367f277d19bd8369e9a19"></a><div class="content"><a class="author">Janus Troelsen</a><div class="metadata"><a href="#242776601" name="242776601"><div>2021-06-15 18:20:35</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="416205">Bernd Losert</span> <a href="#narrow/stream/201385-Haskell/topic/List.20monad/near/242350367">said</a>:</p>
+<blockquote>
+<p>If you use <a href="https://hackage.haskell.org/package/combinatorial-0.1.0.1/docs/Combinatorics.html#v:variateRep">this guy</a>, you could do it like this:</p>
+<p><div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">allCombination</span> <span class="n">eltcnt</span> <span class="n">n</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">candidate</span> <span class="ow">&lt;-</span> <span class="n">variateRep</span> <span class="n">eltcnt</span> <span class="p">[</span><span class="mi">0</span><span class="o">..</span><span class="n">n</span><span class="p">]</span>
+  <span class="n">guard</span> <span class="p">(</span><span class="n">sum</span> <span class="n">candidate</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
+</code></pre></div><br>
+</p>
+</blockquote>
+<p>I imagine you could even use it with <code>MonadComprehensions</code>, then it looks even more like the original.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

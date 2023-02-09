@@ -1,0 +1,180 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I thought I&#39;d try to build ghcide myself, and quite possibly use it to experiment a bit with cachix late on. The following is the expression I came up with.
+- Is it  a reasonable way of building these packages?
+- Will I run into any issues later on if I mix this build of ghcide with expressions for " name="description"><link href="https://funprog.srid.ca/nix/building-ghcide.html" rel="canonical"><meta property="og:title" content="Building ghcide? - Nix"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Nix"><meta property="og:article:modified_time" content="2019-12-12T09:14:32Z"><meta property="og:article:published_time" content="2019-12-07T19:43:04Z"><title>Building ghcide? - Nix</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Building ghcide? - Nix</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/nix/" class="section">#Nix</a><i class="right angle icon divider"></i><div class="active section">Building ghcide?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182858812" name="182858812"><div>2019-12-07 19:43:04</div></a></div><div class="text"><p>I thought I'd try to build <code>ghcide</code> myself, and quite possibly use it to experiment a bit with <code>cachix</code> late on. The following is the expression I came up with.</p>
+<p>- Is it  a reasonable way of building these packages?<br>
+- Will I run into any issues later on if I mix this build of <code>ghcide</code> with expressions for building packages based on "plain nixpkgs"? (I think not, since the result is an executable, so quite possibly I won't even have to match pin shas I suspect.)</p>
+<div class="codehilite"><pre><span></span>with (import &lt;nixpkgs&gt; {});
+
+let
+  ghc_ver = &quot;ghc865&quot;;
+
+  ghcide-0_0_4-src = builtins.fetchTarball {
+    url = https://hackage.haskell.org/package/ghcide-0.0.4/ghcide-0.0.4.tar.gz;
+  };
+
+  haskell-lsp_0_17_0_0-src = builtins.fetchTarball {
+    url = https://hackage.haskell.org/package/haskell-lsp-0.17.0.0/haskell-lsp-0.17.0.0.tar.gz;
+  };
+
+  haskell-lsp-types_0_17_0_0-src = builtins.fetchTarball {
+    url = https://hackage.haskell.org/package/haskell-lsp-types-0.17.0.0/haskell-lsp-types-0.17.0.0.tar.gz;
+  };
+
+  lsp-test_0_8_0_0-src = builtins.fetchTarball {
+    url = https://hackage.haskell.org/package/lsp-test-0.8.0.0/lsp-test-0.8.0.0.tar.gz;
+  };
+
+  myHaskellPackages = pkgs.haskell.packages.${ghc_ver}.override {
+    overrides = self: super: rec {
+      haskell-lsp = self.callCabal2nix &quot;haskell-lsp&quot; haskell-lsp_0_17_0_0-src {};
+      haskell-lsp-types = self.callCabal2nix &quot;haskell-lsp-types&quot; haskell-lsp-types_0_17_0_0-src {};
+      lsp-test = self.callCabal2nixWithOptions &quot;lsp-test&quot; lsp-test_0_8_0_0-src &quot;--no-check&quot; {};
+      ghcide = self.callCabal2nixWithOptions &quot;ghcide&quot; ghcide-0_0_4-src &quot;--no-check&quot; {};
+    };
+  };
+
+in {
+  haskell-lsp_0_17_0_0 = myHaskellPackages.haskell-lsp;
+  haskell-lsp-types_0_17_0_0 = myHaskellPackages.haskell-lsp-types;
+  lsp-test_0_8_0_0 = myHaskellPackages.lsp-test;
+  ghcide_0_0_4 = myHaskellPackages.ghcide;
+}
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#182860289" name="182860289"><div>2019-12-07 20:19:46</div></a></div><div class="text"><p>You'll want callHackage</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182931689" name="182931689"><div>2019-12-09 07:58:49</div></a></div><div class="text"><p>Nice, but as so often documentation is lacking <span aria-label="disappointed" class="emoji emoji-1f61e" role="img" title="disappointed">:disappointed:</span> </p>
+<p>What is an <code>AttrSet</code> actually?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182934454" name="182934454"><div>2019-12-09 08:44:47</div></a></div><div class="text"><p>I'm guessing I have to use <code>AttrSet</code> to turn off checking, passing <code>--no-check</code> to `cabal2nix, it's just that I don't know at all how to do that.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#182938580" name="182938580"><div>2019-12-09 09:47:22</div></a></div><div class="text"><p>I was thinking backwards... I don't want to pass in attrs, I want to run functions from <code>haskell.lib</code> on it. In the end it looks like this:</p>
+<div class="codehilite"><pre><span></span>with (import &lt;nixpkgs&gt; {});
+
+let
+  hl = haskell.lib;
+
+  ghc_ver = &quot;ghc865&quot;;
+
+  myHaskellPackages = pkgs.haskell.packages.${ghc_ver}.override {
+    overrides = self: super: rec {
+      haskell-lsp = self.callHackage &quot;haskell-lsp&quot; &quot;0.17.0.0&quot; {};
+      haskell-lsp-types = self.callHackage &quot;haskell-lsp-types&quot; &quot;0.17.0.0&quot; {};
+      lsp-test = hl.dontCheck (self.callHackage &quot;lsp-test&quot; &quot;0.8.0.0&quot; {});
+      ghcide = hl.dontCheck (self.callHackage &quot;ghcide&quot; &quot;0.0.4&quot; {});
+    };
+  };
+
+in {
+  haskell-lsp_0_17_0_0 = myHaskellPackages.haskell-lsp;
+  haskell-lsp-types_0_17_0_0 = myHaskellPackages.haskell-lsp-types;
+  lsp-test_0_8_0_0 = myHaskellPackages.lsp-test;
+  ghcide_0_0_4 = myHaskellPackages.ghcide;
+}
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#183110470" name="183110470"><div>2019-12-10 22:42:31</div></a></div><div class="text"><p>In the code above I explicitly set the ghc version to be used. Is there some variable in <code>nixpkgs</code> that already holds the correct value for the "current" ghc version?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#183140566" name="183140566"><div>2019-12-11 09:39:41</div></a></div><div class="text"><p>pkgs.haskellPackages</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#183140886" name="183140886"><div>2019-12-11 09:44:27</div></a></div><div class="text"><p>Oh, an attrSet is basically just a dictionary / record in nix.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#183140905" name="183140905"><div>2019-12-11 09:44:58</div></a></div><div class="text"><p>Use pkgs.haskell.lib.dontCheck function to add the dont-check to a haskell derivation.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#183147509" name="183147509"><div>2019-12-11 11:20:55</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251045">@Ben Kolera</span> What about <code>pkgs.haskellPackages</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#183147572" name="183147572"><div>2019-12-11 11:21:55</div></a></div><div class="text"><p>That's the concept of the latest Haskell package set.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#183240761" name="183240761"><div>2019-12-12 09:14:32</div></a></div><div class="text"><p>Yes.. I know.</p>
+<p>I found a solution, a bit of a hack really, to the question about getting the GHC version in that specific format:</p>
+<div class="codehilite"><pre><span></span>ghcver = builtins.replaceStrings [&quot;-&quot; &quot;.&quot;] [&quot;&quot; &quot;&quot;] pkgs.ghc.name;
+</pre></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

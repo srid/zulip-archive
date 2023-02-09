@@ -1,0 +1,138 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Most of the details are here:
+https://github.com/yesodweb/persistent/issues/1199
+The activity levels not as high there though, so I thought there might be useful conversation to be had here.
+but it might be easiest just to look at the code:
+https://github.com/codygman/persistent-postgresql-query-in-" name="description"><link href="https://funprog.srid.ca/haskell/why-does-persistent-with-data-pool-connection-leak.html" rel="canonical"><meta property="og:title" content="Why does Persistent with Data.Pool connection leak? - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-03-11T01:44:56Z"><meta property="og:article:published_time" content="2021-03-05T23:55:34Z"><title>Why does Persistent with Data.Pool connection leak? - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Why does Persistent with Data.Pool connection leak? - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Why does Persistent with Data.Pool connection leak?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#229044436" name="229044436"><div>2021-03-05 23:55:34</div></a></div><div class="text"><p>Most of the details are here:</p>
+<p><a href="https://github.com/yesodweb/persistent/issues/1199">https://github.com/yesodweb/persistent/issues/1199</a></p>
+<p>The activity levels not as high there though, so I thought there might be useful conversation to be had here.</p>
+<p>but it might be easiest just to look at the code:</p>
+<p><a href="https://github.com/codygman/persistent-postgresql-query-in-progress-repro/blob/958e66963c0ad9761149f7ef97fd5ec0d7322f73/src/Main.hs#L18">https://github.com/codygman/persistent-postgresql-query-in-progress-repro/blob/958e66963c0ad9761149f7ef97fd5ec0d7322f73/src/Main.hs#L18</a></p>
+<p>And reflect on how in the world <code>Pool.destroyAllResources</code> doesn't ensure a connection is fresh here:</p>
+<p><a href="https://github.com/codygman/persistent-postgresql-query-in-progress-repro/blob/958e66963c0ad9761149f7ef97fd5ec0d7322f73/src/Main.hs#L29">https://github.com/codygman/persistent-postgresql-query-in-progress-repro/blob/958e66963c0ad9761149f7ef97fd5ec0d7322f73/src/Main.hs#L29</a></p>
+<p>Per <a href="https://hackage.haskell.org/package/resource-pool-0.2.3.2/docs/Data-Pool.html#v:destroyAllResources">the docs for destroyAllResources</a>:</p>
+<blockquote>
+<p>Destroy all resources in all stripes in the pool. Note that this will ignore any exceptions in the destroy function.</p>
+<p>This function is useful when you detect that all resources in the pool are broken. For example after a database has been restarted all connections opened before the restart will be broken. In that case it's better to close those connections so that takeResource won't take a broken connection from the pool but will open a new connection instead.</p>
+<p>Another use-case for this function is that when you know you are done with the pool you can destroy all idle resources immediately instead of waiting on the garbage collector to destroy them, thus freeing up those resources sooner.</p>
+</blockquote>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/yesodweb/persistent/issues/1199" style="background-image: url(https://avatars.githubusercontent.com/u/930379?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/yesodweb/persistent/issues/1199" title="Postgres connections are returned to Pool too quickly · Issue #1199 · yesodweb/persistent">Postgres connections are returned to Pool too quickly · Issue #1199 · yesodweb/persistent</a></div><div class="message_embed_description">When a query (especially long running) is interrupted while using a connection from a Pool, that connection is almost immediately returned to the pool even if the query is still running on that con...</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://github.com/codygman/persistent-postgresql-query-in-progress-repro/blob/958e66963c0ad9761149f7ef97fd5ec0d7322f73/src/Main.hs#L18" style="background-image: url(https://avatars.githubusercontent.com/u/225847?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/codygman/persistent-postgresql-query-in-progress-repro/blob/958e66963c0ad9761149f7ef97fd5ec0d7322f73/src/Main.hs#L18" title="codygman/persistent-postgresql-query-in-progress-repro">codygman/persistent-postgresql-query-in-progress-repro</a></div><div class="message_embed_description">Contribute to codygman/persistent-postgresql-query-in-progress-repro development by creating an account on GitHub.</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://github.com/codygman/persistent-postgresql-query-in-progress-repro/blob/958e66963c0ad9761149f7ef97fd5ec0d7322f73/src/Main.hs#L29" style="background-image: url(https://avatars.githubusercontent.com/u/225847?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/codygman/persistent-postgresql-query-in-progress-repro/blob/958e66963c0ad9761149f7ef97fd5ec0d7322f73/src/Main.hs#L29" title="codygman/persistent-postgresql-query-in-progress-repro">codygman/persistent-postgresql-query-in-progress-repro</a></div><div class="message_embed_description">Contribute to codygman/persistent-postgresql-query-in-progress-repro development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#229045189" name="229045189"><div>2021-03-06 00:03:15</div></a></div><div class="text"><p>I guess hasql is struggling with issues along these lines too given this recent commit:</p>
+<p><a href="https://github.com/nikita-volkov/hasql-pool/commit/d25249f4bd4b8c2c46f61be7746eca0ed3cd8865">https://github.com/nikita-volkov/hasql-pool/commit/d25249f4bd4b8c2c46f61be7746eca0ed3cd8865</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/nikita-volkov/hasql-pool/commit/d25249f4bd4b8c2c46f61be7746eca0ed3cd8865" style="background-image: url(https://avatars.githubusercontent.com/u/1560937?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/nikita-volkov/hasql-pool/commit/d25249f4bd4b8c2c46f61be7746eca0ed3cd8865" title="ResourcePool: destroy resource on exception · nikita-volkov/hasql-pool@d25249f">ResourcePool: destroy resource on exception · nikita-volkov/hasql-pool@d25249f</a></div><div class="message_embed_description">Before this change, IO-based exceptions in the session (`act`)
+caused the connection to "used" indefinitely; not returning capacity
+to the pool, eventually depleting the pool.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#229045355" name="229045355"><div>2021-03-06 00:05:08</div></a></div><div class="text"><p>This  seems promising: <a href="https://qnikst.brick.do/2020-12-28-resource-pool">https://qnikst.brick.do/2020-12-28-resource-pool</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#229078140" name="229078140"><div>2021-03-06 08:08:16</div></a></div><div class="text"><p>so the issue is that the connection temporarily leaks?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#229118317" name="229118317"><div>2021-03-06 18:28:00</div></a></div><div class="text"><p>Yes. The connection goes back into the pool even though a query is still running on it.</p>
+<p>My latest theory is some weird mask/interrupt interaction must be happening since this issue does not happen with postgresql-simple.</p>
+<p>And removing UnliftIO.catchAny in persistent and running my test code partially fixes Pool interaction so that Pool.destroyAllResoutces works.</p>
+<p>Maybe masking is happening more that once or something... Not sure.</p>
+<p>Today or next week I'm going to try and layer on UnLiftIO stuff to my postgresql-simple example like Persistent has until it breaks (assuming it will).</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/33ed1f4a88793f2221d759610e2e8ddb"></a><div class="content"><a class="author">codygman</a><div class="metadata"><a href="#229779016" name="229779016"><div>2021-03-11 01:44:56</div></a></div><div class="text"><p>A solution: <a href="https://github.com/yesodweb/persistent/issues/1199#issuecomment-796289659">https://github.com/yesodweb/persistent/issues/1199#issuecomment-796289659</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/yesodweb/persistent/issues/1199#issuecomment-796289659" style="background-image: url(https://avatars.githubusercontent.com/u/930379?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/yesodweb/persistent/issues/1199#issuecomment-796289659" title="Postgres connections are returned to Pool too quickly · Issue #1199 · yesodweb/persistent">Postgres connections are returned to Pool too quickly · Issue #1199 · yesodweb/persistent</a></div><div class="message_embed_description">When a query (especially long running) is interrupted while using a connection from a Pool, that connection is almost immediately returned to the pool even if the query is still running on that con...</div></div></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

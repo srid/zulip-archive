@@ -1,0 +1,120 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="What&#39;s the status of type inference? Last time I looked into Dhall I was driven off by having to annotate all the polymorphic functions explicitly - but maybe it&#39;s just me being used to it in Haskell :slight_smile:" name="description"><link href="https://funprog.srid.ca/dhall/inference.html" rel="canonical"><meta property="og:title" content="Inference - Dhall"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Dhall"><meta property="og:article:modified_time" content="2020-02-14T08:14:45Z"><meta property="og:article:published_time" content="2020-02-13T18:48:36Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"><title>Inference - Dhall</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Inference - Dhall</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/dhall/" class="section">#Dhall</a><i class="right angle icon divider"></i><div class="active section">Inference</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#188137020" name="188137020"><div>2020-02-13 18:48:36</div></a></div><div class="text"><p>What's the status of type inference? Last time I looked into Dhall I was driven off by having to annotate all the polymorphic functions explicitly - but maybe it's just me being used to it in Haskell <span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/2f4316c80f59f157d26cb515ed98026308998f44?version=2"></a><div class="content"><a class="author">Nick Scheel</a><div class="metadata"><a href="#188178778" name="188178778"><div>2020-02-14 05:09:58</div></a></div><div class="text"><p>I want to implement it as an editor tool, in dhall-purescript, but I haven't had time to put the research into it. (I would do it a non-standard way.)</p>
+<p>Some people were suggesting adding bidirectional type inference, but there were concerns about the maintenance burden for implementations, and the related projects stalled.</p>
+<p>Additionally, there are a number of choices being made as the language grows that complicate inference in many ways (overloading operators like <code>.</code>), which I think would make standard bidirectional inference more difficult.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/2f4316c80f59f157d26cb515ed98026308998f44?version=2"></a><div class="content"><a class="author">Nick Scheel</a><div class="metadata"><a href="#188179257" name="188179257"><div>2020-02-14 05:24:09</div></a></div><div class="text"><p>Basically it would be a tool that performs a "fill in holes" functions, for holes that represent inferrable types. But it has to be a highly global search, due to all of the ambiguity. Basically I would propose a monoid that combines information from various usages, plus a couple other features (like refinement, tracing, error handling, backtracking).</p>
+<p>As one example of ambiguity, <code>$1.label : $2</code> can mean:</p>
+<ul>
+<li><code>$1 : $3</code> is a record of type <code>$3</code> containing a field named <code>label</code>, and <code>$2</code> is the type of that field named <code>label</code> in that record</li>
+<li><code>$1</code> is itself a union type, and it is either a bare union label, whence <code>$2 = $1</code>, or it is a constructor-type label with data of type <code>$3</code>, whence <code>$2 = $3 -&gt; $1</code>.</li>
+</ul>
+<p>All of this type of information needs to be combined in a sensible manner, and it won't be straightforward. Luckily that's the worst case, the rest is more straightforward <span aria-label="wink" class="emoji emoji-1f609" role="img" title="wink">:wink:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#188186362" name="188186362"><div>2020-02-14 08:14:45</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251225">@Nicholas Scheel</span> thanks - so at the end, explicit type arguments are sort of a design decision?</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
