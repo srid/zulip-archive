@@ -1,0 +1,122 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="How would I describe monads such as MonadReader or MonadState or even Applicative in the language of category theory? When searching for these I only find their functional programming description (even Applicative, which I would expect to be easy to find a categorical description)." name="description"><link href="https://funprog.srid.ca/haskell/reader-monad-categorically.html" rel="canonical"><meta property="og:title" content="Reader monad, categorically - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-11-01T06:45:14Z"><meta property="og:article:published_time" content="2020-10-28T15:26:17Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"><title>Reader monad, categorically - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Reader monad, categorically - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Reader monad, categorically</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#214852272" name="214852272"><div>2020-10-28 15:26:17</div></a></div><div class="text"><p>How would I describe monads such as <code>MonadReader</code> or <code>MonadState</code> or even <code>Applicative</code> in the language of category theory? When searching for these I only find their functional programming description (even <code>Applicative</code>, which I would expect to be easy to find a categorical description).</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214855660" name="214855660"><div>2020-10-28 15:48:05</div></a></div><div class="text"><p>applicative is a "monoidal functor" afaiu</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#214856510" name="214856510"><div>2020-10-28 15:53:27</div></a></div><div class="text"><p>Cool! For future reference:</p>
+<ul>
+<li><a href="http://www.staff.city.ac.uk/~ross/papers/Applicative.pdf">http://www.staff.city.ac.uk/~ross/papers/Applicative.pdf</a></li>
+<li><a href="https://bartoszmilewski.com/2017/02/06/applicative-functors/">https://bartoszmilewski.com/2017/02/06/applicative-functors/</a></li>
+</ul>
+<div class="message_embed"><a class="message_embed_image" href="https://bartoszmilewski.com/2017/02/06/applicative-functors/" style="background-image: url(https://bartoszmilewski.files.wordpress.com/2017/02/closed.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://bartoszmilewski.com/2017/02/06/applicative-functors/" title="Applicative Functors">Applicative Functors</a></div><div class="message_embed_description">Unlike monads, which came into programming straight from category theory, applicative functors have their origins in programming. McBride and Paterson introduced applicative functors as a programmi…</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#214856622" name="214856622"><div>2020-10-28 15:54:03</div></a></div><div class="text"><p>Still, it would be interesting to figure if there is a good description of <code>MonadReader</code> in the language of category theory.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#214857273" name="214857273"><div>2020-10-28 15:58:01</div></a></div><div class="text"><p>something like a monad in the Hom category</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214862921" name="214862921"><div>2020-10-28 16:34:48</div></a></div><div class="text"><p>I guess <code>Reader</code> is just a function, and <code>MonadX</code> constraints are sort of "proofs" of monad transformers being composable with <code>X</code> monad?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#214863065" name="214863065"><div>2020-10-28 16:35:49</div></a></div><div class="text"><p>right so the question is whether <span class="user-mention" data-user-id="346868">@Pedro Minicz</span> meant <code>ReaderT</code> or specifically <code>MonadReader</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#214880217" name="214880217"><div>2020-10-28 18:37:58</div></a></div><div class="text"><p><code>MonadReader</code> specifically.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#214880347" name="214880347"><div>2020-10-28 18:38:57</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/201385-Haskell/topic/Reader.20monad.2C.20categorically/near/214857273">said</a>:</p>
+<blockquote>
+<p>something like a monad in the Hom category</p>
+</blockquote>
+<p>Which hom-category? As far as I know, a hom-category is the category between 0-cells in a 2-category.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/3fd04473065250c8eec3f222ba3a974b28940e8a?version=2"></a><div class="content"><a class="author">Pedro Minicz</a><div class="metadata"><a href="#214880475" name="214880475"><div>2020-10-28 18:40:15</div></a></div><div class="text"><p>I  believe I haven't heard anyone talk about about the "2-category of endofunctors," which is the context in which monad are usually discussed. What should the 2-cells be?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/943f136ec7427f6b625c6adfb39456aff9a88ee2?version=2"></a><div class="content"><a class="author">Kim-Ee Yeoh</a><div class="metadata"><a href="#215230617" name="215230617"><div>2020-11-01 06:45:14</div></a></div><div class="text"><p>Check out the last issue of <em>The Monad Reader</em>, published in March 2009, which answers the question "where do the common fundamental monads of Haskell, such as State, Reader, Writer, List, and Maybe, come from?" in the article by Derek Elkins.</p>
+<p><a href="https://wiki.haskell.org/wikiupload/8/85/TMR-Issue13.pdf">https://wiki.haskell.org/wikiupload/8/85/TMR-Issue13.pdf</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

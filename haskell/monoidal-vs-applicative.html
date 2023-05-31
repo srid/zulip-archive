@@ -1,0 +1,126 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="The docs for Control.Invertible.Monoidal say
+
+Invariant monoidal functor. This roughly corresponds to Applicative, [..]
+
+What&#39;s rough about the correspondence, if anything?" name="description"><link href="https://funprog.srid.ca/haskell/monoidal-vs-applicative.html" rel="canonical"><meta property="og:title" content="Monoidal vs applicative - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-10-05T08:56:45Z"><meta property="og:article:published_time" content="2020-10-05T03:31:46Z"><title>Monoidal vs applicative - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Monoidal vs applicative - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Monoidal vs applicative</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/b450c754c95e372799d56cb7eef2eba2"></a><div class="content"><a class="author">James Sully</a><div class="metadata"><a href="#212255181" name="212255181"><div>2020-10-05 03:31:46</div></a></div><div class="text"><p>The docs for Control.Invertible.Monoidal say</p>
+<blockquote>
+<p>Invariant monoidal functor. This roughly corresponds to Applicative, [..]</p>
+</blockquote>
+<p>What's rough about the correspondence, if anything?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#212270126" name="212270126"><div>2020-10-05 08:17:05</div></a></div><div class="text"><p>I think what they're referring to is that the module's contents roughly correspond to the contents of Control.Applicative</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#212270172" name="212270172"><div>2020-10-05 08:17:54</div></a></div><div class="text"><p>Oh wait there's two places they talk about correspondence, whoops! Reading that part now</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#212270356" name="212270356"><div>2020-10-05 08:19:30</div></a></div><div class="text"><p>So you could define Applicative in terms of Monoidal I'm pretty sure.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#212270404" name="212270404"><div>2020-10-05 08:20:04</div></a></div><div class="text"><p>You should try give it a go defining <code>pure</code> and <code>&lt;*&gt;</code> in terms of <code>unit</code> and <code>&gt;*&lt;</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4d7e5bf37281d41829f7b8a95d15292ff274c327?version=2"></a><div class="content"><a class="author">Vladimir Ciobanu</a><div class="metadata"><a href="#212273197" name="212273197"><div>2020-10-05 08:55:13</div></a></div><div class="text"><p>I think they are actually exactly equivalent, not only "roughly correspondent", but the <code>Applicative</code> interface is nicer to work with, in practice.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#212273274" name="212273274"><div>2020-10-05 08:56:15</div></a></div><div class="text"><p>It's basically the same thing as relation between</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">bind</span> <span class="ow">::</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span>
+</code></pre></div>
+
+<p>and</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">join</span> <span class="ow">::</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="n">m</span> <span class="p">(</span><span class="n">m</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#212273300" name="212273300"><div>2020-10-05 08:56:45</div></a></div><div class="text"><p>One is more convenient, the other is closer to formal definition</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

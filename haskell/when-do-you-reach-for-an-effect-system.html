@@ -1,0 +1,151 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="We were discussing effect systems in Haskell on the video chat over the weekend.
+I and some others had mentioned that we haven&#39;t been using effect systems in our applications. We&#39;ve been getting by fine with IO, refs, and the like. In my case it&#39;s because my system is deployed on AWS Lambda and so m" name="description"><link href="https://funprog.srid.ca/haskell/when-do-you-reach-for-an-effect-system.html" rel="canonical"><meta property="og:title" content="When do you reach for an effect system - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-04-28T06:28:43Z"><meta property="og:article:published_time" content="2020-04-27T17:49:41Z"><title>When do you reach for an effect system - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">When do you reach for an effect system - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">When do you reach for an effect system</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195452516" name="195452516"><div>2020-04-27 17:49:41</div></a></div><div class="text"><p>We were discussing effect systems in Haskell on the video chat over the weekend.</p>
+<p>I and some others had mentioned that we haven't been using effect systems in our applications. We've been getting by fine with <code>IO</code>, refs, and the like. In my case it's because my system is deployed on AWS Lambda and so my programs are small by necessity and I haven't felt a need for such a library.</p>
+<p>I have experimented with them for my side projects but I've often heard people say they are complicated to learn and I was curious where the cliff happens in your project: when do you reach for an effect library? What's the trade off?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#195453209" name="195453209"><div>2020-04-27 17:55:43</div></a></div><div class="text"><p>it's useful if you want to reinterpret the same computation in multiple contexts. e.g. for testing, or for visualization</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195455231" name="195455231"><div>2020-04-27 18:10:53</div></a></div><div class="text"><p>and also if you're program is big and you want to test small parts (different effects) of it?</p>
+<p>I also enjoy these two "cosmetic" benefits:</p>
+<ul>
+<li>your "business logic" is "cleaner" - you're not talking about http, file systems, etc</li>
+<li>each function plainly states what things it can do in its type signature - it's easier to take a quick look and imagine what a function might be doing vs an all encompassing IO</li>
+</ul></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195455413" name="195455413"><div>2020-04-27 18:12:31</div></a></div><div class="text"><p>I guess it's also harder to reach for an effect that you shouldn't be doing in the particular place where you are at:<br>
+with IO you can do whatever effect you want, whereas when you have to write it out in your type signature you necessarily have to think twice before using some effect</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#195455604" name="195455604"><div>2020-04-27 18:14:33</div></a></div><div class="text"><p>but tbh I'm also not sure about the benefits and realities of these things - I'm a "very inexperienced" dev (~1yr professionally), so I would also love to see some concrete examples where effects have greatly helped with e.g. testing</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195455998" name="195455998"><div>2020-04-27 18:18:34</div></a></div><div class="text"><p>Right, I'm trying to find out what the tipping point is in terms of "large" or "complex" where you would say, "Okay this is getting too hard to manage with IORefs and ReaderT, I need something more sophisticated."</p>
+<p>The reason being that I think most people find effects difficult to understand when they're new to the Haskell ecosystem and putting them out there as a best practice should probably come with some kind of guideline about the complexity trade off, no?</p>
+<p>Otherwise we may end up trapping some people in a long hurdle before they can even begin writing useful Haskell programs, right? For context I recall getting tripped up when trying to add logging and not having yet learned transformers and finding that a steep hill I just climbed was only the foot of the mountain. :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195456101" name="195456101"><div>2020-04-27 18:19:39</div></a></div><div class="text"><p>I wonder if our advice should be like, "for this large of a project, stick with IO and IORefs" and "for projects larger than that consider effect libraries"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195458921" name="195458921"><div>2020-04-27 18:43:49</div></a></div><div class="text"><p>IMO io and iorefs are always bad solutions</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195458934" name="195458934"><div>2020-04-27 18:44:01</div></a></div><div class="text"><p>that's not to say they shouldn't be used</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195458991" name="195458991"><div>2020-04-27 18:44:08</div></a></div><div class="text"><p>but that they _need_ an abstraction boundary around them</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195459073" name="195459073"><div>2020-04-27 18:45:00</div></a></div><div class="text"><p>it's ok if my MemoryManagement module uses iorefs, but if i have inlined that functionality everywhere else in my codebase, i have commited a true crime against the future maintainability of my software</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195459151" name="195459151"><div>2020-04-27 18:45:43</div></a></div><div class="text"><p>effect systems are an OK-to-bad solution to "i want an abstraction boundary but i dont want to work too hard for it"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195459401" name="195459401"><div>2020-04-27 18:47:37</div></a></div><div class="text"><p>they don't prevent you from shooting yourself by making a bad abstraction</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195459755" name="195459755"><div>2020-04-27 18:50:07</div></a></div><div class="text"><p>using io/refs is bad not because "io is fundamentally evil" but because it doesn't give you any way of changing that decision later</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195459937" name="195459937"><div>2020-04-27 18:51:56</div></a></div><div class="text"><p>people fall into this alllll the time. as soon as you have some ioref in your RIO pattern, you end up seeing shit like this everywhere:</p>
+<div class="codehilite"><pre><span></span><span class="kr">do</span>
+  <span class="n">config</span> <span class="ow">&lt;-</span> <span class="n">ask</span>
+  <span class="kr">let</span> <span class="n">ref</span> <span class="ow">=</span> <span class="n">_myIORef</span> <span class="n">config</span>
+  <span class="n">modifyIORef</span> <span class="n">ref</span> <span class="n">whatever</span>
+</pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195460241" name="195460241"><div>2020-04-27 18:54:21</div></a></div><div class="text"><p>the problem is that this conceptual "i want to change ref" is now split up into three commands, two of which assume a great deal about the context they're running in, and the third assuming a great deal about how to get <code>myIORef</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195460314" name="195460314"><div>2020-04-27 18:55:08</div></a></div><div class="text"><p>by working directly in IO here, not only are your concepts diluted, but also you are just asking people to say "oh, you're already in IO here? i want to do some IO. i'll do it here"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195460378" name="195460378"><div>2020-04-27 18:55:41</div></a></div><div class="text"><p>and the second that happens, you can no longer change your mind about how these things are implemented</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195460494" name="195460494"><div>2020-04-27 18:56:43</div></a></div><div class="text"><p>by leaking the fact that your state management happens in IO, you are tempted to do other IO there because it's convenient, and now the implementation detail of IO is part of the public interface</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#195460817" name="195460817"><div>2020-04-27 18:59:35</div></a></div><div class="text"><p><span aria-label="100" class="emoji emoji-1f4af" role="img" title="100">:100:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195460947" name="195460947"><div>2020-04-27 19:00:40</div></a></div><div class="text"><p>i guess this is a little off topic from the original prompt --- my new book is exactly on this topic of finding abstraction boundaries, so i'm a little primed :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195461147" name="195461147"><div>2020-04-27 19:02:21</div></a></div><div class="text"><p>to answer the original question it's "always build an abstraction boundary, even for single module IO programs." that abstraction doesn't need to be big</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195461234" name="195461234"><div>2020-04-27 19:03:08</div></a></div><div class="text"><p>avoid monadicness if you can. if you can't, look harder at trying to avoid it. if you REALLY cant, make a newtype monad around IO, don't give it a name that suggests it should be used everywhere in your app, and don't give it any ability to directly lift IO</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195461408" name="195461408"><div>2020-04-27 19:04:26</div></a></div><div class="text"><p>i like to both not export the ctor, AND to give a WARNING pragma on the ctor so that even if it does get exported, people get a warning if they ever use it</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195461757" name="195461757"><div>2020-04-27 19:07:31</div></a></div><div class="text"><p>in general, i think the problem is that we all forget about functional programming as soon as we get our hands on IO. the bad, old procedural urges come back and we write the same software we would have in PHP</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195463624" name="195463624"><div>2020-04-27 19:24:03</div></a></div><div class="text"><p>So no program is too small for modeling effects? <span aria-label="thinking" class="emoji emoji-1f914" role="img" title="thinking">:thinking:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195463989" name="195463989"><div>2020-04-27 19:27:37</div></a></div><div class="text"><p>I might try giving it another go. For this system I'm building at work it's all AWS Lambda's which are conceptually and purposefully limited to a single function.</p>
+<p>I do have a side project where I'm building an in-memory kv database where I'll probably do some more serious experimentation with it.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#195464349" name="195464349"><div>2020-04-27 19:30:47</div></a></div><div class="text"><p>I'm getting increasingly confused what an "effect system" is meant to designate. At least as far as Haskell implementations are concerned, what more is there to the term than "another way to organize interfaces"?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#195465517" name="195465517"><div>2020-04-27 19:42:04</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251302">@Lysxia</span> Many people seem to use the term "effect" to mean many different things. From my rather limited perspective an "effect" is an algebra of some signature on a type <code>m a</code>, for an arbitrary monad <code>m</code> (or an "interface" on a monad as you say)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#195466374" name="195466374"><div>2020-04-27 19:49:39</div></a></div><div class="text"><p>I mean, I would call this example from FCI "effect system" too:</p>
+<div class="codehilite"><pre><span></span><span class="kr">class</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">Teletype</span> <span class="n">m</span> <span class="kr">where</span>
+  <span class="n">read</span>  <span class="ow">::</span> <span class="n">m</span> <span class="kt">String</span>
+  <span class="n">write</span> <span class="ow">::</span> <span class="kt">String</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="nb">()</span>
+
+<span class="nf">mkInst</span> <span class="kt">&#39;&#39;Teletype</span>
+
+<span class="nf">hello</span> <span class="ow">::</span> <span class="kt">Teletype</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="n">m</span> <span class="nb">()</span>
+<span class="nf">hello</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">write</span> <span class="s">&quot;What&#39;s your name?: &quot;</span>
+  <span class="n">name</span> <span class="ow">&lt;-</span> <span class="n">read</span>
+  <span class="n">write</span> <span class="o">$</span> <span class="s">&quot;Hi &quot;</span> <span class="o">++</span> <span class="n">name</span> <span class="o">++</span> <span class="s">&quot;!</span><span class="se">\n</span><span class="s">&quot;</span>
+
+<span class="nf">main</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">main</span> <span class="ow">=</span> <span class="kt">Teletype</span> <span class="n">inst</span> <span class="n">getLine</span> <span class="n">putStr</span> <span class="o">==&gt;</span> <span class="n">hello</span>
+</pre></div>
+
+
+<p>Even though it's literally just "explicit dictionaries", reusing stuff from typeclass resolution.</p>
+<p>To me it seems that all these patterns and libraries boil down to "I want to parametrize code over specific implementation of some of it's parts", in an composable way.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#195466484" name="195466484"><div>2020-04-27 19:50:32</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> what's not apparent in mtl (but is once you use something like your FCI library) is that the underlying mathematics with the free monad stuff and mtl is the same</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#195467693" name="195467693"><div>2020-04-27 20:00:55</div></a></div><div class="text"><p>i'm not sure what's special about the "monad" part of the "signature functor on monads" though. for example why is a monoid interface not an effect?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#195467750" name="195467750"><div>2020-04-27 20:01:25</div></a></div><div class="text"><p>maybe it has to do with the fact that monads lend themselves to writing code in a familiar imperative syntax</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#195470197" name="195470197"><div>2020-04-27 20:21:50</div></a></div><div class="text"><p>That last point may be the thing - other languages may swap monads for e.g. abilities and handlers, compare them to e.g. exceptions and still call them effects</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#195494603" name="195494603"><div>2020-04-28 01:49:02</div></a></div><div class="text"><p>The one advice is that you can very much make a lot of mistakes (including things that were correct decisions that turned out to be mistakes) in where you draw the lines (especially wrt performance) so you really need to optimise for your code to be easy to understand and change later. Especially when you're in more of a discovery phase and don't really know all the answers yet. </p>
+<p>The codebase that I currently work on is orders of magnitude slower than it needs to be processing the data that it does and is an order of magnitude harder to change than you expect because there is so much incidental complexity built up over many years of dev on a big codebase (with lots of abstractions lines which at least now are questionable) from lots of different people. It's lovely and testable but it still sucks so hard the company has given up on haskell and rewriting it all in go. <span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span> </p>
+<p>Now there's an sensible argument to be made that having your code as pure as possible and as testable as possible so that you can have a chance to keep up with a fast moving product trajectory, but drawing the wrong lines in your system too early can kill you just as much. It's just a different ball of mud. </p>
+<p>This is largely a people management thing. It's doco; it's making sure that devs actually understand the product goals and aren't just being shovelled crap; it's making sure that everyone knows that discovering the product is a learning process that requires change over time but should still minimise chaos along that journey; it's about being aware of when you are eating tech debt and critically looking at the abstractions (or lack thereof) that are causing it. All of those things matter in building a product, and I'm always suspicious of getting the programming in the small stuff too nailed down before you've got the product engineering part sorted.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/a3a40b5b547344370d45ad0f805b4d81"></a><div class="content"><a class="author">Ben Kolera</a><div class="metadata"><a href="#195494729" name="195494729"><div>2020-04-28 01:52:28</div></a></div><div class="text"><p>I guess my tl;dr is that "no amount of haskell will save you if your product pipeline sucks, and over abstracting too early can definitely hurt you while you aren't clear on the boundaries and reqs yet. So please be careful under abstracting and having shitty imperative haskell or over abstracting to the point you draw lots of layers that don't match reality anymore . Both can be impossible to work with later on! "</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/d3d2de116df80bc024b799e84dcdbc97"></a><div class="content"><a class="author">gilmi</a><div class="metadata"><a href="#195495819" name="195495819"><div>2020-04-28 02:19:43</div></a></div><div class="text"><p>Really great comment Ben. Cheers.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/d5f51e76392d18898a66faf360be0416"></a><div class="content"><a class="author">Daniel Díaz Carrete</a><div class="metadata"><a href="#195523156" name="195523156"><div>2020-04-28 06:28:43</div></a></div><div class="text"><p>I would reach for eff (or a transformer stack) if I had non-determinism effects with complex interactions with other effects. For example: nondeterminism with global search state, but also local per-branch state. Otherwise I would stay with a <code>RIO</code>-like solution. If depending on <code>IO</code> so directly started bothering me, I would try hiding it behind a veil of polymorphism, in the style of a van Laarhoven Free Monad. <a href="http://r6.ca/blog/20140210T181244Z.html" title="http://r6.ca/blog/20140210T181244Z.html">http://r6.ca/blog/20140210T181244Z.html</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

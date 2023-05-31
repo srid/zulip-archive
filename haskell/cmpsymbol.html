@@ -1,0 +1,145 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="GHC.TypeLits Data.Ord&gt; :k! CmpSymbol &quot;a&quot; &quot;\000&quot;
+CmpSymbol &quot;a&quot; &quot;\000&quot; :: Ordering
+= &#39;LT
+GHC.TypeLits Data.Ord&gt; compare &quot;a&quot; &quot;\000&quot;
+GT
+
+
+
+???" name="description"><link href="https://funprog.srid.ca/haskell/cmpsymbol.html" rel="canonical"><meta property="og:title" content="CmpSymbol - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-08-11T19:25:25Z"><meta property="og:article:published_time" content="2020-08-10T09:50:43Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"><title>CmpSymbol - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">CmpSymbol - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">CmpSymbol</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#206444248" name="206444248"><div>2020-08-10 09:50:43</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code>GHC.TypeLits Data.Ord&gt; :k! CmpSymbol &quot;a&quot; &quot;\000&quot;
+CmpSymbol &quot;a&quot; &quot;\000&quot; :: Ordering
+= &#39;LT
+GHC.TypeLits Data.Ord&gt; compare &quot;a&quot; &quot;\000&quot;
+GT
+</code></pre></div>
+
+
+<p>???</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#206450565" name="206450565"><div>2020-08-10 11:26:11</div></a></div><div class="text"><p>Tracking this down through GHC, it seems like it ends up being <code>ByteString</code> comparison (inside of <code>FastString</code>) - but</p>
+<div class="codehilite"><pre><span></span><code>Data.ByteString Data.Ord&gt; compare @ByteString &quot;a&quot; &quot;\000&quot;
+GT
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#206453804" name="206453804"><div>2020-08-10 12:17:03</div></a></div><div class="text"><p>Could it be something stupid like the arguments are flipped?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#206454278" name="206454278"><div>2020-08-10 12:23:13</div></a></div><div class="text"><div class="codehilite"><pre><span></span><code>Data.ByteString Data.Ord GHC.TypeLits&gt; :k! CmpSymbol &quot;a&quot; &quot;b&quot;
+CmpSymbol &quot;a&quot; &quot;b&quot; :: Ordering
+= &#39;LT
+Data.ByteString Data.Ord GHC.TypeLits&gt; compare @ByteString &quot;a&quot; &quot;b&quot;
+LT
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#206456272" name="206456272"><div>2020-08-10 12:48:45</div></a></div><div class="text"><p>Hmmm I wonder if "\000" is getting interpreted differently</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#206456366" name="206456366"><div>2020-08-10 12:49:50</div></a></div><div class="text"><p>Like for CmpSymbol it's the null character but for compare it's "\" followed by "0"s</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#206456655" name="206456655"><div>2020-08-10 12:52:42</div></a></div><div class="text"><p>Although, looking at an ascii table they're both LT 'a'</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#206456671" name="206456671"><div>2020-08-10 12:52:51</div></a></div><div class="text"><p><code>"\0"</code> behaves the same way<br>
+And</p>
+<div class="codehilite"><pre><span></span><code>λ&gt; symbolVal $ Proxy @&quot;\0&quot;
+&quot;\NUL&quot;
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#206456675" name="206456675"><div>2020-08-10 12:52:56</div></a></div><div class="text"><p>Think you have a bug on your hands</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#206456718" name="206456718"><div>2020-08-10 12:53:21</div></a></div><div class="text"><p>But I have no idea how can it arise <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#206456826" name="206456826"><div>2020-08-10 12:54:22</div></a></div><div class="text"><p>Just for completeness:</p>
+<div class="codehilite"><pre><span></span><code>λ&gt; :k! CmpSymbol &quot;a&quot; &quot;\NUL&quot;
+CmpSymbol &quot;a&quot; &quot;\NUL&quot; :: Ordering
+= &#39;LT
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#206465493" name="206465493"><div>2020-08-10 14:17:48</div></a></div><div class="text"><p>That's also wrong, right? <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#206552484" name="206552484"><div>2020-08-11 08:44:31</div></a></div><div class="text"><p>Nice: <a href="https://gitlab.haskell.org/ghc/ghc/-/issues/18562#note_293330">https://gitlab.haskell.org/ghc/ghc/-/issues/18562#note_293330</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://gitlab.haskell.org/ghc/ghc/-/issues/18562#note_293330" style="background-image: url(https://gitlab.haskell.org/uploads/-/system/project/avatar/1/ghc.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://gitlab.haskell.org/ghc/ghc/-/issues/18562#note_293330" title="#18562: `CmpSymbol` treats &quot;\0&quot; as bigger than expected · Issues · Glasgow Haskell Compiler / GHC">#18562: `CmpSymbol` treats "\0" as bigger than expected · Issues · Glasgow Haskell Compiler / GHC</a></div><div class="message_embed_description">## Summary Compared to behaviour of e.g. `Ord String` or `Ord ByteString`, `CmpSymbol` treats string `"\0"` as bigger than e.g. `"a"`, even though null character appears as first in ASCII...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#206555717" name="206555717"><div>2020-08-11 09:28:13</div></a></div><div class="text"><p>awesome</p></div></div></div><div class="comment"><a class="avatar"><img src="https://secure.gravatar.com/avatar/374affb4db58caa9507f265d7fdf03fe?d=identicon&amp;version=1"></a><div class="content"><a class="author">Fintan Halpenny</a><div class="metadata"><a href="#206617391" name="206617391"><div>2020-08-11 19:06:06</div></a></div><div class="text"><p>You're doing hero work</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#206619537" name="206619537"><div>2020-08-11 19:25:25</div></a></div><div class="text"><p>Thanks to @hsyl20 for tackling this quickly</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

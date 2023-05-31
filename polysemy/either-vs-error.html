@@ -1,0 +1,553 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="So I have this effect:
+data FooAPI m where
+  getFooBar :: Text -&gt; FooAPI m (Either Text Bar)
+
+
+
+Can I make getFooBar require the Member (Error Text) constraint, such that it doesn&#39;t have to return Either? Or is this an anti-pattern for polysemy? If so, what would be the recommended approach?" name="description"><link href="https://funprog.srid.ca/polysemy/either-vs-error.html" rel="canonical"><meta property="og:title" content="Either vs Error - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2020-05-12T21:55:44Z"><meta property="og:article:published_time" content="2020-05-07T18:06:26Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"><title>Either vs Error - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Either vs Error - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">Either vs Error</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196809005" name="196809005"><div>2020-05-07 18:06:26</div></a></div><div class="text"><p>So I have this effect:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">FooAPI</span> <span class="n">m</span> <span class="kr">where</span>
+  <span class="n">getFooBar</span> <span class="ow">::</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">FooAPI</span> <span class="n">m</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">Text</span> <span class="kt">Bar</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>Can I make <code>getFooBar</code> require the <code>Member (Error Text)</code> constraint, such that it doesn't have to return Either? Or is this an anti-pattern for polysemy? If so, what would be the recommended approach?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196810632" name="196810632"><div>2020-05-07 18:19:16</div></a></div><div class="text"><p>that also has been my most substantial coherence concern so far</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196810655" name="196810655"><div>2020-05-07 18:19:35</div></a></div><div class="text"><p>haven't done any meaningful research though</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196810941" name="196810941"><div>2020-05-07 18:21:52</div></a></div><div class="text"><p>you <em>can</em> catch an error blindly from a consumer, but that's not very reasonable</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#196819892" name="196819892"><div>2020-05-07 19:32:03</div></a></div><div class="text"><p>I personally prefer to use the Error effect and not be specific about the returning type being able to "fail". I start by being explicit tho and then refine the signatures I don't see any need to be explicit</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/cf32e348c646a53534a1a022c022bab8528df176?version=3"></a><div class="content"><a class="author">Alex Chapman</a><div class="metadata"><a href="#196842841" name="196842841"><div>2020-05-07 23:25:49</div></a></div><div class="text"><p>I have been wondering about this too. In a work I have in progress I have left the error constraint out of the API but have it in the interpreter. This way you could have an interpreter in which <code>getFooBar</code> always returns a <code>Bar</code>, and never throws an error. But it also means that you still have to handle the errors even if you only use API functions that don't throw errors.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196867855" name="196867855"><div>2020-05-08 08:02:13</div></a></div><div class="text"><p>I use <code>Either</code> in all effect APIs and call <code>fromEither</code> on every use. So <code>Error</code> is only used in the intermediate machinery, converting to/from <code>Either</code> on the interpreter boundaries. It would be really nice to have something to simplify that.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196867919" name="196867919"><div>2020-05-08 08:03:11</div></a></div><div class="text"><p>my preference tbh would be to build the error type into <code>Sem</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196867938" name="196867938"><div>2020-05-08 08:03:23</div></a></div><div class="text"><p>like <code>zio</code> does over in scala world</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196867967" name="196867967"><div>2020-05-08 08:03:50</div></a></div><div class="text"><p>don't know any specifics there tho</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196868087" name="196868087"><div>2020-05-08 08:05:24</div></a></div><div class="text"><p>probably also complicated to make this flexible, i.e. keep a handled error from propagating in the signature</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196871261" name="196871261"><div>2020-05-08 08:51:23</div></a></div><div class="text"><p>one possibility would be a TH constructor that automates the <code>fromEither</code> call</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196871518" name="196871518"><div>2020-05-08 08:54:22</div></a></div><div class="text"><p>but all of this is indicative of the main problem: the error is inherently specific to an interpreter, so exposing it as an <code>Either</code> signature is already premature.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#196885974" name="196885974"><div>2020-05-08 11:53:25</div></a></div><div class="text"><p>this was going to be my original response too - there's no need to put it in the effect itself, but then I realised there might be some effects that always have the inherent possibility to fail, and handling their failure is also a part of your "business logic" (?)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196887036" name="196887036"><div>2020-05-08 12:06:12</div></a></div><div class="text"><p>Like API errors</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196887057" name="196887057"><div>2020-05-08 12:06:39</div></a></div><div class="text"><p>exactly, I guess there is a substantial conceptual difference between using <code>Error</code> in a oneshot CLI app where you would always terminate the whole process on error and something daemonic like a web app.</p>
+<p>You could argue that this is inherently an abuse of <code>Error</code>, I guess</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196887314" name="196887314"><div>2020-05-08 12:09:54</div></a></div><div class="text"><p>so what you would need is the Polysemy machinery checking whether an Error is caught somewhere in the other interpreters (or the main program), though that would need them to know about the errors again. you could do something like making all errors that are interpreter-specific into <code>Text</code> and catching that as a <code>NonFatal X</code> where <code>X</code> is  the effect whose interpreter throws</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196887598" name="196887598"><div>2020-05-08 12:13:39</div></a></div><div class="text"><p>could be an effect <code>CatchNonFatal</code> you use in the consumer that is interpreted as <code>interpretCNF :: Sem (CatchNonFatal X : NonFatal X InterpreterError : Error InterpreterError  : r) a-&gt; Sem r a</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#196887888" name="196887888"><div>2020-05-08 12:17:28</div></a></div><div class="text"><p>if the consumer needs a data type for the error, then it's obviously something non-specific and may be part of the API. I do sometimes use data type errors specific to an interpreter to decide on a consequence in a consumer, so this would enforce some discipline in that area</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197254240" name="197254240"><div>2020-05-12 09:57:51</div></a></div><div class="text"><p>I'd just do an indirection:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">FooAPI</span> <span class="n">m</span> <span class="kr">where</span>
+  <span class="kt">GetFooBar&#39;</span> <span class="ow">::</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">FooAPI</span> <span class="n">m</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">Text</span> <span class="kt">Bar</span><span class="p">)</span>
+
+<span class="nf">getFooBar</span>
+  <span class="ow">::</span> <span class="kt">Members</span> <span class="p">[</span><span class="kt">FooAPI</span><span class="p">,</span> <span class="kt">Error</span> <span class="kt">Text</span><span class="p">]</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">Text</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="kt">Bar</span>
+<span class="nf">getFooBar</span> <span class="n">str</span> <span class="ow">=</span> <span class="n">getFooBar&#39;</span> <span class="n">str</span> <span class="o">&gt;&gt;=</span> <span class="n">fromEither</span>
+</code></pre></div>
+
+
+<p>Or is there some reason that wouldn't work?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197254511" name="197254511"><div>2020-05-12 10:00:13</div></a></div><div class="text"><p>Sorry, just noticed that's what Torsten suggested</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197264260" name="197264260"><div>2020-05-12 11:57:58</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254034">@Love Waern (King of the Homeless)</span> so what's your opinion on whether this is a sane use case for <code>Error</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197268733" name="197268733"><div>2020-05-12 12:39:58</div></a></div><div class="text"><p>If the exception is inherently part of the effect, so that you must have the user or want to enforce the user to deal with the exception, then yes, this is a good way to go about it.<br>
+An alternative way is to instead do the conversion at the interpreter level.<br>
+Take the example of, say, a REST api that you can do for something stateful that might fail:</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">getRestfulState</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">RestfulException</span> <span class="kt">RestfulState</span><span class="p">)</span>
+<span class="nf">getRestfulState</span> <span class="ow">=</span> <span class="o">...</span>
+
+<span class="nf">putRestfulState</span> <span class="ow">::</span> <span class="n">s</span> <span class="ow">-&gt;</span> <span class="kt">IO</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">RestfulException</span> <span class="kt">RestfulState</span><span class="p">)</span>
+<span class="nf">putRestfulState</span> <span class="n">s</span> <span class="ow">=</span> <span class="o">...</span>
+
+<span class="nf">runRestfulState</span>
+  <span class="ow">::</span> <span class="p">(</span><span class="kt">Member</span> <span class="kt">IO</span> <span class="n">r</span><span class="p">,</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Error</span> <span class="kt">RestfulException</span><span class="p">)</span> <span class="n">r</span><span class="p">)</span>
+  <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">State</span> <span class="kt">RestfulState</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">runRestfulState</span> <span class="ow">=</span> <span class="n">interpret</span> <span class="o">$</span> <span class="nf">\</span><span class="kr">case</span>
+  <span class="kt">Put</span> <span class="n">s</span> <span class="ow">-&gt;</span> <span class="n">fromEitherM</span> <span class="p">(</span><span class="n">putRestfulState</span> <span class="n">s</span><span class="p">)</span>
+  <span class="kt">Get</span> <span class="ow">-&gt;</span> <span class="n">fromEitherM</span> <span class="n">getRestfulState</span>
+</code></pre></div>
+
+
+<p>That way, users can use <code>get</code> of the <code>State RestfulState</code> effect, and have it raise an exception, without the <code>Error RestfulException</code> effect being in scope.</p>
+<p>You want the ability to deal with the exception in application code? No problem. Just have an <code>Member (Error RestfulException) r</code> at the place where you want to deal with the exception, and then use <code>catch</code>. Notably, you can do this <em>without</em> needing <code>Member (Embed IO) r</code> like the interpreter does.</p>
+<p>There is a problem however: you can't, out-of-the-box, have more granular exceptions. Say you want to deal with a<code>RestfulException</code> generated by <code>put</code> and <code>get</code>, but in a granular way: in terms of an <code>Error</code> effect that's smaller than <code>Error RestfulException</code>, or maybe not even connected to <code>Rest</code> at all: say,<code>Error PutException</code>. If so, then you need an interpreter later down the line to convert <code>Error PutException</code> to <code>Error RestfulException</code>. You might reach for <code>mapError</code>, but NOPE, it will actually break due to <a href="https://github.com/polysemy-research/polysemy/issues/225">#225</a>. I hadn't actually realized this until now. The example in #225 is contrived in comparison.</p>
+<p>But the following will fix that:</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">errorToError</span>
+  <span class="ow">::</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">Error</span> <span class="n">e2</span><span class="p">)</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">e1</span> <span class="ow">-&gt;</span> <span class="n">e2</span><span class="p">)</span>
+  <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">e2</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="n">e1</span><span class="p">)</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Error</span> <span class="n">e1</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">errorToError</span> <span class="n">to</span> <span class="n">from</span> <span class="ow">=</span> <span class="n">interpretH</span> <span class="o">$</span> <span class="nf">\</span><span class="kr">case</span>
+  <span class="kt">Throw</span> <span class="n">e</span> <span class="ow">-&gt;</span> <span class="n">throw</span> <span class="p">(</span><span class="n">to</span> <span class="n">e</span><span class="p">)</span>
+  <span class="kt">Catch</span> <span class="n">m</span> <span class="n">h</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+    <span class="n">m&#39;</span> <span class="ow">&lt;-</span> <span class="n">errorToError</span> <span class="n">to</span> <span class="n">from</span> <span class="o">&lt;$&gt;</span> <span class="n">runT</span> <span class="n">m</span>
+    <span class="n">h&#39;</span> <span class="ow">&lt;-</span> <span class="p">(</span><span class="n">errorToError</span> <span class="n">to</span> <span class="n">from</span> <span class="o">.</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">bindT</span> <span class="n">h</span>
+    <span class="n">s</span>  <span class="ow">&lt;-</span> <span class="n">getInitialStateT</span>
+    <span class="n">raise</span> <span class="o">$</span> <span class="n">catch</span> <span class="n">m&#39;</span> <span class="o">$</span> <span class="nf">\</span><span class="n">e</span> <span class="ow">-&gt;</span> <span class="kr">case</span> <span class="n">from</span> <span class="n">e</span> <span class="kr">of</span>
+      <span class="kt">Just</span> <span class="n">e&#39;</span> <span class="ow">-&gt;</span> <span class="n">h&#39;</span> <span class="p">(</span><span class="n">e&#39;</span> <span class="o">&lt;$</span> <span class="n">s</span><span class="p">)</span>
+      <span class="kr">_</span>       <span class="ow">-&gt;</span> <span class="n">throw</span> <span class="n">e</span>
+</code></pre></div>
+
+
+<p>Which I am now convinced should get added to Polysemy v2.0, probably together with a deprecation of mapError. For the moment, stick that into your code, and use it to convert between your <code>Error</code>s.<br>
+This way, you can get:</p>
+<p>1. The choice to be ignorant to the fact that an action of an effect may cause an exception generated by the interpreter for that effect<br>
+  2. The ability to handle exceptions in a granular way when you do care about it</p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/polysemy-research/polysemy/issues/225" style="background-image: url(https://avatars1.githubusercontent.com/u/52079915?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/polysemy-research/polysemy/issues/225" title="Add variant of mapError that doesn't use runError internally · Issue #225 · polysemy-research/polysemy">Add variant of mapError that doesn't use runError internally · Issue #225 · polysemy-research/polysemy</a></div><div class="message_embed_description">mapError currently uses runError internally when processing catch, and then converting the error to the mapped error once the handling has completed. This has the benefit of mapError only requiring...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197268784" name="197268784"><div>2020-05-12 12:40:04</div></a></div><div class="text"><p>WASN'T DONE. HIT ENTER BY ACCIDENT</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197270001" name="197270001"><div>2020-05-12 12:50:42</div></a></div><div class="text"><p>Now done.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197271692" name="197271692"><div>2020-05-12 13:03:58</div></a></div><div class="text"><p>Actually, now when I think about it, sometimes conversions only go one way. For example, it might make sense to convert <code>RestfulException</code> to <code>Maybe PutException</code>, but not <code>PutException</code> to <code>RestfulException</code>. In that case, what you <em>really</em> want is an <code>Error</code> effect without <code>throw</code> to use in application code, à-la <code>fused-effects</code>. That's something we'd need to think more about.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197273346" name="197273346"><div>2020-05-12 13:16:31</div></a></div><div class="text"><p>my concern with <code>catch</code> is that the compiler won't notify me that I forgot to handle the interpreter's error in my program since using <code>catch</code> doesn't remove the need for the <code>Error</code> interpreter after the throwing interpreter. Obviously this isn't exactly canonical for <code>Error</code>, but it's what happens to me a lot. I was wondering if I'm just doing things <em>wrong</em>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197276599" name="197276599"><div>2020-05-12 13:39:09</div></a></div><div class="text"><p>Hmm. Then what about combining the indirection approach with a pseudo-action that you can use in place of <code>catch</code> that <em>does</em> give you that property, like this:</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">catch&#39;</span> <span class="ow">::</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Error</span> <span class="n">e</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">e</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">catch&#39;</span> <span class="n">m</span> <span class="n">h</span> <span class="ow">=</span> <span class="n">runError</span> <span class="n">m</span> <span class="o">&gt;&gt;=</span> <span class="n">either</span> <span class="n">h</span> <span class="n">pure</span>
+</code></pre></div>
+
+
+<p>Then you can do this:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">FooAPI</span> <span class="n">m</span> <span class="kr">where</span>
+  <span class="kt">GetFooBar&#39;</span> <span class="ow">::</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">FooAPI</span> <span class="n">m</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">Text</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="nf">getFooBar</span>
+  <span class="ow">::</span> <span class="kt">Members</span> <span class="kt">&#39;[FooAPI, Error Text]</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">Text</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="kt">Bar</span>
+<span class="nf">getFooBar</span> <span class="n">str</span> <span class="ow">=</span> <span class="n">getFooBar&#39;</span> <span class="n">str</span> <span class="o">&gt;&gt;=</span> <span class="n">fromEither</span>
+
+<span class="c1">-- Compiles:</span>
+<span class="nf">one</span> <span class="ow">::</span> <span class="kt">Members</span> <span class="kt">&#39;[FooAPI r, Error Text]</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Text</span><span class="p">,</span> <span class="kt">Text</span><span class="p">)</span>
+<span class="nf">one</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">t1</span> <span class="ow">&lt;-</span> <span class="n">getFooBar</span>
+  <span class="n">t2</span> <span class="ow">&lt;-</span> <span class="n">getFooBar</span>
+  <span class="n">return</span> <span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+
+<span class="nf">two</span> <span class="ow">::</span> <span class="kt">Members</span> <span class="kt">&#39;[FooAPI r, Error Text]</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Text</span><span class="p">,</span> <span class="kt">Text</span><span class="p">)</span>
+<span class="nf">two</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">t1</span> <span class="ow">&lt;-</span> <span class="n">getFooBar</span> <span class="p">`</span><span class="n">catch&#39;</span><span class="p">`</span> <span class="nf">\</span><span class="n">e</span> <span class="ow">-&gt;</span> <span class="n">return</span> <span class="o">$</span> <span class="s">&quot;Bad1: &quot;</span> <span class="o">&lt;&gt;</span> <span class="n">e</span>
+  <span class="n">t2</span> <span class="ow">&lt;-</span> <span class="n">getFooBar</span>
+  <span class="n">return</span> <span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+
+<span class="nf">usingTwo</span> <span class="ow">::</span> <span class="kt">Member</span> <span class="kt">FooApi</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="kt">Text</span>
+<span class="nf">usingTwo</span> <span class="ow">=</span> <span class="p">(`</span><span class="n">catch&#39;</span><span class="p">`</span> <span class="nf">\</span><span class="n">e</span> <span class="ow">-&gt;</span> <span class="n">return</span> <span class="o">$</span> <span class="s">&quot;Bad12:&quot;</span> <span class="o">&lt;&gt;</span> <span class="n">e</span><span class="p">)</span> <span class="o">$</span> <span class="kr">do</span>
+  <span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span> <span class="ow">&lt;-</span> <span class="n">two</span>
+  <span class="n">return</span> <span class="o">$</span> <span class="n">t1</span> <span class="o">&lt;&gt;</span> <span class="n">t2</span>
+
+<span class="nf">three</span> <span class="ow">::</span> <span class="kt">Member</span> <span class="kt">FooAPI</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Text</span><span class="p">,</span> <span class="kt">Text</span><span class="p">)</span>
+<span class="nf">three</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">t1</span> <span class="ow">&lt;-</span> <span class="n">getFooBar</span> <span class="p">`</span><span class="n">catch&#39;</span><span class="p">`</span> <span class="nf">\</span><span class="n">e</span> <span class="ow">-&gt;</span> <span class="n">return</span> <span class="o">$</span> <span class="s">&quot;Bad1: &quot;</span> <span class="o">&lt;&gt;</span> <span class="n">e</span>
+  <span class="n">t2</span> <span class="ow">&lt;-</span> <span class="n">getFooBar</span> <span class="p">`</span><span class="n">catch&#39;</span><span class="p">`</span> <span class="nf">\</span><span class="n">e</span> <span class="ow">-&gt;</span> <span class="n">return</span> <span class="o">$</span> <span class="s">&quot;Bad2: &quot;</span> <span class="o">&lt;&gt;</span> <span class="n">e</span>
+  <span class="n">return</span> <span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+
+<span class="c1">-- Doesn&#39;t compile due to the second use of getFooBar:</span>
+<span class="nf">bad</span> <span class="ow">::</span> <span class="kt">Member</span> <span class="kt">FooAPI</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Text</span><span class="p">,</span> <span class="kt">Text</span><span class="p">)</span>
+<span class="nf">bad</span> <span class="ow">=</span> <span class="kr">do</span>
+  <span class="n">t1</span> <span class="ow">&lt;-</span> <span class="n">getFooBar</span> <span class="p">`</span><span class="n">catch&#39;</span><span class="p">`</span> <span class="nf">\</span><span class="n">e</span> <span class="ow">-&gt;</span> <span class="n">return</span> <span class="o">$</span> <span class="s">&quot;Bad1: &quot;</span> <span class="o">&lt;&gt;</span> <span class="n">e</span>
+  <span class="n">t2</span> <span class="ow">&lt;-</span> <span class="n">getFooBar</span>
+  <span class="n">return</span> <span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197277565" name="197277565"><div>2020-05-12 13:45:16</div></a></div><div class="text"><p>Hey, isn't this a trick some first-order extensible effects library used to get pseudo-error? Since with this, you don't need an higher-order effect for <code>catch</code>; you can use the pseudo-action instead.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197277751" name="197277751"><div>2020-05-12 13:46:14</div></a></div><div class="text"><p>Yeah, <code>freer-simple</code>!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197279577" name="197279577"><div>2020-05-12 13:58:26</div></a></div><div class="text"><p>There are probably some issues with this: I think it messes up local/global state semantics, since you're effectively taking a global "Error" effect and making it local. I'd need to look into it some more.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197279771" name="197279771"><div>2020-05-12 13:59:43</div></a></div><div class="text"><p>But all things considered, I quite like this. Shame you can't call it <code>catch</code>, though.<br>
+... But maybe we can call it <code>handle</code>, if we decide to add it.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197279790" name="197279790"><div>2020-05-12 13:59:52</div></a></div><div class="text"><p>I'm confused, you have the <code>Error</code> constraint on <code>getFooBar</code> now visible from the programs <code>one</code> etc?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197280033" name="197280033"><div>2020-05-12 14:01:23</div></a></div><div class="text"><p>With <code>catch'</code>, the error constraint is visible as long as there exists some <code>getFooBar</code> the possible exception of which hasn't been handled.<br>
+Compare with <code>three</code> and <code>usingTwo</code>; they don't have the constraint.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197281864" name="197281864"><div>2020-05-12 14:13:01</div></a></div><div class="text"><p>my mind is going in circles now.</p>
+<p>I was starting from this place when talking about <code>catch</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">E</span> <span class="ow">=</span> <span class="kt">E</span> <span class="kr">deriving</span> <span class="kt">Show</span>
+
+<span class="kr">data</span> <span class="kt">A</span> <span class="ow">::</span> <span class="kt">Effect</span> <span class="kr">where</span>
+  <span class="kt">DoA</span> <span class="ow">::</span> <span class="kt">A</span> <span class="n">m</span> <span class="nb">()</span>
+
+<span class="nf">makeSem</span> <span class="kt">&#39;&#39;A</span>
+
+<span class="nf">prog</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">Error</span> <span class="kt">E</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Member</span> <span class="kt">A</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span>
+<span class="nf">prog</span> <span class="ow">=</span>
+  <span class="n">catch</span> <span class="n">doA</span> <span class="p">(</span><span class="nf">\</span> <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="nb">()</span><span class="p">)</span>
+
+<span class="nf">interpretA</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">Error</span> <span class="kt">E</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">InterpreterFor</span> <span class="kt">A</span> <span class="n">r</span>
+<span class="nf">interpretA</span> <span class="ow">=</span>
+  <span class="n">interpret</span> <span class="o">$</span> <span class="nf">\</span> <span class="kt">DoA</span> <span class="ow">-&gt;</span> <span class="n">throw</span> <span class="kt">E</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197282155" name="197282155"><div>2020-05-12 14:14:53</div></a></div><div class="text"><p>so here the fact that <code>E</code> is thrown by <code>doA</code>is not visible to <code>prog</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197282383" name="197282383"><div>2020-05-12 14:16:34</div></a></div><div class="text"><p><em>but</em> it is also an error specific to <code>interpretA</code> and might not be thrown by a different interpreter, and moreover the different one might throw something else</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197282588" name="197282588"><div>2020-05-12 14:18:06</div></a></div><div class="text"><p>so my earlier suggestion was to have an additional <code>AError Text</code> that is used as a <em>something went wrong in A</em> marker, which is then caught in <code>prog</code> and converted from <code>E</code> at the interpretation point</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197282735" name="197282735"><div>2020-05-12 14:19:25</div></a></div><div class="text"><p>and then my question was "how do I ensure that this error is handled in <code>prog</code>"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197282782" name="197282782"><div>2020-05-12 14:19:49</div></a></div><div class="text"><p>Ok, I get it. Let me think a bit.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197282855" name="197282855"><div>2020-05-12 14:20:11</div></a></div><div class="text"><p>so this might be a completely unreasonable way to approach the whole subject but it's what transpired a lot for me</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197282985" name="197282985"><div>2020-05-12 14:21:25</div></a></div><div class="text"><p>my earlier suggestion was to have an additional error effect that is used only for the purpose of connecting the two, as a constraint on <code>prog</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197283014" name="197283014"><div>2020-05-12 14:21:33</div></a></div><div class="text"><p>let my try to implement this quick</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197286262" name="197286262"><div>2020-05-12 14:44:53</div></a></div><div class="text"><p>I came up with this evil piece of magic:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">AManager</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">ManageA</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Member</span> <span class="p">(</span><span class="kt">Error</span> <span class="kt">E</span><span class="p">)</span> <span class="n">r</span><span class="p">,</span> <span class="kt">Member</span> <span class="kt">AManager</span> <span class="n">r</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">A</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">AManager</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span>
+
+<span class="nf">manageA</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Member</span> <span class="p">(</span><span class="kt">Error</span> <span class="kt">E</span><span class="p">)</span> <span class="n">r</span><span class="p">,</span> <span class="kt">Member</span> <span class="kt">AManager</span> <span class="n">r</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">A</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">manageA</span> <span class="ow">=</span> <span class="n">send</span> <span class="o">.</span> <span class="kt">ManageA</span>
+
+<span class="nf">prog</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="kt">AManager</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span>
+<span class="nf">prog</span> <span class="ow">=</span> <span class="n">catch&#39;</span> <span class="p">(</span><span class="n">manageA</span> <span class="n">doA</span><span class="p">)</span> <span class="p">(</span><span class="nf">\</span> <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="nb">()</span><span class="p">)</span>
+
+
+<span class="nf">interpretA</span>
+  <span class="ow">::</span> <span class="kt">InterpreterFor</span> <span class="p">(</span><span class="kt">AManager</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">))</span> <span class="n">r</span>
+<span class="nf">interpretA</span> <span class="ow">=</span> <span class="n">interpretH</span> <span class="o">$</span> <span class="nf">\</span><span class="p">(</span><span class="kt">ManageA</span> <span class="n">m</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+  <span class="n">m&#39;</span> <span class="ow">&lt;-</span> <span class="n">runT</span> <span class="o">$</span> <span class="p">(`</span><span class="n">interpret</span><span class="p">`</span> <span class="n">m</span><span class="p">)</span> <span class="o">$</span> <span class="nf">\</span><span class="kt">DoA</span> <span class="ow">-&gt;</span> <span class="n">throw</span> <span class="kt">E</span>
+  <span class="n">raise</span> <span class="p">(</span><span class="n">interpretA</span> <span class="n">m&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>But this is pretty damn ugly and bad</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197286822" name="197286822"><div>2020-05-12 14:48:22</div></a></div><div class="text"><p>Wait, hold on... this ain't enough.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197287032" name="197287032"><div>2020-05-12 14:49:53</div></a></div><div class="text"><p><span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197287095" name="197287095"><div>2020-05-12 14:50:04</div></a></div><div class="text"><p>This is gonna get so damn ugly...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197293220" name="197293220"><div>2020-05-12 15:27:48</div></a></div><div class="text"><p>already interesting to see a HO effect specialized to <code>Sem r</code> interpreted <span aria-label="smiley" class="emoji emoji-1f603" role="img" title="smiley">:smiley:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197295581" name="197295581"><div>2020-05-12 15:42:29</div></a></div><div class="text"><p>Going back to the FooAPI example, replacing <code>Error Text</code> with <code>Error SmallExc</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">FooAPI</span> <span class="n">m</span> <span class="kr">where</span>
+  <span class="kt">GetFooBar</span> <span class="ow">::</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">FooAPI</span> <span class="n">m</span> <span class="n">a</span>
+
+<span class="nf">makeSem</span> <span class="kt">&#39;&#39;FooAPI</span>
+
+<span class="kr">data</span> <span class="kt">FooAPIManager</span> <span class="n">c</span> <span class="n">e</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">ManageFooAPI</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">c</span> <span class="n">e</span> <span class="n">r</span> <span class="n">a</span><span class="o">.</span> <span class="kt">Members</span> <span class="kt">&#39;[FooAPIManager c e, Error e]</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">FooAPI</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">FooAPIManager</span> <span class="n">c</span> <span class="n">e</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span>
+  <span class="kt">ManageFooAPICarrier</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">c</span> <span class="n">e</span> <span class="n">m</span> <span class="n">a</span><span class="o">.</span> <span class="n">c</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">FooAPIManager</span> <span class="n">c</span> <span class="n">e</span> <span class="n">m</span> <span class="n">a</span>
+
+<span class="nf">manageFooAPI</span>  <span class="ow">::</span> <span class="n">forall</span> <span class="n">c</span> <span class="n">e</span> <span class="n">r</span> <span class="n">a</span><span class="o">.</span> <span class="p">(</span><span class="kt">Member</span> <span class="n">e</span> <span class="n">r</span><span class="p">,</span> <span class="kt">Member</span> <span class="p">(</span><span class="kt">FooAPIManager</span> <span class="n">c</span> <span class="n">e</span> <span class="n">r</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">FooAPI</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">manageFooAPI</span>  <span class="ow">=</span> <span class="n">send</span> <span class="o">.</span> <span class="kt">ManageFooAPI</span> <span class="o">@</span><span class="n">c</span> <span class="o">@</span><span class="n">e</span>
+
+<span class="c1">-- Some progam that makes use of getFooBar without knowing or caring that it might cause exceptions</span>
+<span class="nf">prog&#39;</span> <span class="ow">::</span> <span class="kt">Member</span> <span class="kt">FooAPI</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span>
+<span class="nf">prog&#39;</span> <span class="ow">=</span> <span class="n">getFooBar</span> <span class="s">&quot;hiho&quot;</span>
+
+<span class="c1">-- Running that piece of the program in the context of the larger application.</span>
+<span class="nf">prog</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">FooAPIManager</span> <span class="n">c</span> <span class="kt">SmallExc</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span>
+<span class="nf">prog</span> <span class="ow">=</span> <span class="n">catch&#39;</span> <span class="p">(</span><span class="n">manageFooAPI</span>  <span class="o">@</span><span class="n">c</span> <span class="o">@</span><span class="kt">SmallExc</span> <span class="n">prog&#39;</span><span class="p">)</span> <span class="p">(</span><span class="nf">\</span> <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="nb">()</span><span class="p">)</span>
+
+<span class="c1">-- The primitive behind getFooBar</span>
+<span class="nf">getFooBarIO</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">BigExc</span> <span class="n">a</span><span class="p">)</span>
+<span class="nf">getFooBarIO</span> <span class="ow">=</span> <span class="o">...</span>
+
+<span class="nf">bigToSmall</span> <span class="ow">::</span> <span class="kt">BigExc</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="kt">SmallExc</span>
+<span class="nf">bigToSmall</span> <span class="ow">=</span> <span class="o">...</span>
+
+<span class="nf">runFooAPIManager</span> <span class="ow">::</span> <span class="kt">Members</span> <span class="kt">&#39;[Embed IO r, Error BigExc]</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">InterpreterFor</span> <span class="p">(</span><span class="kt">FooAPIManager</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span> <span class="kt">SmallExc</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span>
+<span class="nf">runFooAPIManager</span> <span class="ow">=</span> <span class="n">interpretH</span> <span class="o">$</span> <span class="nf">\</span><span class="kr">case</span>
+  <span class="kt">ManageFooAPI</span> <span class="n">m</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+    <span class="n">m&#39;</span> <span class="ow">&lt;-</span> <span class="n">runT</span> <span class="o">$</span> <span class="p">(`</span><span class="n">interpret</span><span class="p">`</span> <span class="n">m</span><span class="p">)</span> <span class="o">$</span> <span class="nf">\</span><span class="p">(</span><span class="kt">GetFooBar</span> <span class="n">exc</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+      <span class="n">e</span> <span class="ow">&lt;-</span> <span class="n">send</span> <span class="o">$</span> <span class="kt">ManageFooAPICarrier</span> <span class="o">$</span> <span class="n">tryJust</span> <span class="n">bigToSmall</span> <span class="p">(</span><span class="n">fromEitherM</span> <span class="n">getFooBarIO</span><span class="p">)</span>
+      <span class="n">fromEither</span> <span class="n">e</span>
+    <span class="n">raise</span> <span class="p">(</span><span class="n">runFooAPIManager</span> <span class="n">m&#39;</span><span class="p">)</span>
+  <span class="kt">ManageFooAPICarrier</span> <span class="n">c</span> <span class="ow">-&gt;</span> <span class="n">raise</span> <span class="n">c</span> <span class="o">&gt;&gt;=</span> <span class="n">pureT</span>
+</code></pre></div>
+
+
+<p>This is terrible, but it works, somehow.<br>
+<code>FooAPIManager</code> is the "link", here. You can use <code>getFooBar</code>in a part of the program without knowing it throws exceptions, but eventually, in order to run that part, you must use <code>manageFooAPI</code> to convert it, at which point any exception makes itself known, and you must handle that exception by using <code>catch'</code>. <code>FooApiManager</code> has an additional type variable for the <em>carrier</em>, which is needed to actually interpret <code>GetFooBar</code> with the parametrized <code>Sem r0</code> seen inside <code>ManageFooAPI</code>, since we don't know anything about it other than it carries <code>FooAPIManager (Sem r) SmallExc</code> and <code>Error SmallExc</code>. By keeping that type variable polymorphic inside user code, you keep user code from doing naughty things with it.<br>
+I also show here how you can do this in a way that exposes a smaller, granular exception to the user code rather than the bigger exception that the primitive may generate.</p>
+<p>This is complicated, evil, and very, very ugly. I'll try to find some way to improve it.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197295734" name="197295734"><div>2020-05-12 15:43:39</div></a></div><div class="text"><p>Keep in mind I haven't checked if this compiles. It should work <em>morally</em>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197296739" name="197296739"><div>2020-05-12 15:49:36</div></a></div><div class="text"><p>phew, I'll have to study that for a while</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#197305840" name="197305840"><div>2020-05-12 16:58:25</div></a></div><div class="text"><p>I haven't read this entire discussion, but it seems to me that I should just stick to returning Eithers</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197306791" name="197306791"><div>2020-05-12 17:06:16</div></a></div><div class="text"><p><span class="user-mention" data-user-id="254034">@Love Waern (King of the Homeless)</span> can you tell me why this doesn't work? I'm trying to understand the semantics of throwing and catching.</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">NonFatal</span> <span class="n">e</span> <span class="n">er</span> <span class="ow">=</span>
+  <span class="kt">NonFatal</span> <span class="n">er</span>
+  <span class="kr">deriving</span> <span class="kt">Show</span>
+
+<span class="kr">data</span> <span class="kt">CatchNonFatal</span> <span class="n">e</span> <span class="ow">=</span>
+  <span class="kt">CatchNonFatal</span> <span class="kt">Text</span>
+  <span class="kr">deriving</span> <span class="kt">Show</span>
+
+<span class="kr">data</span> <span class="kt">E</span> <span class="ow">=</span> <span class="kt">E</span> <span class="kr">deriving</span> <span class="kt">Show</span>
+
+<span class="kr">data</span> <span class="kt">A</span> <span class="ow">::</span> <span class="kt">Effect</span> <span class="kr">where</span>
+  <span class="kt">DoA</span> <span class="ow">::</span> <span class="kt">A</span> <span class="n">m</span> <span class="kt">Int</span>
+
+<span class="nf">makeSem</span> <span class="kt">&#39;&#39;A</span>
+
+<span class="kr">data</span> <span class="kt">NF</span> <span class="n">a</span> <span class="ow">=</span>
+  <span class="kt">NF</span> <span class="kt">Text</span>
+  <span class="kr">deriving</span> <span class="kt">Show</span>
+
+<span class="kr">data</span> <span class="kt">CNF</span> <span class="n">e</span> <span class="ow">::</span> <span class="kt">Effect</span> <span class="kr">where</span>
+  <span class="kt">ThrowNF</span> <span class="ow">::</span> <span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="kt">CNF</span> <span class="n">e</span> <span class="n">m</span> <span class="n">a</span>
+  <span class="kt">CatchNF</span> <span class="ow">::</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Text</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">CNF</span> <span class="n">e</span> <span class="n">m</span> <span class="n">a</span>
+
+<span class="nf">makeSem</span> <span class="kt">&#39;&#39;CNF</span>
+
+<span class="nf">intCNF</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">Error</span> <span class="p">(</span><span class="kt">NF</span> <span class="kt">A</span><span class="p">))</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">InterpreterFor</span> <span class="p">(</span><span class="kt">CNF</span> <span class="kt">A</span><span class="p">)</span> <span class="n">r</span>
+<span class="nf">intCNF</span> <span class="ow">=</span>
+  <span class="n">interpretH</span> <span class="o">$</span> <span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">ThrowNF</span> <span class="n">er</span> <span class="ow">-&gt;</span> <span class="n">throw</span> <span class="p">(</span><span class="kt">NF</span> <span class="n">er</span><span class="p">)</span>
+    <span class="kt">CatchNF</span> <span class="n">ma</span> <span class="n">recover</span> <span class="ow">-&gt;</span>
+      <span class="p">(</span><span class="n">catch</span> <span class="o">@</span><span class="p">(</span><span class="kt">NF</span> <span class="kt">A</span><span class="p">)</span> <span class="p">(</span><span class="n">run</span> <span class="n">ma</span><span class="p">)</span> <span class="p">(</span><span class="nf">\</span> <span class="p">(</span><span class="kt">NF</span> <span class="n">er</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">run</span> <span class="p">(</span><span class="n">recover</span> <span class="n">er</span><span class="p">)))</span>
+      <span class="kr">where</span>
+        <span class="n">run</span> <span class="ow">=</span>
+          <span class="n">raise</span> <span class="o">.</span> <span class="n">intCNF</span> <span class="o">&lt;=&lt;</span> <span class="n">runT</span>
+
+<span class="nf">run</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">CNF</span> <span class="kt">A</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Member</span> <span class="kt">A</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="kt">Int</span>
+<span class="nf">run</span> <span class="ow">=</span>
+  <span class="n">catchNF</span> <span class="n">doA</span> <span class="o">$</span> <span class="nf">\</span> <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="mi">1</span>
+
+<span class="nf">interpretA</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">Error</span> <span class="kt">E</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">InterpreterFor</span> <span class="kt">A</span> <span class="n">r</span>
+<span class="nf">interpretA</span> <span class="ow">=</span>
+  <span class="n">interpret</span> <span class="o">$</span> <span class="nf">\</span> <span class="kt">DoA</span> <span class="ow">-&gt;</span> <span class="n">throw</span> <span class="kt">E</span>
+
+<span class="nf">intNF</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">CNF</span> <span class="kt">A</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Error</span> <span class="p">(</span><span class="kt">NonFatal</span> <span class="kt">A</span> <span class="kt">E</span><span class="p">)</span> <span class="kt">:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">intNF</span> <span class="ow">=</span>
+  <span class="n">cnf</span> <span class="o">&lt;=&lt;</span> <span class="n">runError</span>
+  <span class="kr">where</span>
+    <span class="n">cnf</span> <span class="p">(</span><span class="kt">Left</span> <span class="p">(</span><span class="kt">NonFatal</span> <span class="n">er</span><span class="p">))</span> <span class="ow">=</span> <span class="n">throwNF</span> <span class="p">(</span><span class="n">show</span> <span class="n">er</span><span class="p">)</span>
+    <span class="n">cnf</span> <span class="p">(</span><span class="kt">Right</span> <span class="n">a</span><span class="p">)</span> <span class="ow">=</span> <span class="n">pure</span> <span class="n">a</span>
+
+<span class="nf">test_errorBad</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">test_errorBad</span> <span class="ow">=</span>
+  <span class="n">print</span> <span class="o">=&lt;&lt;</span> <span class="p">(</span>
+    <span class="n">runFinal</span> <span class="o">$</span>
+      <span class="n">runError</span> <span class="o">$</span>
+      <span class="n">intCNF</span> <span class="o">$</span>
+      <span class="n">intNF</span> <span class="o">$</span>
+      <span class="n">mapError</span> <span class="p">(</span><span class="kt">NonFatal</span> <span class="o">@</span><span class="kt">A</span> <span class="o">@</span><span class="kt">E</span><span class="p">)</span> <span class="o">$</span>
+      <span class="n">interpretA</span> <span class="o">$</span>
+      <span class="n">run</span>
+  <span class="p">)</span>
+</code></pre></div>
+
+
+<p>the <code>throw</code> in <code>intCNF</code> is caught by <code>runError</code> in the main function, not <code>catchNF</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197307256" name="197307256"><div>2020-05-12 17:09:02</div></a></div><div class="text"><p>Because <code>mapError</code> is broken.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197307300" name="197307300"><div>2020-05-12 17:09:28</div></a></div><div class="text"><p>See <a href="https://github.com/polysemy-research/polysemy/issues/225">#225</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/polysemy-research/polysemy/issues/225" style="background-image: url(https://avatars1.githubusercontent.com/u/52079915?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/polysemy-research/polysemy/issues/225" title="Add variant of mapError that doesn't use runError internally · Issue #225 · polysemy-research/polysemy">Add variant of mapError that doesn't use runError internally · Issue #225 · polysemy-research/polysemy</a></div><div class="message_embed_description">mapError currently uses runError internally when processing catch, and then converting the error to the mapped error once the handling has completed. This has the benefit of mapError only requiring...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197307333" name="197307333"><div>2020-05-12 17:09:49</div></a></div><div class="text"><p>It's only just now I realized the extent of how horrible it is</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197307398" name="197307398"><div>2020-05-12 17:10:05</div></a></div><div class="text"><p>Like I said above, use <code>errorToError</code> (which isn't in <code>polysemy</code> yet) instead</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197308480" name="197308480"><div>2020-05-12 17:18:20</div></a></div><div class="text"><p>nope, same with <code>errorToError</code> <span aria-label="speechless" class="emoji emoji-1f636" role="img" title="speechless">:speechless:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197309250" name="197309250"><div>2020-05-12 17:24:08</div></a></div><div class="text"><p>Oh, sorry. It's probably because<code>intNF</code> converts its argument as a whole, rather than individual throws. Same problem as with <code>mapError</code>. That's also fixed by defining it in terms of <code>errorToError</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197309398" name="197309398"><div>2020-05-12 17:25:17</div></a></div><div class="text"><p>My suggestion for <code>mapErrorVia</code> in #225 has the same problem, so that's quite stupid of me in hindsight.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197311737" name="197311737"><div>2020-05-12 17:41:50</div></a></div><div class="text"><p>ugh, obviously when I use <code>runError</code>, an <code>X.catch</code> is inserted <span aria-label="smiley" class="emoji emoji-1f603" role="img" title="smiley">:smiley:</span> now it works!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197312713" name="197312713"><div>2020-05-12 17:49:08</div></a></div><div class="text"><p>even with <code>mapError</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197325258" name="197325258"><div>2020-05-12 19:20:58</div></a></div><div class="text"><p>Cooked up an alternative to that manager garbage.</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">import</span> <span class="nn">Polysemy</span>
+<span class="kr">import</span> <span class="nn">Polysemy.Internal</span>
+<span class="kr">import</span> <span class="nn">Polysemy.Internal.Union</span>
+
+<span class="kr">import</span> <span class="nn">Polysemy.Error</span>
+
+<span class="kr">data</span> <span class="kt">Exceptional</span> <span class="n">err</span> <span class="n">eff</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">Exceptionally</span>
+    <span class="ow">::</span> <span class="n">forall</span> <span class="n">err</span> <span class="n">eff</span> <span class="n">r0</span> <span class="n">a</span>
+     <span class="o">.</span> <span class="kt">Weaving</span> <span class="n">eff</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r0</span><span class="p">)</span> <span class="n">a</span>
+    <span class="ow">-&gt;</span> <span class="kt">Exceptional</span> <span class="n">err</span> <span class="n">eff</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r0</span><span class="p">)</span> <span class="p">(</span><span class="kt">Either</span> <span class="n">err</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="c1">-- Run a Sem using actions of `eff`if you&#39;re prepared to deal with any exception that may arise from those actions.</span>
+<span class="nf">exceptionally</span>
+  <span class="ow">::</span> <span class="n">forall</span> <span class="n">err</span> <span class="n">eff</span> <span class="n">r</span> <span class="n">a</span>
+   <span class="o">.</span> <span class="kt">Members</span> <span class="kt">&#39;[Exceptional err eff, Error err]</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="n">eff</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">exceptionally</span> <span class="n">sem</span> <span class="ow">=</span> <span class="kt">Sem</span> <span class="o">$</span> <span class="nf">\</span><span class="n">k</span> <span class="ow">-&gt;</span> <span class="n">runSem</span> <span class="n">sem</span> <span class="o">$</span> <span class="nf">\</span><span class="n">u</span> <span class="ow">-&gt;</span> <span class="kr">case</span> <span class="n">decomp</span> <span class="p">(</span><span class="n">hoist</span> <span class="p">(</span><span class="n">exceptionally</span> <span class="o">@</span><span class="n">err</span><span class="p">)</span> <span class="n">u</span><span class="p">)</span> <span class="kr">of</span>
+  <span class="kt">Right</span> <span class="n">wav</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+    <span class="n">runSem</span> <span class="p">(</span><span class="n">send</span> <span class="p">(</span><span class="kt">Exceptionally</span> <span class="o">@</span><span class="n">err</span> <span class="n">wav</span><span class="p">)</span> <span class="o">&gt;&gt;=</span> <span class="n">fromEither</span><span class="p">)</span> <span class="n">k</span>
+  <span class="kt">Left</span> <span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">k</span> <span class="n">g</span>
+
+<span class="c1">-- Runs `Exceptional exc eff` if `eff`is in the effect stack, given a way to convert from a larger exception to `exc`.</span>
+<span class="nf">runExceptional</span>
+  <span class="ow">::</span> <span class="n">forall</span> <span class="n">eff</span> <span class="n">smallExc</span> <span class="n">bigExc</span> <span class="n">r</span> <span class="n">a</span>
+   <span class="o">.</span> <span class="kt">Members</span> <span class="kt">&#39;[eff, Error bigExc]</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">bigExc</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="n">smallExc</span><span class="p">)</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Exceptional</span> <span class="n">smallExc</span> <span class="n">eff</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span>
+  <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">runExceptional</span> <span class="n">from</span> <span class="n">sem</span> <span class="ow">=</span> <span class="kt">Sem</span> <span class="o">$</span> <span class="nf">\</span><span class="n">k</span> <span class="ow">-&gt;</span> <span class="n">runSem</span> <span class="n">sem</span> <span class="o">$</span> <span class="nf">\</span><span class="n">u</span> <span class="ow">-&gt;</span> <span class="kr">case</span> <span class="n">decomp</span> <span class="p">(</span><span class="n">hoist</span> <span class="p">(</span><span class="n">runExceptional</span> <span class="n">from</span><span class="p">)</span> <span class="n">u</span><span class="p">)</span> <span class="kr">of</span>
+  <span class="kt">Right</span> <span class="p">(</span><span class="kt">Weaving</span> <span class="p">(</span><span class="kt">Exceptionally</span> <span class="n">wav</span><span class="p">)</span> <span class="n">s</span> <span class="n">wv</span> <span class="n">ex</span> <span class="n">ins</span><span class="p">)</span> <span class="ow">-&gt;</span>
+    <span class="kr">let</span>
+      <span class="n">main</span> <span class="ow">=</span> <span class="n">liftSem</span> <span class="o">$</span> <span class="n">weave</span> <span class="n">s</span> <span class="n">wv</span> <span class="n">ins</span> <span class="p">(</span><span class="n">injWeaving</span> <span class="n">wav</span><span class="p">)</span>
+    <span class="kr">in</span>
+      <span class="p">(`</span><span class="n">runSem</span><span class="p">`</span> <span class="n">k</span><span class="p">)</span> <span class="o">$</span>
+        <span class="n">catchJust</span> <span class="n">from</span> <span class="p">(</span><span class="n">fmap</span> <span class="p">(</span><span class="n">ex</span> <span class="o">.</span> <span class="n">fmap</span> <span class="kt">Right</span><span class="p">)</span> <span class="n">main</span><span class="p">)</span> <span class="o">$</span> <span class="nf">\</span><span class="n">e</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="p">(</span><span class="n">ex</span> <span class="p">(</span><span class="kt">Left</span> <span class="n">e</span> <span class="o">&lt;$</span> <span class="n">s</span><span class="p">))</span>
+  <span class="kt">Left</span> <span class="n">g</span> <span class="ow">-&gt;</span> <span class="n">k</span> <span class="n">g</span>
+
+<span class="nf">handle</span> <span class="ow">::</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Error</span> <span class="n">e</span> <span class="kt">&#39;:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">e</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">handle</span> <span class="n">m</span> <span class="n">h</span> <span class="ow">=</span> <span class="n">runError</span> <span class="n">m</span> <span class="o">&gt;&gt;=</span> <span class="n">either</span> <span class="n">h</span> <span class="n">pure</span>
+
+<span class="c1">-- Boilerplate ends here.</span>
+
+<span class="kr">data</span> <span class="kt">FooAPI</span> <span class="n">m</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="kt">GetFooBar</span> <span class="ow">::</span> <span class="kt">String</span> <span class="ow">-&gt;</span> <span class="kt">FooAPI</span> <span class="n">m</span> <span class="n">a</span>
+
+<span class="nf">makeSem</span> <span class="kt">&#39;&#39;FooAPI</span>
+
+<span class="kr">data</span> <span class="kt">BigExc</span>
+<span class="kr">data</span> <span class="kt">SmallExc</span>
+
+<span class="c1">-- Some progam that makes use of getFooBar without knowing or caring that it might cause exceptions</span>
+<span class="nf">prog&#39;</span> <span class="ow">::</span> <span class="kt">Member</span> <span class="kt">FooAPI</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span>
+<span class="nf">prog&#39;</span> <span class="ow">=</span> <span class="n">getFooBar</span> <span class="s">&quot;hiho&quot;</span>
+
+<span class="c1">-- Running that piece of the program in the context of the larger application.</span>
+<span class="nf">prog</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">Exceptional</span> <span class="kt">SmallExc</span> <span class="kt">FooAPI</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="nb">()</span>
+<span class="nf">prog</span> <span class="ow">=</span> <span class="n">handle</span> <span class="o">@</span><span class="kt">SmallExc</span> <span class="p">(</span><span class="n">exceptionally</span> <span class="o">@</span><span class="kt">SmallExc</span> <span class="o">@</span><span class="kt">FooAPI</span> <span class="n">prog&#39;</span><span class="p">)</span> <span class="p">(</span><span class="nf">\</span> <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="nb">()</span><span class="p">)</span>
+
+<span class="c1">-- The primitive behind getFooBar</span>
+<span class="nf">getFooBarIO</span> <span class="ow">::</span> <span class="kt">String</span> <span class="ow">-&gt;</span> <span class="kt">IO</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">BigExc</span> <span class="n">a</span><span class="p">)</span>
+<span class="nf">getFooBarIO</span> <span class="ow">=</span> <span class="n">undefined</span>
+
+<span class="nf">bigToSmall</span> <span class="ow">::</span> <span class="kt">BigExc</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="kt">SmallExc</span>
+<span class="nf">bigToSmall</span> <span class="ow">=</span> <span class="n">undefined</span>
+
+<span class="nf">runFooAPI</span> <span class="ow">::</span> <span class="kt">Members</span> <span class="kt">&#39;[Embed IO, Error BigExc]</span> <span class="n">r</span> <span class="ow">=&gt;</span> <span class="kt">InterpreterFor</span> <span class="kt">FooAPI</span> <span class="n">r</span>
+<span class="nf">runFooAPI</span> <span class="ow">=</span> <span class="n">interpret</span> <span class="o">$</span> <span class="nf">\</span><span class="p">(</span><span class="kt">GetFooBar</span> <span class="n">str</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">fromEitherM</span> <span class="p">(</span><span class="n">getFooBarIO</span> <span class="n">str</span><span class="p">)</span>
+
+<span class="nf">runFooAPIExceptional</span>
+  <span class="ow">::</span> <span class="kt">Members</span> <span class="kt">&#39;[Embed IO, Error BigExc]</span> <span class="n">r</span>
+  <span class="ow">=&gt;</span> <span class="kt">InterpreterFor</span> <span class="p">(</span><span class="kt">Exceptional</span> <span class="kt">SmallExc</span> <span class="kt">FooAPI</span><span class="p">)</span> <span class="n">r</span>
+<span class="nf">runFooAPIExceptional</span> <span class="ow">=</span>
+   <span class="n">runFooAPI</span>
+ <span class="o">.</span> <span class="n">runExceptional</span> <span class="n">bigToSmall</span>
+ <span class="o">.</span> <span class="n">raiseUnder</span>
+</code></pre></div>
+
+
+<p>The key combinator of interest here is <code>exceptionally</code>, as well as the interpreter <code>runExceptional</code>.<br>
+This has the benefit of shuffling more responsibility from the user to predefined functions. You don't need to understand how it works to use it!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#197325464" name="197325464"><div>2020-05-12 19:22:31</div></a></div><div class="text"><p>Yeah, it uses a lot of internal stuff, but that's fine. We'll probably add <code>Exceptional</code>, or some generalization thereof.<br>
+Also fun fact the only reason <code>Exceptional</code> instantiates its parameter is because <code>weave</code> has a constraint it doesn't need. We'll fix that.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#197345030" name="197345030"><div>2020-05-12 21:55:44</div></a></div><div class="text"><p>nice, I'll have to try that out in the wild to assess the ergonomics.<br>
+For the record, this is what I bruteforced together to achieve the UX I was going for:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">data</span> <span class="kt">E</span> <span class="ow">=</span> <span class="kt">E</span> <span class="kr">deriving</span> <span class="kt">Show</span>
+
+<span class="kr">data</span> <span class="kt">A</span> <span class="ow">::</span> <span class="kt">Effect</span> <span class="kr">where</span>
+  <span class="kt">DoA</span> <span class="ow">::</span> <span class="kt">A</span> <span class="n">m</span> <span class="kt">Int</span>
+
+<span class="nf">makeSem</span> <span class="kt">&#39;&#39;A</span>
+
+<span class="kr">data</span> <span class="kt">InterpreterError</span> <span class="n">a</span> <span class="n">err</span> <span class="ow">=</span>
+  <span class="kt">InterpreterError</span> <span class="n">err</span>
+  <span class="kr">deriving</span> <span class="kt">Show</span>
+
+<span class="kr">data</span> <span class="kt">EffectError</span> <span class="n">eff</span> <span class="n">err</span> <span class="ow">::</span> <span class="kt">Effect</span> <span class="kr">where</span>
+  <span class="kt">InterpreterCatch</span> <span class="ow">::</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">err</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">EffectError</span> <span class="n">eff</span> <span class="n">err</span> <span class="n">m</span> <span class="n">a</span>
+
+<span class="nf">makeSem</span> <span class="kt">&#39;&#39;EffectError</span>
+
+<span class="nf">interpretEffectError</span> <span class="ow">::</span>
+  <span class="err">∀</span> <span class="n">e</span> <span class="n">err</span> <span class="n">r</span> <span class="o">.</span>
+  <span class="kt">Show</span> <span class="n">err</span> <span class="ow">=&gt;</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">Error</span> <span class="p">(</span><span class="kt">InterpreterError</span> <span class="n">e</span> <span class="n">err</span><span class="p">))</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">InterpreterFor</span> <span class="p">(</span><span class="kt">EffectError</span> <span class="n">e</span> <span class="n">err</span><span class="p">)</span> <span class="n">r</span>
+<span class="nf">interpretEffectError</span> <span class="ow">=</span>
+  <span class="n">interpretH</span> <span class="o">$</span> <span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">InterpreterCatch</span> <span class="n">ma</span> <span class="n">recover</span> <span class="ow">-&gt;</span>
+      <span class="p">(</span><span class="n">catch</span> <span class="p">(</span><span class="n">run</span> <span class="n">ma</span><span class="p">)</span> <span class="p">(</span><span class="nf">\</span> <span class="p">(</span><span class="kt">InterpreterError</span> <span class="n">er</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">run</span> <span class="p">(</span><span class="n">recover</span> <span class="n">er</span><span class="p">)))</span>
+      <span class="kr">where</span>
+        <span class="n">run</span> <span class="ow">=</span>
+          <span class="n">raise</span> <span class="o">.</span> <span class="n">interpretEffectError</span> <span class="o">&lt;=&lt;</span> <span class="n">runT</span>
+
+<span class="nf">interpreterError</span> <span class="ow">::</span>
+  <span class="err">∀</span> <span class="n">eff</span> <span class="n">err</span> <span class="n">err1</span> <span class="n">r</span> <span class="o">.</span>
+  <span class="kt">Show</span> <span class="n">err</span> <span class="ow">=&gt;</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">Error</span> <span class="p">(</span><span class="kt">InterpreterError</span> <span class="n">eff</span> <span class="n">err1</span><span class="p">))</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="p">(</span><span class="n">err</span> <span class="ow">-&gt;</span> <span class="n">err1</span><span class="p">)</span> <span class="ow">-&gt;</span>
+  <span class="kt">InterpreterFor</span> <span class="p">(</span><span class="kt">Error</span> <span class="n">err</span><span class="p">)</span> <span class="n">r</span>
+<span class="nf">interpreterError</span> <span class="n">lift</span> <span class="ow">=</span>
+  <span class="n">interpretH</span> <span class="o">$</span> <span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">Throw</span> <span class="n">er</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+      <span class="n">throw</span> <span class="p">(</span><span class="kt">InterpreterError</span> <span class="p">(</span><span class="n">lift</span> <span class="n">er</span><span class="p">))</span>
+    <span class="kt">Catch</span> <span class="n">ma</span> <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+      <span class="n">raise</span> <span class="o">.</span> <span class="p">(</span><span class="n">interpreterError</span> <span class="n">lift</span><span class="p">)</span> <span class="o">=&lt;&lt;</span> <span class="n">runT</span> <span class="n">ma</span>
+
+<span class="nf">observeEffectError</span> <span class="ow">::</span>
+  <span class="err">∀</span> <span class="n">e</span> <span class="n">err</span> <span class="n">err1</span> <span class="n">r</span> <span class="n">a</span> <span class="o">.</span>
+  <span class="kt">Show</span> <span class="n">err</span> <span class="ow">=&gt;</span>
+  <span class="kt">Show</span> <span class="n">err1</span> <span class="ow">=&gt;</span>
+  <span class="p">(</span><span class="n">err</span> <span class="ow">-&gt;</span> <span class="n">err1</span><span class="p">)</span> <span class="ow">-&gt;</span>
+  <span class="kt">Sem</span> <span class="p">(</span><span class="kt">Error</span> <span class="n">err</span> <span class="kt">:</span> <span class="kt">EffectError</span> <span class="n">e</span> <span class="n">err1</span> <span class="kt">:</span> <span class="kt">Error</span> <span class="p">(</span><span class="kt">InterpreterError</span> <span class="n">e</span> <span class="n">err1</span><span class="p">)</span> <span class="kt">:</span> <span class="n">r</span><span class="p">)</span> <span class="n">a</span> <span class="ow">-&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">observeEffectError</span> <span class="n">lift</span> <span class="ow">=</span>
+  <span class="n">eek</span> <span class="o">&lt;=&lt;</span> <span class="n">runError</span> <span class="o">.</span> <span class="n">interpretEffectError</span> <span class="o">.</span> <span class="n">interpreterError</span> <span class="n">lift</span>
+  <span class="kr">where</span>
+    <span class="n">eek</span> <span class="p">(</span><span class="kt">Right</span> <span class="n">a</span><span class="p">)</span> <span class="ow">=</span> <span class="n">pure</span> <span class="n">a</span>
+    <span class="n">eek</span> <span class="p">(</span><span class="kt">Left</span> <span class="kr">_</span><span class="p">)</span> <span class="ow">=</span> <span class="n">pure</span> <span class="n">undefined</span>
+
+<span class="nf">run</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">EffectError</span> <span class="kt">A</span> <span class="kt">Text</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Member</span> <span class="kt">A</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="kt">Int</span>
+<span class="nf">run</span> <span class="ow">=</span>
+  <span class="n">interpreterCatch</span> <span class="n">doA</span> <span class="o">$</span> <span class="nf">\</span> <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="mi">1</span>
+
+<span class="nf">interpretA</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">Error</span> <span class="kt">E</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">InterpreterFor</span> <span class="kt">A</span> <span class="n">r</span>
+<span class="nf">interpretA</span> <span class="ow">=</span>
+  <span class="n">interpret</span> <span class="o">$</span> <span class="nf">\</span> <span class="kt">DoA</span> <span class="ow">-&gt;</span> <span class="n">throw</span> <span class="kt">E</span>
+
+<span class="nf">test_effectError</span> <span class="ow">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="nf">test_effectError</span> <span class="ow">=</span>
+  <span class="n">print</span> <span class="o">=&lt;&lt;</span> <span class="p">(</span><span class="n">runFinal</span> <span class="o">.</span> <span class="n">observeEffectError</span> <span class="n">show</span> <span class="o">.</span> <span class="n">interpretA</span> <span class="o">$</span> <span class="n">run</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>It's got a few holes <span aria-label="slight smile" class="emoji emoji-1f642" role="img" title="slight smile">:slight_smile:</span></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

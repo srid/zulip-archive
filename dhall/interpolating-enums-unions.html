@@ -1,0 +1,131 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I have a problem encoding an enum (union) value as a JSON string. dhall-json has no problem encoding the enum value as a string as long as it&#39;s not in a string interpolation, but that&#39;s exactly where I&#39;d like to use it." name="description"><link href="https://funprog.srid.ca/dhall/interpolating-enums-unions.html" rel="canonical"><meta property="og:title" content="interpolating enums/unions - Dhall"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Dhall"><meta property="og:article:modified_time" content="2022-08-31T08:56:28Z"><meta property="og:article:published_time" content="2022-08-31T08:55:26Z"><title>interpolating enums/unions - Dhall</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">interpolating enums/unions - Dhall</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/dhall/" class="section">#Dhall</a><i class="right angle icon divider"></i><div class="active section">interpolating enums/unions</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/8015f8f4bb13e606054262a84610c7fb"></a><div class="content"><a class="author">John Rinehart</a><div class="metadata"><a href="#296282188" name="296282188"><div>2022-08-31 08:55:26</div></a></div><div class="text"><p>I have a problem encoding an enum (union) value as a JSON string. <code>dhall-json</code> has no problem encoding the enum value as a string as long as it's not in a string interpolation, but that's exactly where I'd like to use it.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/8015f8f4bb13e606054262a84610c7fb"></a><div class="content"><a class="author">John Rinehart</a><div class="metadata"><a href="#296282250" name="296282250"><div>2022-08-31 08:55:50</div></a></div><div class="text"><p>So, here's something that <em>works</em>:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">let</span><span class="w"> </span><span class="kt">EditorRole</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">moderator</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">administrator</span><span class="w"> </span><span class="o">&gt;</span><span class="w"></span>
+
+<span class="kr">let</span><span class="w"> </span><span class="n">makeUser</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="nf">\</span><span class="p">(</span><span class="n">role</span><span class="kt">:</span><span class="w"> </span><span class="kt">EditorRole</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="kr">let</span><span class="w"> </span><span class="n">userRole</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">role</span><span class="w"></span>
+<span class="w">      </span><span class="kr">in</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">role</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">userRole</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="kr">in</span><span class="w">  </span><span class="p">[</span><span class="w"></span>
+<span class="w">          </span><span class="n">makeUser</span><span class="w"> </span><span class="kt">EditorRole</span><span class="o">.</span><span class="n">administrator</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="p">]</span><span class="w"></span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/8015f8f4bb13e606054262a84610c7fb"></a><div class="content"><a class="author">John Rinehart</a><div class="metadata"><a href="#296282379" name="296282379"><div>2022-08-31 08:56:28</div></a></div><div class="text"><p>Here's the thing that <em>doesn't</em> work. It's unclear how to accomplish what I want.</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">let</span><span class="w"> </span><span class="kt">EditorRole</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">moderator</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">administrator</span><span class="w"> </span><span class="o">&gt;</span><span class="w"></span>
+
+<span class="kr">let</span><span class="w"> </span><span class="n">makeUser</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="nf">\</span><span class="p">(</span><span class="n">role</span><span class="kt">:</span><span class="w"> </span><span class="kt">EditorRole</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="kr">let</span><span class="w"></span>
+<span class="w">    </span><span class="n">jsonRole</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="s">"${role}"</span><span class="w"></span>
+<span class="w">      </span><span class="kr">in</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">role</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">jsonRole</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="kr">in</span><span class="w">  </span><span class="p">[</span><span class="w"></span>
+<span class="w">          </span><span class="n">makeUser</span><span class="w"> </span><span class="kt">EditorRole</span><span class="o">.</span><span class="n">administrator</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="p">]</span><span class="w"></span>
+</code></pre></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,132 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Hello, is there some way to require at least one of two switches, when using optparse-applicative? So all of:
+
+myexe -a
+myexe -b
+myexe -ab or myexe -ba
+
+should work, but not just myexe without any options." name="description"><link href="https://funprog.srid.ca/haskell/optparse-applicative-require-at-least-one-of-two-switches.html" rel="canonical"><meta property="og:title" content="optparse-applicative require at least one of two switches - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-07-12T07:31:58Z"><meta property="og:article:published_time" content="2021-07-11T07:11:08Z"><title>optparse-applicative require at least one of two switches - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">optparse-applicative require at least one of two switches - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">optparse-applicative require at least one of two switches</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/92de86e6e1dee26414c72864c9050b8a"></a><div class="content"><a class="author">J C</a><div class="metadata"><a href="#245592785" name="245592785"><div>2021-07-11 07:11:08</div></a></div><div class="text"><p>Hello, is there some way to require at least one of two switches, when using <code>optparse-applicative</code>? So all of:</p>
+<ul>
+<li><code>myexe -a</code></li>
+<li><code>myexe -b</code></li>
+<li><code>myexe -ab</code> or <code>myexe -ba</code></li>
+</ul>
+<p>should work, but not just <code>myexe</code> without any options.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#245601460" name="245601460"><div>2021-07-11 11:03:03</div></a></div><div class="text"><p>you could do <code>onlyA &lt;|&gt; onlyB &lt;|&gt; both</code> where each of those contain one or both of the individual <code>Parser</code>s</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/92de86e6e1dee26414c72864c9050b8a"></a><div class="content"><a class="author">J C</a><div class="metadata"><a href="#245605809" name="245605809"><div>2021-07-11 12:56:24</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="260881">Torsten Schmits</span> <a href="#narrow/stream/201385-Haskell/topic/optparse-applicative.20require.20at.20least.20one.20of.20two.20switches/near/245601460">said</a>:</p>
+<blockquote>
+<p>you could do <code>onlyA &lt;|&gt; onlyB &lt;|&gt; both</code> where each of those contain one or both of the individual <code>Parser</code>s</p>
+</blockquote>
+<p>Really? I'm not getting that to work. Seems like the parser doesn't have backtracking, so I think it would be difficult: <a href="https://github.com/pcapriotti/optparse-applicative/issues/404">https://github.com/pcapriotti/optparse-applicative/issues/404</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#245628388" name="245628388"><div>2021-07-11 21:35:46</div></a></div><div class="text"><p>oh <span aria-label="grimacing" class="emoji emoji-1f62c" role="img" title="grimacing">:grimacing:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#245628428" name="245628428"><div>2021-07-11 21:36:07</div></a></div><div class="text"><p>guess you'll have to throw an error yourself</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#245650967" name="245650967"><div>2021-07-12 06:56:02</div></a></div><div class="text"><p>what are <code>-a</code> and <code>-b</code> actually?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#245651015" name="245651015"><div>2021-07-12 06:56:13</div></a></div><div class="text"><p>it might be the case that they're more suited to be sub-commands?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/92de86e6e1dee26414c72864c9050b8a"></a><div class="content"><a class="author">J C</a><div class="metadata"><a href="#245653472" name="245653472"><div>2021-07-12 07:28:36</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254032">Georgi Lyubenov // googleson78</span> <a href="#narrow/stream/201385-Haskell/topic/optparse-applicative.20require.20at.20least.20one.20of.20two.20switches/near/245650967">said</a>:</p>
+<blockquote>
+<p>what are <code>-a</code> and <code>-b</code> actually?</p>
+</blockquote>
+<p>It's for a small tool to create initial Cabal/Nix project setups, so the switches are supposed to be translated to <code>--lib</code>, <code>--exe</code>, and <code>--libandexe</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#245653713" name="245653713"><div>2021-07-12 07:31:33</div></a></div><div class="text"><p>so how about <code>--create</code> which accepts <code>lib</code> or <code>exe</code> or <code>both</code>? (translating to a <code>data Mode = Lib | Exe | Both</code>)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#245653738" name="245653738"><div>2021-07-12 07:31:58</div></a></div><div class="text"><p>you can easily have a default value too, that way</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

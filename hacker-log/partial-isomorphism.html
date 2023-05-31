@@ -1,0 +1,139 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Really curious about the best way to do isomorphism check, but with allowance for Maybe:
+encodeRoute :: r -&gt; FilePath
+decodeRoute :: FilePath -&gt; Maybe r
+
+decodeRoute . encodeRoute = id in principle, but that Maybe is preventing us from treating this as isomorphism. What can be done here?" name="description"><link href="https://funprog.srid.ca/hacker-log/partial-isomorphism.html" rel="canonical"><meta property="og:title" content="Partial Isomorphism - Hacker Log"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Hacker Log"><meta property="og:article:modified_time" content="2022-02-24T23:23:26Z"><meta property="og:article:published_time" content="2022-02-11T15:25:26Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"><title>Partial Isomorphism - Hacker Log</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Partial Isomorphism - Hacker Log</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/hacker-log/" class="section">#Hacker Log</a><i class="right angle icon divider"></i><div class="active section">Partial Isomorphism</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#271591898" name="271591898"><div>2022-02-11 15:25:26</div></a></div><div class="text"><p>Really curious about the best way to do isomorphism check, but with allowance for Maybe:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">encodeRoute</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">FilePath</span><span class="w"></span>
+<span class="nf">decodeRoute</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">FilePath</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Maybe</span><span class="w"> </span><span class="n">r</span><span class="w"></span>
+</code></pre></div>
+<p><code>decodeRoute . encodeRoute = id</code> in principle, but that Maybe is preventing us from treating this as isomorphism. What can be done here?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#271591912" name="271591912"><div>2022-02-11 15:25:34</div></a></div><div class="text"><p>What's this <a href="https://github.com/hanshoglund/iso-deriving/blob/master/test/Spec.hs">https://github.com/hanshoglund/iso-deriving/blob/master/test/Spec.hs</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#271593471" name="271593471"><div>2022-02-11 15:37:51</div></a></div><div class="text"><p><a href="https://github.com/schernichkin/partial-isomorphisms/blob/master/src/Control/Isomorphism/Partial/Unsafe.hs">https://github.com/schernichkin/partial-isomorphisms/blob/master/src/Control/Isomorphism/Partial/Unsafe.hs</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#271593604" name="271593604"><div>2022-02-11 15:38:49</div></a></div><div class="text"><div class="codehilite" data-code-language="Agda"><pre><span></span><code><span class="kr">data</span><span class="w"> </span>Iso<span class="w"> </span>α<span class="w"> </span>β<span class="w"></span>
+<span class="ow">=</span><span class="w"> </span>Iso<span class="w"> </span><span class="o">(</span>α<span class="w"> </span><span class="ow">→</span><span class="w"> </span>Maybe<span class="w"> </span>β<span class="o">)</span><span class="w"> </span><span class="o">(</span>β<span class="w"> </span><span class="ow">→</span><span class="w"> </span>Maybe<span class="w"> </span>α<span class="o">)</span><span class="w"></span>
+</code></pre></div>
+<p><a href="https://www.mathematik.uni-marburg.de/~rendel/rendel10invertible.pdf">https://www.mathematik.uni-marburg.de/~rendel/rendel10invertible.pdf</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#271596286" name="271596286"><div>2022-02-11 15:57:12</div></a></div><div class="text"><p>Hackish,</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="c1">-- | An Iso that is not necessarily surjective; as well as takes an (unchanging)</span><span class="w"></span>
+<span class="c1">-- context value.</span><span class="w"></span>
+<span class="kr">type</span><span class="w"> </span><span class="kt">PartialIso</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="p">(</span><span class="n">ctx</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Maybe</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"></span>
+
+<span class="nf">partialIsoIsLawful</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">PartialIso</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Bool</span><span class="w"></span>
+<span class="nf">partialIsoIsLawful</span><span class="w"> </span><span class="p">(</span><span class="n">to</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="p">)</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="ow">=</span><span class="w"></span>
+<span class="w">  </span><span class="n">all</span><span class="w"> </span><span class="o">$</span><span class="w"> </span><span class="nf">\</span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kr">let</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="kt">Just</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">s</span><span class="w"></span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#271596985" name="271596985"><div>2022-02-11 16:01:32</div></a></div><div class="text"><p>I think that paper will obviate needing a <code>partialIsoIsLawful</code>.</p>
+<p>If I treat decoding routes as parsing, and encoding route as pretty-printing - that paper is super relevant to this problem.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#271691569" name="271691569"><div>2022-02-12 14:32:36</div></a></div><div class="text"><p>More from Julien: <a href="https://github.com/srid/ema/issues/78#issuecomment-1036993190">https://github.com/srid/ema/issues/78#issuecomment-1036993190</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#272123741" name="272123741"><div>2022-02-16 14:36:57</div></a></div><div class="text"><p>Julien again, re: improving <code>PartialIso</code>: <a href="https://git.code.sourcephile.fr/~julm/webc/tree/main">https://git.code.sourcephile.fr/~julm/webc/tree/main</a></p>
+<p>ctx: <a href="https://github.com/srid/ema/issues/78#issuecomment-1041189041">https://github.com/srid/ema/issues/78#issuecomment-1041189041</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#273164081" name="273164081"><div>2022-02-24 23:23:26</div></a></div><div class="text"><div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">isJust</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Maybe</span><span class="w"> </span><span class="nb">()</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="kt">Bool</span><span class="w"></span>
+<span class="nf">isJust</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="p">[</span><span class="n">biCase</span><span class="o">|</span><span class="w"></span>
+<span class="w">    </span><span class="kt">Just</span><span class="w"> </span><span class="nb">()</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="kt">True</span><span class="w"></span>
+<span class="w">    </span><span class="kt">Nothing</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="kt">False</span><span class="w"></span>
+<span class="w">  </span><span class="o">|</span><span class="p">]</span><span class="w"></span>
+</code></pre></div>
+<p>whoa - this could be used defined bijecetive route encoders? <a href="https://hackage.haskell.org/package/invertible-0.2.0.7/docs/Control-Invertible-Monoidal.html">https://hackage.haskell.org/package/invertible-0.2.0.7/docs/Control-Invertible-Monoidal.html</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

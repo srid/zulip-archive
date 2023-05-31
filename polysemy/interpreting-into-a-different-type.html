@@ -1,0 +1,125 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="hi guys! im learn polysemy and am looking to get some practice. to do that i have been trying to reimplement some of the stuff in the paper &quot;Effect handlers in scope&quot;
+however, when trying to replicate one of the first examples (the nondet computation one), i ran into some issues" name="description"><link href="https://funprog.srid.ca/polysemy/interpreting-into-a-different-type.html" rel="canonical"><meta property="og:title" content="interpreting into a different type - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2023-05-24T16:02:16Z"><meta property="og:article:published_time" content="2023-05-24T14:54:04Z"><title>interpreting into a different type - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">interpreting into a different type - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">interpreting into a different type</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/5b38405adf166dedba910ed98632757b"></a><div class="content"><a class="author">Jacob Yu</a><div class="metadata"><a href="#360814377" name="360814377"><div>2023-05-24 14:54:04</div></a></div><div class="text"><p>hi guys! im learn polysemy and am looking to get some practice. to do that i have been trying to reimplement some of the stuff in the paper "Effect handlers in scope"<br>
+however, when trying to replicate one of the first examples (the nondet computation one), i ran into some issues</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/5b38405adf166dedba910ed98632757b"></a><div class="content"><a class="author">Jacob Yu</a><div class="metadata"><a href="#360814691" name="360814691"><div>2023-05-24 14:55:13</div></a></div><div class="text"><p>essentially im looking to write an interpreter for this effect:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">data</span><span class="w"> </span><span class="kt">Backtrack</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="kr">where</span>
+<span class="w">    </span><span class="kt">BtNode</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Backtrack</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span>
+<span class="w">    </span><span class="kt">BtFail</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Backtrack</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span>
+<span class="w">    </span><span class="kt">BtChoice</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Backtrack</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="n">a</span>
+
+<span class="nf">makeSem</span><span class="w"> </span><span class="kt">''Backtrack</span>
+
+<span class="nf">runBacktrack</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="p">(</span><span class="kt">Backtrack</span><span class="w"> </span><span class="kt">':</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/5b38405adf166dedba910ed98632757b"></a><div class="content"><a class="author">Jacob Yu</a><div class="metadata"><a href="#360815649" name="360815649"><div>2023-05-24 14:58:36</div></a></div><div class="text"><p>the problem i have is implementing <code>runBacktrack</code>, which interprets into a different return type (<code>[a]</code> rather than <code>a</code>). i run into errors when trying to use the standard <code>interpret</code>/<code>interpretH</code> functions - with <code>interpret</code> I've the problem that its first parameter interprets into the same type <code>a</code>: <code>e Sem (e ': r) a -&gt; Sem r a</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/5b38405adf166dedba910ed98632757b"></a><div class="content"><a class="author">Jacob Yu</a><div class="metadata"><a href="#360816454" name="360816454"><div>2023-05-24 15:01:25</div></a></div><div class="text"><p>and with <code>interpretH</code> I think I'm still a bit confused about its usage - I had issues coming up with return values satisfying <code>forall f</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/5b38405adf166dedba910ed98632757b"></a><div class="content"><a class="author">Jacob Yu</a><div class="metadata"><a href="#360816709" name="360816709"><div>2023-05-24 15:02:10</div></a></div><div class="text"><p>looking at the existing examples on <code>State</code> (another example where handled type differs from original), it seems like there's some custom <code>interpret</code>-like function written for that special case</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/5b38405adf166dedba910ed98632757b"></a><div class="content"><a class="author">Jacob Yu</a><div class="metadata"><a href="#360816867" name="360816867"><div>2023-05-24 15:02:38</div></a></div><div class="text"><p>if I want to do something like <code>Backtrack</code>, is that what I must do as well? or is there a way to make it work with <code>interpretH</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/5b38405adf166dedba910ed98632757b"></a><div class="content"><a class="author">Jacob Yu</a><div class="metadata"><a href="#360817276" name="360817276"><div>2023-05-24 15:04:06</div></a></div><div class="text"><p>(<code>State</code> example I'm referring to: <a href="https://github.com/polysemy-research/polysemy/blob/master/src/Polysemy/State.hs">https://github.com/polysemy-research/polysemy/blob/master/src/Polysemy/State.hs</a> ,<br>
+and Effect handlers in scope paper: <a href="https://www.cs.ox.ac.uk/people/nicolas.wu/papers/Scope.pdf">https://www.cs.ox.ac.uk/people/nicolas.wu/papers/Scope.pdf</a> - I'm trying to implement the <code>solutions</code> handler at the end of chapter 3)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#360831476" name="360831476"><div>2023-05-24 15:57:23</div></a></div><div class="text"><p>yes, if you want to change the return type you'll have to crack open the <code>Sem</code> manually. maybe start by inlining <code>interpretH</code> or <code>runError</code> and playing type tetris.</p>
+<p>In the next release, this will likely become easier, but it's gonna take some more time</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/5b38405adf166dedba910ed98632757b"></a><div class="content"><a class="author">Jacob Yu</a><div class="metadata"><a href="#360832705" name="360832705"><div>2023-05-24 16:02:16</div></a></div><div class="text"><p>thanks torsten! that helps a lot - i'll stop fiddling with interpretH, trying to make it work for now :)</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

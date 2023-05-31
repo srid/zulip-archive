@@ -1,0 +1,116 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I like to add default extensions to my cabal file for common extensions and would like the Haskell process to pick those up and check my file with those extensions... but I set the variable to &#39;(&quot;-XDerivingStrategies&quot;) for example. Flycheck continues to suggest the language extension. Is there a way" name="description"><link href="https://funprog.srid.ca/haskell/emacs-haskell-mode-default-language-extensions.html" rel="canonical"><meta property="og:title" content="emacs haskell-mode default language extensions - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-10-26T06:55:27Z"><meta property="og:article:published_time" content="2021-10-24T20:31:26Z"><title>emacs haskell-mode default language extensions - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">emacs haskell-mode default language extensions - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">emacs haskell-mode default language extensions</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#258896841" name="258896841"><div>2021-10-24 20:31:26</div></a></div><div class="text"><p>I like to add default extensions to my cabal file for common extensions and would like the Haskell process to pick those up and check my file with those extensions... but I set the variable to <code>'("-XDerivingStrategies")</code> for example. Flycheck continues to suggest the language extension. Is there a way to tell <code>haskell-mode</code> to use this list of extensions when starting up the ghci process?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#258898505" name="258898505"><div>2021-10-24 21:07:46</div></a></div><div class="text"><p>Ok... I think this customization variable is there but not really used by anything in <code>haskell-mode</code>.</p>
+<p>You select <code>hlint</code> as your flychecker with <code>flycheck-select-checker</code>, which if available on your path, seems to understand your cabal configuration. It doesn't seem to work but there is a customization variable in the <code>haskell-interactive</code> group to turn off these language extension suggestions... seems like switching the flymake checker is key.</p>
+<p>Next I had to set <code>haskell-process-type</code> to <code>'ghci</code></p>
+<p>Then I had to add the language extensions as the <code>ghci</code> process parameters by adding them to the list of values in <code>haskell-process-args-ghci</code>.</p>
+<p>I don't know why but the <code>cabal-repl</code> type for <code>haskell-process-type</code> doesn't seem to work well with <code>haskell-interactive-mode</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#258900327" name="258900327"><div>2021-10-24 21:53:15</div></a></div><div class="text"><p>It doesn't seem like many of these can be properly set by <code>.dir-locals.el</code> or at least I haven't figured out the right incantation... so if your project uses a different set of default extensions.. well, you'll have to set the variables per session or update your customization group when you switch I guess?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#258916769" name="258916769"><div>2021-10-25 04:59:57</div></a></div><div class="text"><p>I think hls (so <code>lsp-mode/lsp-haskell</code>) can figure out the extensions stuff :? what are the things that <code>haskell-mode</code> that <code>lsp-haskell</code> is not good enough at?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#259042760" name="259042760"><div>2021-10-26 01:54:53</div></a></div><div class="text"><p>Does <code>lsp-mode</code> work with ghci or ghcid?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#259058057" name="259058057"><div>2021-10-26 06:55:27</div></a></div><div class="text"><p>I think it uses a ghci session to collect info from ghc</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

@@ -1,0 +1,129 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Introducing filesystem hierarchy support in Ka https://www.srid.ca/a2691ce4.html" name="description"><link href="https://funprog.srid.ca/neuron/ka-updates.html" rel="canonical"><meta property="og:title" content="Ka updates - Neuron"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Neuron"><meta property="og:article:modified_time" content="2020-11-11T21:43:21Z"><meta property="og:article:published_time" content="2020-10-19T21:06:53Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"><title>Ka updates - Neuron</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Ka updates - Neuron</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/neuron/" class="section">#Neuron</a><i class="right angle icon divider"></i><div class="active section">Ka updates</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#213846042" name="213846042"><div>2020-10-19 21:06:53</div></a></div><div class="text"><p>Introducing filesystem hierarchy support in Ka <a href="https://www.srid.ca/a2691ce4.html">https://www.srid.ca/a2691ce4.html</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#213846083" name="213846083"><div>2020-10-19 21:07:14</div></a></div><div class="text"><p>Also added a video demo to <a href="https://www.srid.ca/ka.html">https://www.srid.ca/ka.html</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#215267555" name="215267555"><div>2020-11-01 23:15:25</div></a></div><div class="text"><p>By the way, if anybody else is curious - let me know, I can give you access to ka (require a GitHub username)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#215270795" name="215270795"><div>2020-11-02 00:46:25</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span> <a href="#narrow/stream/231929-Neuron/topic/Ka.20updates/near/215267555">said</a>:</p>
+<blockquote>
+<p>By the way, if anybody else is curious - let me know, I can give you access to ka (require a GitHub username)</p>
+</blockquote>
+<p>I'm definitely curious to know more!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#215273134" name="215273134"><div>2020-11-02 01:51:10</div></a></div><div class="text"><p>What's your Github  username?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#215273506" name="215273506"><div>2020-11-02 02:01:13</div></a></div><div class="text"><p><a href="https://github.com/rizary">https://github.com/rizary</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/rizary" style="background-image: url(https://avatars2.githubusercontent.com/u/7221768?s=400&amp;u=459cf5c55dad860606f56959a29bc1f9941a2dec&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/rizary" title="Rizary - Overview">Rizary - Overview</a></div><div class="message_embed_description">From Lawyer to Haskell Enthusiast
+. Rizary has 157 repositories available. Follow their code on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#215273559" name="215273559"><div>2020-11-02 02:02:20</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251394">@Rizary</span> invited; checkout meta info <a href="#narrow/stream/234801-VideoChat/topic/Reflex.20.2F.20Obelisk.20demo/near/215270130">here</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#215273782" name="215273782"><div>2020-11-02 02:08:57</div></a></div><div class="text"><p>nice!! thank you!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#215273869" name="215273869"><div>2020-11-02 02:11:43</div></a></div><div class="text"><p>this repo is really cool! TIL I can finally leaving reflex-platform in Nix.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f8bfbf378e5c718a138a94ec461d33e0"></a><div class="content"><a class="author">troy</a><div class="metadata"><a href="#215422816" name="215422816"><div>2020-11-03 08:18:23</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span> <a href="#narrow/stream/231929-Neuron/topic/Ka.20updates/near/215267555">said</a>:</p>
+<blockquote>
+<p>By the way, if anybody else is curious - let me know, I can give you access to ka (require a GitHub username)</p>
+</blockquote>
+<p>I would also be happy to try it out. My github user id is rroy1729</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#215481487" name="215481487"><div>2020-11-03 16:59:33</div></a></div><div class="text"><p><span class="user-mention" data-user-id="347684">@troy</span> done.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/f8bfbf378e5c718a138a94ec461d33e0"></a><div class="content"><a class="author">troy</a><div class="metadata"><a href="#215677870" name="215677870"><div>2020-11-05 07:24:29</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span> <a href="#narrow/stream/231929-Neuron/topic/Ka.20updates/near/215481487">said</a>:</p>
+<blockquote>
+<p><span class="user-mention silent" data-user-id="347684">troy</span> done.</p>
+</blockquote>
+<p>Thanks. I need to figure out how to install it on my Mac.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#215983782" name="215983782"><div>2020-11-08 01:54:15</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251311">@Sridhar Ratnakumar</span> is there any place to discuss about Ka? or open up topic under <a class="stream" data-stream-id="231929" href="/#narrow/stream/231929-Neuron">#Neuron</a>  is fine?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#215984310" name="215984310"><div>2020-11-08 02:09:12</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251394">@Rizary</span> Sure, open up a topic in <a class="stream" data-stream-id="231929" href="/#narrow/stream/231929-Neuron">#Neuron</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#216228771" name="216228771"><div>2020-11-10 15:39:58</div></a></div><div class="text"><p>Thre is also Matrix: <a href="https://app.element.io/#/room/#neuron:matrix.org">https://app.element.io/#/room/#neuron:matrix.org</a></p>
+<p>I'll be posting updates there.</p>
+<div class="message_embed"><a class="message_embed_image" href="https://app.element.io/#/room/#neuron:matrix.org" style="background-image: url(https://app.element.io/themes/element/img/logos/opengraph.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://app.element.io/#/room/#neuron:matrix.org" title="Element">Element</a></div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#216229369" name="216229369"><div>2020-11-10 15:44:03</div></a></div><div class="text"><p>.. and here as well (as links to blog post)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#216229422" name="216229422"><div>2020-11-10 15:44:19</div></a></div><div class="text"><p>The previous blog post was: <a href="https://ka.srid.ca/Ka_inspired_neuron's_contextual_backlinks_feature.html">https://ka.srid.ca/Ka_inspired_neuron's_contextual_backlinks_feature.html</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#216288078" name="216288078"><div>2020-11-10 23:15:54</div></a></div><div class="text"><p>We can also discuss here: <a href="https://github.com/srid/neuron/discussions">https://github.com/srid/neuron/discussions</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/discussions" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/discussions" title="srid/neuron">srid/neuron</a></div><div class="message_embed_description">Future-proof and simple-to-use notes system based on Zettelkasten. - srid/neuron</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#216402459" name="216402459"><div>2020-11-11 21:43:21</div></a></div><div class="text"><p>New post: <a href="https://ka.srid.ca/Browse_filesystem_hierarchy.html">https://ka.srid.ca/Browse_filesystem_hierarchy.html</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

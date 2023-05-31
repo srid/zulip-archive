@@ -1,0 +1,206 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I modified intercept so that the handler must return Maybe:
+interceptPartialUsingH ::
+  ∀ e r a .
+  Member e r =&gt;
+  ElemOf e r -&gt;
+  (∀ x rInitial . e (Sem rInitial) x -&gt; Tactical e (Sem rInitial) r (Maybe x)) -&gt;
+  Sem r a -&gt;
+  Sem r a
+interceptPartialUsingH pr f (Sem m) =
+  Sem \ (k :: ∀ b . Union r" name="description"><link href="https://funprog.srid.ca/polysemy/interceptpartial.html" rel="canonical"><meta property="og:title" content="interceptPartial - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2021-09-24T18:56:27Z"><meta property="og:article:published_time" content="2021-08-22T22:30:35Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"><title>interceptPartial - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">interceptPartial - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">interceptPartial</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250296421" name="250296421"><div>2021-08-22 22:30:35</div></a></div><div class="text"><p>I modified <code>intercept</code> so that the handler must return <code>Maybe</code>:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">interceptPartialUsingH</span> <span class="ow">::</span>
+  <span class="err">∀</span> <span class="n">e</span> <span class="n">r</span> <span class="n">a</span> <span class="o">.</span>
+  <span class="kt">Member</span> <span class="n">e</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">ElemOf</span> <span class="n">e</span> <span class="n">r</span> <span class="ow">-&gt;</span>
+  <span class="p">(</span><span class="err">∀</span> <span class="n">x</span> <span class="n">rInitial</span> <span class="o">.</span> <span class="n">e</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">rInitial</span><span class="p">)</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">Tactical</span> <span class="n">e</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">rInitial</span><span class="p">)</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">x</span><span class="p">))</span> <span class="ow">-&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">-&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">interceptPartialUsingH</span> <span class="n">pr</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">m</span><span class="p">)</span> <span class="ow">=</span>
+  <span class="kt">Sem</span> <span class="nf">\</span> <span class="p">(</span><span class="n">k</span> <span class="ow">::</span> <span class="err">∀</span> <span class="n">b</span> <span class="o">.</span> <span class="kt">Union</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="nf">\</span> <span class="p">(</span><span class="n">u</span> <span class="ow">::</span> <span class="kt">Union</span> <span class="n">r</span> <span class="p">(</span><span class="kt">Sem</span> <span class="n">r</span><span class="p">)</span> <span class="n">x</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kr">case</span> <span class="n">prjUsing</span> <span class="n">pr</span> <span class="n">u</span> <span class="kr">of</span>
+    <span class="kt">Just</span> <span class="p">(</span><span class="kt">Weaving</span> <span class="n">e</span> <span class="n">s</span> <span class="n">d</span> <span class="n">y</span> <span class="n">v</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
+      <span class="n">result</span> <span class="ow">&lt;-</span> <span class="n">usingSem</span> <span class="n">k</span> <span class="o">$</span>
+        <span class="n">runTactics</span> <span class="n">s</span> <span class="p">(</span><span class="n">raise</span> <span class="o">.</span> <span class="n">d</span><span class="p">)</span> <span class="n">v</span> <span class="p">(</span><span class="n">interceptPartialUsingH</span> <span class="n">pr</span> <span class="n">f</span> <span class="o">.</span> <span class="n">d</span><span class="p">)</span> <span class="o">$</span>
+        <span class="n">f</span> <span class="n">e</span>
+      <span class="n">maybe</span> <span class="p">(</span><span class="n">k</span> <span class="o">$</span> <span class="n">hoist</span> <span class="p">(</span><span class="n">interceptPartialUsingH</span> <span class="n">pr</span> <span class="n">f</span><span class="p">)</span> <span class="n">u</span><span class="p">)</span> <span class="p">(</span><span class="n">pure</span> <span class="o">.</span> <span class="n">y</span> <span class="o">.</span> <span class="p">(</span><span class="o">&lt;$</span> <span class="n">s</span><span class="p">))</span> <span class="p">(</span><span class="n">join</span> <span class="p">(</span><span class="n">v</span> <span class="n">result</span><span class="p">))</span>
+    <span class="kt">Nothing</span> <span class="ow">-&gt;</span>
+      <span class="n">k</span> <span class="o">$</span> <span class="n">hoist</span> <span class="p">(</span><span class="n">interceptPartialUsingH</span> <span class="n">pr</span> <span class="n">f</span><span class="p">)</span> <span class="n">u</span>
+<span class="cm">{-# inline interceptPartialUsingH #-}</span>
+</code></pre></div>
+<p>so that interpretation is deferred to the next interpreter if <code>Nothing</code> is returned, making it possible to create a catch-all case:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">data</span> <span class="kt">Ip</span> <span class="ow">::</span> <span class="kt">Effect</span> <span class="kr">where</span>
+  <span class="kt">Ip</span> <span class="ow">::</span> <span class="kt">Ip</span> <span class="n">m</span> <span class="kt">Int</span>
+  <span class="kt">Other</span> <span class="ow">::</span> <span class="kt">Ip</span> <span class="n">m</span> <span class="kt">Int</span>
+  <span class="kt">Another</span> <span class="ow">::</span> <span class="kt">Ip</span> <span class="n">m</span> <span class="kt">Int</span>
+
+<span class="nf">makeSem</span> <span class="kt">''Ip</span>
+
+<span class="nf">interpretIp</span> <span class="ow">::</span>
+  <span class="kt">Member</span> <span class="p">(</span><span class="kt">State</span> <span class="kt">Int</span><span class="p">)</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">InterpreterFor</span> <span class="kt">Ip</span> <span class="n">r</span>
+<span class="nf">interpretIp</span> <span class="ow">=</span>
+  <span class="n">interpret</span> <span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">Ip</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="mi">23</span>
+    <span class="kt">Other</span> <span class="ow">-&gt;</span> <span class="n">gets</span> <span class="p">(</span><span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="kt">Another</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="mi">42</span>
+
+<span class="nf">interceptIp</span> <span class="ow">::</span>
+  <span class="kt">Members</span> <span class="p">[</span><span class="kt">Ip</span><span class="p">,</span> <span class="kt">State</span> <span class="kt">Int</span><span class="p">]</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">-&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">interceptIp</span> <span class="ow">=</span>
+  <span class="n">interceptPartial</span> <span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">Ip</span> <span class="ow">-&gt;</span> <span class="kt">Just</span> <span class="mi">4</span> <span class="o">&lt;$</span> <span class="n">put</span> <span class="mi">3</span>
+    <span class="kr">_</span> <span class="ow">-&gt;</span> <span class="n">pure</span> <span class="kt">Nothing</span>
+
+<span class="nf">test_interceptPartial</span> <span class="ow">::</span> <span class="kt">UnitTest</span>
+<span class="nf">test_interceptPartial</span> <span class="ow">=</span>
+  <span class="n">runTest</span> <span class="kr">do</span>
+    <span class="n">evalState</span> <span class="mi">0</span> <span class="kr">do</span>
+      <span class="p">(</span><span class="n">interpretIp</span> <span class="o">.</span> <span class="n">interceptIp</span><span class="p">)</span> <span class="kr">do</span>
+        <span class="n">i1</span> <span class="ow">&lt;-</span> <span class="n">ip</span>
+        <span class="n">i2</span> <span class="ow">&lt;-</span> <span class="n">other</span>
+        <span class="mi">12</span> <span class="o">===</span> <span class="p">(</span><span class="n">i1</span> <span class="o">+</span> <span class="n">i2</span><span class="p">)</span>
+</code></pre></div>
+<p>Not sure this is sane. <span class="user-mention" data-user-id="254034">@Love Waern (King of the Homeless)</span> ?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250313346" name="250313346"><div>2021-08-23 05:50:05</div></a></div><div class="text"><p><del>It's sane,</del> but (somewhat) redundant: the existing pattern to achieve the same thing is to re-send the effect, like this:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">interceptIp</span> <span class="ow">::</span>
+  <span class="kt">Members</span> <span class="p">[</span><span class="kt">Ip</span><span class="p">,</span> <span class="kt">State</span> <span class="kt">Int</span><span class="p">]</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">-&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">interceptIp</span> <span class="ow">=</span>
+  <span class="n">intercept</span> <span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">Ip</span> <span class="ow">-&gt;</span> <span class="mi">4</span> <span class="o">&lt;$</span> <span class="n">put</span> <span class="mi">3</span>
+    <span class="n">u</span> <span class="ow">-&gt;</span> <span class="n">send</span> <span class="p">(</span><span class="n">coerce</span> <span class="n">u</span><span class="p">)</span>
+</code></pre></div>
+<p>However, as you can see, doing so generically requires 1. using coerce; 2. using the still-internal-for-some-reason <code>send</code> 3. is only possible with first-order effects since <code>interpretH</code> is bad.<br>
+Yeah that's not exactly convincing. However, the in-progress rework of higher-order effect interpretation has a  solution to all this, so I figure I should <em>really just get to completing that</em> rather than adding <code>interpretPartial</code> to <code>polysemy</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250313563" name="250313563"><div>2021-08-23 05:55:35</div></a></div><div class="text"><p>Wait, you're using the inspector in the interpreter, and then discard the functorial state given by the calculation. Yeah, that's not sane.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250335600" name="250335600"><div>2021-08-23 10:57:16</div></a></div><div class="text"><p>ah, damn. didn't know about the <code>coerce</code> trick, that looks adequate.</p>
+<p>regarding the discarded state, can you demonstrate how this could be preserved in my code?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250340159" name="250340159"><div>2021-08-23 11:51:15</div></a></div><div class="text"><p>I don't think you can with the <code>weave</code> abstraction as core. Again, I <em>really</em> should get to completing that core rewrite.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250340448" name="250340448"><div>2021-08-23 11:53:40</div></a></div><div class="text"><p>It is done, really. The only thing really holding it up is some questions about complexity, and "how much of the old API do we want to throw away vs. leave alone for backwards compatibility"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250340538" name="250340538"><div>2021-08-23 11:54:11</div></a></div><div class="text"><p>I'll work on it once I'm done with my other work for the day.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250340646" name="250340646"><div>2021-08-23 11:55:25</div></a></div><div class="text"><p>oh wow, awesome</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250340662" name="250340662"><div>2021-08-23 11:55:38</div></a></div><div class="text"><p>are you working on your thesis still?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250340682" name="250340682"><div>2021-08-23 11:55:51</div></a></div><div class="text"><p>No, that one's complete. I've got an actual job now.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250340778" name="250340778"><div>2021-08-23 11:56:30</div></a></div><div class="text"><p>ah, nice <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span> did you mention that before? where you working at?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250341078" name="250341078"><div>2021-08-23 11:59:47</div></a></div><div class="text"><p>I'm working at Intel, at their simulator department. My thesis is called "Coroutines for Simics Device Modeling Language" -- Simics is the (primary) simulator in question. I'll probably work on implementing what my thesis is about, sooner or later. Anything more probably isn't safe to say.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250341194" name="250341194"><div>2021-08-23 12:00:21</div></a></div><div class="text"><p>The report will be public, but the university hasn't published it yet.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250341506" name="250341506"><div>2021-08-23 12:03:05</div></a></div><div class="text"><p>wow, sounds very impressive! that simulates cpus?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250341544" name="250341544"><div>2021-08-23 12:03:38</div></a></div><div class="text"><p>Simics is a full-system simulator: it simulates CPUs and peripheral devices interacting with the CPU and each-other.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250341628" name="250341628"><div>2021-08-23 12:04:15</div></a></div><div class="text"><p>Peripheral devices are simulated through high-level behavioral models, rather than RTL -- this allows simulation to be fast and development of device models simple.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250341644" name="250341644"><div>2021-08-23 12:04:31</div></a></div><div class="text"><p>Simics DML is the primary modeling language for such device models.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250341646" name="250341646"><div>2021-08-23 12:04:32</div></a></div><div class="text"><p>crazy. does this run in software only or some FPGA stuff?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250341698" name="250341698"><div>2021-08-23 12:05:11</div></a></div><div class="text"><p>Simics runs in software. You can probably rig it to make use of/connect FPGA:s; it's flexible.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250341810" name="250341810"><div>2021-08-23 12:06:06</div></a></div><div class="text"><p>My thesis concerns the fact that asynchronous procedures (especially communication) is very common in device models, yet DML does not have a dedicated abstraction for it -- so users are forced to roll FSMs, which are insanely boilerplate heavy.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250341829" name="250341829"><div>2021-08-23 12:06:20</div></a></div><div class="text"><p>So my thesis develops coroutine designs for use in DML to address that.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250341899" name="250341899"><div>2021-08-23 12:07:07</div></a></div><div class="text"><p>Only designs though -- which the thesis does not implement, it only suggests potential implementation approaches.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250342072" name="250342072"><div>2021-08-23 12:08:56</div></a></div><div class="text"><p>very curious to read that!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250342149" name="250342149"><div>2021-08-23 12:09:54</div></a></div><div class="text"><p>I'll let you know once the university decides to publish it. Beware, it's some like 120 pages long.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250342150" name="250342150"><div>2021-08-23 12:09:57</div></a></div><div class="text"><p>I write too much.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250343737" name="250343737"><div>2021-08-23 12:25:27</div></a></div><div class="text"><p><span aria-label="grinning" class="emoji emoji-1f600" role="img" title="grinning">:grinning:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250379963" name="250379963"><div>2021-08-23 16:59:04</div></a></div><div class="text"><p>Turns out I'm too tired to work on it now. To make up for it a bit, I've pushed up yet another branch where you can look at the current progress of that core rewrite work. It's not completely polished.<br>
+I'm so tempted to just rip out all the old <code>interpretH</code> stuff and not care about backwards compatibility. The core rewrite is intended for v2.0 anyway, so there's a real argument to commit to that. That's the sort of decisions I shouldn't do alone, though.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250380025" name="250380025"><div>2021-08-23 16:59:46</div></a></div><div class="text"><p><a href="https://github.com/polysemy-research/polysemy/tree/interpreth-powerful-wip">https://github.com/polysemy-research/polysemy/tree/interpreth-powerful-wip</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250380138" name="250380138"><div>2021-08-23 17:00:12</div></a></div><div class="text"><p>ooh, nice</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250380493" name="250380493"><div>2021-08-23 17:02:18</div></a></div><div class="text"><p>Most notable, did a rewrite to <code>Final</code>, and <code>RunH</code> is now a <em>very</em> curious beast.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250380574" name="250380574"><div>2021-08-23 17:02:56</div></a></div><div class="text"><p>it basically depicts <code>MonadTransControl</code> in all but name</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250380653" name="250380653"><div>2021-08-23 17:03:28</div></a></div><div class="text"><div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">liftWithH</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">z</span> <span class="n">t</span> <span class="n">e</span> <span class="n">r</span> <span class="n">r'</span> <span class="n">a</span>
+           <span class="o">.</span> <span class="p">((</span><span class="n">forall</span> <span class="n">x</span><span class="o">.</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">RunH</span> <span class="n">z</span> <span class="n">t</span> <span class="n">e</span> <span class="n">r</span> <span class="kt">':</span> <span class="n">r</span><span class="p">)</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r</span> <span class="p">(</span><span class="n">t</span> <span class="n">x</span><span class="p">))</span> <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="n">r'</span> <span class="n">a</span><span class="p">)</span>
+          <span class="ow">-&gt;</span> <span class="kt">Sem</span> <span class="p">(</span><span class="kt">RunH</span> <span class="n">z</span> <span class="n">t</span> <span class="n">e</span> <span class="n">r</span> <span class="kt">':</span> <span class="n">r'</span><span class="p">)</span> <span class="n">a</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250381071" name="250381071"><div>2021-08-23 17:06:14</div></a></div><div class="text"><p>Oh yeah, and you can spot <code>propagate</code> there, too, which is the solution to the intercept stuff we talked about.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#250381199" name="250381199"><div>2021-08-23 17:07:22</div></a></div><div class="text"><div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">interceptIp</span> <span class="ow">::</span>
+  <span class="kt">Members</span> <span class="p">[</span><span class="kt">Ip</span><span class="p">,</span> <span class="kt">State</span> <span class="kt">Int</span><span class="p">]</span> <span class="n">r</span> <span class="ow">=&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">-&gt;</span>
+  <span class="kt">Sem</span> <span class="n">r</span> <span class="n">a</span>
+<span class="nf">interceptIp</span> <span class="ow">=</span>
+  <span class="n">interceptNew</span> <span class="nf">\</span><span class="kr">case</span>
+    <span class="kt">Ip</span> <span class="ow">-&gt;</span> <span class="mi">4</span> <span class="o">&lt;$</span> <span class="n">put</span> <span class="mi">3</span>
+    <span class="n">e</span> <span class="ow">-&gt;</span> <span class="n">propagate</span> <span class="n">e</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250413399" name="250413399"><div>2021-08-23 21:18:57</div></a></div><div class="text"><p>wow, <code>interpretNew</code> is crazy <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250414938" name="250414938"><div>2021-08-23 21:32:29</div></a></div><div class="text"><p>so <code>runM</code> is now unified over <code>Final</code> and <code>Embed</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250415170" name="250415170"><div>2021-08-23 21:34:39</div></a></div><div class="text"><p>and <code>interpretNew</code> is supposed to be used for first-order effects as well?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#250417129" name="250417129"><div>2021-08-23 21:53:41</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="254034">Love Waern (King of the Homeless)</span> <a href="#narrow/stream/216942-Polysemy/topic/interceptPartial/near/250313563">said</a>:</p>
+<blockquote>
+<p>Wait, you're using the inspector in the interpreter, and then discard the functorial state given by the calculation. Yeah, that's not sane.</p>
+</blockquote>
+<p>I'm wondering, why is the <code>put 3</code> in the example effectful? shouldn't it be discarded?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#254662882" name="254662882"><div>2021-09-24 07:28:37</div></a></div><div class="text"><p>The university decided to stop dragging their feet after some nagging and published my thesis!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#254662883" name="254662883"><div>2021-09-24 07:28:40</div></a></div><div class="text"><p><a href="https://uu.diva-portal.org/smash/record.jsf?dswid=3769">https://uu.diva-portal.org/smash/record.jsf?dswid=3769</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#254662888" name="254662888"><div>2021-09-24 07:28:46</div></a></div><div class="text"><p>Again, beware, 120 pages long.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#254663502" name="254663502"><div>2021-09-24 07:35:19</div></a></div><div class="text"><blockquote>
+<p>The record could not be found. The reason may be that the record is no longer available or you may have typed in a wrong id in the address field.</p>
+</blockquote>
+<p>:((</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#254663542" name="254663542"><div>2021-09-24 07:35:43</div></a></div><div class="text"><p>for some reason it redirects to a random <code>dswid</code> value every time</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#254675301" name="254675301"><div>2021-09-24 09:21:08</div></a></div><div class="text"><p>Found "Coroutines for Simics Device Modeling Language" by searching for "Love Waern"</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#254681743" name="254681743"><div>2021-09-24 10:21:24</div></a></div><div class="text"><p>yaaaay awesome!! <span aria-label="tada" class="emoji emoji-1f389" role="img" title="tada">:tada:</span> <span aria-label="party ball" class="emoji emoji-1f38a" role="img" title="party ball">:party_ball:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/f1ec33bcc6144366b30e479d6b3bed74cdb9f611?version=4"></a><div class="content"><a class="author">Love Waern (King of the Homeless)</a><div class="metadata"><a href="#254754513" name="254754513"><div>2021-09-24 18:56:27</div></a></div><div class="text"><p>whoops, sorry, this should be permanent: <a href="http://urn.kb.se/resolve?urn=urn:nbn:se:uu:diva-453889">http://urn.kb.se/resolve?urn=urn:nbn:se:uu:diva-453889</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

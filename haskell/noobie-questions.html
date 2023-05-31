@@ -1,0 +1,117 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Ah, interesting :) Yea, LISP doesn&#39;t scare me. I can throw brackets at people any time, any day :&gt;" name="description"><link href="https://funprog.srid.ca/haskell/noobie-questions.html" rel="canonical"><meta property="og:title" content="Noobie questions - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-01-22T12:42:23Z"><meta property="og:article:published_time" content="2021-01-21T11:22:28Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/37ad3467538d933e9381d9d9da5af7fb72d87ede?version=4"><title>Noobie questions - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Noobie questions - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Noobie questions</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/37ad3467538d933e9381d9d9da5af7fb72d87ede?version=4"></a><div class="content"><a class="author">Mikolaj Kubera</a><div class="metadata"><a href="#223495346" name="223495346"><div>2021-01-21 11:22:28</div></a></div><div class="text"><p>Ah, interesting :) Yea, LISP doesn't scare me. I can throw brackets at people any time, any day :&gt;</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/37ad3467538d933e9381d9d9da5af7fb72d87ede?version=4"></a><div class="content"><a class="author">Mikolaj Kubera</a><div class="metadata"><a href="#223496316" name="223496316"><div>2021-01-21 11:33:46</div></a></div><div class="text"><p><span class="user-mention" data-user-id="338020">@Mason Mackaman</span> Haskell is my goal atm, but I can see your point. Can you tell me why the move from Elm to PS, and does PS implement TEA or something equivalent?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/37ad3467538d933e9381d9d9da5af7fb72d87ede?version=4"></a><div class="content"><a class="author">Mikolaj Kubera</a><div class="metadata"><a href="#223501705" name="223501705"><div>2021-01-21 12:37:40</div></a></div><div class="text"><p>I'm just toying with Prelude's fns in ghci. <a href="https://hackage.haskell.org/package/Prelude-0.1.0.1/docs/Prelude.html#g:14">https://hackage.haskell.org/package/Prelude-0.1.0.1/docs/Prelude.html#g:14</a><br>
+<code>head</code>,<code>last</code>,<code>init</code>,and <code>tail</code> all throw a value without <code>Maybe</code>, though. Is there something I do not know here? :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#223501790" name="223501790"><div>2021-01-21 12:38:24</div></a></div><div class="text"><p>you should know never to use those!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#223501847" name="223501847"><div>2021-01-21 12:39:04</div></a></div><div class="text"><p>there are multiple alternative packages that provide a safer prelude, highly recommended</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#223501860" name="223501860"><div>2021-01-21 12:39:23</div></a></div><div class="text"><p><a href="https://hackage.haskell.org/package/relude">https://hackage.haskell.org/package/relude</a> for example</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/37ad3467538d933e9381d9d9da5af7fb72d87ede?version=4"></a><div class="content"><a class="author">Mikolaj Kubera</a><div class="metadata"><a href="#223501864" name="223501864"><div>2021-01-21 12:39:25</div></a></div><div class="text"><p>Oh, didn't know that.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#223501920" name="223501920"><div>2021-01-21 12:40:03</div></a></div><div class="text"><p>not trivial to use with ghci though.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#223501986" name="223501986"><div>2021-01-21 12:40:31</div></a></div><div class="text"><p>bit of a problem area for haskell</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/37ad3467538d933e9381d9d9da5af7fb72d87ede?version=4"></a><div class="content"><a class="author">Mikolaj Kubera</a><div class="metadata"><a href="#223505588" name="223505588"><div>2021-01-21 13:14:58</div></a></div><div class="text"><p>kk, thanks <span class="user-mention" data-user-id="260881">@Torsten Schmits</span> I will poke around :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#223506923" name="223506923"><div>2021-01-21 13:26:41</div></a></div><div class="text"><blockquote>
+<p>Can you tell me why the move from Elm to PS, and does PS implement TEA or something equivalent?</p>
+</blockquote>
+<p>Compared to PS/HS, Elm feels a little bit like a web-specific DSL - nothing is really stopping you from implementing Elm architecture in these, but at the same time you're free to implement completely different approaches.<br>
+Similarly, Elm only has few builtin typeclasses, while HS/PS let you implement and instantiate your own, in any way you like</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3cea5dd94abba9982d34d28eef71efc0"></a><div class="content"><a class="author">Mason Mackaman</a><div class="metadata"><a href="#223524115" name="223524115"><div>2021-01-21 15:30:10</div></a></div><div class="text"><p><span class="user-mention" data-user-id="313193">@Mikolaj Kubera</span> as <span class="user-mention" data-user-id="225127">@TheMatten</span>  said, you can implement TEA in purescript (I've basically done this myself!). The more haskell you learn the more you'll see why I switched. The main reason I loved elm, other than ADTs, was the compiler could catch nearly all the errors for you. Well PS/Haskell also offer that benefit, but with many more capabilities.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#223568961" name="223568961"><div>2021-01-21 20:54:55</div></a></div><div class="text"><p>For completeness, I should mention that in your own code, you can throw errors without <code>Maybe</code> by using the <code>error</code> function, though as <span class="user-mention" data-user-id="260881">@Torsten Schmits</span> says you shouldn’t usually use those. The one area where I regularly use it is for code paths which shouldn’t ever be reached, but I can’t statically ensure this. A contrived example: <code>let x' = ("key","value") : x in case lookup "key" x' of { Just _ -&gt; "worked" ; Nothing -&gt; error "this part should never be reached" }</code>.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/eafc0f7c35b3424a69f878734f94ede4"></a><div class="content"><a class="author">bradrn</a><div class="metadata"><a href="#223569369" name="223569369"><div>2021-01-21 20:58:22</div></a></div><div class="text"><p><span class="user-mention" data-user-id="260881">@Torsten Schmits</span> Surely you don’t actually _need_ an alternative Prelude, right? I’ve always just used plain <code>Prelude</code>and never really had any problems with it.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#223570472" name="223570472"><div>2021-01-21 21:07:44</div></a></div><div class="text"><p>It's good to treat <code>error</code> as equivalent of <code>panic!</code> from Rust</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/67dba8dccee74946586f0fa81945a7ce22dc273b?version=2"></a><div class="content"><a class="author">Mats Rauhala</a><div class="metadata"><a href="#223635286" name="223635286"><div>2021-01-22 12:37:57</div></a></div><div class="text"><p>Yeah. You don't need an alternative prelude. You need to be careful with those partial functions though. You can implement your own total <code>headMaybe</code> and the likes, I usually prefer going through the <code>NonEmpty</code> list if I want to stay in <code>base</code></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#223635403" name="223635403"><div>2021-01-22 12:39:09</div></a></div><div class="text"><p>it's true that you don't <em>need</em> one, but you might as well use it, if you're going to be using those functions, especially if you're writing an application</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#223635680" name="223635680"><div>2021-01-22 12:42:23</div></a></div><div class="text"><p>(and for the other things a custom prelude provides of course)</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
