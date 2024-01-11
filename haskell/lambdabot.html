@@ -1,0 +1,122 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="@Asad Saeeduddin We don&#39;t have Lambdabot yet - we would need some server to power zulip bot itself" name="description"><link href="https://funprog.srid.ca/haskell/lambdabot.html" rel="canonical"><meta property="og:title" content="Lambdabot - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-02-21T21:32:31Z"><meta property="og:article:published_time" content="2020-03-09T10:52:29Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"><title>Lambdabot - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Lambdabot - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Lambdabot</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#190057407" name="190057407"><div>2020-03-09 10:52:29</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225136">@Asad Saeeduddin</span> We don't have Lambdabot yet - we would need some server to power zulip bot itself</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#190057828" name="190057828"><div>2020-03-09 10:58:38</div></a></div><div class="text"><p><span class="user-mention" data-user-id="225127">@TheMatten</span> Is it possible to run this server in a Docker container?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#190057861" name="190057861"><div>2020-03-09 10:59:18</div></a></div><div class="text"><p>I have a VPS I can run it on, provided it can be resource limited and isolated from the rest of the system</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#190058109" name="190058109"><div>2020-03-09 11:02:35</div></a></div><div class="text"><p>It think it shouldn't be a problem - though I would like to create our own bot based on <code>hint</code> if possible, because original Lambdabot is a little bit buggy and has limited imports</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#190058164" name="190058164"><div>2020-03-09 11:03:43</div></a></div><div class="text"><p>We should be able to limit resources through GHC flags - then there's <code>Safe</code> flag to limit unsafe features of language, plus we could provide some fake <code>IO</code> with limited functionality</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#190058235" name="190058235"><div>2020-03-09 11:04:43</div></a></div><div class="text"><p>And it would be nice to be able to import some restricted set of common packages, or at least have them available - like, most of Kmett's stuff</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#190058280" name="190058280"><div>2020-03-09 11:05:18</div></a></div><div class="text"><p>I'm not sure I trust resource limiting at the application level that much. If I run it on my VPS I'd want to put it in a Docker container and enforce network/file/resource access using the standard containerization primitives</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#190058383" name="190058383"><div>2020-03-09 11:06:27</div></a></div><div class="text"><p>that said if it's inside a container I don't really care whether it uses safe or unsafe features</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#190058432" name="190058432"><div>2020-03-09 11:07:07</div></a></div><div class="text"><p>is a <code>hint</code> based bot persistent, or can it be started up to serve a request and then disposed?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#190058977" name="190058977"><div>2020-03-09 11:14:42</div></a></div><div class="text"><p>We can do both - it could potentially limit amount of needed restarts if users try something fancy, and one never knows if there isn't something Docker could potentially miss<br>
+Not sure how <code>hint</code> handles it precisely - but looking at code it seems like it's <code>InterepreterT</code> is run by initializing new GHC session?: <a href="https://www.stackage.org/haddock/lts-14.25/hint-0.9.0.2/src/Control.Monad.Ghc.html#rawRunGhcT" target="_blank" title="https://www.stackage.org/haddock/lts-14.25/hint-0.9.0.2/src/Control.Monad.Ghc.html#rawRunGhcT">https://www.stackage.org/haddock/lts-14.25/hint-0.9.0.2/src/Control.Monad.Ghc.html#rawRunGhcT</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#190059009" name="190059009"><div>2020-03-09 11:15:25</div></a></div><div class="text"><p>So if we ran every request in separate <code>InterpreterT</code>, it should "clean up" after itself?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#190063736" name="190063736"><div>2020-03-09 12:37:33</div></a></div><div class="text"><p>i don't see the appeal to lambdabot</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#190063775" name="190063775"><div>2020-03-09 12:37:59</div></a></div><div class="text"><p><code>ghci</code> is only four letters long :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#190063830" name="190063830"><div>2020-03-09 12:38:18</div></a></div><div class="text"><p><span class="user-mention" data-user-id="251120">@Sandy Maguire</span> I wanted to try out some free theorems, idk how you do that in ghci</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#190063843" name="190063843"><div>2020-03-09 12:38:39</div></a></div><div class="text"><p>how do you mean</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#190063847" name="190063847"><div>2020-03-09 12:38:42</div></a></div><div class="text"><p>The article I was looking at online said you can do it in lambdabot</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#190063870" name="190063870"><div>2020-03-09 12:39:04</div></a></div><div class="text"><p>Lambdabot has a feature where you can give it a type and it will tell you the free thorems of that type</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#190064128" name="190064128"><div>2020-03-09 12:43:55</div></a></div><div class="text"><p>fair enough</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#190064174" name="190064174"><div>2020-03-09 12:44:04</div></a></div><div class="text"><p>they're not too much work to run the maze on</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#204895392" name="204895392"><div>2020-07-24 09:28:48</div></a></div><div class="text"><p>Okay guys, I have (maybe crazy) idea how to do this basically for free:</p>
+<ul>
+<li>we get API token on <a href="http://run.glot.io">run.glot.io</a> to run snippets with hosted instance of GHC (<a href="https://github.com/prasmussen/glot-run">https://github.com/prasmussen/glot-run</a>)</li>
+<li>we register outgoing webhook in Zulip to send mentions to our worker (<a href="https://zulipchat.com/api/outgoing-webhooks">https://zulipchat.com/api/outgoing-webhooks</a>)</li>
+<li>we create Cloudflare worker (<a href="https://workers.cloudflare.com/">https://workers.cloudflare.com/</a>) that retrieves request from Zulip, sends request to <a href="http://glot.io">glot.io</a> and passes formatted result back to Zulip</li>
+<li><span aria-label="money" class="emoji emoji-1f4b0" role="img" title="money">:money:</span> <span aria-label="money" class="emoji emoji-1f4b0" role="img" title="money">:money:</span> profit <span aria-label="money" class="emoji emoji-1f4b0" role="img" title="money">:money:</span> <span aria-label="money" class="emoji emoji-1f4b0" role="img" title="money">:money:</span> - I don't think we can consume 100K requests, so we should stay in free tier, worse that can happen is 5$ for up to 10M <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></li>
+</ul>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/prasmussen/glot-run" style="background-image: url(https://avatars0.githubusercontent.com/u/720405?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/prasmussen/glot-run" title="prasmussen/glot-run">prasmussen/glot-run</a></div><div class="message_embed_description">API for running code inside docker containers. Contribute to prasmussen/glot-run development by creating an account on GitHub.</div></div></div><div class="message_embed"><a class="message_embed_image" href="https://zulipchat.com/api/outgoing-webhooks" style="background-image: url(https://zulipchat.com/static/images/logo/zulip-icon-128x128.png)"></a><div class="data-container"><div class="message_embed_title"><a href="https://zulipchat.com/api/outgoing-webhooks" title="Outgoing Webhooks (Zulip API Documentation)">Outgoing Webhooks (Zulip API Documentation)</a></div><div class="message_embed_description">Outgoing Webhooks allow you to build or set up Zulip integrations which are notified when certain types of messages are sent in Zulip. When one of those events is triggered, we'll send a HTTP POST payload to the webhook's configured URL. Webhooks can be used to power a wide range of Zulip integrations. For example, the Zulip Botserver is built on top of this API. | Zulip supports outgoing webhooks both in a clean native Zulip format, as well as a format that's compatible with Slack's outgoing webhook API, which can help with porting an existing Slack integration to work with Zulip.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#204895533" name="204895533"><div>2020-07-24 09:30:20</div></a></div><div class="text"><p>And I mean, it should be simple to generalize this to any of the <a href="https://github.com/prasmussen/glot-code-runner#supported-languages">supported languages</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/prasmussen/glot-code-runner#supported-languages" style="background-image: url(https://avatars0.githubusercontent.com/u/720405?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/prasmussen/glot-code-runner#supported-languages" title="prasmussen/glot-code-runner">prasmussen/glot-code-runner</a></div><div class="message_embed_description">Code runner. Contribute to prasmussen/glot-code-runner development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/db5b03704c129196a4e9415e55413ce6"></a><div class="content"><a class="author">Ryan</a><div class="metadata"><a href="#205044091" name="205044091"><div>2020-07-26 09:26:20</div></a></div><div class="text"><p>Worth noting that Google Cloud Run lets you run cloud functions from arbitrary Docker images with a generous free tier and built-in runtime restrictions</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/db5b03704c129196a4e9415e55413ce6"></a><div class="content"><a class="author">Ryan</a><div class="metadata"><a href="#205044109" name="205044109"><div>2020-07-26 09:27:07</div></a></div><div class="text"><p>I think that could cover pretty much everything, the webhook could be directed towards the cloud run endpoint</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#227195050" name="227195050"><div>2021-02-21 21:25:40</div></a></div><div class="text"><p>What's the plan with zulip bots in here, <span class="user-mention" data-user-id="225127">@TheMatten</span>? I wonder if we can do something cool to lure people away from the run-of-the-mill FP slack ...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#227195248" name="227195248"><div>2021-02-21 21:29:43</div></a></div><div class="text"><p>Lambdabot equivalent is a must I guess <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span> <br>
+Additionally we can consider support for few other FP languages, and then maybe some utility bots for e.g. managing meetings</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#227195353" name="227195353"><div>2021-02-21 21:31:41</div></a></div><div class="text"><p>I don't think bots will be a big motivator</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#227195358" name="227195358"><div>2021-02-21 21:31:59</div></a></div><div class="text"><p>people already aren't motivated by the better features and usability (imo)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#227195409" name="227195409"><div>2021-02-21 21:32:31</div></a></div><div class="text"><p>having some concrete communites based here (like polysemy) seems like the thing that could attract people</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

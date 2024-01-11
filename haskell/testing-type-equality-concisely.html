@@ -1,0 +1,137 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I was unhappy with having to tinker with Refls when trying multiple matches on TypeRep, and I&#39;ve ended up with these helpers:
+-- introduces result in scope
+pattern Is :: () =&gt; a ~~ b =&gt; Maybe (a :~~: b)
+pattern Is = Just HRefl
+
+-- let&#39;s me pass expected type as type argument
+as :: forall a b. Typeab" name="description"><link href="https://funprog.srid.ca/haskell/testing-type-equality-concisely.html" rel="canonical"><meta property="og:title" content="Testing type equality concisely - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-10-28T17:58:18Z"><meta property="og:article:published_time" content="2020-10-28T17:49:46Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"><title>Testing type equality concisely - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Testing type equality concisely - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Testing type equality concisely</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214873766" name="214873766"><div>2020-10-28 17:49:46</div></a></div><div class="text"><p>I was unhappy with having to tinker with <code>Refl</code>s when trying multiple matches on <code>TypeRep</code>, and I've ended up with these helpers:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="c1">-- introduces result in scope</span>
+<span class="nf">pattern</span> <span class="kt">Is</span> <span class="ow">::</span> <span class="nb">()</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="o">~~</span> <span class="n">b</span> <span class="ow">=&gt;</span> <span class="kt">Maybe</span> <span class="p">(</span><span class="n">a</span> <span class="kt">:~~:</span> <span class="n">b</span><span class="p">)</span>
+<span class="nf">pattern</span> <span class="kt">Is</span> <span class="ow">=</span> <span class="kt">Just</span> <span class="kt">HRefl</span>
+
+<span class="c1">-- let's me pass expected type as type argument</span>
+<span class="nf">as</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">a</span> <span class="n">b</span><span class="o">.</span> <span class="kt">Typeable</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="kt">TypeRep</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="kt">Maybe</span> <span class="p">(</span><span class="n">a</span> <span class="kt">:~~:</span> <span class="n">b</span><span class="p">)</span>
+<span class="nf">as</span> <span class="ow">=</span> <span class="n">eqTypeRep</span> <span class="n">typeRep</span>
+</code></pre></div>
+
+<p>which can be used as</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">case</span> <span class="n">typeOf</span> <span class="n">x</span> <span class="kr">of</span>
+  <span class="p">(</span><span class="n">as</span> <span class="o">@</span><span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="kt">Is</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kr">_</span> <span class="c1">-- x ~~ Int in scope</span>
+</code></pre></div>
+
+<p>Am I reinventing the wheel and there's already something similar or better?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214874303" name="214874303"><div>2020-10-28 17:53:09</div></a></div><div class="text"><p>the <code>() =&gt;</code> is some hack for pattern synonyms?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214874664" name="214874664"><div>2020-10-28 17:55:02</div></a></div><div class="text"><p><code>PatternSynonyms</code> are sort of interesting because the can both want and provide constraints - to make it possible to declare both situations, GHC recognizes two separate constraints in their signatures as corresponding options</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214874752" name="214874752"><div>2020-10-28 17:55:31</div></a></div><div class="text"><p>So <code>Is</code> wants <code>()</code> (nothing) and provides <code>a ~~ b</code> <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214874864" name="214874864"><div>2020-10-28 17:56:05</div></a></div><div class="text"><p>Once we have type applications in patterns, we'll be able to do</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kt">As</span> <span class="o">@</span><span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="kr">_</span>
+</code></pre></div>
+
+<p>(I guess)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214874946" name="214874946"><div>2020-10-28 17:56:34</div></a></div><div class="text"><p>so does that mean you can't write <code>(a, b) =&gt; ...</code> as <code>a =&gt; b =&gt; ...</code> instead? :o</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214875019" name="214875019"><div>2020-10-28 17:57:01</div></a></div><div class="text"><p>Not in signatures of patterns, but you can otherwise</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#214875094" name="214875094"><div>2020-10-28 17:57:27</div></a></div><div class="text"><p>It's a <em>hack</em>, but not a terrible one</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/bd1c2dd9ab5e95cae3e7a38c2f373739e5a1acba?version=2"></a><div class="content"><a class="author">Georgi Lyubenov // googleson78</a><div class="metadata"><a href="#214875249" name="214875249"><div>2020-10-28 17:58:18</div></a></div><div class="text"><p>I would snoop around singletons, to see if there is something like what  you've defined</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

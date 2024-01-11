@@ -1,0 +1,185 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="is there a verbosity flag that supplies more information about missing instances? it would be nice to have the locations of where the instance was requested, not only the transitive callsite." name="description"><link href="https://funprog.srid.ca/haskell/instance-error-verbosity.html" rel="canonical"><meta property="og:title" content="instance error verbosity - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-09-21T22:05:07Z"><meta property="og:article:published_time" content="2020-09-18T17:09:41Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"><title>instance error verbosity - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">instance error verbosity - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">instance error verbosity</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#210548664" name="210548664"><div>2020-09-18 17:09:41</div></a></div><div class="text"><p>is there a verbosity flag that supplies more information about missing instances? it would be nice to have the locations of where the instance was requested, not only the transitive callsite.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/89529ef093c72e16a5ce3ac00d88f354ccc08cf9?version=2"></a><div class="content"><a class="author">Lysxia</a><div class="metadata"><a href="#210622418" name="210622418"><div>2020-09-19 16:11:57</div></a></div><div class="text"><p>Probably not. That sounds like a nice feature request.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#210622499" name="210622499"><div>2020-09-19 16:13:39</div></a></div><div class="text"><p>coincidentally, I built a similar thing for Scala</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/83d70d23ca1b42464032f434141b1503a290a7ec?version=2"></a><div class="content"><a class="author">Steven Shaw</a><div class="metadata"><a href="#210645234" name="210645234"><div>2020-09-20 02:19:30</div></a></div><div class="text"><p>Do you have an example of the error message that needs improvement? I'm having trouble understanding what you mean by transitive call site.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#210662560" name="210662560"><div>2020-09-20 11:33:20</div></a></div><div class="text"><p>sure!</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">class</span> <span class="kt">Foo</span> <span class="n">a</span> <span class="kr">where</span>
+
+<span class="kr">class</span> <span class="kt">Bar</span> <span class="n">a</span> <span class="kr">where</span>
+
+<span class="kr">instance</span> <span class="kt">Foo</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="kt">Bar</span> <span class="n">a</span> <span class="kr">where</span>
+
+<span class="nf">f</span> <span class="ow">::</span> <span class="kt">Bar</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span>
+<span class="nf">f</span> <span class="ow">=</span> <span class="n">undefined</span>
+
+<span class="nf">g</span> <span class="ow">::</span> <span class="kt">Int</span>
+<span class="nf">g</span> <span class="ow">=</span> <span class="n">f</span>
+</code></pre></div>
+
+
+<p>This results in the error</p>
+<div class="codehilite"><pre><span></span><code>    * No instance for (Foo Int) arising from a use of `f&#39;
+    * In the expression: f
+      In an equation for `g&#39;: g = f
+</code></pre></div>
+
+
+<p>where I would call <code>Foo</code> a transitive dependency of <code>f</code> via <code>Bar</code>, with the callsite being the equation for <code>g</code>.<br>
+In this case, I would like ghc to tell me that <code>Foo</code> was explicitly depended upon in the <code>Bar</code> instance.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/83d70d23ca1b42464032f434141b1503a290a7ec?version=2"></a><div class="content"><a class="author">Steven Shaw</a><div class="metadata"><a href="#210693864" name="210693864"><div>2020-09-21 01:02:32</div></a></div><div class="text"><p>Thanks, I've never noticed that before. It's a pretty terrible error message since you have no idea where (Foo Int) is needed.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/83d70d23ca1b42464032f434141b1503a290a7ec?version=2"></a><div class="content"><a class="author">Steven Shaw</a><div class="metadata"><a href="#210693944" name="210693944"><div>2020-09-21 01:05:51</div></a></div><div class="text"><p>I noticed that I had to put the following at the top the file when I tried your example code:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">{-# LANGUAGE FlexibleInstances #-}</span>
+<span class="cm">{-# LANGUAGE UndecidableInstances #-}</span>
+<span class="cm">{-# LANGUAGE MonoLocalBinds #-}</span>
+</code></pre></div>
+
+
+<p>I wonder if those extensions have a bearning on the poor error message?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/83d70d23ca1b42464032f434141b1503a290a7ec?version=2"></a><div class="content"><a class="author">Steven Shaw</a><div class="metadata"><a href="#210694147" name="210694147"><div>2020-09-21 01:11:35</div></a></div><div class="text"><p>It doesn't look like removing those extensions helps. I was able to remove the extensions by tweaking the example to :</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">module</span> <span class="nn">Foo</span> <span class="kr">where</span>
+
+<span class="kr">class</span> <span class="kt">Foo</span> <span class="n">q</span> <span class="kr">where</span>
+
+<span class="kr">class</span> <span class="kt">Bar</span> <span class="n">a</span> <span class="kr">where</span>
+
+<span class="kr">instance</span> <span class="kt">Foo</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="kt">Bar</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="kr">where</span>
+
+<span class="nf">f</span> <span class="ow">::</span> <span class="kt">Bar</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span>
+<span class="nf">f</span> <span class="ow">=</span> <span class="n">undefined</span>
+
+<span class="nf">g</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]</span>
+<span class="nf">g</span> <span class="ow">=</span> <span class="n">f</span>
+</code></pre></div>
+
+
+<p>The error message remains the same.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/83d70d23ca1b42464032f434141b1503a290a7ec?version=2"></a><div class="content"><a class="author">Steven Shaw</a><div class="metadata"><a href="#210694443" name="210694443"><div>2020-09-21 01:20:46</div></a></div><div class="text"><p>Out of curiosity, I tried Idris 2, hopeful that the situation there is better.</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">module</span> <span class="nn">Foo</span>
+
+<span class="kr">interface</span> <span class="kt">Foo</span> q <span class="kr">where</span>
+
+<span class="kr">interface</span> <span class="kt">Bar</span> a <span class="kr">where</span>
+
+<span class="kt">Foo</span> a <span class="ow">=&gt;</span> <span class="kt">Bar</span> <span class="ow">(</span><span class="kt">List</span> a<span class="ow">)</span> <span class="kr">where</span>
+
+<span class="nf">f</span> <span class="ow">:</span> <span class="kt">Bar</span> a <span class="ow">=&gt;</span> a
+f <span class="ow">=</span> f
+
+<span class="nf">g</span> <span class="ow">:</span> <span class="kt">List</span> <span class="kt">Int</span>
+g <span class="ow">=</span> f
+</code></pre></div>
+
+
+<p>The error is</p>
+<div class="codehilite"><pre><span></span><code>Foo.idr:13:5--13:6:While processing right hand side of g at Foo.idr:13:1--14:1:
+Can&#39;t find an implementation for Bar (List Int) at:
+13      g = f
+            ^
+</code></pre></div>
+
+
+<p>This is correct and perhaps better than the GHC error message. However, It would be nice to know that an implementation of <code>Foo Int</code> would solve the problem.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#210716843" name="210716843"><div>2020-09-21 09:12:37</div></a></div><div class="text"><p>yeah, it's weird that this is not a first class concern. same thing bothered me five years ago in scala so much that I made <a href="https://github.com/tek/splain#implicit-resolution-chains">this plugin</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/tek/splain#implicit-resolution-chains" style="background-image: url(https://avatars0.githubusercontent.com/u/2632?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/tek/splain#implicit-resolution-chains" title="tek/splain">tek/splain</a></div><div class="message_embed_description">better implicit errors for scala. Contribute to tek/splain development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/83d70d23ca1b42464032f434141b1503a290a7ec?version=2"></a><div class="content"><a class="author">Steven Shaw</a><div class="metadata"><a href="#210806223" name="210806223"><div>2020-09-21 22:05:07</div></a></div><div class="text"><p>That's cool. Nice that you could address it using a compiler plugin.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

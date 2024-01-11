@@ -1,0 +1,119 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Did y&#39;all know ghci supports commands like :loc-at to support definition at cursor, :type-at  for types of expressions at cursor, and :uses-of to find uses at cursor????" name="description"><link href="https://funprog.srid.ca/haskell/ghci-ide-commands.html" rel="canonical"><meta property="og:title" content="Ghci &quot;ide&quot; commands - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2020-05-01T22:33:16Z"><meta property="og:article:published_time" content="2020-04-29T00:18:39Z"><title>Ghci &quot;ide&quot; commands - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Ghci &quot;ide&quot; commands - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Ghci &quot;ide&quot; commands</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195645549" name="195645549"><div>2020-04-29 00:18:39</div></a></div><div class="text"><p>Did y'all know ghci supports commands like <code>:loc-at</code> to support definition at cursor, <code>:type-at</code>  for types of expressions at cursor, and <code>:uses-of</code> to find uses at cursor????</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#195646058" name="195646058"><div>2020-04-29 00:28:22</div></a></div><div class="text"><p>Waaaat</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195646089" name="195646089"><div>2020-04-29 00:28:59</div></a></div><div class="text"><p>and APPARENTLY HAS SINCE 8.01</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#195646124" name="195646124"><div>2020-04-29 00:29:40</div></a></div><div class="text"><p>How am I supposed to use it in the repl though?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195646209" name="195646209"><div>2020-04-29 00:30:55</div></a></div><div class="text"><p>you aren't</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195646212" name="195646212"><div>2020-04-29 00:31:01</div></a></div><div class="text"><p>you're supposed to pipe an editor to the repl</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/068f19d948936a41dcd13e340bacb9344e28944c?version=2"></a><div class="content"><a class="author">Bolt</a><div class="metadata"><a href="#195646407" name="195646407"><div>2020-04-29 00:34:11</div></a></div><div class="text"><p>ohhh makes sense!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195646670" name="195646670"><div>2020-04-29 00:39:52</div></a></div><div class="text"><p>I supposed this is how Dante works, and to some degree how Intero works. Interestingly this is similar to how Lean works -- they have a "server" mode that listens for commands on a local port and it speaks JSON.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195646726" name="195646726"><div>2020-04-29 00:40:25</div></a></div><div class="text"><p>And if you haven't tried it, the developer experience of using Lean is next level. Highly interactive, very cool.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195646727" name="195646727"><div>2020-04-29 00:40:30</div></a></div><div class="text"><p>this is amazing! i wrote some shitty vim/tmux/ghci bindings that play together</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3d24a4100b3eab34d8ce3059d789c543"></a><div class="content"><a class="author">Sandy Maguire</a><div class="metadata"><a href="#195646734" name="195646734"><div>2020-04-29 00:40:47</div></a></div><div class="text"><p>but my type-of button just pastes in the name</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#195647457" name="195647457"><div>2020-04-29 00:51:36</div></a></div><div class="text"><p>idk if you've tried it, but ghcide also works pretty good and has all these features</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#195647565" name="195647565"><div>2020-04-29 00:52:33</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="225136">Asad Saeeduddin</span> <a href="#narrow/stream/201385-Haskell/topic/Ghci.20.22ide.22.20commands/near/195647457" title="#narrow/stream/201385-Haskell/topic/Ghci.20.22ide.22.20commands/near/195647457">said</a>:</p>
+<blockquote>
+<p>idk if you've tried it, but ghcide also works pretty good and has all these features</p>
+</blockquote>
+<p>how so? except for the type and local definitions</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#195647655" name="195647655"><div>2020-04-29 00:53:33</div></a></div><div class="text"><p>yes, except for the features it has, it doesn't have any features</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#195647763" name="195647763"><div>2020-04-29 00:55:24</div></a></div><div class="text"><p>well, it's a very small subset of what <span class="user-mention" data-user-id="251120">@Sandy Maguire</span> reported</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/520889f20a2c66a8f4bd5be6f37d2923"></a><div class="content"><a class="author">Asad Saeeduddin</a><div class="metadata"><a href="#195647963" name="195647963"><div>2020-04-29 00:57:55</div></a></div><div class="text"><p>You're right. It doesn't support <code>:uses-at</code>. I'm not sure I agree that 2/3 is a very small subset though</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#195648071" name="195648071"><div>2020-04-29 00:59:24</div></a></div><div class="text"><p>my point was that it doesn't support definition at cursor for dependencies, which, in my experience, is much more substantial than local definitions</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/7334dc60b6aef6a75cd9284126231f13c76926a5?version=6"></a><div class="content"><a class="author">Torsten Schmits</a><div class="metadata"><a href="#195648333" name="195648333"><div>2020-04-29 01:02:33</div></a></div><div class="text"><p>mainly because keeping track of the sources of dependencies, indexing and so on, is a non-trivial task regarding performance and memory usage</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/e881cb072eaeddcf2e2c1a570f4ba80eee54f595?version=2"></a><div class="content"><a class="author">Vance Palacio</a><div class="metadata"><a href="#195659513" name="195659513"><div>2020-04-29 04:38:40</div></a></div><div class="text"><p><span class="user-mention" data-user-id="250729">@James King</span> What's lean? Haskell ide type of thing? Is there a github for this?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/e881cb072eaeddcf2e2c1a570f4ba80eee54f595?version=2"></a><div class="content"><a class="author">Vance Palacio</a><div class="metadata"><a href="#195664637" name="195664637"><div>2020-04-29 06:10:28</div></a></div><div class="text"><p>Nvm, found it lol<br>
+<a href="https://github.com/leanprover/lean" title="https://github.com/leanprover/lean">https://github.com/leanprover/lean</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/leanprover/lean" style="background-image: url(https://avatars1.githubusercontent.com/u/7233018?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/leanprover/lean" title="leanprover/lean">leanprover/lean</a></div><div class="message_embed_description">Lean Theorem Prover. Contribute to leanprover/lean development by creating an account on GitHub.</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195707963" name="195707963"><div>2020-04-29 13:26:56</div></a></div><div class="text"><p>It's a depently typed language and theorem prover: <a href="https://leanprover.github.io/" title="https://leanprover.github.io/">https://leanprover.github.io/</a> </p>
+<p>I've been writing a guide for hackers: <a href="https://agentultra.github.io/lean-for-hackers/" title="https://agentultra.github.io/lean-for-hackers/">https://agentultra.github.io/lean-for-hackers/</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195708053" name="195708053"><div>2020-04-29 13:27:41</div></a></div><div class="text"><p>To me it represents the pinnacle in interactive development.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/e881cb072eaeddcf2e2c1a570f4ba80eee54f595?version=2"></a><div class="content"><a class="author">Vance Palacio</a><div class="metadata"><a href="#195712772" name="195712772"><div>2020-04-29 13:58:31</div></a></div><div class="text"><p>Hey, thats an awesome write up! The official documentation I found made lean seem like not very attainable. Thats really cool</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/4ba4faf2fc5818d37c0aed6acb5b69a2"></a><div class="content"><a class="author">James King</a><div class="metadata"><a href="#195716477" name="195716477"><div>2020-04-29 14:20:29</div></a></div><div class="text"><p>They're really focused on making Lean usable for pure mathematicians doing research. I'm more interested in programming and program verification so I've felt the documentation was a bit lacking for that audience as well. :)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/8ae3c3a98eb73541a0a410e92b025ebd"></a><div class="content"><a class="author">Reed Mullanix</a><div class="metadata"><a href="#196017287" name="196017287"><div>2020-05-01 22:30:22</div></a></div><div class="text"><p>I would love to see some stuff from agda/lean get brought to haskell tools</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/8ae3c3a98eb73541a0a410e92b025ebd"></a><div class="content"><a class="author">Reed Mullanix</a><div class="metadata"><a href="#196017450" name="196017450"><div>2020-05-01 22:33:16</div></a></div><div class="text"><p>Especially the hole interactions for agda</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

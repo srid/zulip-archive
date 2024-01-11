@@ -1,0 +1,175 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="foreach is actually a valid keyword. This code type-checks:
+type T :: Type -&gt; foreach (r :: Type) -&gt; Type -&gt; Type
+data T k r a
+
+type T&#39; :: Type -&gt; Type
+type T&#39; a = T a Identity a
+
+https://gitlab.haskell.org/ghc/ghc/-/wikis/dependent-haskell#4-quantifiers
+But why does it have to take Type -&gt; Type (ie" name="description"><link href="https://funprog.srid.ca/haskell/foreach.html" rel="canonical"><meta property="og:title" content="foreach - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2022-02-03T15:21:09Z"><meta property="og:article:published_time" content="2022-02-01T21:22:28Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"><title>foreach - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">foreach - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">foreach</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#270289053" name="270289053"><div>2022-02-01 21:22:28</div></a></div><div class="text"><p><code>foreach</code> is actually a valid keyword. This code type-checks:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="kr">type</span><span class="w"> </span><span class="kt">T</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Type</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">foreach</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Type</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Type</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Type</span><span class="w"></span>
+<span class="kr">data</span><span class="w"> </span><span class="kt">T</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="n">a</span><span class="w"></span>
+
+<span class="kr">type</span><span class="w"> </span><span class="kt">T'</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Type</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Type</span><span class="w"></span>
+<span class="kr">type</span><span class="w"> </span><span class="kt">T'</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="kt">T</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="kt">Identity</span><span class="w"> </span><span class="n">a</span><span class="w"></span>
+</code></pre></div>
+<p><a href="https://gitlab.haskell.org/ghc/ghc/-/wikis/dependent-haskell#4-quantifiers">https://gitlab.haskell.org/ghc/ghc/-/wikis/dependent-haskell#4-quantifiers</a></p>
+<p>But why does it have to take <code>Type -&gt; Type</code> (ie., <code>Identity</code>)? That's a puzzle to me ...</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#270311334" name="270311334"><div>2022-02-02 00:11:43</div></a></div><div class="text"><p>Uh, PEBKAC. <code>foreach</code> is just a type variable. Not a special keyword. At least not yet.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#270311478" name="270311478"><div>2022-02-02 00:13:05</div></a></div><div class="text"><p><a href="https://gitlab.haskell.org/ghc/ghc/-/wikis/dependent-haskell">https://gitlab.haskell.org/ghc/ghc/-/wikis/dependent-haskell</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#270388103" name="270388103"><div>2022-02-02 14:04:09</div></a></div><div class="text"><p><code>forall (r :: Type) -&gt; </code> is an existing syntax though</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#270388368" name="270388368"><div>2022-02-02 14:05:56</div></a></div><div class="text"><p>Plus at type level, erasure doesn't really matter (it's runtime thing), so it wouldn't give you any advantage</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#270493216" name="270493216"><div>2022-02-03 02:48:01</div></a></div><div class="text"><p>In dependent Haskell it will matter though, to be able to write:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">vReplicate</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="n">foreach</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Nat</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Vec</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="n">a</span><span class="w"></span>
+<span class="nf">vReplicate</span><span class="w"> </span><span class="kt">Zero</span><span class="w">     </span><span class="kr">_</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="kt">Nil</span><span class="w"></span>
+<span class="nf">vReplicate</span><span class="w"> </span><span class="p">(</span><span class="kt">Succ</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="kt">:&gt;</span><span class="w"> </span><span class="n">vReplicate</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="n">x</span><span class="w"></span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#270493301" name="270493301"><div>2022-02-03 02:49:21</div></a></div><div class="text"><p>The proposed syntax from that link:</p>
+<div class="codehilite"><pre><span></span><code>                  ------------  Attribute ------------------
+Quantifier        Dependence     Visibility     Erasure
+------------------------------------------------------------
+forall a. ty      Dependent      Invisible      Erased
+forall a -&gt; ty    Dependent      Visible        Erased
+foreach a. ty     Dependent      Invisible      Retained
+foreach a -&gt; ty   Dependent      Visible        Retained
+Eq a =&gt; ty        Non-dependent  Invisible      Retained
+t1 -&gt; t2          Non-dependent  Visible        Retained
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#270524493" name="270524493"><div>2022-02-03 10:03:24</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span> <a href="#narrow/stream/201385-Haskell/topic/foreach/near/270493216">said</a>:</p>
+<blockquote>
+<p>In dependent Haskell it will matter though, to be able to write:</p>
+<p><div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">vReplicate</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="n">foreach</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Nat</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Vec</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="n">a</span><span class="w"></span>
+<span class="nf">vReplicate</span><span class="w"> </span><span class="kt">Zero</span><span class="w">     </span><span class="kr">_</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="kt">Nil</span><span class="w"></span>
+<span class="nf">vReplicate</span><span class="w"> </span><span class="p">(</span><span class="kt">Succ</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="kt">:&gt;</span><span class="w"> </span><span class="n">vReplicate</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="n">x</span><span class="w"></span>
+</code></pre></div><br>
+</p>
+</blockquote>
+<p>It will matter at value level - at type level (or kind level if you will), you're not concerned with erasure, because you can already match on type variables - e.g. in closed type families</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#270525911" name="270525911"><div>2022-02-03 10:15:11</div></a></div><div class="text"><p>E.g.</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">ghci</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">:</span><span class="p">{</span><span class="w"></span>
+<span class="nf">ghci</span><span class="o">|</span><span class="w"> </span><span class="kr">type</span><span class="w">        </span><span class="kt">Foo</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="n">forall</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Type</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">t</span><span class="w"></span>
+<span class="nf">ghci</span><span class="o">|</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="kr">family</span><span class="w"> </span><span class="kt">Foo</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="kr">where</span><span class="w"></span>
+<span class="nf">ghci</span><span class="o">|</span><span class="w">   </span><span class="kt">Foo</span><span class="w"> </span><span class="kt">Type</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="kt">Identity</span><span class="w"></span>
+<span class="nf">ghci</span><span class="o">|</span><span class="w">   </span><span class="kt">Foo</span><span class="w"> </span><span class="p">(</span><span class="kt">Type</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Type</span><span class="p">)</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="kt">IdentityT</span><span class="w"></span>
+<span class="nf">ghci</span><span class="o">|</span><span class="w"> </span><span class="kt">:</span><span class="p">}</span><span class="w"></span>
+<span class="nf">ghci</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">:</span><span class="n">k</span><span class="o">!</span><span class="w"> </span><span class="kt">Foo</span><span class="w"> </span><span class="kt">Type</span><span class="w"></span>
+<span class="kt">Foo</span><span class="w"> </span><span class="kt">Type</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
+<span class="ow">=</span><span class="w"> </span><span class="kt">Identity</span><span class="w"></span>
+<span class="nf">ghci</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">:</span><span class="n">k</span><span class="o">!</span><span class="w"> </span><span class="kt">Foo</span><span class="w"> </span><span class="p">(</span><span class="kt">Type</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Type</span><span class="p">)</span><span class="w"></span>
+<span class="kt">Foo</span><span class="w"> </span><span class="p">(</span><span class="kt">Type</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Type</span><span class="p">)</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
+<span class="ow">=</span><span class="w"> </span><span class="kt">IdentityT</span><span class="w"></span>
+<span class="nf">ghci</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">:</span><span class="n">k</span><span class="o">!</span><span class="w"> </span><span class="kt">Foo</span><span class="w"> </span><span class="kr">_</span><span class="w"> </span><span class="kt">Int</span><span class="w"></span>
+<span class="kt">Foo</span><span class="w"> </span><span class="kr">_</span><span class="w"> </span><span class="kt">Int</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
+<span class="ow">=</span><span class="w"> </span><span class="kt">Identity</span><span class="w"> </span><span class="kt">Int</span><span class="w"></span>
+<span class="nf">ghci</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">:</span><span class="n">k</span><span class="o">!</span><span class="w"> </span><span class="kt">Foo</span><span class="w"> </span><span class="kr">_</span><span class="w"> </span><span class="kt">Maybe</span><span class="w"></span>
+<span class="kt">Foo</span><span class="w"> </span><span class="kr">_</span><span class="w"> </span><span class="kt">Maybe</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
+<span class="ow">=</span><span class="w"> </span><span class="kt">IdentityT</span><span class="w"> </span><span class="kt">Maybe</span><span class="w"></span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#270526211" name="270526211"><div>2022-02-03 10:17:36</div></a></div><div class="text"><p>Basically, erasure doesn't make much sense here, because both types and kinds are evaluated "at the same time", while typechecking<br>
+You could probably interpret them in some staged way similar to typechecking vs. evaluation, but GHC doesn't do that AFAIK</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#270564909" name="270564909"><div>2022-02-03 15:17:37</div></a></div><div class="text"><p>Ah, yes. You were talking about at type-level (type-checking is always at compile-time; but erasure is a run-time thingy).</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#270565039" name="270565039"><div>2022-02-03 15:18:13</div></a></div><div class="text"><p>by the way, you can have ghci print <code>Type</code> in lieu of <code>*</code>, and do other cool things using some of these flags and extensions: <a href="https://github.com/srid/haskell-template/blob/master/haskell-template.cabal">https://github.com/srid/haskell-template/blob/master/haskell-template.cabal</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#270565277" name="270565277"><div>2022-02-03 15:20:02</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span> <a href="#narrow/stream/201385-Haskell/topic/foreach/near/270565039">said</a>:</p>
+<blockquote>
+<p>by the way, you can have ghci print <code>Type</code> in lieu of <code>*</code>, and do other cool things using some of these flags and extensions: <a href="https://github.com/srid/haskell-template/blob/master/haskell-template.cabal">https://github.com/srid/haskell-template/blob/master/haskell-template.cabal</a></p>
+</blockquote>
+<p>Thanks - TBH I'm just lazy and don't have any top level GHCi config <span aria-label="big smile" class="emoji emoji-1f604" role="img" title="big smile">:big_smile:</span></p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#270565461" name="270565461"><div>2022-02-03 15:21:09</div></a></div><div class="text"><p>Me neither; I just start ghci from that project, using <code>nix develop -c cabal -- repl</code> (or run <a href="https://github.com/srid/haskell-template/blob/master/bin/repl">https://github.com/srid/haskell-template/blob/master/bin/repl</a> )</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

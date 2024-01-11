@@ -1,0 +1,220 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I&#39;m trying to wrap my head around dhall. I&#39;m trying to create a function and I&#39;m not entirely sure how I&#39;m messing it up. Any tips please?
+ I&#39;m trying to create this yaml
+        - check: this.content == &quot;/commands&quot;
+          processors:
+            - bloblang: |
+                let commands = [
+   " name="description"><link href="https://funprog.srid.ca/dhall/learning.html" rel="canonical"><meta property="og:title" content="learning - Dhall"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Dhall"><meta property="og:article:modified_time" content="2022-03-04T15:47:56Z"><meta property="og:article:published_time" content="2022-03-03T04:47:19Z"><title>learning - Dhall</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">learning - Dhall</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/dhall/" class="section">#Dhall</a><i class="right angle icon divider"></i><div class="active section">learning</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ce41ee7a1c88fd1e1cc7acb273356f37"></a><div class="content"><a class="author">James D.</a><div class="metadata"><a href="#273922198" name="273922198"><div>2022-03-03 04:47:19</div></a></div><div class="text"><p>I'm trying to wrap my head around dhall. I'm trying to create a function and I'm not entirely sure how I'm messing it up. Any tips please?<br>
+ I'm trying to create this yaml</p>
+<div class="codehilite"><pre><span></span><code>        - check: this.content == &quot;/commands&quot;
+          processors:
+            - bloblang: |
+                let commands = [
+                  &quot;/commands&quot;,
+                  &quot;/joke&quot;,
+                  &quot;/roast&quot;,
+                  &quot;/release&quot;,
+                ]
+                root = &quot;My commands are: &quot; + $commands.join(&quot;, &quot;)
+</code></pre></div>
+<p>With this dhall</p>
+<div class="codehilite"><pre><span></span><code>let processorWithArgs =
+    \(checkArg: Text) -&gt;
+    \(args: List) -&gt;
+    \(message: Text) -&gt;
+    { check = &quot;this.content == \&quot;/${checkArg}\&quot;&quot;
+    , processors =
+        { bloblang = &quot;let $checkArg = ${args}&quot;
+        , root = message
+        }
+    }
+
+in [ processorWithArgs &quot;commands&quot;
+   , [ &quot;/commands&quot;,
+    &quot;/joke&quot;,
+    &quot;/roast&quot;,
+    &quot;/release&quot;,
+    ]
+    , &quot;My commands are: \&quot; + $commands.join(\&quot;, \&quot;)&quot; ]
+</code></pre></div>
+<p>But I'm getting this output</p>
+<div class="codehilite"><pre><span></span><code>Error: Invalid function input
+
+ 3│     \(args: List) -&gt;
+ 4│     \(message: Text) -&gt;
+ 5│     { check = &quot;this.content == \&quot;/${checkArg}\&quot;&quot;
+ 6│     , processors =
+ 7│     { bloblang = &quot;let $checkArg = ${args}&quot;
+ 8│     , root = message
+ 9│     }
+10│     }
+11│
+
+processor.dhall:3:5
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ce41ee7a1c88fd1e1cc7acb273356f37"></a><div class="content"><a class="author">James D.</a><div class="metadata"><a href="#273922673" name="273922673"><div>2022-03-03 04:55:54</div></a></div><div class="text"><p>Its looking like it doesn't like the <code>List</code> time for <code>args</code>. I guess I need to figure out how to map a list to the Text</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ce41ee7a1c88fd1e1cc7acb273356f37"></a><div class="content"><a class="author">James D.</a><div class="metadata"><a href="#273923706" name="273923706"><div>2022-03-03 05:09:22</div></a></div><div class="text"><p>So right now i'm at </p>
+<div class="codehilite"><pre><span></span><code>let processorWithArgs =
+    \(checkArg: Text) -&gt;
+    \(args: Text) -&gt;
+    \(message: Text) -&gt;
+    {
+        check = &quot;this.content == \&quot;/${checkArg}\&quot;&quot;
+        , processors = {
+            bloblang = &quot;let ${checkArg} = ${args}&quot;
+            , root = message
+        }
+    }
+
+in [ processorWithArgs &quot;commands&quot;  &quot;\&quot;/commands\&quot;, \&quot;/joke\&quot;, \&quot;/roast\&quot;, \&quot;/release\&quot;,&quot;  &quot;My commands are: \&quot; + $commands.join(\&quot;, \&quot;)&quot; ]
+</code></pre></div>
+<p>And that gets me</p>
+<div class="codehilite"><pre><span></span><code>- check: &quot;this.content == \&quot;/commands\&quot;&quot;
+  processors:
+    bloblang: &quot;let commands = \&quot;/commands\&quot;, \&quot;/joke\&quot;, \&quot;/roast\&quot;, \&quot;/release\&quot;,&quot;
+    root: &quot;My commands are: \&quot; + $commands.join(\&quot;, \&quot;)&quot;
+</code></pre></div>
+<p>which is close. But its putting the escaped quotes in the yaml</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ce41ee7a1c88fd1e1cc7acb273356f37"></a><div class="content"><a class="author">James D.</a><div class="metadata"><a href="#273924393" name="273924393"><div>2022-03-03 05:20:17</div></a></div><div class="text"><p>So to start with, I was reading my yaml wrong. bloblang on down is one big text field</p>
+<div class="codehilite"><pre><span></span><code>let processorWithArgs =
+    \(checkArg: Text) -&gt;
+    \(message: Text) -&gt;
+    {
+        check = &quot;this.content == \&quot;/${checkArg}\&quot;&quot;
+        , processors = {
+            bloblang = &quot;let ${checkArg} = ${message}&quot;
+        }
+    }
+
+in [ processorWithArgs &quot;commands&quot;  &#39;&#39;
+        let commands = [
+            &quot;/commands&quot;,
+            &quot;/joke&quot;,
+            &quot;/roast&quot;,
+            &quot;/release&quot;,
+        ]
+        root = &quot;My commands are: &quot; + $commands.join(&quot;, &quot;)&#39;&#39;
+    ]
+</code></pre></div>
+<p>gives me</p>
+<div class="codehilite"><pre><span></span><code>- check: &quot;this.content == \&quot;/commands\&quot;&quot;
+  processors:
+    bloblang: |
+      let commands = let commands = [
+          &quot;/commands&quot;,
+          &quot;/joke&quot;,
+          &quot;/roast&quot;,
+          &quot;/release&quot;,
+      ]
+      root = &quot;My commands are: &quot; + $commands.join(&quot;, &quot;)
+</code></pre></div>
+<p>So now I just need to understand how not to return those escaped quotes on the first line.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/20a04d823b7c3891d78ca5f6a188ccd0e4fc5e3d?version=2"></a><div class="content"><a class="author">TheMatten</a><div class="metadata"><a href="#274047173" name="274047173"><div>2022-03-03 22:04:08</div></a></div><div class="text"><p>I guess it sanitizes your output on purpose to make it safe<br>
+May it be that the resulting YAML will still work though?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ce41ee7a1c88fd1e1cc7acb273356f37"></a><div class="content"><a class="author">James D.</a><div class="metadata"><a href="#274147768" name="274147768"><div>2022-03-04 15:47:56</div></a></div><div class="text"><p>So, I got past that. Now I have this weird thing where <code>switch</code> should be <code>- switch</code> but its not. <a href="https://gist.github.com/JamesAtTensure/91c07a2d412dee4d793eb5fb985ab990#file-output-yaml-L15">https://gist.github.com/JamesAtTensure/91c07a2d412dee4d793eb5fb985ab990#file-output-yaml-L15</a></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

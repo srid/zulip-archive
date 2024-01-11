@@ -1,0 +1,118 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Right now I have block of article pages that only have Pandoc.render val and the markdown get rendered into my article page. However, since I use tailwind-css and it does reset all style value, then there is no difference between h1 and p. And it will be styled by specifying each tag&#39;s class. 
+Is th" name="description"><link href="https://funprog.srid.ca/rib/provide-template-for-rendered-markdown.html" rel="canonical"><meta property="og:title" content="Provide template for rendered markdown? - Rib"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Rib"><meta property="og:article:modified_time" content="2020-05-08T14:13:06Z"><meta property="og:article:published_time" content="2020-05-08T09:17:16Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?version=2"><title>Provide template for rendered markdown? - Rib</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Provide template for rendered markdown? - Rib</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/rib/" class="section">#Rib</a><i class="right angle icon divider"></i><div class="active section">Provide template for rendered markdown?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#196873286" name="196873286"><div>2020-05-08 09:17:16</div></a></div><div class="text"><p>Right now I have block of article pages that only have <code>Pandoc.render val</code> and the markdown get rendered into my article page. However, since I use <code>tailwind-css</code> and it does reset all style value, then there is no difference between <code>h1</code> and <code>p</code>. And it will be styled by specifying each tag's class. </p>
+<p>Is there any additional step that I need to do if I want to use that css, so let say I can provide template so that the rendered result will already contain the class that I have in my template. For example, rather than got <code>&lt;h1&gt; Hello World&lt;/h1&gt;</code>, the result will be like <code>&lt;h1 class="text-xl" &gt; Hello World &lt;/h1&gt;</code>?</p>
+<p>Or do I need to custom it in lucid part?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196886966" name="196886966"><div>2020-05-08 12:05:23</div></a></div><div class="text"><p>Render your doc inside a div with some class, and then style descendant elements in that class?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#196898417" name="196898417"><div>2020-05-08 13:59:00</div></a></div><div class="text"><p>I did think of that. Is there any other option?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196898922" name="196898922"><div>2020-05-08 14:02:58</div></a></div><div class="text"><p>Not sure if Pandoc will ever support this: <a href="https://github.com/jgm/pandoc/issues/684" title="https://github.com/jgm/pandoc/issues/684">https://github.com/jgm/pandoc/issues/684</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/jgm/pandoc/issues/684" style="background-image: url(https://avatars3.githubusercontent.com/u/3044?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/jgm/pandoc/issues/684" title="Permit adding attributes to all Markdown elements · Issue #684 · jgm/pandoc">Permit adding attributes to all Markdown elements · Issue #684 · jgm/pandoc</a></div><div class="message_embed_description">I&#39;d like to suggest that Pandoc allow attributes to be attached to any Markdown element, not just code blocks. So for example, if it encountered this: #{.main} Header it would generate this: &amp;l...</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196898992" name="196898992"><div>2020-05-08 14:03:32</div></a></div><div class="text"><p>But commonmark-hs does: <a href="https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md" title="https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md">https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md" style="background-image: url(https://avatars3.githubusercontent.com/u/3044?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md" title="jgm/commonmark-hs">jgm/commonmark-hs</a></div><div class="message_embed_description">Pure Haskell commonmark parsing library, designed to be flexible and extensible - jgm/commonmark-hs</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196899016" name="196899016"><div>2020-05-08 14:03:48</div></a></div><div class="text"><p>I'd recommend the div approach, if you want to style all documents uniformly.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#196899164" name="196899164"><div>2020-05-08 14:04:54</div></a></div><div class="text"><p>Or you can write a Pandoc extension? Or a MMark extension: <a href="https://github.com/srid/neuron/blob/master/src/app/Text/MMark/Extension/SetTableClass.hs" title="https://github.com/srid/neuron/blob/master/src/app/Text/MMark/Extension/SetTableClass.hs">https://github.com/srid/neuron/blob/master/src/app/Text/MMark/Extension/SetTableClass.hs</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/blob/master/src/app/Text/MMark/Extension/SetTableClass.hs" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/blob/master/src/app/Text/MMark/Extension/SetTableClass.hs" title="srid/neuron">srid/neuron</a></div><div class="message_embed_description">Haskell meets Zettelkasten, for your plain-text delight. - srid/neuron</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/8084ff35e892945a460a7ed9885325c7804e1b87?version=2"></a><div class="content"><a class="author">Rizary</a><div class="metadata"><a href="#196900133" name="196900133"><div>2020-05-08 14:13:06</div></a></div><div class="text"><p>Noted! I'll take a look into that. Yeah I think pandoc will not support it.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
