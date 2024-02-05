@@ -1,0 +1,117 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Would anyone have any use case at all as to query for zettels based on information other than tags? I&#39;m beginning to wonder if queries should be kept simple, supporting only tags." name="description"><link href="https://funprog.srid.ca/neuron/non-tag-queries.html" rel="canonical"><meta property="og:title" content="Non-tag queries - Neuron"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Neuron"><meta property="og:article:modified_time" content="2020-04-08T23:09:45Z"><meta property="og:article:published_time" content="2020-04-07T22:09:37Z"><meta property="og:image" content="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"><title>Non-tag queries - Neuron</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Non-tag queries - Neuron</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/neuron/" class="section">#Neuron</a><i class="right angle icon divider"></i><div class="active section">Non-tag queries</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#193254643" name="193254643"><div>2020-04-07 22:09:37</div></a></div><div class="text"><p>Would anyone have any use case at all as to query for zettels based on information other than <code>tags</code>? I'm beginning to wonder if queries should be kept simple, supporting only tags.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#193255483" name="193255483"><div>2020-04-07 22:20:19</div></a></div><div class="text"><p>I think it depends whether queries are meant to be used mainly from the zettel links themselves or if they should provide a powerful API for e.g. implementing a search engine. For example I use ripgrep in my zettel-mode for searching by title and text but I use <code>neuron ... query</code> to search by tags. Implementing a search engine is hard but I think it would be useful.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#193255621" name="193255621"><div>2020-04-07 22:22:20</div></a></div><div class="text"><p>I'm starting to think that an integrated search page in the web application would be nice, sadly this requires abandoning fully static sites.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#193256583" name="193256583"><div>2020-04-07 22:35:21</div></a></div><div class="text"><blockquote>
+<p>I'm starting to think that an integrated search page in the web application would be nice, sadly this requires abandoning fully static sites.</p>
+</blockquote>
+<p>Well there are JavaScript based search libraries. Neuron can generate the index for using from the web browser.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#193256671" name="193256671"><div>2020-04-07 22:36:13</div></a></div><div class="text"><p>eg <a href="https://github.com/bvaughn/js-search" title="https://github.com/bvaughn/js-search">https://github.com/bvaughn/js-search</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/bvaughn/js-search" style="background-image: url(https://avatars3.githubusercontent.com/u/29597?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/bvaughn/js-search" title="bvaughn/js-search">bvaughn/js-search</a></div><div class="message_embed_description">JS Search is an efficient, client-side search library for JavaScript and JSON objects - bvaughn/js-search</div></div></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#193256865" name="193256865"><div>2020-04-07 22:39:30</div></a></div><div class="text"><p>Yeah but there is no way to use neuron queries to implement the search engine. So I guess queries by text won't be very useful after all.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#193256936" name="193256936"><div>2020-04-07 22:40:05</div></a></div><div class="text"><p>When you generate .html files, we can also write a .json index (using neuron query), and use that from JavaScript.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#193257269" name="193257269"><div>2020-04-07 22:44:22</div></a></div><div class="text"><p>Hmm I'm not sure how that would work, the actual query would have to be processed from JavaScript. What I had in mind was to have a single search engine, accessible from neuron queries, without using any JS search library at all.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#193257502" name="193257502"><div>2020-04-07 22:47:28</div></a></div><div class="text"><p>If that's impossible then yeah, I guess queries could be kept simple, with only queries by tags (and maybe hierarchical tags later)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/39430c3a1d5705ad377af9607e67d98c"></a><div class="content"><a class="author">felko</a><div class="metadata"><a href="#193341833" name="193341833"><div>2020-04-08 16:06:21</div></a></div><div class="text"><p>Another use case for non tag queries might be to query the graph itself and find backlinks for example. That would be useful for editor support, because it would allow users to browse the zettelkasten without opening the web app.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#193389926" name="193389926"><div>2020-04-08 23:09:45</div></a></div><div class="text"><p><a href="https://github.com/srid/neuron/issues/74" title="https://github.com/srid/neuron/issues/74">https://github.com/srid/neuron/issues/74</a></p>
+<div class="message_embed"><a class="message_embed_image" href="https://github.com/srid/neuron/issues/74" style="background-image: url(https://avatars2.githubusercontent.com/u/3998?s=400&amp;v=4)"></a><div class="data-container"><div class="message_embed_title"><a href="https://github.com/srid/neuron/issues/74" title="Query: nearby zettels · Issue #74 · srid/neuron">Query: nearby zettels · Issue #74 · srid/neuron</a></div><div class="message_embed_description">Add to query the functionality to retrieve nearby zettels zquery://search?linkFrom=&lt;zid&gt; zquery://search?linkTo=&lt;zid&gt; zquery://search?forestFrom=&lt;zid&gt; zquery://search?forestTo=&amp;lt...</div></div></div></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

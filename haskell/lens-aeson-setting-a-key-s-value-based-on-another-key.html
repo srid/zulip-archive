@@ -1,0 +1,159 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="I’m trying to work out if there’s a nicer way (i.e. more clever) of using lens-aeson to set a key based on the value of another key.
+I have a YAML structure like this:
+yaml&#39; :: Value
+yaml&#39; =
+    [yamlQQ|
+- panda:
+    x-image: panda
+- goat:
+    x-image: goat
+|]
+
+that I want to transform into this:
+ya" name="description"><link href="https://funprog.srid.ca/haskell/lens-aeson-setting-a-key-s-value-based-on-another-key.html" rel="canonical"><meta property="og:title" content="Lens &amp; aeson: setting a key’s value based on another key - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2021-09-27T14:14:29Z"><meta property="og:article:published_time" content="2021-09-21T18:47:04Z"><title>Lens &amp; aeson: setting a key’s value based on another key - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">Lens &amp; aeson: setting a key’s value based on another key - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">Lens &amp; aeson: setting a key’s value based on another key</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#254257806" name="254257806"><div>2021-09-21 18:47:04</div></a></div><div class="text"><p>I’m trying to work out if there’s a nicer way (i.e. more clever) of using lens-aeson to set a key based on the value of another key.</p>
+<p>I have a YAML structure like this:</p>
+<div class="codehilite"><pre><span></span><code>yaml&#39; :: Value
+yaml&#39; =
+    [yamlQQ|
+- panda:
+    x-image: panda
+- goat:
+    x-image: goat
+|]
+</code></pre></div>
+<p>that I want to transform into this:</p>
+<div class="codehilite"><pre><span></span><code>yaml&#39; :: Value
+yaml&#39; =
+    [yamlQQ|
+- panda:
+    image: panda:latest
+    x-image: pada
+- goat:
+    image: goat:latest
+    x-image: goat
+|]
+</code></pre></div>
+<p>That is, I want to add/set the value of <code>image</code> based on the value of <code>x-image</code> of the same object.</p>
+<p>The way I came up with was to write a helper function</p>
+<div class="codehilite"><pre><span></span><code>foo o = o &amp; _Object . at &quot;image&quot; ?~ String (iN &lt;&gt; &quot;:latest&quot;)
+  where
+    iN = o ^. key &quot;x-image&quot; . _String
+</code></pre></div>
+<p>and using that I can do what I want:</p>
+<div class="codehilite"><pre><span></span><code>λ&gt; yaml&#39; &amp; values . members %~ foo
+Array [Object (fromList [(&quot;panda&quot;,Object (fromList [(&quot;image&quot;,String &quot;panda:latest&quot;),(&quot;x-image&quot;,String &quot;panda&quot;)]))]),Object (fromList [(&quot;goat&quot;,Object (fromList [(&quot;image&quot;,String &quot;goat:latest&quot;),(&quot;x-image&quot;,String &quot;goat&quot;)]))])]
+</code></pre></div>
+<p>Is there another, nicer way of doing this?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/3e8752071cc8fb107dae91f90121f4e3"></a><div class="content"><a class="author">rhendric</a><div class="metadata"><a href="#254288792" name="254288792"><div>2021-09-21 22:37:40</div></a></div><div class="text"><p>Would you consider this nicer?</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">yaml'</span> <span class="o">&amp;</span> <span class="n">values</span> <span class="o">.</span> <span class="n">members</span> <span class="o">.</span> <span class="n">_Object</span> <span class="o">%~</span> <span class="p">(</span><span class="n">set</span> <span class="p">(</span><span class="n">at</span> <span class="s">"image"</span><span class="p">)</span> <span class="o">.</span> <span class="p">(</span><span class="n">_Just</span> <span class="o">.</span> <span class="n">_String</span> <span class="o">%~</span> <span class="p">(</span><span class="o">&lt;&gt;</span> <span class="s">":latest"</span><span class="p">))</span> <span class="o">=&lt;&lt;</span> <span class="n">view</span> <span class="p">(</span><span class="n">at</span> <span class="s">"x-image"</span><span class="p">))</span>
+</code></pre></div></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/ca2e2c3442a73f84394abb35d6236b12"></a><div class="content"><a class="author">Magnus Therning</a><div class="metadata"><a href="#255054822" name="255054822"><div>2021-09-27 14:14:29</div></a></div><div class="text"><p>Hmm, maybe slightly. I have to admit I was hoping I'd missed a function that perfectly fit my need though <span aria-label="sweat smile" class="emoji emoji-1f605" role="img" title="sweat smile">:sweat_smile:</span></p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>

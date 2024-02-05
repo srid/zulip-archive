@@ -1,0 +1,130 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Does anyone have a configuration for using VSCode&#39;s remote ssh connection to use h-ide where the connection needs to first enter a nix-shell?  I&#39;ve tried using direnv but I can&#39;t seem to make the .envrc load the nix shell before h-ide gives up on finding cabal (and any other dependency needed from t" name="description"><link href="https://funprog.srid.ca/haskell/vscode-remote-ssh-and-hie-lsp-in-nix-shell.html" rel="canonical"><meta property="og:title" content="VSCode remote SSH and HIE / lsp in nix-shell? - Haskell"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Haskell"><meta property="og:article:modified_time" content="2022-03-12T10:37:49Z"><meta property="og:article:published_time" content="2022-03-05T17:34:05Z"><title>VSCode remote SSH and HIE / lsp in nix-shell? - Haskell</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">VSCode remote SSH and HIE / lsp in nix-shell? - Haskell</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/haskell/" class="section">#Haskell</a><i class="right angle icon divider"></i><div class="active section">VSCode remote SSH and HIE / lsp in nix-shell?</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/dc4572e32b0b80984681224ee2078032"></a><div class="content"><a class="author">o1lo01ol1o</a><div class="metadata"><a href="#274255444" name="274255444"><div>2022-03-05 17:34:05</div></a></div><div class="text"><p>Does anyone have a configuration for using VSCode's remote ssh connection to use h-ide where the connection needs to first enter a nix-shell?  I've tried using <code>direnv</code> but I can't seem to make the .envrc load the nix shell before h-ide gives up on finding cabal (and any other dependency needed from the <code>nix-shell</code> in question.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#274257103" name="274257103"><div>2022-03-05 18:08:36</div></a></div><div class="text"><p>My template doesn't require direnv: <a href="https://github.com/srid/haskell-template">https://github.com/srid/haskell-template</a> </p>
+<p>It should "just work" (I use remote ssh all the time), due to <code>arrterian.nix-env-selector</code>.</p>
+<p>For some projects, I use direnv, and you just need <code>use flake</code> in <code>./.envrc</code>, followed by <code>direnv allow</code>. Then, when you open the workspace remotely, keep all tabs closed. Open flake.nix first, wait a second or two, then open a .hs file.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#274257131" name="274257131"><div>2022-03-05 18:09:14</div></a></div><div class="text"><p>For some reason HLS breaks when a workspace is opened with pre-opened .hs tabs. Also keep your terminal turned off at window open time.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/dc4572e32b0b80984681224ee2078032"></a><div class="content"><a class="author">o1lo01ol1o</a><div class="metadata"><a href="#274258384" name="274258384"><div>2022-03-05 18:36:31</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span> <a href="#narrow/stream/201385-Haskell/topic/VSCode.20remote.20SSH.20and.20HIE.20.2F.20lsp.20in.20nix-shell.3F/near/274257103">said</a>:</p>
+<blockquote>
+<p>My template doesn't require direnv: <a href="https://github.com/srid/haskell-template">https://github.com/srid/haskell-template</a> </p>
+<p>It should "just work" (I use remote ssh all the time), due to <code>arrterian.nix-env-selector</code>.</p>
+<p>For some projects, I use direnv, and you just need <code>use flake</code> in <code>./.envrc</code>, followed by <code>direnv allow</code>. Then, when you open the workspace remotely, keep all tabs closed. Open flake.nix first, wait a second or two, then open a .hs file.</p>
+</blockquote>
+<p>Huh, I've tried the latter with obelisk's <code>ob shell</code> in direnv and no matter how long i give it before opening tabs, it always breaks.  Have you been able to do it with obelisk?  </p>
+<p>To be clear, I can allow the direnv and I can see the VM's cpu resources spike as things load, so I know it's working.  I just can't seem to make h-ide load at the right time.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#274258639" name="274258639"><div>2022-03-05 18:42:38</div></a></div><div class="text"><p>Oh, obelisk is a different beast. They don't even support HLS afaict. I don't use ghcjs anymore, but I think you want <a href="https://github.com/obsidiansystems/obelisk/issues/762">https://github.com/obsidiansystems/obelisk/issues/762</a></p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/dc4572e32b0b80984681224ee2078032"></a><div class="content"><a class="author">o1lo01ol1o</a><div class="metadata"><a href="#274258822" name="274258822"><div>2022-03-05 18:47:20</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span> <a href="#narrow/stream/201385-Haskell/topic/VSCode.20remote.20SSH.20and.20HIE.20.2F.20lsp.20in.20nix-shell.3F/near/274258639">said</a>:</p>
+<blockquote>
+<p>Oh, obelisk is a different beast. They don't even support HLS afaict. I don't use ghcjs anymore, but I think you want <a href="https://github.com/obsidiansystems/obelisk/issues/762">https://github.com/obsidiansystems/obelisk/issues/762</a></p>
+</blockquote>
+<p>I've been using HLS with obelisk for a couple years now without a problem.  To do it locally, I simply need to launch code from <code>ob shell</code> (Can also do <code>nix-shell -A shells.ghc</code> but this doesn't load cabal tests.).  AFAICT, <code>ob shell</code> just manually builds up a custom <code>nix-shell</code> so it shouldn't be that different.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#274259045" name="274259045"><div>2022-03-05 18:53:49</div></a></div><div class="text"><p><span class="user-mention" data-user-id="266531">@o1lo01ol1o</span> <a href="https://github.com/obsidiansystems/obelisk/issues/184#issuecomment-869083916">https://github.com/obsidiansystems/obelisk/issues/184#issuecomment-869083916</a></p>
+<p>looks like <code>use nix -A shells.ghc</code> should work</p></div></div></div><div class="comment"><a class="avatar"><img src="https://zulip-avatars.s3.amazonaws.com/13896/4429aa8b689608f24a4ad712843ce29862e330d2?version=3"></a><div class="content"><a class="author">Sridhar Ratnakumar</a><div class="metadata"><a href="#274259095" name="274259095"><div>2022-03-05 18:54:21</div></a></div><div class="text"><p>(but you still need HLS in nix shell I think)</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/dc4572e32b0b80984681224ee2078032"></a><div class="content"><a class="author">o1lo01ol1o</a><div class="metadata"><a href="#274259109" name="274259109"><div>2022-03-05 18:55:01</div></a></div><div class="text"><p><span class="user-mention silent" data-user-id="251311">Sridhar Ratnakumar</span> <a href="#narrow/stream/201385-Haskell/topic/VSCode.20remote.20SSH.20and.20HIE.20.2F.20lsp.20in.20nix-shell.3F/near/274259095">said</a>:</p>
+<blockquote>
+<p>(but you still need HLS in nix shell I think)</p>
+</blockquote>
+<p>Yes, that's provided by the <code>shellTools</code> attribute in the nix derivation.  can I <code>use ob shell</code>?</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/dc4572e32b0b80984681224ee2078032"></a><div class="content"><a class="author">o1lo01ol1o</a><div class="metadata"><a href="#274259303" name="274259303"><div>2022-03-05 18:59:30</div></a></div><div class="text"><p>Ah, I see, I missed that issue.  Will investigate, thanks!</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/dc4572e32b0b80984681224ee2078032"></a><div class="content"><a class="author">o1lo01ol1o</a><div class="metadata"><a href="#275089745" name="275089745"><div>2022-03-12 10:34:09</div></a></div><div class="text"><p>There are some issues still with getting the shell loaded prior to VSCode initializing plugins, so I have a hack that just creates an <code>.envrc</code> with the PATH set by <code>ob shell</code>;  this appears to load everything correctly.</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/dc4572e32b0b80984681224ee2078032"></a><div class="content"><a class="author">o1lo01ol1o</a><div class="metadata"><a href="#275089841" name="275089841"><div>2022-03-12 10:37:49</div></a></div><div class="text"><p>Though I'm still working on getting upstream deps in the right place to build HLS with the same GHC used in the project.   For some reason, the HLS-VSCode managed HIDE binaries work without a problem on <code>darwin</code> but they break on template haskell splices on <code>linux</code>.  The latter breakage causes many of the useful plugins (code lenses, go to,  etc) to break.</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
