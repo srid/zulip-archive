@@ -4,7 +4,7 @@ data Cache c :: Effect where
   type Key = ...
   GetCacheKey :: Cache c m Key
 
-but i&#39;m not sure what to use, it seems like type families or data families would do the trick" name="description"><link href="https://funprog.srid.ca/polysemy/data-type-or-family-inside-effect.html" rel="canonical"><meta property="og:title" content="data type or family inside effect - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2024-03-01T10:18:22Z"><meta property="og:article:published_time" content="2024-02-29T22:28:40Z"><title>data type or family inside effect - Polysemy</title><style type="text/css">
+but i&#39;m not sure what to use, it seems like type families or data families would do the trick" name="description"><link href="https://funprog.srid.ca/polysemy/data-type-or-family-inside-effect.html" rel="canonical"><meta property="og:title" content="data type or family inside effect - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2024-03-01T17:29:27Z"><meta property="og:article:published_time" content="2024-02-29T22:28:40Z"><title>data type or family inside effect - Polysemy</title><style type="text/css">
 div#thesite
 {
   font-family   : "Open Sans", sans-serif;
@@ -132,4 +132,5 @@ i would like to create an effect that requires a data type to be implemented in 
 <p>but i'm not sure what to use, it seems like type families or data families would do the trick but i'm a bit lost on these concepts on their own, let alone their interaction with <code>polysemy</code></p>
 </blockquote>
 <p>What should the <code>Key</code> depend on (e.g. <code>c</code>)?<br>
-Would be great to have some example of a specific one</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
+Would be great to have some example of a specific one</p></div></div></div><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/76e9ed969b472bb5e1b70f37bae29cf1"></a><div class="content"><a class="author">drlkf</a><div class="metadata"><a href="#424294664" name="424294664"><div>2024-03-01 17:29:27</div></a></div><div class="text"><p>not <code>c</code>, but i see what you mean, i guess it should be a parameter of <code>Cache</code> then?<br>
+i guess one example would be an interpreter for file cache that would have <code>FilePath</code> as <code>Key</code>, when a redis cache would have a <code>ByteString</code>, something like that</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
