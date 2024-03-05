@@ -1,0 +1,164 @@
+<html lang="en"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="hello,
+i&#39;m having an issue reducing my error effects into one aggregate type, i have
+the following code:
+handleHTTPError
+  :: Member (Error e) r
+  =&gt; (HTTPError -&gt; e)
+  -&gt; Sem (Error HTTPError &#39;: r) a
+  -&gt; Sem r a
+handleHTTPError = mapError
+
+handleProcessError
+  :: Member (Error e) r
+  =&gt; (ProcessEr" name="description"><link href="https://funprog.srid.ca/polysemy/reducing-error-effects.html" rel="canonical"><meta property="og:title" content="reducing error effects - Polysemy"><meta property="og:site_name" content="Functional Programming Zulip Archive"><meta property="og:type" content="article"><meta property="og:article:section" content="Polysemy"><meta property="og:article:modified_time" content="2024-03-05T00:30:00Z"><meta property="og:article:published_time" content="2024-03-05T00:30:00Z"><title>reducing error effects - Polysemy</title><style type="text/css">
+div#thesite
+{
+  font-family   : "Open Sans", sans-serif;
+  font-size     : 1em !important;
+  margin-top    : 1em;
+  margin-bottom : 1em;
+}
+
+div#thesite h1
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h2
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h3
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h4
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h5
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite h6
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .ui.breadcrumb.rib .section
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite .as-header
+{
+  font-family : "Roboto", sans-serif;
+  line-height : 1.19999em;
+}
+
+div#thesite code, pre, tt
+{
+  font-family : "SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New", monospace;
+}
+
+div#thesite .ui.breadcrumb.rib
+{
+  margin-bottom : 1em;
+}
+
+
+
+div#thesite .ui.comments.messages .comment .metadata a
+{
+  color : #808080;
+}
+
+div#thesite .ui.comments.messages .comment a.avatar img
+{
+  height : auto;
+}
+
+div#thesite .subtle
+{
+  color : #808080;
+}
+
+
+div#thesite .messages pre
+{
+  font-size : 85%;
+  overflow  : auto;
+  max-width : 100%;
+}
+
+div#thesite .messages .message_embed
+{
+  border-left  : solid 3px #808080;
+  padding-left : 0.69999em;
+}
+
+div#thesite .messages .message_inline_image img
+{
+  max-width     : 100%;
+  margin-bottom : 1em;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */</style><link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans&amp;display=swap" rel="stylesheet"></head><body><div id="thesite" class="ui text container"><div class="ui violet inverted top attached center aligned segment"><h1 class="ui huge header">reducing error effects - Polysemy</h1></div><div class="ui attached segment"><div class="ui message"><p>Welcome to the Functional Programming Zulip Chat Archive. You can join the chat <a href="https://funprog.zulipchat.com">here</a>.</p></div><div class="ui breadcrumb rib"><a href="/" class="section">Home</a><i class="right angle icon divider"></i><a href="/polysemy/" class="section">#Polysemy</a><i class="right angle icon divider"></i><div class="active section">reducing error effects</div></div><div class="ui comments messages"><div class="comment"><a class="avatar"><img src="https://www.gravatar.com/avatar/76e9ed969b472bb5e1b70f37bae29cf1"></a><div class="content"><a class="author">drlkf</a><div class="metadata"><a href="#424772715" name="424772715"><div>2024-03-05 00:30:00</div></a></div><div class="text"><p>hello,<br>
+i'm having an issue reducing my error effects into one aggregate type, i have<br>
+the following code:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="nf">handleHTTPError</span>
+<span class="w">  </span><span class="ow">::</span><span class="w"> </span><span class="kt">Member</span><span class="w"> </span><span class="p">(</span><span class="kt">Error</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="n">r</span>
+<span class="w">  </span><span class="ow">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="kt">HTTPError</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="w">  </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="p">(</span><span class="kt">Error</span><span class="w"> </span><span class="kt">HTTPError</span><span class="w"> </span><span class="kt">':</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">a</span>
+<span class="w">  </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="n">a</span>
+<span class="nf">handleHTTPError</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">mapError</span>
+
+<span class="nf">handleProcessError</span>
+<span class="w">  </span><span class="ow">::</span><span class="w"> </span><span class="kt">Member</span><span class="w"> </span><span class="p">(</span><span class="kt">Error</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="n">r</span>
+<span class="w">  </span><span class="ow">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="kt">ProcessError</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="w">  </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="p">(</span><span class="kt">Error</span><span class="w"> </span><span class="kt">ProcessError</span><span class="w"> </span><span class="kt">':</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">a</span>
+<span class="w">  </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="n">a</span>
+<span class="nf">handleProcessError</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">mapError</span>
+
+<span class="nf">handleCommandErrors</span>
+<span class="w">  </span><span class="ow">::</span><span class="w"> </span><span class="kt">Member</span><span class="w"> </span><span class="p">(</span><span class="kt">Error</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="n">r</span>
+<span class="w">  </span><span class="ow">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="kt">ProcessError</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="w">  </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="kt">HTTPError</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="w">  </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="p">(</span><span class="kt">Error</span><span class="w"> </span><span class="kt">ProcessError</span><span class="w"> </span><span class="kt">':</span><span class="w"> </span><span class="kt">Error</span><span class="w"> </span><span class="kt">HTTPError</span><span class="w"> </span><span class="kt">':</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">a</span>
+<span class="w">  </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="n">a</span>
+<span class="nf">handleCommandErrors</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="ow">=</span><span class="w"> </span><span class="n">handleHTTPError</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">.</span><span class="w"> </span><span class="n">handleProcessError</span><span class="w"> </span><span class="n">p</span>
+</code></pre></div>
+<p>but the compiler seems to believe that i want to transform <code>ProcessError</code> into<br>
+<code>HTTPError</code> with the right-most call:</p>
+<div class="codehilite" data-code-language="Haskell"><pre><span></span><code><span class="w">    </span><span class="err">•</span><span class="w"> </span><span class="kt">Couldn't</span><span class="w"> </span><span class="n">match</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="err">‘</span><span class="n">e</span><span class="err">’</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="err">‘</span><span class="kt">HTTPError</span><span class="err">’</span>
+<span class="w">        </span><span class="n">arising</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">use</span><span class="w"> </span><span class="kr">of</span><span class="w"> </span><span class="err">‘</span><span class="n">handleProcessError</span><span class="err">’</span>
+<span class="w">      </span><span class="err">‘</span><span class="n">e</span><span class="err">’</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">rigid</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="n">variable</span><span class="w"> </span><span class="n">bound</span><span class="w"> </span><span class="n">by</span>
+<span class="w">        </span><span class="n">the</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="n">signature</span><span class="w"> </span><span class="n">for</span><span class="kt">:</span>
+<span class="w">          </span><span class="n">handleCommandErrors</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="n">forall</span><span class="w"> </span><span class="n">e</span>
+<span class="w">                                        </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="ow">::</span><span class="w"> </span><span class="kt">Polysemy</span><span class="o">.</span><span class="kt">Internal</span><span class="o">.</span><span class="kt">Kind</span><span class="o">.</span><span class="kt">EffectRow</span><span class="p">)</span><span class="w"> </span><span class="n">a</span><span class="o">.</span>
+<span class="w">                                 </span><span class="kt">Member</span><span class="w"> </span><span class="p">(</span><span class="kt">Error</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="ow">=&gt;</span>
+<span class="w">                                 </span><span class="p">(</span><span class="kt">ProcessError</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="w">                                 </span><span class="ow">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="kt">HTTPError</span><span class="w"> </span><span class="ow">-&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="w">                                 </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="p">(</span><span class="kt">Error</span><span class="w"> </span><span class="kt">ProcessError</span><span class="w"> </span><span class="kt">:</span><span class="w"> </span><span class="kt">Error</span><span class="w"> </span><span class="kt">HTTPError</span><span class="w"> </span><span class="kt">:</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">a</span>
+<span class="w">                                 </span><span class="ow">-&gt;</span><span class="w"> </span><span class="kt">Sem</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="n">a</span>
+</code></pre></div>
+<p>how can i tell the compiler explicitly that the first call is meant to transform<br>
+<code>ProcessError</code> into <code>e</code>?</p></div></div></div></div></div><div class="ui vertical footer segment"><a href="https://github.com/srid/zulip-archive">Powered by Haskell</a> | Questions? Contact <a href="https://www.srid.ca">srid</a></div></div></body></html>
